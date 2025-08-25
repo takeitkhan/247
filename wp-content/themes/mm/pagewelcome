@@ -1,0 +1,403 @@
+        <section class="hero__v6 section" id="home">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="mb-4 mb-lg-0 col-lg-6">
+                        <div class="row">
+                            <div class="col-lg-11">
+                                <span class="text-uppercase hero-subtitle aos-init aos-animate" data-aos="fade-up" data-aos-delay="0">
+                                    Share the Power
+                                </span>
+                                <h1 class="mb-3 hero-title aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+                                    Welcome to The World’s First Empowerment + Profit-Sharing 💥 Social Platform
+                                </h1>
+                                <p class="mb-4 mb-lg-5 hero-description aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+                                    Join the world’s first social platform that empowers you and shares profits. Make an impact, share your ideas, and earn rewards—all in one place.
+                                </p>
+                                <div class="d-flex gap-2 mb-4 mb-lg-5 cta aos-init aos-animate" data-aos="fade-up" data-aos-delay="300">
+                                    <a class="btn" href="/signup">Sign Up Now</a>
+                                    <a class="btn-white-outline btn" href="/faqs-empowerment-support">
+                                        Learn More
+                                        <svg class="lucide-arrow-up-right lucide" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M7 7h10v10"></path>
+                                            <path d="M7 17 17 7"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                                <!-- <div class="mb-4 logos aos-init aos-animate" data-aos="fade-up" data-aos-delay="400"><span class="d-block mb-4 text-uppercase logos-title">Trusted by major companies worldwide</span>
+                                    <div class="d-flex align-items-center gap-4 logos-images">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="189" height="59" viewBox="0 0 189 59" fill="none" class="img-fluid" src="assets/images/logo/actual-size/logo-air-bnb__black.svg" alt="Company 1" style="width: 110px;">
+                                            <g clip-path="url(#clip0_525_3)">
+                                                <path d="M99.6077 14.816C99.6077 16.9412 97.8953 18.6524 95.7701 18.6524C93.645 18.6524 91.9337 16.9412 91.9337 14.816C91.9337 12.6908 93.5866 10.9796 95.7701 10.9796C97.9554 11.0386 99.6077 12.7504 99.6077 14.816ZM83.7881 22.5489V23.4936C83.7881 23.4936 81.9589 21.1313 78.063 21.1313C71.6297 21.1313 66.6116 26.0309 66.6116 32.8186C66.6116 39.5479 71.5707 44.5058 78.063 44.5058C82.0179 44.5058 83.7881 42.0858 83.7881 42.0858V43.0888C83.7881 43.5611 84.143 43.9143 84.6148 43.9143H89.3952V21.7198H84.6148C84.143 21.7216 83.7881 22.1356 83.7881 22.5489ZM83.7881 36.7735C82.9036 38.0725 81.1322 39.1941 79.0076 39.1941C75.2302 39.1941 72.3373 36.833 72.3373 32.8186C72.3373 28.8047 75.2302 26.4437 79.0076 26.4437C81.0738 26.4437 82.9625 27.6242 83.7881 28.8637V36.7735ZM92.9374 21.7216H98.6035V43.9161H92.9374V21.7216ZM177.581 21.1308C173.685 21.1308 171.855 23.493 171.855 23.493V11.0386H166.189V43.9161H170.971C171.443 43.9161 171.796 43.5028 171.796 43.0894V42.0864C171.796 42.0864 173.626 44.5064 177.521 44.5064C183.956 44.5064 188.973 39.5496 188.973 32.8203C188.973 26.091 183.956 21.1308 177.581 21.1308ZM176.637 39.1345C174.452 39.1345 172.741 38.0141 171.855 36.7145V28.8047C172.741 27.6242 174.629 26.3847 176.637 26.3847C180.414 26.3847 183.306 28.7457 183.306 32.7596C183.306 36.7735 180.415 39.1345 176.637 39.1345ZM163.238 30.7536V43.9751H157.571V31.4022C157.571 27.7433 156.39 26.2668 153.205 26.2668C151.494 26.2668 149.722 27.1524 148.599 28.4515V43.9167H142.934V21.7222H147.419C147.891 21.7222 148.245 22.1356 148.245 22.5489V23.4936C149.898 21.7812 152.082 21.1313 154.265 21.1313C156.745 21.1313 158.811 21.8407 160.464 23.2571C162.47 24.9099 163.238 27.0345 163.238 30.7536ZM129.179 21.1308C125.284 21.1308 123.454 23.493 123.454 23.493V11.0386H117.788V43.9161H122.568C123.041 43.9161 123.395 43.5028 123.395 43.0894V42.0864C123.395 42.0864 125.225 44.5064 129.12 44.5064C135.554 44.5064 140.571 39.5496 140.571 32.8203C140.63 26.0904 135.613 21.1308 129.179 21.1308ZM128.234 39.1345C126.051 39.1345 124.34 38.0141 123.454 36.7145V28.8047C124.34 27.6242 126.228 26.3847 128.234 26.3847C132.013 26.3847 134.905 28.7457 134.905 32.7596C134.905 36.7735 132.013 39.1345 128.234 39.1345ZM112.888 21.1308C114.599 21.1308 115.485 21.4268 115.485 21.4268V26.6795C115.485 26.6795 110.763 25.0856 107.812 28.4509V43.9745H102.145V21.7216H106.927C107.399 21.7216 107.752 22.135 107.752 22.5483V23.493C108.816 22.2529 111.118 21.1308 112.888 21.1308ZM54.0399 41.9089C53.745 41.2007 53.4496 40.4335 53.1548 39.7837C52.6819 38.7217 52.2096 37.7175 51.7974 36.7735L51.7384 36.7145C47.665 27.86 43.2979 18.8888 38.6932 10.0356L38.5163 9.68056C38.032 8.76214 37.56 7.83726 37.1005 6.90618C36.5096 5.84301 35.92 4.72263 34.9753 3.65946C33.0866 1.29843 30.3712 -0.000610352 27.4795 -0.000610352C24.5276 -0.000610352 21.8717 1.29844 19.9246 3.54094C19.039 4.60294 18.3891 5.72449 17.7995 6.78766C17.3388 7.71816 16.8668 8.64302 16.3837 9.56205L16.2062 9.91702C11.661 18.7703 7.23438 27.7421 3.16154 36.596L3.10199 36.7133C2.68922 37.6592 2.21631 38.6622 1.74398 39.7236C1.44915 40.3734 1.15431 41.0816 0.859479 41.8487C0.091731 44.0323 -0.144737 46.0985 0.151276 48.2242C0.800501 52.6515 3.7512 56.3687 7.82463 58.0228C9.35954 58.6726 10.9534 58.9674 12.6057 58.9674C13.078 58.9674 13.6677 58.9084 14.1406 58.8489C16.0888 58.613 18.0955 57.9644 20.0437 56.8428C22.4637 55.4848 24.7658 53.5377 27.3627 50.7044C29.9596 53.5377 32.3206 55.4848 34.6817 56.8428C36.6305 57.9644 38.6366 58.613 40.5842 58.8489C41.0566 58.909 41.6474 58.9674 42.1197 58.9674C43.7726 58.9674 45.4248 58.6726 46.9002 58.0228C51.0326 56.3687 53.9243 52.5925 54.5741 48.2242C55.0429 46.1586 54.807 44.0936 54.0399 41.9089ZM27.4199 44.9781C24.2322 40.9642 22.166 37.1868 21.4584 34.0003C21.1635 32.6423 21.104 31.4617 21.2815 30.3992C21.3988 29.4545 21.7538 28.6278 22.2261 27.9196C23.3477 26.3269 25.2364 25.3227 27.4205 25.3227C29.6052 25.3227 31.5529 26.2673 32.6155 27.9196C33.0878 28.6278 33.4416 29.4551 33.5607 30.3992C33.737 31.4623 33.6781 32.7012 33.3832 34.0003C32.6727 37.1279 30.6065 40.9059 27.4199 44.9781ZM50.9701 47.7525C50.5573 50.8217 48.4911 53.4787 45.5994 54.6593C44.183 55.2489 42.6475 55.4264 41.1138 55.2489C39.6384 55.0714 38.1619 54.5991 36.6282 53.7146C34.503 52.5329 32.3784 50.7044 29.8989 47.9884C33.7942 43.2079 36.1553 38.8391 37.0409 34.9443C37.4543 33.114 37.5139 31.4617 37.3358 29.9262C37.1005 28.4509 36.5686 27.0929 35.7425 25.9124C33.9116 23.2553 30.8417 21.7216 27.4193 21.7216C23.9969 21.7216 20.9271 23.3155 19.0973 25.9124C18.2712 27.0929 17.7393 28.4509 17.5034 29.9262C17.2676 31.4617 17.326 33.173 17.7983 34.9443C18.6834 38.8391 21.1034 43.2663 24.9398 48.0473C22.5198 50.7628 20.3356 52.5931 18.2105 53.7736C16.6756 54.6593 15.2008 55.1316 13.7255 55.3079C12.1322 55.4854 10.5967 55.249 9.23925 54.7183C6.34752 53.5377 4.28132 50.8807 3.86855 47.8115C3.69165 46.3361 3.809 44.8608 4.39985 43.2079C4.57616 42.6171 4.87217 42.0274 5.167 41.3192C5.58036 40.3746 6.05151 39.3704 6.52442 38.3673L6.58398 38.25C10.6562 29.4545 15.0239 20.4827 19.5691 11.7474L19.746 11.3924C20.2189 10.5079 20.6912 9.56322 21.1629 8.67754C21.6353 7.73289 22.166 6.84721 22.8158 6.07946C24.0553 4.66426 25.7075 3.89592 27.5378 3.89592C29.3682 3.89592 31.0204 4.66426 32.2599 6.07946C32.9097 6.84898 33.4404 7.73466 33.9127 8.67754C34.3857 9.56322 34.858 10.5079 35.3291 11.3924L35.5066 11.7474C39.9825 20.519 44.2921 29.3744 48.4333 38.309V38.3679C48.9062 39.3138 49.319 40.3752 49.7913 41.321C50.0862 42.028 50.3816 42.6177 50.5585 43.2085C51.0296 44.7417 51.2065 46.2182 50.9701 47.7525Z" fill="black"></path>
+                                            </g>
+                                            <defs>
+                                                <clipPath id="clip0_525_3">
+                                                    <rect width="189" height="58.968" fill="white"></rect>
+                                                </clipPath>
+                                            </defs>
+                                        </svg>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="shadow-lg rounded overflow-hidden video-wrapper" style="max-width: 720px; margin: auto;">
+                            <iframe
+                                src="https://www.youtube.com/embed/-aZKm7MWqlg"
+                                title="Welcome to the World’s First Empowerment+ Profit-Sharing 💥 Social Platform"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                allowfullscreen
+                                style="width: 100%; height: 100%; min-height: 500px; display: block;">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Hero-->
+        </section>
+        <section class="about__v4 section" id="about">
+            <div class="container-fluid">
+                <div class="align-items-center row"> <!-- Add this class for vertical centering -->
+
+                    <!-- Text Column -->
+                    <div class="d-flex justify-content-center order-md-2 col-md-6">
+                        <div class="justify-content-center row">
+                            <div class="mb-4 mb-md-0 col-md-11">
+                                <span class="mb-3 text-uppercase subtitle aos-init aos-animate" data-aos="fade-up" data-aos-delay="0">
+                                    About Us
+                                </span>
+                                <h2 class="mb-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+                                    What Is 24/7 Empowerment?
+                                </h2>
+                                <div data-aos="fade-up" data-aos-delay="200" class="aos-init aos-animate">
+                                    <h4>Two Synergies: You and Your Vision</h4>
+                                    <p>
+                                        <strong class="fw-bold">1️⃣ Empowerment Teams:</strong> Our Teams make Champions and Millionaires.
+                                        Don’t go it alone! Get Support, Growth, and Accountability.
+                                    </p>
+                                    <p>
+                                        <strong class="fw-bold">2️⃣ The World’s First Profit-Sharing Social Platform:</strong>
+                                        Revenue Streams & Tools to Fund your Life and Vision.
+                                    </p>
+                                </div>
+                                <h4 class="mt-4 mb-3 small fw-bold aos-init aos-animate" data-aos="fade-up" data-aos-delay="300">
+                                    🎯 Who We’re Looking For
+                                </h4>
+                                <p>We’re in “Soft Launch”, and Recruiting Passionate Collaborators:
+                                    Especially in Outreach, Marketing, and Tech Support.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image Column -->
+                    <div class="col-md-6">
+                        <div class="position-relative img-wrap">
+                            <img class="rounded-4 img-fluid aos-init aos-animate" src="<?php echo get_template_directory_uri(); ?>/assets/img/team.jpg" alt="FreeBootstrap.net image placeholder" data-aos="fade-up" data-aos-delay="0">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <section class="my-52 section features__v2" id="features">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-lg-flex p-5 rounded-4 content aos-init aos-animate" data-aos="fade-in" data-aos-delay="0">
+                            <div class="row">
+                                <div class="mb-5 mb-lg-0 col-lg-3 aos-init aos-animate" data-aos="fade-up" data-aos-delay="0">
+                                    <div class="row">
+                                        <div class="col-lg-11">
+                                            <div class="d-flex flex-column justify-content-between h-100">
+                                                <div>
+                                                    <h2 class="mb-4">What’s in it for you</h2>
+                                                    <p class="mb-5">
+                                                        Unlock lifetime profit-sharing, AI marketing tools, leadership perks, and your own branded portal. Lead, grow, and make a difference with a custom invite link to fund your vision. Gain exclusive talk show promotions and advance your career through meaningful growth opportunities. Reconnect with your purpose and build the destiny you deserve.
+                                                    </p>
+                                                </div>
+                                                <div class="align-self-start"><a class="d-inline-flex align-items-center gap-2 glightbox btn btn-play" href="https://www.youtube.com/watch?v=DQx96G4yHd8" data-gallery="video"><i class="bi bi-play-fill"></i> Watch the Video</a></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="justify-content-end row">
+                                        <div class="col-lg-11">
+                                            <div class="row">
+                                                <div class="col-sm-6 aos-init aos-animate" data-aos="fade-up" data-aos-delay="0">
+                                                    <div class="align-items-start mb-4 row g-0">
+                                                        <div class="pe-3 col-auto">
+                                                            <div class="icon">
+                                                                <i class="bi bi-currency-dollar fs-4"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h3 class="mb-2 fs-6 fw-bold">Profit Sharing & Revenue</h3>
+                                                            <p class="mb-0">Lifetime Profit-Sharing, and Revenue Streams</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+                                                    <div class="align-items-start mb-4 row g-0">
+                                                        <div class="pe-3 col-auto">
+                                                            <div class="icon">
+                                                                <i class="bi bi-cpu fs-4"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h3 class="mb-2 fs-6 fw-bold">AI & Marketing Tools</h3>
+                                                            <p class="mb-0">Powerful Tools, AI, Marketing, Funnels, and More “For Your Vision”</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+                                                    <div class="align-items-start mb-4 row g-0">
+                                                        <div class="pe-3 col-auto">
+                                                            <div class="icon">
+                                                                <i class="bi bi-award fs-4"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h3 class="mb-2 fs-6 fw-bold">Founding Roles & Perks</h3>
+                                                            <p class="mb-0">Founding Roles with Seniority, Perks, and Visibility</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6 aos-init aos-animate" data-aos="fade-up" data-aos-delay="300">
+                                                    <div class="align-items-start mb-4 row g-0">
+                                                        <div class="pe-3 col-auto">
+                                                            <div class="icon">
+                                                                <i class="bi bi-mic fs-4"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h3 class="mb-2 fs-6 fw-bold">Talk Show Promotions</h3>
+                                                            <p class="mb-0">Talk Show Interviews & Promotions</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+                                                    <div class="align-items-start mb-4 row g-0">
+                                                        <div class="pe-3 col-auto">
+                                                            <div class="icon">
+                                                                <i class="bi bi-bar-chart-line fs-4"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h3 class="mb-2 fs-6 fw-bold">Leadership & Growth</h3>
+                                                            <p class="mb-0">Leadership, Growth, Employment, Advancement</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6 aos-init aos-animate" data-aos="fade-up" data-aos-delay="300">
+                                                    <div class="align-items-start mb-4 row g-0">
+                                                        <div class="pe-3 col-auto">
+                                                            <div class="icon">
+                                                                <i class="bi bi-layers fs-4"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h3 class="mb-2 fs-6 fw-bold">Your Own Portal</h3>
+                                                            <p class="mb-0">Your Own White-Labeled Portal, Link, and Revenue Streams</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+                                                    <div class="align-items-start mb-4 row g-0">
+                                                        <div class="pe-3 col-auto">
+                                                            <div class="icon">
+                                                                <i class="bi bi-heart fs-4"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h3 class="mb-2 fs-6 fw-bold">Make a Difference</h3>
+                                                            <p class="mb-0">Change Lives — including Your Own</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6 aos-init aos-animate" data-aos="fade-up" data-aos-delay="300">
+                                                    <div class="align-items-start mb-4 row g-0">
+                                                        <div class="pe-3 col-auto">
+                                                            <div class="icon">
+                                                                <i class="bi bi-stars fs-4"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h3 class="mb-2 fs-6 fw-bold">Grow Your Destiny</h3>
+                                                            <p class="mb-0">Reconnect to your Heart and Make a Difference While You Grow your Destiny</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+                                                    <div class="align-items-start mb-4 row g-0">
+                                                        <div class="pe-3 col-auto">
+                                                            <div class="icon">
+                                                                <i class="bi bi-people fs-4"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h3 class="mb-2 fs-6 fw-bold">Born to Lead</h3>
+                                                            <p class="mb-0">You weren’t born for the 9–5. You were born to lead, serve, and prosper.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6 aos-init aos-animate" data-aos="fade-up" data-aos-delay="300">
+                                                    <div class="align-items-start mb-4 row g-0">
+                                                        <div class="pe-3 col-auto">
+                                                            <div class="icon">
+                                                                <i class="bi bi-link-45deg fs-4"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h3 class="mb-2 fs-6 fw-bold">Custom Invite Link</h3>
+                                                            <p class="mb-0">You also get a customized invitation link to market and fund yourself and your vision.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+        <section class="section services__v3" id="services">
+            <div class="container-fluid">
+                <div class="mb-5 row">
+                    <div class="mx-auto text-center col-md-8"><span class="mb-3 text-uppercase subtitle aos-init aos-animate" data-aos="fade-up" data-aos-delay="0">Our Services</span>
+                        <h2 class="mb-3 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">AI, Marketing, Collaboration & Growth — All-in-One Empowerment Suite</h2>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="0">
+                        <div class="d-flex flex-column justify-content-between gap-5 p-4 rounded-4 h-100 service-card">
+                            <div>
+                                <span class="d-inline-block mb-4 text-primary icon fs-3">
+                                    <i class="bi bi-cpu"></i>
+                                </span>
+                                <h3 class="mb-3 fs-5">AI (BASIC & SPECIALIZED)</h3>
+                                <ul class="mb-4 ps-3">
+                                    <li>Training & Certification</li>
+                                    <li>AI Life & Marketing Tools</li>
+                                    <li>Instant Prompt Support by Niche</li>
+                                    <li>Script to Video, Audio to Video, and More</li>
+                                    <li>Branding, Ad Copy, SEO, CRM Workflows</li>
+                                    <li>Specialized AI for Legal, Health, Fitness, Business, etc. More..</li>
+                                </ul>
+                            </div>
+
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+                        <div class="d-flex flex-column justify-content-between gap-5 p-4 rounded-4 h-100 service-card">
+                            <div>
+                                <span class="d-inline-block mb-4 text-primary icon fs-3">
+                                    <i class="bi bi-bar-chart-line"></i>
+                                </span>
+                                <h3 class="mb-3 fs-5">MARKETING, REVENUE STREAMS & PROFIT-SHARING</h3>
+                                <ul class="mb-4 ps-3">
+                                    <li>Training & Certification</li>
+                                    <li>Funnels, Calendars, CRM, Landing Pages</li>
+                                    <li>White Label Branding</li>
+                                    <li>Online Stores & Payment Systems</li>
+                                    <li>Press Releases, Logos, Ads, and Promotions</li>
+                                    <li>Legal Business Entities, DBAs</li>
+                                    <li>Complete Marketing Funnels</li>
+                                    <li>More..</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="300">
+                        <div class="d-flex flex-column justify-content-between gap-5 p-4 rounded-4 h-100 service-card">
+                            <div>
+                                <span class="d-inline-block mb-4 text-primary icon fs-3">
+                                    <i class="bi bi-people"></i>
+                                </span>
+                                <h3 class="mb-3 fs-5">TEAMWORK & COLABORATION</h3>
+                                <ul class="mb-4 ps-3">
+                                    <li>Full Curriculum Training & Certifications</li>
+                                    <li>Zoom, Google Meet, Calendar Booking</li>
+                                    <li>Docs, Sheets, Project Planning</li>
+                                    <li>Team building</li>
+                                    <li>Talk Show Interviews</li>
+                                    <li>More..</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="400">
+                        <div class="d-flex flex-column justify-content-between gap-5 p-4 rounded-4 h-100 service-card">
+                            <div>
+                                <span class="d-inline-block mb-4 text-primary icon fs-3">
+                                    <i class="bi bi-star"></i> <!-- Reputation Icon -->
+                                </span>
+                                <h3 class="mb-3 fs-5">REPUTATION MANAGEMENT</h3>
+                                <ul class="mb-4 ps-3">
+                                    <li>Google & Yelp Review Tools</li>
+                                    <li>Public Branding & Profile Visibility</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
+                        <div class="d-flex flex-column justify-content-between gap-5 p-4 rounded-4 h-100 service-card">
+                            <div>
+                                <span class="d-inline-block mb-4 text-primary icon fs-3">
+                                    <i class="bi bi-share"></i> <!-- Autoposting Icon -->
+                                </span>
+                                <h3 class="mb-3 fs-5">CONCURRENT SOCIAL – AUTOPOSTING</h3>
+                                <ul>
+                                    <li>Schedule posts across YouTube, Facebook, Instagram, X, LinkedIn, and more — all at once</li>
+                                    <li>More..</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
+                        <div class="d-flex flex-column justify-content-between gap-5 p-4 rounded-4 h-100 service-card service-card--last">
+                            <div>                                
+                                <h2 class="mb-4">Ready to Be Part of History?</h2>
+                                <ul class="mb-4 list-unstyled">
+                                    <li class="mb-2">✅ Early Birds Catch the Big Worms.</li>
+                                    <li class="mb-2">✅ Bring it! Your voice, your ideas, your leadership.</li>
+                                    <li class="mb-2">✅ Sign Up now before the masses take your place.</li>
+                                    <li class="mb-2">✅ Be the Eyes, Ears, and Heart of your Future.</li>
+                                    <li class="mb-2">✅ Squash bugs, give feedback, & create abundance in your life & vision.</li>
+                                </ul>
+                                <div class="d-flex gap-3">
+                                    <a href="/signup" class="btn btn-primary btn-lg">Sign Up Now</a>
+                                    <a class="btn-white-outline btn" href="/faqs-empowerment-support">
+                                        Learn More
+                                        <svg class="lucide-arrow-up-right lucide" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M7 7h10v10"></path>
+                                            <path d="M7 17 17 7"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
