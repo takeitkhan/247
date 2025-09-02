@@ -44,6 +44,7 @@ if (!$is_shareable) {
 ?>
 
 <?php if ($is_shareable): ?>
+    
     <?php
     $path = $_SERVER['REQUEST_URI'];
     $segments = explode('/', trim($path, '/'));
@@ -124,7 +125,7 @@ if (!$is_shareable) {
                                             ?>
 
                                             <div class="text-end">
-                                                <button class="btn-outline-primary btn btn-sm" onclick="copySharableLink('<?= esc_url($shareable_link); ?>')">
+                                                <button id="copyLinkBtn" class="btn-outline-primary btn btn-sm">                                                
                                                     <i class="bi bi-link-45deg"></i> Copy Sharable Link
                                                 </button>
                                             </div>
@@ -297,11 +298,34 @@ if (!$is_shareable) {
             }
         });
 
-        function copySharableLink(link) {
-            navigator.clipboard.writeText(link)
-                .then(() => alert("Sharable link copied!"))
-                .catch(() => alert("Failed to copy the link."));
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var button = document.getElementById('copyLinkBtn');
+            var link = <?= json_encode($shareable_link); ?>;
+
+            button.addEventListener('click', function() {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(link)
+                        .then(() => alert("Sharable link copied!"))
+                        .catch(() => fallbackCopy(link));
+                } else {
+                    fallbackCopy(link);
+                }
+            });
+
+            function fallbackCopy(text) {
+                var textarea = document.createElement("textarea");
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    alert("Sharable link copied!");
+                } catch (err) {
+                    alert("Failed to copy the link.");
+                }
+                document.body.removeChild(textarea);
+            }
+        });
     </script>
 
 

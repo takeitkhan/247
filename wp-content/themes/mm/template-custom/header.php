@@ -65,10 +65,11 @@
                           </div>
 
                           <div>
-                              <a href="#" class=""> <!-- Update if calendar gets a route -->
+                              <a href="<?php echo esc_url(home_url("/$username/events")); ?>" class="<?php echo (home_url("/$username/events") === $current_url) ? 'active-menu' : ''; ?>">
                                   <i class="bi bi-calendar-event fs-4"></i>
                               </a>
                           </div>
+
 
                       </div>
                   </div>
@@ -257,4 +258,4 @@
                   </div>
               </div>
           </nav>
-      </header>      
+      </header>

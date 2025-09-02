@@ -810,4 +810,5 @@ require_once get_template_directory() . '/inc/UserConnectionManager.php';
 require_once get_template_directory() . '/more_functions/authentication.php';
 require_once get_template_directory() . '/more_functions/profile.php';
 require_once get_template_directory() . '/more_functions/store.php';
+require_once get_template_directory() . '/more_functions/event.php';
 require_once get_template_directory() . '/more_functions/issues.php';
