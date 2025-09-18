@@ -100,8 +100,109 @@ $profile = (new UserProfileData($user_slug))->getProfile();
                         </div>
                     <?php endif; ?>
                 </div>
+                <?php
+                $notify = get_transient("gamification_notify_{$current_user_id}");
+                if ($notify) :
+                ?>
+                    <div id="points-notification" class="points-notification">
+                        <?= esc_html($notify); ?>
+                    </div>
+                    <?php delete_transient("gamification_notify_{$current_user_id}"); ?>
+                <?php endif; ?>
+
+                <div class="bg-white custom-box-shadow mt-4 mb-3 p-3 custom-border-radius">
+                    <?php
+                    $points_logs = get_user_meta($current_user_id, 'earned_points_logs', true);
+                    $points_logs = is_array($points_logs) ? $points_logs : [];
+                    $current_points = 0;
+                    if (!empty($points_logs)) {
+                        foreach ($points_logs as $log) {
+                            $current_points += (float) $log['points'];
+                        }
+                    }
+                    ?>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <h5 class="mb-5">🏆 Earned Points</h5>
+                        </div>
+                        <div class="text-end col-6">
+                            <div class="mb-5">
+                                <h3>💰 Current Points: <span class="text-success"><?= $current_points; ?></span></h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <?php if (empty($points_logs)) : ?>
+                        <p>You haven't earned any points yet.</p>
+                    <?php else : ?>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Activity</th>
+                                        <th>Points</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach (array_reverse($points_logs) as $log) : ?>
+                                        <tr>
+                                            <td><?= esc_html($log['activity']); ?></td>
+                                            <td class="text-primary"><?= number_format((float)$log['points']); ?></td>
+                                            <td><?= esc_html(date('F j, Y H:i', strtotime($log['date']))); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
             </div>
         </div>
     </div>
 </main>
+<style>
+    #points-notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        padding: 15px 25px;
+        border-radius: 8px;
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+        transform: translateY(-50px);
+        opacity: 0;
+        transition: transform 0.5s ease, opacity 0.5s ease;
+    }
+
+    #points-notification.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var notify = document.getElementById("points-notification");
+        if (notify) {
+            // Play sound
+            var audio = new Audio("<?= get_template_directory_uri(); ?>/sounds/coin.mp3");
+            audio.play();
+
+            // Animate notification
+            notify.classList.add("show");
+
+            // Hide after 3 seconds
+            setTimeout(function() {
+                notify.classList.remove("show");
+            }, 3000);
+        }
+    });
+</script>
+
 <?php get_footer(); ?>

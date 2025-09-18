@@ -43,14 +43,15 @@ add_action('add_meta_boxes', function () {
     add_meta_box(
         'issue_details_box',             // ID
         'Issue Details',                 // Title
-        'render_issue_details_meta_box',// Callback
+        'render_issue_details_meta_box', // Callback
         'issue_report',                  // Post type
         'normal',                        // Context
         'high'                           // Priority
     );
 });
 
-function render_issue_details_meta_box($post) {
+function render_issue_details_meta_box($post)
+{
     $fields = [
         'name'         => 'Name',
         'email'        => 'Email',
@@ -131,7 +132,8 @@ add_action('add_meta_boxes', function () {
     );
 });
 
-function render_suggestion_details_meta_box($post) {
+function render_suggestion_details_meta_box($post)
+{
     $fields = [
         'name'             => 'Name',
         'email'            => 'Email',

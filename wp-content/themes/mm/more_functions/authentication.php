@@ -289,3 +289,13 @@ add_action('init', function () {
         }
     }
 });
+
+
+// Example: custom user registration
+mm_register_action('user_register', 'User Registration');
+
+// Example: profile photo upload
+mm_register_action('profile_photo_upload', 'Profile Photo Upload');
+
+// Example: first login
+mm_register_action('first_login', 'First Login');

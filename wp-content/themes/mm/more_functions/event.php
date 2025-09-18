@@ -29,7 +29,8 @@ function register_event_post_type()
 }
 add_action('init', 'register_event_post_type');
 
-function add_event_caps() {
+function add_event_caps()
+{
     $roles = ['administrator']; // you can add other roles too
     foreach ($roles as $role_name) {
         $role = get_role($role_name);
@@ -81,7 +82,8 @@ function add_custom_event_rewrite_rule()
 }
 add_action('init', 'add_custom_event_rewrite_rule');
 
-function add_event_caps_to_subscribers() {
+function add_event_caps_to_subscribers()
+{
     $role = get_role('subscriber');
     if ($role) {
         $role->add_cap('read');
@@ -96,52 +98,108 @@ function add_event_caps_to_subscribers() {
 }
 add_action('init', 'add_event_caps_to_subscribers');
 
-
 function event_submission_form() {
     if (!is_user_logged_in()) {
-        echo '<p>You must be logged in to submit an event.</p>';
+        echo '<div class="alert alert-warning">You must be logged in to submit an event.</div>';
         return;
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['event_title'])) {
         if (!isset($_POST['event_submission_nonce']) || !wp_verify_nonce($_POST['event_submission_nonce'], 'event_submission')) {
-            echo '<p class="text-danger">Nonce verification failed!</p>';
+            echo '<div class="alert alert-danger">Nonce verification failed!</div>';
         } else {
+
+            // Prepare post data
             $event_id = wp_insert_post([
                 'post_title'   => sanitize_text_field($_POST['event_title']),
-                'post_content' => wp_kses_post($_POST['event_content']),
+                'post_content' => wp_kses_post($_POST['event_description']),
                 'post_type'    => 'event',
                 'post_status'  => 'publish',
                 'post_author'  => get_current_user_id(),
             ]);
 
             if ($event_id) {
-                echo '<p class="text-success">✅ Event posted successfully!</p>';
+                // Save custom fields (ACF or post meta)
+                update_post_meta($event_id, 'event_location', sanitize_text_field($_POST['event_location']));
+                update_post_meta($event_id, 'event_start_date', sanitize_text_field($_POST['event_start_date']));
+                update_post_meta($event_id, 'event_end_date', sanitize_text_field($_POST['event_end_date']));
+                update_post_meta($event_id, 'event_privacy', sanitize_text_field($_POST['event_privacy']));
+
+                echo '<div class="alert alert-success">✅ Event posted successfully!</div>';
             } else {
-                echo '<p class="text-danger">Failed to post the event.</p>';
+                echo '<div class="alert alert-danger">Failed to post the event.</div>';
             }
         }
     }
     ?>
-    <form method="post" action="">
+
+    <form method="post" action="" class="needs-validation" novalidate enctype="multipart/form-data">
         <?php wp_nonce_field('event_submission', 'event_submission_nonce'); ?>
-        <p>
-            <label for="event_title">Event Title</label><br>
-            <input type="text" name="event_title" required>
-        </p>
-        <p>
-            <label for="event_content">Event Details</label><br>
-            <textarea name="event_content" rows="5"></textarea>
-        </p>
-        <p>
-            <button type="submit">Submit Event</button>
-        </p>
+
+        <div class="mb-3">
+            <label for="event_title" class="form-label">Event Name</label>
+            <input type="text" name="event_title" class="form-control" id="event_title" required>
+            <div class="invalid-feedback">Please enter the event name.</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="event_description" class="form-label">Description</label>
+            <textarea name="event_description" class="form-control" id="event_description" rows="5"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="event_location" class="form-label">Location</label>
+            <input type="text" name="event_location" class="form-control" id="event_location">
+        </div>
+
+        <div class="mb-3 row g-3">
+            <div class="col-md-6">
+                <label for="event_start_date" class="form-label">Start Date & Time</label>
+                <input type="datetime-local" name="event_start_date" class="form-control" id="event_start_date">
+            </div>
+            <div class="col-md-6">
+                <label for="event_end_date" class="form-label">End Date & Time</label>
+                <input type="datetime-local" name="event_end_date" class="form-control" id="event_end_date">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="event_privacy" class="form-label">Privacy</label>
+            <select name="event_privacy" class="form-select" id="event_privacy">
+                <option value="public">Public</option>
+                <option value="friends">Friends</option>
+                <option value="private">Private</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="event_image" class="form-label">Event Image</label>
+            <input type="file" name="event_image" class="form-control" id="event_image" accept="image/*">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Event</button>
     </form>
-    <?php
+
+    <script>
+        // Bootstrap form validation
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+
+<?php
 }
 add_shortcode('event_submission_form', 'event_submission_form');
-
-
 
 function add_event_query_vars($vars)
 {
@@ -186,3 +244,14 @@ add_filter('post_row_actions', function ($actions, $post) {
     }
     return $actions;
 }, 10, 2);
+
+
+// Register Event Submission Action
+if (function_exists('mm_register_action')) {
+    mm_register_action('event_submission', 'Event Submission');
+
+    // Optionally, you can register more specific actions if needed
+    mm_register_action('event_created', 'Event Created');
+    mm_register_action('event_edited', 'Event Edited');
+    mm_register_action('event_deleted', 'Event Deleted');
+}

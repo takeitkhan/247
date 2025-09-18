@@ -2025,3 +2025,51 @@ Stack trace:
 [02-Sep-2025 10:53:47 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_wp_theme_files_patterns-f239a5dc4e143dcf3d571f1b29c22763' made by require_once('wp-admin/admin.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option
 [02-Sep-2025 10:53:47 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_timeout_wp_theme_files_patterns-f239a5dc4e143dcf3d571f1b29c22763' made by require_once('wp-admin/admin.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option
 [02-Sep-2025 10:53:49 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_kirki_googlefonts_cache' made by require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Kirki\Module\Webfonts->run, Kirki\Module\Webfonts\Google::get_instance, Kirki\Module\Webfonts\Google->__construct, Kirki\Module\Webfonts\Fonts::get_google_fonts, Kirki\GoogleFonts->get_google_fonts, get_site_transient, delete_site_option, delete_network_option, delete_option
+[12-Sep-2025 15:41:48 UTC] Automatic updates starting...
+[12-Sep-2025 15:41:49 UTC]   Automatic plugin updates starting...
+[12-Sep-2025 15:41:49 UTC]   Automatic plugin updates complete.
+[12-Sep-2025 15:41:51 UTC] Automatic updates complete.
+[13-Sep-2025 10:20:29 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[13-Sep-2025 10:20:33 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[13-Sep-2025 10:48:46 UTC] Automatic updates starting...
+[13-Sep-2025 10:48:48 UTC]   Automatic plugin updates starting...
+[13-Sep-2025 10:48:48 UTC]   Automatic plugin updates complete.
+[13-Sep-2025 10:48:49 UTC] Automatic updates complete.
+[13-Sep-2025 10:57:35 UTC] PHP Notice:  Function wpdb::prepare was called <strong>incorrectly</strong>. The query argument of wpdb::prepare() must have a placeholder. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 3.9.0.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
+[13-Sep-2025 15:09:26 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_wp_theme_files_patterns-f239a5dc4e143dcf3d571f1b29c22763' made by require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option
+[13-Sep-2025 15:09:26 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_timeout_wp_theme_files_patterns-f239a5dc4e143dcf3d571f1b29c22763' made by require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option
+[13-Sep-2025 15:09:27 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_kirki_googlefonts_cache' made by require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Kirki\Module\Webfonts->run, Kirki\Module\Webfonts\Google::get_instance, Kirki\Module\Webfonts\Google->__construct, Kirki\Module\Webfonts\Fonts::get_google_fonts, Kirki\GoogleFonts->get_google_fonts, get_site_transient, delete_site_option, delete_network_option, delete_option
+[13-Sep-2025 15:09:27 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_timeout_kirki_googlefonts_cache' made by require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Kirki\Module\Webfonts->run, Kirki\Module\Webfonts\Google::get_instance, Kirki\Module\Webfonts\Google->__construct, Kirki\Module\Webfonts\Fonts::get_google_fonts, Kirki\GoogleFonts->get_google_fonts, get_site_transient, delete_site_option, delete_network_option, delete_option
+[13-Sep-2025 15:09:33 UTC] Automatic updates starting...
+[13-Sep-2025 15:09:36 UTC] Automatic updates complete.
+[14-Sep-2025 04:35:26 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[14-Sep-2025 04:35:30 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[14-Sep-2025 04:36:51 UTC] Automatic updates starting...
+[14-Sep-2025 04:36:55 UTC] Automatic updates complete.
+[15-Sep-2025 06:21:14 UTC] Automatic updates starting...
+[15-Sep-2025 06:21:18 UTC] Automatic updates complete.
+[17-Sep-2025 03:01:30 UTC] Automatic updates starting...
+[17-Sep-2025 03:01:33 UTC] Automatic updates complete.
+[17-Sep-2025 05:57:12 UTC] PHP Fatal error:  Uncaught TypeError: call_user_func_array(): Argument #1 ($callback) must be a valid callback, class MM_Gamification does not have a method "register_admin_menus" in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php:324
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
+#1 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#2 D:\oldwindows\laragon\www\pet\wp-admin\includes\menu.php(161): do_action('admin_menu', '')
+#3 D:\oldwindows\laragon\www\pet\wp-admin\menu.php(423): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\wp-admin\admin.php(159): require('D:\\oldwindows\\l...')
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php on line 324
+[17-Sep-2025 06:10:58 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mm_get_available_actions() in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-admin.php:85
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): MM_Gamification_Admin->add_action_page('')
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#2 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#3 D:\oldwindows\laragon\www\pet\wp-admin\admin.php(260): do_action('gamification_pa...')
+#4 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-admin.php on line 85
+[17-Sep-2025 06:34:34 UTC] PHP Fatal error:  Cannot redeclare mm_get_available_actions() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-admin.php:10) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 18
+[17-Sep-2025 06:34:34 UTC] PHP Fatal error:  Cannot redeclare mm_get_available_actions() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-admin.php:10) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 18
+[17-Sep-2025 06:34:35 UTC] PHP Fatal error:  Cannot redeclare mm_get_available_actions() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-admin.php:10) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 18
+[17-Sep-2025 06:37:41 UTC] PHP Fatal error:  Cannot redeclare event_submission_form() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\themes\mm\more_functions\event.php:115) in D:\oldwindows\laragon\www\pet\wp-content\themes\mm\more_functions\event.php on line 205
+[17-Sep-2025 06:37:42 UTC] PHP Fatal error:  Cannot redeclare event_submission_form() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\themes\mm\more_functions\event.php:115) in D:\oldwindows\laragon\www\pet\wp-content\themes\mm\more_functions\event.php on line 205
+[17-Sep-2025 06:37:42 UTC] PHP Fatal error:  Cannot redeclare event_submission_form() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\themes\mm\more_functions\event.php:115) in D:\oldwindows\laragon\www\pet\wp-content\themes\mm\more_functions\event.php on line 205
