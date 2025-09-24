@@ -1,15 +1,14 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
-// Central array to store all available actions
+// Central array to store available actions
 $GLOBALS['mm_available_actions'] = [];
 
 /**
- * Register a new user action for gamification
+ * Register a new gamification action globally
  */
 if (!function_exists('mm_register_action')) {
-    function mm_register_action($key, $label)
-    {
+    function mm_register_action($key, $label) {
         $GLOBALS['mm_available_actions'][$key] = $label;
     }
 }
@@ -18,11 +17,15 @@ if (!function_exists('mm_register_action')) {
  * Get all registered actions
  */
 if (!function_exists('mm_get_available_actions')) {
-    function mm_get_available_actions()
-    {
+    function mm_get_available_actions() {
         return $GLOBALS['mm_available_actions'];
     }
 }
+
+mm_register_action('user_register', 'User Registration');
+mm_register_action('first_login', 'First Login');
+mm_register_action('profile_photo_upload', 'Profile Photo Upload');
+mm_register_action('cover_photo_upload', 'Cover Photo Upload');
 
 add_action('profile_update', 'gamification_profile_photo_points', 10, 2);
 

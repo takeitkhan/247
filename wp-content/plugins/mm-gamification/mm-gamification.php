@@ -11,11 +11,12 @@
 if (! defined('ABSPATH')) exit; // No direct access
 
 // Includes
+require_once plugin_dir_path(__FILE__) . 'includes/functions-actions.php';
+require_once plugin_dir_path(__FILE__) . 'includes/functions-points.php';
 require_once plugin_dir_path(__FILE__) . 'includes/class-gamification-admin.php';
 require_once plugin_dir_path(__FILE__) . 'includes/class-gamification-user.php';
-require_once plugin_dir_path(__FILE__) . 'includes/functions-points.php';
-require_once plugin_dir_path(__FILE__) . 'includes/functions-actions.php';
 require_once plugin_dir_path(__FILE__) . 'includes/class-notifications.php';
+
 
 class MM_Gamification
 {
@@ -45,10 +46,13 @@ class MM_Gamification
     }
 }
 
+
+
 // Boot
-new MM_Gamification();
+new MM_Gamification(); // plugin activation / setup
+
 if (is_admin()) {
     new MM_Gamification_Admin();
 } else {
-    new MM_Gamification_User();
+    MM_Gamification_User::init(); // ✅ singleton instance
 }

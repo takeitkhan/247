@@ -2081,3 +2081,225 @@ Stack trace:
 [18-Sep-2025 04:27:44 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_timeout_kirki_googlefonts_cache' made by require_once('wp-admin/admin.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Kirki\Module\Webfonts->run, Kirki\Module\Webfonts\Google::get_instance, Kirki\Module\Webfonts\Google->__construct, Kirki\Module\Webfonts\Fonts::get_google_fonts, Kirki\GoogleFonts->get_google_fonts, get_site_transient, delete_site_option, delete_network_option, delete_option
 [18-Sep-2025 04:27:51 UTC] Automatic updates starting...
 [18-Sep-2025 04:27:55 UTC] Automatic updates complete.
+[22-Sep-2025 06:45:30 UTC] Automatic updates starting...
+[22-Sep-2025 06:45:33 UTC] Automatic updates complete.
+[23-Sep-2025 07:14:53 UTC] Automatic updates starting...
+[23-Sep-2025 07:14:56 UTC] Automatic updates complete.
+[24-Sep-2025 04:00:07 UTC] Automatic updates starting...
+[24-Sep-2025 04:00:11 UTC] Automatic updates complete.
+[24-Sep-2025 04:19:29 UTC] PHP Parse error:  syntax error, unexpected identifier "add_action", expecting "function" or "const" in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-admin.php on line 157
+[24-Sep-2025 04:21:06 UTC] PHP Parse error:  syntax error, unexpected identifier "add_action", expecting "function" or "const" in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-admin.php on line 157
+[24-Sep-2025 04:30:28 UTC] PHP Warning:  Undefined property: stdClass::$notification_message in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-admin.php on line 65
+[24-Sep-2025 04:31:20 UTC] PHP Warning:  Undefined property: stdClass::$notification_message in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-admin.php on line 65
+[24-Sep-2025 04:38:34 UTC] WordPress database error Unknown column 'notification_message' in 'field list' for query UPDATE `pet_gamification_actions` SET `action_key` = 'profile_photo_upload', `custom_message` = 'Upload profile photo to get 2 points each time', `notification_message` = 'Thanks, you received 5 points', `points` = '2' WHERE `id` = '1' made by do_action('gamification_page_mm-gamification-add'), WP_Hook->do_action, WP_Hook->apply_filters, MM_Gamification_Admin->add_action_page
+[24-Sep-2025 05:03:38 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 2
+[24-Sep-2025 05:03:39 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 2
+                                                                                                                                                                                                                           [24-Sep-2025 05:21:18 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[24-Sep-2025 05:21:23 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[24-Sep-2025 05:22:00 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 2
+[24-Sep-2025 05:22:01 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 2
+[24-Sep-2025 05:32:19 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 2
+[24-Sep-2025 05:32:20 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 2
+[24-Sep-2025 05:47:33 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[24-Sep-2025 05:47:38 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[24-Sep-2025 05:47:44 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[24-Sep-2025 05:48:09 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 2
+[24-Sep-2025 05:48:22 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 2
+[24-Sep-2025 05:48:23 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 2
+[24-Sep-2025 05:55:51 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 2
+[24-Sep-2025 05:55:52 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 2
+[24-Sep-2025 05:56:07 UTC] PHP Fatal error:  Uncaught Error: Class "MM_Gamification_User" not found in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php:53
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(545): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php on line 53
+[24-Sep-2025 05:56:08 UTC] PHP Fatal error:  Uncaught Error: Class "MM_Gamification_User" not found in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php:53
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(545): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php on line 53
+[24-Sep-2025 05:56:09 UTC] PHP Fatal error:  Uncaught Error: Class "MM_Gamification_User" not found in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php:53
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(545): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php on line 53
+[24-Sep-2025 05:56:10 UTC] PHP Fatal error:  Uncaught Error: Class "MM_Gamification_User" not found in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php:53
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(545): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php on line 53
+[24-Sep-2025 05:56:31 UTC] PHP Fatal error:  Uncaught Error: Class "MM_Gamification_User" not found in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php:53
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(545): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php on line 53
+[24-Sep-2025 05:56:31 UTC] PHP Fatal error:  Uncaught Error: Class "MM_Gamification_User" not found in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php:53
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(545): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php on line 53
+[24-Sep-2025 06:05:18 UTC] PHP Fatal error:  Cannot declare class MM_Gamification, because the name is already in use in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 5
+[24-Sep-2025 06:05:18 UTC] PHP Fatal error:  Cannot declare class MM_Gamification, because the name is already in use in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 5
+[24-Sep-2025 06:05:24 UTC] PHP Fatal error:  Cannot declare class MM_Gamification, because the name is already in use in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 5
+[24-Sep-2025 06:05:25 UTC] PHP Fatal error:  Cannot declare class MM_Gamification, because the name is already in use in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 5
+[24-Sep-2025 06:05:25 UTC] PHP Fatal error:  Cannot declare class MM_Gamification, because the name is already in use in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 5
+[24-Sep-2025 06:16:05 UTC] PHP Fatal error:  Cannot redeclare MM_Gamification_User::register_action() in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 41
+[24-Sep-2025 06:20:35 UTC] PHP Parse error:  syntax error, unexpected identifier "user" in D:\oldwindows\laragon\www\pet\wp-content\themes\mm\more_functions\authentication.php on line 287
+[24-Sep-2025 06:20:35 UTC] PHP Fatal error:  Uncaught Error: Call to private MM_Gamification_User::__construct() from global scope in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php:53
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(545): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php on line 53
+[24-Sep-2025 06:46:34 UTC] PHP Fatal error:  Cannot redeclare mm_register_action() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:10) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 10
+[24-Sep-2025 06:46:38 UTC] PHP Fatal error:  Cannot redeclare mm_register_action() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:10) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 10
+[24-Sep-2025 06:46:38 UTC] PHP Fatal error:  Cannot redeclare mm_register_action() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:10) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 10
+[24-Sep-2025 06:46:39 UTC] PHP Fatal error:  Cannot redeclare mm_register_action() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:10) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 10
+[24-Sep-2025 06:46:40 UTC] PHP Fatal error:  Cannot redeclare mm_register_action() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:10) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 10
+[24-Sep-2025 06:47:42 UTC] PHP Fatal error:  Cannot redeclare mm_register_action() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:11) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 10
+[24-Sep-2025 06:47:42 UTC] PHP Fatal error:  Cannot redeclare mm_register_action() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:11) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 10
+[24-Sep-2025 06:47:43 UTC] PHP Fatal error:  Cannot redeclare mm_register_action() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:11) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 10
+[24-Sep-2025 06:47:43 UTC] PHP Fatal error:  Cannot redeclare mm_register_action() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:11) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 10
+[24-Sep-2025 06:47:44 UTC] PHP Fatal error:  Cannot redeclare mm_register_action() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:11) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 10
+[24-Sep-2025 06:47:44 UTC] PHP Fatal error:  Cannot redeclare mm_register_action() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:11) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 10
+[24-Sep-2025 06:47:44 UTC] PHP Fatal error:  Cannot redeclare mm_register_action() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:11) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 10
+[24-Sep-2025 06:47:45 UTC] PHP Fatal error:  Cannot redeclare mm_register_action() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:11) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 10
+[24-Sep-2025 06:47:47 UTC] PHP Fatal error:  Cannot redeclare mm_register_action() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:11) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 10
+[24-Sep-2025 06:47:47 UTC] PHP Fatal error:  Cannot redeclare mm_register_action() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:11) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 10
+[24-Sep-2025 06:56:31 UTC] PHP Fatal error:  Uncaught Error: Call to private MM_Gamification_User::__construct() from global scope in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php:53
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(545): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-cron.php(46): require_once('D:\\oldwindows\\l...')
+#4 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php on line 53
+[24-Sep-2025 06:58:32 UTC] PHP Fatal error:  Uncaught Error: Call to private MM_Gamification_User::__construct() from global scope in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php:53
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(545): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-cron.php(46): require_once('D:\\oldwindows\\l...')
+#4 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php on line 53
+[24-Sep-2025 07:00:33 UTC] PHP Fatal error:  Uncaught Error: Call to private MM_Gamification_User::__construct() from global scope in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php:53
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(545): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-cron.php(46): require_once('D:\\oldwindows\\l...')
+#4 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php on line 53
+[24-Sep-2025 07:00:34 UTC] PHP Fatal error:  Uncaught Error: Call to private MM_Gamification_User::__construct() from global scope in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php:53
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(545): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-login.php(12): require('D:\\oldwindows\\l...')
+#4 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php on line 53
+[24-Sep-2025 07:03:29 UTC] PHP Fatal error:  Uncaught Error: Call to private MM_Gamification_User::__construct() from global scope in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php:82
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(545): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-cron.php(46): require_once('D:\\oldwindows\\l...')
+#4 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php on line 82
+[24-Sep-2025 07:03:31 UTC] PHP Fatal error:  Uncaught Error: Call to private MM_Gamification_User::__construct() from global scope in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php:82
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(545): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-login.php(12): require('D:\\oldwindows\\l...')
+#4 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php on line 82
+[24-Sep-2025 07:03:31 UTC] PHP Fatal error:  Uncaught Error: Call to private MM_Gamification_User::__construct() from global scope in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php:82
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(545): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php on line 82
+[24-Sep-2025 07:03:36 UTC] PHP Fatal error:  Uncaught Error: Call to private MM_Gamification_User::__construct() from global scope in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php:55
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(545): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-login.php(12): require('D:\\oldwindows\\l...')
+#4 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php on line 55
+[24-Sep-2025 07:03:36 UTC] PHP Fatal error:  Uncaught Error: Call to private MM_Gamification_User::__construct() from global scope in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php:55
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(545): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\mm-gamification.php on line 55
+[24-Sep-2025 07:04:50 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mm_gamification_award_points() in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:38
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): MM_Gamification_User->handle_first_login('joseph', Object(WP_User))
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#2 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\user.php(138): do_action('wp_login', 'joseph', Object(WP_User))
+#4 D:\oldwindows\laragon\www\pet\wp-login.php(1323): wp_signon(Array, false)
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 38
+[24-Sep-2025 07:06:02 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mm_gamification_award_points() in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:38
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): MM_Gamification_User->handle_first_login('joseph', Object(WP_User))
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#2 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\user.php(138): do_action('wp_login', 'joseph', Object(WP_User))
+#4 D:\oldwindows\laragon\www\pet\wp-login.php(1323): wp_signon(Array, false)
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 38
+[24-Sep-2025 08:11:33 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mm_get_action_by_key() in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php:35
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(326): MM_Gamification_User->handle_user_register(20)
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(20, Array)
+#2 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\user.php(2621): do_action('user_register', 20, Array)
+#4 D:\oldwindows\laragon\www\pet\wp-includes\user.php(2916): wp_insert_user(Array)
+#5 D:\oldwindows\laragon\www\pet\wp-content\themes\mm\more_functions\authentication.php(56): wp_create_user('muid2', Object(SensitiveParameterValue), 'muid2@gmail.com')
+#6 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): {closure}('')
+#7 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
+#8 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#9 D:\oldwindows\laragon\www\pet\wp-settings.php(727): do_action('init')
+#10 D:\oldwindows\laragon\www\pet\wp-config.php(107): require_once('D:\\oldwindows\\l...')
+#11 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#12 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#13 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#14 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\class-gamification-user.php on line 35

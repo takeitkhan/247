@@ -14,35 +14,35 @@ add_action('init', function () {
         $last_name  = sanitize_text_field($_POST['last_name']);
         $dob        = sanitize_text_field($_POST['dob']);
 
-        // ❌ Reject if sanitized username is different from the original (means invalid chars removed)
+        // ❌ Reject invalid username
         if ($username !== $_POST['username']) {
             set_transient('custom_user_message', [
                 'type' => 'danger',
-                'text' => 'Username cannot contain special characters. Please use only letters, numbers, underscores, hyphens, or periods.',
-                'old_input' => $_POST
-            ], 30);
-            return;
-        }
-        // Consent validation (required checkboxes)
-        if (empty($_POST['consent_transactional']) || empty($_POST['consent_marketing'])) {
-            set_transient('custom_user_message', [
-                'type' => 'danger',
-                'text' => 'You must agree to both consent checkboxes to register.',
-                'old_input' => $_POST
-            ], 30);
-            return;
-        }
-        // Prohibit using email as username
-        if (is_email($_POST['username'])) {
-            set_transient('custom_user_message', [
-                'type' => 'danger',
-                'text' => 'You cannot use an email address as your username.',
+                'text' => 'Username cannot contain special characters.',
                 'old_input' => $_POST
             ], 30);
             return;
         }
 
-        // Check for existing user
+        // Consent validation
+        if (empty($_POST['consent_transactional']) || empty($_POST['consent_marketing'])) {
+            set_transient('custom_user_message', [
+                'type' => 'danger',
+                'text' => 'You must agree to both consent checkboxes.',
+                'old_input' => $_POST
+            ], 30);
+            return;
+        }
+
+        if (is_email($_POST['username'])) {
+            set_transient('custom_user_message', [
+                'type' => 'danger',
+                'text' => 'You cannot use an email as username.',
+                'old_input' => $_POST
+            ], 30);
+            return;
+        }
+
         if (username_exists($username) || email_exists($email)) {
             set_transient('custom_user_message', [
                 'type' => 'danger',
@@ -56,41 +56,38 @@ add_action('init', function () {
         $user_id = wp_create_user($username, $password, $email);
 
         if (!is_wp_error($user_id)) {
-            // Update user details
             wp_update_user([
                 'ID'         => $user_id,
                 'first_name' => $first_name,
                 'last_name'  => $last_name,
             ]);
-
             update_user_meta($user_id, 'dob', $dob);
 
-            // Set referrer: use submitted value or fallback to default from WP settings
             $referrer = !empty($_POST['referrer'])
                 ? sanitize_text_field($_POST['referrer'])
                 : sanitize_text_field(get_option('default_referrer_username'));
-
             update_user_meta($user_id, 'referrer', $referrer);
 
-
-            // Save consents
             update_user_meta($user_id, 'consent_transactional', 'yes');
             update_user_meta($user_id, 'consent_marketing', 'yes');
 
-            // Notifications (custom class calls)
+            // Notifications
             if (class_exists('Notifications')) {
                 $notifications = Notifications::getInstance();
                 $notifications->add_referrer_notification_for_user($user_id);
                 $notifications->add_referral_notification_to_referrer($user_id);
             }
 
-            // Success message
+            // ✅ Trigger the registered action
+            if (function_exists('mm_trigger_action')) {
+                mm_trigger_action('user_register', $user_id);
+            }
+
             set_transient('custom_user_message', [
                 'type' => 'success',
                 'text' => '🎉 Thank you for registering! <a href="/signin" class="alert-link">Login here</a>.'
             ], 30);
         } else {
-            // Error from wp_create_user()
             set_transient('custom_user_message', [
                 'type' => 'danger',
                 'text' => $user_id->get_error_message()
@@ -118,31 +115,26 @@ add_action('init', function () {
         $user = wp_signon($creds, false);
 
         if (!is_wp_error($user)) {
+            // ✅ Check for first login
+            if (function_exists('mm_trigger_action')) {
+                $last_login = get_user_meta($user->ID, 'last_login', true);
+                if (empty($last_login)) {
+                    mm_trigger_action('first_login', $user->ID);
+                }
+                update_user_meta($user->ID, 'last_login', current_time('mysql'));
+            }
+
             wp_redirect(home_url('/modify-profile'));
             exit;
         } else {
-            // Get the raw error message (may include <a> tag)
             $raw_error_msg = $user->get_error_message();
-
-            // Allow only safe HTML tags, especially <a> for "Lost your password?"
-            $allowed_tags = [
-                'a' => [
-                    'href' => [],
-                    'title' => [],
-                    'target' => [],
-                    'rel' => [],
-                    'class' => [], // add class attribute if you want to add class below
-                ],
-                'strong' => [],
-                'em' => [],
-            ];
+            $allowed_tags = ['a' => ['href' => [], 'class' => []], 'strong' => [], 'em' => []];
             $safe_error_msg = wp_kses($raw_error_msg, $allowed_tags);
 
-            // Replace default lostpassword URL with your custom lost password page URL
             $safe_error_msg = preg_replace_callback(
                 '#<a href="[^"]+">Lost your password\?</a>#i',
                 function () {
-                    $url = esc_url(home_url('/lost-password')); // YOUR custom lost password page here
+                    $url = esc_url(home_url('/lost-password'));
                     return '<a href="' . $url . '" class="alert-link">Lost your password?</a>';
                 },
                 $safe_error_msg
@@ -158,6 +150,7 @@ add_action('init', function () {
         }
     }
 });
+
 
 add_action('init', function () {
     add_rewrite_tag('%user_profile%', '([^&]+)');
@@ -289,13 +282,3 @@ add_action('init', function () {
         }
     }
 });
-
-
-// Example: custom user registration
-mm_register_action('user_register', 'User Registration');
-
-// Example: profile photo upload
-mm_register_action('profile_photo_upload', 'Profile Photo Upload');
-
-// Example: first login
-mm_register_action('first_login', 'First Login');

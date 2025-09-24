@@ -1,20 +1,18 @@
 <?php
 if (! defined('ABSPATH')) exit;
-/**
- * Returns a list of predefined actions/events
- * key => label
- */
+
 class MM_Gamification_Admin
 {
-
     public function __construct()
     {
         add_action('admin_menu', [$this, 'register_admin_menus']);
+
+        // 👇 Hook here, inside constructor, so it runs when the class is instantiated
+        add_action('user_earned_points', [$this, 'handle_user_earned_points'], 10, 3);
     }
 
     public function register_admin_menus()
     {
-        // Main page: Actions List
         add_menu_page(
             'Gamification',
             'Gamification',
@@ -25,7 +23,6 @@ class MM_Gamification_Admin
             30
         );
 
-        // Subpage: Add New Action
         add_submenu_page(
             'mm-gamification',
             'Add New Action',
@@ -41,6 +38,17 @@ class MM_Gamification_Admin
         global $wpdb;
         $table = $wpdb->prefix . 'gamification_actions';
         $actions = $wpdb->get_results("SELECT * FROM $table ORDER BY id DESC");
+
+        if (isset($_GET['delete'])) {
+            $delete_id = intval($_GET['delete']);
+            if (check_admin_referer('mm_delete_action_nonce')) {
+                global $wpdb;
+                $table = $wpdb->prefix . 'gamification_actions';
+                $wpdb->delete($table, ['id' => $delete_id]);
+                echo '<div class="notice notice-success is-dismissible"><p>Action deleted successfully!</p></div>';
+            }
+        }
+
 ?>
         <div class="wrap">
             <h1 class="wp-heading-inline">Gamification Actions</h1>
@@ -50,27 +58,40 @@ class MM_Gamification_Admin
             <table class="fixed widefat striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Action Key</th>
+                        <th style="width: 3%;">ID</th>
+                        <th style="width: 12%;">Action Key</th>
                         <th>Message</th>
-                        <th>Points</th>
-                        <th>Created</th>
+                        <th>Notification Message</th>
+                        <th style="width: 4%;">Points</th>
+                        <th style="width: 10%;">Created</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if ($actions) : ?>
                         <?php foreach ($actions as $a) : ?>
-                            <tr>
-                                <td><?php echo $a->id; ?></td>
-                                <td><?php echo esc_html($a->action_key); ?></td>
-                                <td><?php echo esc_html($a->custom_message); ?></td>
-                                <td><?php echo $a->points; ?></td>
-                                <td><?php echo $a->created_at; ?></td>
-                            </tr>
+                        <tr>
+                            <td><?php echo $a->id; ?></td>
+                            <td>
+                                <?php echo esc_html($a->action_key); ?>
+                                <div class="row-actions">
+                                    <span class="edit">
+                                        <a href="<?php echo admin_url('admin.php?page=mm-gamification-add&action=edit&id=' . $a->id); ?>">Edit</a>
+                                    </span> | 
+                                    <span class="trash">
+                                        <a href="<?php echo wp_nonce_url(admin_url('admin.php?page=mm-gamification&delete=' . $a->id), 'mm_delete_action_nonce'); ?>" 
+                                        onclick="return confirm('Are you sure you want to delete this action?');">Delete</a>
+                                    </span>
+                                </div>
+                            </td>
+                            <td><?php echo esc_html($a->custom_message); ?></td>
+                            <td><?= isset($a->notification_message) ? esc_html($a->notification_message) : ''; ?></td>
+                            <td><?php echo $a->points; ?></td>
+                            <td><?php echo $a->created_at; ?></td>
+                        </tr>
                         <?php endforeach; ?>
                     <?php else : ?>
                         <tr>
-                            <td colspan="5">No actions found.</td>
+                            <td colspan="6">No actions found.</td> <!-- updated colspan to 6 -->
                         </tr>
                     <?php endif; ?>
                 </tbody>
@@ -79,19 +100,23 @@ class MM_Gamification_Admin
     <?php
     }
 
+
     public function add_action_page()
     {
         global $wpdb;
         $table = $wpdb->prefix . 'gamification_actions';
-
-        // Predefined actions
         $available_actions = mm_get_available_actions();
 
-        // Handle form submit
+        $edit_id = isset($_GET['action'], $_GET['id']) && $_GET['action'] === 'edit' ? intval($_GET['id']) : 0;
+
+        if ($edit_id) {
+            $action_to_edit = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE id = %d", $edit_id));
+        }
+
+
         if (isset($_POST['mm_add_action'])) {
             check_admin_referer('mm_add_action_nonce');
 
-            // Determine selected action
             if (!empty($_POST['action_key_custom'])) {
                 $action_key = sanitize_text_field($_POST['action_key_custom']);
             } elseif (!empty($_POST['action_key_dropdown'])) {
@@ -100,18 +125,33 @@ class MM_Gamification_Admin
                 $action_key = '';
             }
 
-            // Validate
             if (empty($action_key)) {
                 echo '<div class="notice notice-error is-dismissible"><p>Please select or enter an action.</p></div>';
             } else {
                 $custom_message = sanitize_textarea_field($_POST['custom_message']);
                 $points         = intval($_POST['points']);
+                $notification_message = sanitize_textarea_field($_POST['notification_message']);
 
-                $wpdb->insert($table, [
-                    'action_key'     => $action_key,
-                    'custom_message' => $custom_message,
-                    'points'         => $points
-                ]);
+
+                if ($edit_id) {
+                    $wpdb->update($table, [
+                        'action_key' => $action_key,
+                        'custom_message' => $custom_message,
+                        'notification_message' => $notification_message,
+                        'points' => $points
+                    ], ['id' => $edit_id]);
+                    
+                    echo '<div class="notice notice-success is-dismissible"><p>Action updated successfully!</p></div>';
+                } else {
+                    $wpdb->insert($table, [
+                        'action_key' => $action_key,
+                        'custom_message' => $custom_message,
+                        'notification_message' => $notification_message,
+                        'points' => $points
+                    ]);
+                    
+                    echo '<div class="notice notice-success is-dismissible"><p>Action added successfully!</p></div>';
+                }
 
                 echo '<div class="notice notice-success is-dismissible"><p>Action Added Successfully!</p></div>';
             }
@@ -134,21 +174,66 @@ class MM_Gamification_Admin
                             <br>
                             <small>Or enter a custom action below:</small>
                             <br>
-                            <input type="text" name="action_key_custom" placeholder="Custom action key" class="regular-text">
+                            <input type="text" name="action_key_custom" placeholder="Custom action key" class="regular-text" value="<?= esc_attr($action_to_edit->action_key ?? '') ?>">
                         </td>
                     </tr>
                     <tr>
                         <th><label for="custom_message">Custom Message</label></th>
-                        <td><textarea name="custom_message" rows="4" class="large-text" required></textarea></td>
+                        <td><textarea name="custom_message" rows="4" class="large-text" required><?= esc_textarea($action_to_edit->custom_message ?? '') ?></textarea></td>
                     </tr>
                     <tr>
+                        <th><label for="notification_message">Notification Message</label></th>
+                        <td>
+                            <input type="text" name="notification_message" placeholder="Optional notification message" class="regular-text" value="<?= esc_attr($action_to_edit->notification_message ?? '') ?>">
+                            <p class="description">This will be shown in user notifications when points are awarded.</p>
+                        </td>
+                    </tr>
+
+                    <tr>
                         <th><label for="points">Points</label></th>
-                        <td><input type="number" name="points" required class="small-text"></td>
+                        <td><input type="number" name="points" required class="small-text" value="<?= esc_attr($action_to_edit->points ?? '') ?>"></td>
                     </tr>
                 </table>
                 <?php submit_button('Save Action', 'primary', 'mm_add_action'); ?>
             </form>
         </div>
 <?php
+    }
+
+    /**
+     * Handle the user_earned_points hook
+     */
+    public function handle_user_earned_points($user_id, $points, $activity)
+    {
+        if (!$user_id || !$points) {
+            return;
+        }
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'gamification_actions';
+        $action = $wpdb->get_row(
+            $wpdb->prepare("SELECT notification_message FROM $table WHERE action_key = %s", $activity)
+        );
+
+        if ($action && !empty($action->notification_message)) {
+            $message = str_replace(
+                ['{points}', '{activity}'],
+                [$points, esc_html($activity)],
+                $action->notification_message
+            );
+        } else {
+            $message = sprintf("You earned %d points for %s 🎉", $points, esc_html($activity));
+        }
+
+        $notifications = Notifications::getInstance();
+        $notifications->addNotification(
+            $user_id,
+            'success',
+            $message,
+            [
+                'points'   => $points,
+                'activity' => $activity
+            ]
+        );
     }
 }
