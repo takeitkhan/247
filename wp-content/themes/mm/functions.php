@@ -802,6 +802,56 @@ add_action('admin_init', function() {
     );
 });
 
+// Mark single as read
+add_action('wp_ajax_mark_notification_read', function(){
+    check_ajax_referer('notifications_nonce', 'security');
+    $user_id  = get_current_user_id();
+    $notif_id = intval($_POST['notification_id']);
+
+    $result = Notifications::getInstance()->markAsRead($user_id, $notif_id);
+
+    wp_send_json_success($result);
+});
+
+// Mark all as read
+add_action('wp_ajax_mark_all_notifications_read', function(){
+    check_ajax_referer('notifications_nonce', 'security');
+    $user_id = get_current_user_id();
+
+    $result = Notifications::getInstance()->markAllAsRead($user_id);
+
+    wp_send_json_success($result);
+});
+
+// Clear all
+add_action('wp_ajax_clear_all_notifications', function(){
+    check_ajax_referer('notifications_nonce', 'security');
+    $user_id = get_current_user_id();
+
+    $result = Notifications::getInstance()->clearNotifications($user_id);
+
+    wp_send_json_success($result);
+});
+
+// === ENQUEUE SCRIPTS ===
+function enqueue_notifications_assets() {
+    // Enqueue your custom JS file
+    wp_enqueue_script(
+        'notifications', // handle
+        get_template_directory_uri() . '/assets/js/notifications.js', // path
+        ['jquery'], // dependencies
+        null, // version
+        true // load in footer
+    );
+
+    // Pass PHP data (ajax URL and nonce) to JS
+    wp_localize_script('notifications', 'notificationsData', [
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'nonce'   => wp_create_nonce('notifications_nonce')
+    ]);
+}
+add_action('wp_enqueue_scripts', 'enqueue_notifications_assets');
+
 
 
 require_once get_template_directory() . '/inc/UserProfileData.php';
