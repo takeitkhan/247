@@ -96,17 +96,24 @@ nav ul li {
 }
 
 /* Style the anchor tags */
-.nav-item a {
-  color: #000000 !important;
-  text-decoration: none !important;
-  font-weight: medium !important;
-  font-size: 18px;
+.nav-item a,
+.list-inline-item a {
+    color: #000000 !important;
+    text-decoration: none !important;
+    font-weight: 600;
+    font-size: 18px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 /* Optional: Add hover effect */
-.nav-item a:hover {
+.nav-item a:hover, .list-inline-item a:hover {
   color: #05489C !important;
   text-decoration: none;
+}
+
+.footer-list-inline-item a {
+  color: #FFFFFF !important;
+  font-weight: 400 !important;
 }
 
 figure {

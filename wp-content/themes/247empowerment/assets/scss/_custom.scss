@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+body {
+    font-weight: 300;
+    width: 100%;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: #09090A;
+}
+
+b,
+strong {
+    font-weight: 400 !important;
+}
+
+.bg-dark-custom {
+    background-color: #FFFFFF !important;
+}
+
+.footer-gradient {
+    background: linear-gradient(to right, #0C53AC 0%, #0C3E80 50%, #052246 100%);
+}
+
+/* Remove bullets from menu list */
+nav ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+nav ul li {
+    padding: 5px 0 !important;
+}
+
+.company_name {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.text-custom-dark {
+    color: #09090A;
+}
+
+.has-text-align-center {
+    font-size: 2.5rem;
+    line-height: 160%;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 500;
+}
+
+.btn-get-started {
+    display: inline-block;
+    padding: 15px 50px;
+    color: #fff;
+    background: linear-gradient(to right, #0C53AC, #052246);
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s ease, transform 0.2s ease;
+
+    &:hover {
+        background: linear-gradient(to right, #052246, #0C53AC);
+        transform: translateY(-2px);
+        text-decoration: none;
+        color: #fff;
+    }
+}
+
+#toastContainer {
+    .unread {
+        background-color: #e9f5ff;
+        font-weight: 500;
+    }
+
+    .read {
+        background-color: #fff;
+        color: #666;
+    }
+}
+
+/* Anchor Styles */
+.nav-item a,
+.list-inline-item a {
+    color: #000000 !important;
+    text-decoration: none !important;
+    font-weight: 600;
+    font-size: 18px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+
+    &:hover {
+        color: #05489C !important;
+        text-decoration: none;
+    }
+}
+
+.footer-list-inline-item a {
+    color: #FFFFFF !important;
+    font-weight: 400 !important;
+}
+
+figure {
+    margin: 0 0 0rem !important;
+}
+
+.footlinks a {
+    text-decoration: none;
+    color: #09090A;
+    margin: 0 10px;
+}
+
+.fs-xxl {
+    font-size: 3rem;
+}
+
+.transparent-bg {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.custom-tab-button {
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    color: #09090A;
+    padding: 10px;
+    margin-right: 2px;
+
+    &.active {
+        background-color: rgba(255, 255, 255, 1);
+    }
+}
+
+#homeTabContent .tab-pane {
+    font-weight: 300;
+}
+
+.text-shadow-lg {
+    text-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+}
+
+.custom-padding-top {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+h1.fs-giant {
+    font-family: "Barlow", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.bg-teal-100 {
+    background-color: #ccfbf1 !important; // Tailwind's teal-100
+}
+
+.small,
+small {
+    font-size: .675em !important;
+}
+
+// =============================
+//         MEDIA QUERIES
+// =============================
+
+@media (max-width: 767.98px) {
+    .offcanvas-start {
+        width: 80% !important;
+    }
+
+    h1.fs-giant {
+        font-size: 1.5rem;
+    }
+
+    .custom-padding-top {
+        padding-top: 50px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1199.98px) {
+    h1.fs-giant {
+        font-size: 1.8rem;
+    }
+
+    .custom-padding-top {
+        padding-top: 100px;
+    }
+}
+
+@media (min-width: 1200px) {
+    h1.fs-giant {
+        font-size: 2.5rem;
+    }
+}

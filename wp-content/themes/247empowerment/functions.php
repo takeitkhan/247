@@ -5,19 +5,16 @@ function mm_theme_setup()
     add_theme_support('post-thumbnails');
 }
 add_action('after_setup_theme', 'mm_theme_setup');
-function mm_enqueue_assets() {
-    wp_enqueue_style('bootstrap-css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
-    wp_enqueue_style('mm-style', get_stylesheet_uri(), [], filemtime(get_stylesheet_directory() . '/style.css'));
-    wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', [], null, true);
-    wp_enqueue_script('jquery');
-    wp_enqueue_script('post-create', get_template_directory_uri() . '/assets/js/post-create.js', ['jquery'], null, true);
 
-    wp_localize_script('post-create', 'ajax_object', [
-        'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce'    => wp_create_nonce('create_post_action')
-    ]);
+function mm_enqueue_assets() {
+    wp_enqueue_style('output', get_template_directory_uri() . '/assets/css/output.css', [], filemtime(get_template_directory() . '/assets/css/output.css'));
+
+    wp_enqueue_style('mm-style', get_stylesheet_uri(), [], filemtime(get_stylesheet_directory() . '/style.css'));
+
+    wp_enqueue_script('bootstrap-js', get_template_directory_uri() . '/assets/js/bootstrap.bundle.min.js', [], null, true);
 }
 add_action('wp_enqueue_scripts', 'mm_enqueue_assets');
+
 
 
 
@@ -102,7 +99,7 @@ class MM_Footer_Walker_Nav_Menu extends Walker_Nav_Menu
 
     function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
     {
-        $output .= '<li class="list-inline-item">';
+        $output .= '<li class="footer-list-inline-item list-inline-item">';
 
         $atts = [
             'href'  => !empty($item->url) ? esc_url($item->url) : '#',
@@ -139,7 +136,7 @@ class MM_Auth_Walker_Nav_Menu extends Walker_Nav_Menu
         // Assign classes
         $classes = '';
         if ($is_sign_in) {
-            $classes = 'btn btn-outline-primary btn-sm';
+            $classes = 'btn btn-outline-primary btn-sm px-4';
         } elseif ($is_sign_up) {
             $classes = 'me-2 text-decoration-none';
         } else {

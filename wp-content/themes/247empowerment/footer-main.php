@@ -9,7 +9,7 @@
             </div>
 
             <div class="mb-3 col-md-3">
-                <ul class="list-inline mb-0">
+                <ul class="footer-list-inline-item list-inline mb-0">
                     <!-- Social links -->
                     <li class="list-inline-item"><a href="#" class="text-white fs-3" aria-label="X / Twitter"><i class="fab fa-x-twitter"></i></a></li>
                     <li class="list-inline-item"><a href="#" class="text-white fs-3" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a></li>

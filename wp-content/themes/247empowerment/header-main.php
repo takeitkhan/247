@@ -65,15 +65,6 @@ if (is_front_page()) {
     <meta name="twitter:image" content="<?php echo esc_url($og_image); ?>">
 
     <link rel="canonical" href="<?php echo esc_url($og_url); ?>" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
-    <!-- Toastify CSS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-
     <!-- Toastify JS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
@@ -193,7 +184,7 @@ if (is_front_page()) {
                 </div>
 
                 <!-- Sign Up / Sign In -->
-                <div class="text-end col-2 col-md-2 col-lg-2">
+                <div class="align-items-center text-end col-2 col-md-2 col-lg-2">
                     <?php
                     wp_nav_menu([
                         'theme_location' => 'authentication',
