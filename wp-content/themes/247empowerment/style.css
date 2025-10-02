@@ -14,9 +14,9 @@ Tags: custom-colors, custom-menu, multi-column, custom-logo, editor-style, featu
 
 */
 /* @import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap'); */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
-@import url('assets/css/loggedin_style.css');
-
+/* @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import url('assets/css/loggedin_style.css'); */
+/* 
 body {
   font-weight: 300;
   width: 100%;
@@ -37,8 +37,6 @@ strong {
   background: linear-gradient(to right, #0C53AC 0%, #0C3E80 50%, #052246 100%);
 }
 
-
-/* Remove bullets from menu list */
 nav ul {
   list-style: none;
   padding-left: 0;
@@ -95,7 +93,6 @@ nav ul li {
   color: #666;
 }
 
-/* Style the anchor tags */
 .nav-item a,
 .list-inline-item a {
     color: #000000 !important;
@@ -104,8 +101,6 @@ nav ul li {
     font-size: 18px;
     font-family: 'Plus Jakarta Sans', sans-serif;
 }
-
-/* Optional: Add hover effect */
 .nav-item a:hover, .list-inline-item a:hover {
   color: #05489C !important;
   text-decoration: none;
@@ -167,8 +162,7 @@ h1.fs-giant {
 }
 
 .bg-teal-100 {
-  background-color: #ccfbf1 !important;
-  /* Tailwind's teal-100 */
+  background-color: #ccfbf1 !important;  
 }
 
 
@@ -205,4 +199,4 @@ h1.fs-giant {
 .small,
 small {
   font-size: .675em !important;
-}
+} */

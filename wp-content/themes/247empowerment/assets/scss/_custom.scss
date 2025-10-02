@@ -28,7 +28,7 @@ nav ul {
 }
 
 nav ul li {
-    padding: 5px 0 !important;
+    padding: 5px 20px !important;
 }
 
 .company_name {
@@ -77,6 +77,16 @@ nav ul li {
         color: #666;
     }
 }
+
+
+.page-header-overlay {
+    position: absolute;
+    top: 28px;
+    left: 0;
+    width: 100%;
+    text-align: center;    
+}
+
 
 /* Anchor Styles */
 .nav-item a,

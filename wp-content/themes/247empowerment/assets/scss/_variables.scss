@@ -1,13 +1,28 @@
 :root {
-    --blue-color: #0572ef;
-    --light-blur: #19afff;
+    --blue-color: #05489C;
+    --light-blur: #1A5DB1;
     --box-shadow-color: #00000033;
-    --light-color: #e5e6eb;
+    --light-color: #FFD5F2;
     --gray-color: #66676b;
     --white-color: #ffffff;
     --black-color: #09090a;
     --red-color: #de3f4f;
 }
+
+// Override Bootstrap color variables BEFORE importing Bootstrap
+$primary: #05489C;
+$secondary: #1A5DB1;
+$success: #16a34a;
+$info: #0ea5e9;
+$warning: #EBC1DE;
+$light-color: #FFD5F2;
+$danger: #dc2626;
+$light: #f8f9fa;
+$dark: #111827;
+
+// Optionally change font, border radius, etc.
+$font-family-sans-serif: 'Plus Jakarta Sans', sans-serif;
+$border-radius: 0.5rem;
 
 * {
     margin: 0;
@@ -73,20 +88,6 @@ body {
 .custom-mt-20 {
     margin-top: -20px !important;
 }
-
-// Override Bootstrap color variables BEFORE importing Bootstrap
-$primary: #1e40af;
-$secondary: #64748b;
-$success: #16a34a;
-$info: #0ea5e9;
-$warning: #f59e0b;
-$danger: #dc2626;
-$light: #f8f9fa;
-$dark: #111827;
-
-// Optionally change font, border radius, etc.
-$font-family-sans-serif: 'Plus Jakarta Sans', sans-serif;
-$border-radius: 0.5rem;
 
 // ==============================
 // Buttons

@@ -5,10 +5,10 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css");
 @import url("https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css");
 :root {
-  --blue-color: #0572ef;
-  --light-blur: #19afff;
+  --blue-color: #05489C;
+  --light-blur: #1A5DB1;
   --box-shadow-color: #00000033;
-  --light-color: #e5e6eb;
+  --light-color: #FFD5F2;
   --gray-color: #66676b;
   --white-color: #ffffff;
   --black-color: #09090a;
@@ -12218,7 +12218,7 @@ nav ul {
 }
 
 nav ul li {
-  padding: 5px 0 !important;
+  padding: 5px 20px !important;
 }
 
 .company_name {
@@ -12262,6 +12262,14 @@ nav ul li {
 #toastContainer .read {
   background-color: #fff;
   color: #666;
+}
+
+.page-header-overlay {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  width: 100%;
+  text-align: center;
 }
 
 /* Anchor Styles */
