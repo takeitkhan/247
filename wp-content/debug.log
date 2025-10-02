@@ -2344,3 +2344,8 @@ Stack trace:
 #3 D:\oldwindows\laragon\www\pet\wp-admin\admin-ajax.php(192): do_action('wp_ajax_mark_al...')
 #4 {main}
   thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\mm\functions.php on line 821
+[02-Oct-2025 02:28:17 UTC] Automatic updates starting...
+[02-Oct-2025 02:28:20 UTC] Automatic updates complete.
+[02-Oct-2025 09:51:50 UTC] PHP Warning:  Attempt to read property "title" on null in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-customize-widgets.php on line 926
+[02-Oct-2025 11:12:04 UTC] PHP Warning:  Attempt to read property "title" on null in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-customize-widgets.php on line 926
+[02-Oct-2025 11:46:41 UTC] PHP Warning:  Attempt to read property "title" on null in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-customize-widgets.php on line 926
