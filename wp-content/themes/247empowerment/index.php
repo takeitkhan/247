@@ -1,4 +1,11 @@
-<?php get_header(); ?>
+<?php
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
+?>
+
 <div class="p-4">
     <?php while (have_posts()):
         the_post(); ?>
@@ -13,4 +20,12 @@
         <?php the_content(); ?>
     <?php endwhile; ?>
 </div>
-<?php get_footer(); ?>
+
+
+<?php
+if (is_user_logged_in()) {
+    get_footer('portal'); // loads footer-custom.php
+} else {
+    get_footer('main'); // loads footer-main.php
+}
+?>

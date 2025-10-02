@@ -5,7 +5,11 @@ if (!is_user_logged_in()) {
     exit;
 }
 
-get_header();
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 ?>
 <main>
     <div class="main-container" style="padding-top: 80px">
@@ -33,4 +37,9 @@ get_header();
 </main>
 
 <?php
-get_footer();
+if (is_user_logged_in()) {
+    get_footer('portal');
+} else {
+    get_footer('main');
+}
+?>

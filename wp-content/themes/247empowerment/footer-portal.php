@@ -4,7 +4,6 @@
             <div class="d-flex align-items-center justify-content-center mt-3">
                 <p class="text-center"><?php echo get_bloginfo('name'); ?></p>
             </div>
-
         </div>
 </footer>
 
@@ -79,15 +78,7 @@ $notifications = array_slice($all_notifications, 0, 6);
         <?php endif; ?>
     </div>
 </div>
+<?php wp_footer(); ?>
+</body>
 
-<!-- CSS -->
-<style>
-    #toastContainer .unread {
-        background-color: #e9f5ff;
-        font-weight: 500;
-    }
-    #toastContainer .read {
-        background-color: #fff;
-        color: #666;
-    }
-</style>
+</html>

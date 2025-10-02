@@ -3,7 +3,11 @@
 /**
  * Template Name: Event Submission Page
  */
-get_header();
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 ?>
 <main>
     <div class="main-container s-main-con">
@@ -31,4 +35,10 @@ get_header();
     </div>
 </main>
 
-<?php get_footer(); ?>
+<?php
+if (is_user_logged_in()) {
+    get_footer('portal'); // loads footer-custom.php
+} else {
+    get_footer('main'); // loads footer-main.php
+}
+?>

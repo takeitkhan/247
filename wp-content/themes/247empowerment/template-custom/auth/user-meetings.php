@@ -1,13 +1,21 @@
 <?php
 /* Template Name: User Meetings Page */
-get_header();
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 
 $user_slug = get_query_var('user_profile');
 $user = get_user_by('slug', $user_slug);
 
 if (!$user) {
     echo '<h2>User not found.</h2>';
-    get_footer();
+    if (is_user_logged_in()) {
+        get_footer('portal');
+    } else {
+        get_footer('main');
+    }
     exit;
 }
 
@@ -41,4 +49,9 @@ $profile = (new UserProfileData($user_slug))->getProfile();
 </main>
 
 <?php
-get_footer();
+if (is_user_logged_in()) {
+    get_footer('portal');
+} else {
+    get_footer('main');
+}
+?>

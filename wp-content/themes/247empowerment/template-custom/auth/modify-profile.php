@@ -1,6 +1,10 @@
 <?php
 /* Template Name: Modify Profile */
-get_header();
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 
 if (!is_user_logged_in()) {
     wp_redirect(wp_login_url());
@@ -370,4 +374,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         padding: 0;
     }
 </style>
-<?php get_footer(); ?>
+<?php
+if (is_user_logged_in()) {
+    get_footer('portal');
+} else {
+    get_footer('main');
+}
+?>

@@ -1,8 +1,11 @@
 <?php
 /* Template Name: Change Password */
 ob_start(); // Start output buffering
-get_header();
-
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 
 if (!is_user_logged_in()) {
     wp_redirect(wp_login_url());
@@ -37,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
             <?php include get_template_directory() . '/template-custom/auth/profile-parts/edit-profile-left-sidebar.php'; ?>
 
             <div class="ms-md-auto col-12 col-md-8 col-lg-9 col-xl-9">
-                <div class="bg-white custom-box-shadow mb-3 p-3 custom-border-radius">                    
+                <div class="bg-white custom-box-shadow mb-3 p-3 custom-border-radius">
                     <h5 class="mb-5">🔒 Change Password</h5>
                     <form method="post">
                         <?php wp_nonce_field('change_password_action', 'change_password_nonce'); ?>
@@ -60,4 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     </div>
 </main>
 <?php ob_end_flush(); ?>
-<?php get_footer(); ?>
+<?php
+if (is_user_logged_in()) {
+    get_footer('portal');
+} else {
+    get_footer('main');
+}
+?>

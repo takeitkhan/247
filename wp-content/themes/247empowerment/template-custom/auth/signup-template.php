@@ -6,7 +6,11 @@
  */
 
 defined('ABSPATH') || exit;
-get_header();
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 ?>
 <?php
 $message = get_transient('custom_user_message');
@@ -152,10 +156,10 @@ $old_input = $message['old_input'] ?? [];
         </div>
     </div>
 </div>
-<style>
-    .small,
-    small {
-        font-size: .675em !important;
-    }
-</style>
-<?php get_footer(); ?>
+<?php
+if (is_user_logged_in()) {
+    get_footer('portal');
+} else {
+    get_footer('main');
+}
+?>

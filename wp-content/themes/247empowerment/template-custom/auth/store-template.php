@@ -3,7 +3,11 @@
 /**
  * Template Name: Logged In Marketplace
  */
-get_header();
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 ?>
 <main>
     <div class="main-container s-main-con">
@@ -156,4 +160,10 @@ get_header();
     }
 </script>
 
-<?php get_footer(); ?>
+<?php
+if (is_user_logged_in()) {
+    get_footer('portal');
+} else {
+    get_footer('main');
+}
+?>

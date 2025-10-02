@@ -6,7 +6,11 @@
  */
 
 defined('ABSPATH') || exit;
-get_header();
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 ?>
 <div class="container-fluid">
     <div class="px-4 py-4 overflow-hidden row">
@@ -99,4 +103,10 @@ get_header();
         toggleIcon.classList.toggle('fa-eye-slash');
     }
 </script>
-<?php get_footer(); ?>
+<?php
+if (is_user_logged_in()) {
+    get_footer('portal');
+} else {
+    get_footer('main');
+}
+?>

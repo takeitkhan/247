@@ -31,7 +31,11 @@ if (isset($_POST['custom_lost_password']) && check_admin_referer('custom_lost_pa
     }
 }
 
-get_header();
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 ?>
 
 <div class="mt-5 container" style="max-width: 480px;">
@@ -60,4 +64,10 @@ get_header();
     <?php endif; ?>
 </div>
 
-<?php get_footer(); ?>
+<?php
+if (is_user_logged_in()) {
+    get_footer('portal');
+} else {
+    get_footer('main');
+}
+?>

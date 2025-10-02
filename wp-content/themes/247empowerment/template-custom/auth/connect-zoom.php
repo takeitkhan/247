@@ -4,8 +4,11 @@ if (!is_user_logged_in()) {
     wp_redirect(wp_login_url());
     exit;
 }
-
-get_header();
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 ?>
 <main>
     <div class="main-container" style="padding-top: 80px">
@@ -33,4 +36,9 @@ get_header();
 </main>
 
 <?php
-get_footer();
+if (is_user_logged_in()) {
+    get_footer('portal'); // loads footer-custom.php
+} else {
+    get_footer('main'); // loads footer-main.php
+}
+?>

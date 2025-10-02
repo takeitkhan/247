@@ -9,7 +9,11 @@ if (!is_user_logged_in()) {
     exit;
 }
 
-get_header();
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 
 $current_user_id = get_current_user_id();
 $balance = (float) get_user_meta($current_user_id, 'referral_commission', true);
@@ -205,4 +209,10 @@ $profile = (new UserProfileData($user_slug))->getProfile();
     });
 </script>
 
-<?php get_footer(); ?>
+<?php
+if (is_user_logged_in()) {
+    get_footer('portal');
+} else {
+    get_footer('main');
+}
+?>

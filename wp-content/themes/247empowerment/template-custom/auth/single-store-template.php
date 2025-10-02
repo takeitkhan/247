@@ -12,11 +12,19 @@ $course = get_page_by_path($course_slug, OBJECT, 'course');
 
 if (!$course) {
     if (!$is_shareable) {
-        get_header();
+        if (is_user_logged_in()) {
+            get_header('portal');
+        } else {
+            get_header('main');
+        }
     }
     echo '<p class="text-danger">Course not found.</p>';
     if (!$is_shareable) {
-        get_footer();
+        if (is_user_logged_in()) {
+            get_footer('portal');
+        } else {
+            get_footer('main');
+        }
     }
     exit;
 }
@@ -38,13 +46,17 @@ $custom_permalink = home_url("/{$store_user}/store/{$course_slug}/");
 
 // Only load header if NOT shareable
 if (!$is_shareable) {
-    get_header();
+    if (is_user_logged_in()) {
+        get_header('portal');
+    } else {
+        get_header('main');
+    }
 }
 
 ?>
 
 <?php if ($is_shareable): ?>
-    
+
     <?php
     $path = $_SERVER['REQUEST_URI'];
     $segments = explode('/', trim($path, '/'));
@@ -125,7 +137,7 @@ if (!$is_shareable) {
                                             ?>
 
                                             <div class="text-end">
-                                                <button id="copyLinkBtn" class="btn-outline-primary btn btn-sm">                                                
+                                                <button id="copyLinkBtn" class="btn-outline-primary btn btn-sm">
                                                     <i class="bi bi-link-45deg"></i> Copy Sharable Link
                                                 </button>
                                             </div>
@@ -330,5 +342,9 @@ if (!$is_shareable) {
 
 
 <?php
-    get_footer();
+    if (is_user_logged_in()) {
+        get_footer('portal');
+    } else {
+        get_footer('main');
+    }
 }

@@ -1,5 +1,10 @@
-<?php get_header(); ?>
-
+<?php
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
+?>
 <main>
     <div class="xmain-container" style="xpadding-top: 80px;">
         <div class="xcustom-box-shadow mb-3 p-3 xcustom-border-radius xbg-white">
@@ -27,4 +32,10 @@
     </div>
 </main>
 
-<?php get_footer(); ?>
+<?php
+if (is_user_logged_in()) {
+    get_footer('portal'); // loads footer-custom.php
+} else {
+    get_footer('main'); // loads footer-main.php
+}
+?>

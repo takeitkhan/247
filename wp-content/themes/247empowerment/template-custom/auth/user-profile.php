@@ -12,7 +12,11 @@ if (!is_user_logged_in()) {
      * Template Name: User Profile Template
      */
 
-    get_header();
+    if (is_user_logged_in()) {
+        get_header('portal');
+    } else {
+        get_header('main');
+    }
 
     // Get the user slug (username) from the URL
     $user_slug = get_query_var('user_profile');
@@ -270,6 +274,12 @@ if (!is_user_logged_in()) {
                 });
         });
     </script>
-    <?php get_footer(); ?>
+    <?php
+    if (is_user_logged_in()) {
+        get_footer('portal');
+    } else {
+        get_footer('main');
+    }
+    ?>
 <?php
 }

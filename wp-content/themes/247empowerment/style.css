@@ -13,13 +13,14 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: custom-colors, custom-menu, multi-column, custom-logo, editor-style, featured-images, full-site-editing, block-patterns, rtl-language-support, sticky-post, threaded-comments, translation-ready, wide-blocks, block-styles, style-variations, accessibility-ready, blog, portfolio, news
 
 */
-@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 @import url('assets/css/loggedin_style.css');
 
 body {
   font-weight: 300;
   width: 100%;
-  font-family: "Barlow", sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   color: #09090A;
 }
 
@@ -58,19 +59,60 @@ nav ul li {
   color: #09090A;
 }
 
+.has-text-align-center {
+  font-size: 2.5rem;
+  line-height: 160%;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 500;
+}
+
+.btn-get-started {
+  display: inline-block;
+  padding: 15px 50px;
+  color: #fff;
+  background: linear-gradient(to right, #0C53AC, #052246);
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-get-started:hover {
+  background: linear-gradient(to right, #052246, #0C53AC);
+  transform: translateY(-2px);
+  text-decoration: none;
+  color: #fff;
+}
+
+#toastContainer .unread {
+  background-color: #e9f5ff;
+  font-weight: 500;
+}
+
+#toastContainer .read {
+  background-color: #fff;
+  color: #666;
+}
+
 /* Style the anchor tags */
-nav a {
-  color: #09090A !important;
+.nav-item a {
+  color: #000000 !important;
   text-decoration: none !important;
-  font-size: 20px;
+  font-weight: medium !important;
+  font-size: 18px;
 }
 
 /* Optional: Add hover effect */
-nav a:hover {
-  color: #ccc;
-  /* Or any color you like */
+.nav-item a:hover {
+  color: #05489C !important;
   text-decoration: none;
 }
+
+figure {
+  margin: 0 0 0rem !important;
+}
+
 
 .footlinks a {
   text-decoration: none;
@@ -151,4 +193,9 @@ h1.fs-giant {
   h1.fs-giant {
     font-size: 2.5rem;
   }
+}
+
+.small,
+small {
+  font-size: .675em !important;
 }

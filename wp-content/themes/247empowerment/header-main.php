@@ -65,7 +65,6 @@ if (is_front_page()) {
     <meta name="twitter:image" content="<?php echo esc_url($og_image); ?>">
 
     <link rel="canonical" href="<?php echo esc_url($og_url); ?>" />
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -94,7 +93,6 @@ if (is_front_page()) {
                 console.log(`Already referred by ${storedReferrer}`);
             }
         });
-
     </script>
 
     <!-- Google tag (gtag.js) -->
@@ -127,25 +125,88 @@ if (is_front_page()) {
         })(window, document, 'script', 'dataLayer', 'GTM-MMZ2RG8C');
     </script>
     <!-- End Google Tag Manager -->
-     <!-- Facebook Pixel Code --> <script nonce="gnuSF21j"> !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod? n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n; n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0; t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');  fbq('init', '1430184528309439'); fbq('track', "PageView");</script> <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1430184528309439&ev=PageView&noscript=1" /></noscript> <!-- End Facebook Pixel Code -->
-    <?php wp_head(); ?>
+    <!-- Facebook Pixel Code -->
+    <script nonce="gnuSF21j">
+        ! function(f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function() {
+                n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1430184528309439');
+        fbq('track', "PageView");
+    </script>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1430184528309439&ev=PageView&noscript=1" /></noscript> <!-- End Facebook Pixel Code -->
 </head>
-<?php if (is_user_logged_in()) : ?>
-    <?php
-    $custom_header = get_template_directory() . '/template-custom/header.php';
-    if (file_exists($custom_header)) {
-        include $custom_header;
-    } else {
-        echo "<p>Missing: $custom_header</p>";
-    }
-    ?>
-<?php else : ?>
-    <?php
-    $main_header = get_template_directory() . '/template-main/header.php';
-    if (file_exists($main_header)) {
-        include $main_header;
-    } else {
-        echo "<p>Missing: $main_header</p>";
-    }
-    ?>
-<?php endif; ?>
+
+<body class="bg-dark-custom">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MMZ2RG8C"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <header class="py-2">
+        <div class="container">
+            <div class="align-items-center row">
+
+                <!-- Logo -->
+                <div class="col-2 col-md-2 col-lg-2">
+                    <a href="<?php echo esc_url(home_url('/')); ?>" class="d-inline-block">
+                        <img src="<?php echo esc_url(get_theme_mod('large_logo')); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>"
+                            class="img-fluid" style="width: 50px;">
+                    </a>
+                </div>
+
+                <!-- Navbar -->
+                <div class="col-8 col-md-8 col-lg-8">
+                    <nav class="bg-white p-0 navbar navbar-expand-lg navbar-light">
+                        <div class="p-0 container-fluid">
+                            <!-- Toggle for mobile -->
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                                aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+
+                            <div class="collapse navbar-collapse justify-content-center" id="mainNavbar">
+                                <?php
+                                wp_nav_menu([
+                                    'theme_location' => 'primary',
+                                    'container'      => false,
+                                    'menu_class'     => 'navbar-nav',
+                                    'fallback_cb'    => false,
+                                    'depth'          => 2,
+                                    'walker'         => new MM_Walker_Nav_Menu(),
+                                ]);
+                                ?>
+                            </div>
+                        </div>
+                    </nav>
+
+                </div>
+
+                <!-- Sign Up / Sign In -->
+                <div class="text-end col-2 col-md-2 col-lg-2">
+                    <?php
+                    wp_nav_menu([
+                        'theme_location' => 'authentication',
+                        'container' => false,
+                        'menu_class' => 'list-inline mb-0',
+                        'items_wrap' => '<ul class="%2$s">%3$s</ul>',
+                        'walker' => new MM_Auth_Walker_Nav_Menu(),
+                        'fallback_cb' => false,
+                    ]);
+                    ?>
+                </div>
+            </div>
+        </div>
+    </header>

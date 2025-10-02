@@ -1,6 +1,10 @@
 <?php
 /* Template Name: Modify Social Links */
-get_header();
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 
 if (!is_user_logged_in()) {
     wp_redirect(wp_login_url());
@@ -171,4 +175,10 @@ $saved_links = get_user_meta($user_id, 'custom_social_links', true) ?: [];
     });
 </script>
 
-<?php get_footer(); ?>
+<?php
+if (is_user_logged_in()) {
+    get_footer('portal');
+} else {
+    get_footer('main');
+}
+?>

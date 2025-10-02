@@ -141,15 +141,22 @@ class MM_Auth_Walker_Nav_Menu extends Walker_Nav_Menu {
     function end_lvl(&$output, $depth = 0, $args = null) {}
 
     function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
-        // Determine button or link based on title or class
-        $is_button = stripos($item->title, 'Sign In') !== false;
+        // Detect "Sign In" or "Sign Up"
+        $title_lower = strtolower($item->title);
+        $is_sign_in = strpos($title_lower, 'sign in') !== false;
+        $is_sign_up = strpos($title_lower, 'sign up') !== false;
 
-        $classes = $is_button
-            ? 'btn btn-primary btn-sm'
-            : 'me-2 text-white text-decoration-none';
+        // Assign classes
+        $classes = '';
+        if ($is_sign_in) {
+            $classes = 'btn btn-outline-primary btn-sm';
+        } elseif ($is_sign_up) {
+            $classes = 'me-2 text-decoration-none';
+        } else {
+            $classes = 'text-decoration-none';
+        }
 
         $output .= '<li class="list-inline-item">';
-
         $output .= '<a href="' . esc_url($item->url) . '" class="' . esc_attr($classes) . '">'
                  . esc_html($item->title) . '</a>';
     }
@@ -158,7 +165,6 @@ class MM_Auth_Walker_Nav_Menu extends Walker_Nav_Menu {
         $output .= '</li>';
     }
 }
-
 
 
 Kirki::add_config('my_config', array(

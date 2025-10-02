@@ -3,7 +3,11 @@
 /**
  * Template Name: Logged In Front Page
  */
-get_header();
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 // Get current user ID
 $current_user_id = get_current_user_id();
 
@@ -30,4 +34,10 @@ $current_user_id = get_current_user_id();
         </div>
     </div>
 </main>
-<?php get_footer(); ?>
+<?php
+if (is_user_logged_in()) {
+    get_footer('portal');
+} else {
+    get_footer('main');
+}
+?>

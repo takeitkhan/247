@@ -1,5 +1,9 @@
 <?php
-get_header();
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 
 $referral_user_slug = get_query_var('referral_user');
 $user = get_user_by('slug', $referral_user_slug);
@@ -8,7 +12,11 @@ $user = get_user_by('slug', $referral_user_slug);
 
 if (!$user) {
     echo '<div class="py-5 container"><h2>User not found.</h2></div>';
-    get_footer();
+    if (is_user_logged_in()) {
+        get_footer('portal');
+    } else {
+        get_footer('main');
+    }
     return;
 }
 
@@ -124,4 +132,10 @@ if ($search) {
     });
 </script>
 
-<?php get_footer(); ?>
+<?php
+if (is_user_logged_in()) {
+    get_footer('portal');
+} else {
+    get_footer('main');
+}
+?>

@@ -3,7 +3,11 @@
 /**
  * Template Name: AI Page
  */
-get_header();
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 ?>
 <main>
     <div class="main-container" style="padding-top: 80px;">
@@ -30,4 +34,10 @@ get_header();
         </div>
     </div>
 </main>
-<?php get_footer(); ?>
+<?php
+if (is_user_logged_in()) {
+    get_footer('portal');
+} else {
+    get_footer('main');
+}
+?>

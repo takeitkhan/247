@@ -1047,7 +1047,7 @@ gmp-place-autocomplete {
     margin-bottom: 10px;
 }
 
-.btn-outline-danger.btn.btn-sm,
+/* .btn-outline-danger.btn.btn-sm,
 .btn-outline-primary.btn.btn-sm {
     padding: 12px 20px;
     background-color: var(--bs-primary);
@@ -1056,7 +1056,7 @@ gmp-place-autocomplete {
     border-radius: 7px;
     font-weight: 600;
     position: relative;
-}
+} */
 
 .btn.btn-white-outline {
     border: 1px solid rgba(var(--inverse-color-rgb), 0.2) !important;

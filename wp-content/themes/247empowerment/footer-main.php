@@ -1,7 +1,7 @@
 </div>
-<footer class="py-4 text-white footer-gradient">
+<footer class="py-2 text-white footer-gradient">
     <div class="container">
-        <div class="align-items-center row">            
+        <div class="align-items-center row">
             <div class="mb-3 col-md-5">
                 <h5><?php echo get_bloginfo('name'); ?></h5>
                 <p class="mb-0"><?php echo get_bloginfo(show: 'tagline'); ?></p>
@@ -34,17 +34,17 @@
                         </a>
                     </li>
                 </ul>
-            </div>            
+            </div>
             <div class="mb-3 text-end col-md-4">
                 <?php
-                    wp_nav_menu([
-                        'theme_location' => 'secondary',
-                        'container' => false,
-                        'menu_class' => 'list-inline mb-0',
-                        'items_wrap' => '<ul id="%1$s" class="%2$s">%3$s</ul>',
-                        'walker' => new MM_Footer_Walker_Nav_Menu(),
-                        'fallback_cb' => false,
-                    ]);
+                wp_nav_menu([
+                    'theme_location' => 'secondary',
+                    'container' => false,
+                    'menu_class' => 'list-inline mb-0',
+                    'items_wrap' => '<ul id="%1$s" class="%2$s">%3$s</ul>',
+                    'walker' => new MM_Footer_Walker_Nav_Menu(),
+                    'fallback_cb' => false,
+                ]);
                 ?>
             </div>
         </div>
@@ -54,7 +54,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.min.js"></script>
-<script>    
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         const tabButtons = document.querySelectorAll('[data-bs-toggle="tab"]');
         const tabContents = document.querySelectorAll('.tab-content'); // Assuming .tab-content wrapper
@@ -97,3 +97,7 @@
         });
     });
 </script>
+<?php wp_footer(); ?>
+</body>
+
+</html>

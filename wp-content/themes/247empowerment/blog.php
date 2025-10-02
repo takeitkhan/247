@@ -8,8 +8,11 @@
  * @author Your Name
  * @version 1.0
  */
-
-get_header(); 
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 ?>
  <!-- owl slider script -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.css">
@@ -23,9 +26,9 @@ get_header();
         while ( have_posts() ) :
             the_post();
             the_content();?>
-                 <section id="blog-listing" class="blog-listing card-sec-padding pb-0 white-bg">
+                 <section id="blog-listing" class="pb-0 blog-listing card-sec-padding white-bg">
     <div class="blog-list-wrapper container">
-        <div class="articles-card-row flex">
+        <div class="flex articles-card-row">
             <?php
             $args = array(
                 'post_type' => 'post',
@@ -41,7 +44,7 @@ get_header();
                                 <img src="<?php the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
                             <?php endif; ?>
                             <div class="artist-content">
-                                <div class="date-box flex">
+                                <div class="flex date-box">
                                 <p><a href="<?php the_permalink(); ?>"><img decoding="async" src="/wp-content/uploads/2024/08/featured-col-small-1.png" alt="blog"></a></p>
                                     <p class="date"><?php echo get_the_date(); ?></p>
                                 </div>
@@ -53,7 +56,7 @@ get_header();
                                 <?php else : ?>
                                     <p><?php _e('No description available.', 'textdomain'); ?></p>
                                 <?php endif; ?>
-                                <a href="<?php the_permalink(); ?>" class="btn-blue mt-20">
+                                <a href="<?php the_permalink(); ?>" class="mt-20 btn-blue">
                                     <svg width="40px" height="10px" viewBox="0 0 40 10">
                                         <path d="M1,5 L36,5"></path>
                                         <polyline points="33 1 37 5 33 9"></polyline>
@@ -70,7 +73,7 @@ get_header();
             <?php endif; ?>
         </div>
         <!-- Pagination Controls -->
-        <div class="pagination-controls flex">
+        <div class="flex pagination-controls">
             <button class="prev-page" disabled=""><span>← </span> Previous</button>
             <div class="page-numbers"></div>
             <button class="next-page" disabled="">Next<span>→ </span></button>
@@ -139,4 +142,10 @@ get_header();
         });
       </script>
 
-<?php get_footer(); ?>
+<?php
+if (is_user_logged_in()) {
+    get_footer('portal'); // loads footer-custom.php
+} else {
+    get_footer('main'); // loads footer-main.php
+}
+?>

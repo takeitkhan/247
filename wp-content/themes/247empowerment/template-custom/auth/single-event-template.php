@@ -13,11 +13,19 @@ $event = get_page_by_path($event_slug, OBJECT, 'event');
 
 if (!$event) {
     if (!$is_shareable) {
-        get_header();
+        if (is_user_logged_in()) {
+            get_header('portal');
+        } else {
+            get_header('main');
+        }
     }
     echo '<p class="text-danger">Event not found.</p>';
     if (!$is_shareable) {
-        get_footer();
+        if (is_user_logged_in()) {
+            get_header('portal');
+        } else {
+            get_header('main');
+        }
     }
     exit;
 }
@@ -39,7 +47,11 @@ $custom_permalink = home_url("/{$event_user}/event/{$event_slug}/");
 
 // Only load header if NOT shareable
 if (!$is_shareable) {
-    get_header();
+    if (is_user_logged_in()) {
+        get_header('portal');
+    } else {
+        get_header('main');
+    }
 }
 
 ?>
@@ -185,5 +197,9 @@ if (!$is_shareable) {
         });
     </script>
 <?php
-    get_footer();
+    if (is_user_logged_in()) {
+        get_footer('portal');
+    } else {
+        get_footer('main');
+    }
 }
