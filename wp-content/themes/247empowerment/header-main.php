@@ -147,6 +147,7 @@ if (is_front_page()) {
         fbq('track', "PageView");
     </script>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1430184528309439&ev=PageView&noscript=1" /></noscript> <!-- End Facebook Pixel Code -->
+    <?php wp_head(); ?>
 </head>
 
 <body class="bg-dark-custom">
@@ -156,8 +157,8 @@ if (is_front_page()) {
     <!-- End Google Tag Manager (noscript) -->
 
     <header class="py-2">
-        <div class="container">
-            <div class="align-items-center row">
+        <div class="container-fluid">
+            <div class="align-items-center px-4 overflow-hidden row">
 
                 <!-- Logo -->
                 <div class="col-2 col-md-2 col-lg-2">
@@ -171,9 +172,7 @@ if (is_front_page()) {
                 <div class="col-8 col-md-8 col-lg-8">
                     <nav class="bg-white p-0 navbar navbar-expand-lg navbar-light">
                         <div class="p-0 container-fluid">
-                            <!-- Toggle for mobile -->
-                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
-                                aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                            <button class="navbar-toggler" ... data-bs-toggle="collapse" ...>
                                 <span class="navbar-toggler-icon"></span>
                             </button>
 
@@ -191,7 +190,6 @@ if (is_front_page()) {
                             </div>
                         </div>
                     </nav>
-
                 </div>
 
                 <!-- Sign Up / Sign In -->

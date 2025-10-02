@@ -17,6 +17,8 @@
  *
  * @package WordPress
  */
+// Hide deprecated notices only
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
 
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */

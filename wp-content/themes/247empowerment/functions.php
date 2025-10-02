@@ -5,40 +5,21 @@ function mm_theme_setup()
     add_theme_support('post-thumbnails');
 }
 add_action('after_setup_theme', 'mm_theme_setup');
+function mm_enqueue_assets() {
+    wp_enqueue_style('bootstrap-css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
+    wp_enqueue_style('mm-style', get_stylesheet_uri(), [], filemtime(get_stylesheet_directory() . '/style.css'));
+    wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', [], null, true);
+    wp_enqueue_script('jquery');
+    wp_enqueue_script('post-create', get_template_directory_uri() . '/assets/js/post-create.js', ['jquery'], null, true);
 
-function enqueue_wp_media_scripts()
-{
-    wp_enqueue_media();
-}
-add_action('admin_enqueue_scripts', 'enqueue_wp_media_scripts');
-
-function enqueue_custom_scripts()
-{
-    // Enqueue post-create.js
-    wp_enqueue_script('post-create', get_template_directory_uri() . '/assets/js/post-create.js', array('jquery'), null, true);
-
-    wp_localize_script('post-create', 'ajax_object', array(
+    wp_localize_script('post-create', 'ajax_object', [
         'ajax_url' => admin_url('admin-ajax.php'),
         'nonce'    => wp_create_nonce('create_post_action')
-    ));
+    ]);
 }
-add_action('wp_enqueue_scripts', 'enqueue_custom_scripts');
+add_action('wp_enqueue_scripts', 'mm_enqueue_assets');
 
 
-
-function enqueue_jquery()
-{
-    if (!is_admin()) {
-        wp_enqueue_script('jquery'); // Enqueue WordPress jQuery
-    }
-}
-add_action('wp_enqueue_scripts', 'enqueue_jquery');
-
-function mm_enqueue_styles()
-{
-    wp_enqueue_style('mm-style', get_stylesheet_uri() . '?time=' . time());
-}
-add_action('wp_enqueue_scripts', 'mm_enqueue_styles');
 
 function register_my_menus()
 {
@@ -50,71 +31,77 @@ function register_my_menus()
 }
 add_action('after_setup_theme', 'register_my_menus');
 
-class MM_Walker_Nav_Menu extends Walker_Nav_Menu
-{
-    function start_lvl(&$output, $depth = 0, $args = null)
-    {
+class MM_Walker_Nav_Menu extends Walker_Nav_Menu {
+
+    // Start level (sub-menu)
+    function start_lvl( &$output, $depth = 0, $args = null ) {
         $indent = str_repeat("\t", $depth);
-        $output .= "\n$indent<ul class=\"dropdown-menu\">\n";
+        $submenu_class = ($depth > 0) ? ' dropdown-submenu' : '';
+        $output .= "\n$indent<ul class=\"dropdown-menu$submenu_class\">\n";
     }
 
-    function start_el(&$output, $item, $depth = 0, $args = [], $id = 0)
-    {
-        $classes = empty($item->classes) ? [] : (array)$item->classes;
+    // Start element
+    function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
+        $classes = empty( $item->classes ) ? [] : (array) $item->classes;
+        $classes = array_filter($classes); // remove empty
+
         $has_children = in_array('menu-item-has-children', $classes);
 
-        // Base li class
+        // Classes for <li>
         $li_classes = ['nav-item'];
         if ($has_children && $depth === 0) {
             $li_classes[] = 'dropdown';
+        } elseif ($depth > 0 && $has_children) {
+            $li_classes[] = 'dropdown-submenu';
+        }
+
+        // Classes for <a>
+        $link_classes = ['nav-link'];
+        if ($depth === 0 && $has_children) {
+            $link_classes[] = 'dropdown-toggle';
+        } elseif ($depth > 0) {
+            $link_classes = ['dropdown-item'];
+        }
+
+        // Attributes for <a>
+        $attrs = '';
+        if ($has_children && $depth === 0) {
+            $attrs .= ' data-bs-toggle="dropdown" aria-expanded="false"';
         }
 
         $output .= '<li class="' . esc_attr(implode(' ', $li_classes)) . '">';
-
-        // Link classes
-        $link_classes = $depth === 0 ? 'nav-link' : 'dropdown-item';
-        if ($has_children && $depth === 0) {
-            $link_classes .= ' dropdown-toggle';
-        }
-
-        // Link attributes
-        $atts = [
-            'href' => !empty($item->url) ? esc_url($item->url) : '',
-            'class' => $link_classes,
-        ];
-
-        if ($has_children && $depth === 0) {
-            $atts['data-bs-toggle'] = 'dropdown';
-            $atts['aria-expanded']  = 'false';
-        }
-
-        $attributes = '';
-        foreach ($atts as $attr => $value) {
-            $attributes .= ' ' . $attr . '="' . esc_attr($value) . '"';
-        }
-
-        // Final link
-        $title = apply_filters('the_title', $item->title, $item->ID);
-        $output .= '<a' . $attributes . '>' . esc_html($title) . '</a>';
+        $output .= '<a href="' . esc_url($item->url) . '" class="' . esc_attr(implode(' ', $link_classes)) . '"' . $attrs . '>';
+        $output .= esc_html($item->title);
+        $output .= '</a>';
     }
 
-    function end_el(&$output, $item, $depth = 0, $args = [])
-    {
+    // End element
+    function end_el( &$output, $item, $depth = 0, $args = null ) {
         $output .= "</li>\n";
+    }
+
+    // End level
+    function end_lvl( &$output, $depth = 0, $args = null ) {
+        $output .= "</ul>\n";
     }
 }
 
 
-class MM_Footer_Walker_Nav_Menu extends Walker_Nav_Menu {
-    function start_lvl( &$output, $depth = 0, $args = null ) {
+
+class MM_Footer_Walker_Nav_Menu extends Walker_Nav_Menu
+{
+    function start_lvl(&$output, $depth = 0, $args = null)
+    {
         // No submenus for footer — skip
     }
 
-    function end_lvl( &$output, $depth = 0, $args = null ) {
+    function end_lvl(&$output, $depth = 0, $args = null)
+    {
         // No submenus for footer — skip
     }
 
-    function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
+    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
+    {
         $output .= '<li class="list-inline-item">';
 
         $atts = [
@@ -123,7 +110,7 @@ class MM_Footer_Walker_Nav_Menu extends Walker_Nav_Menu {
         ];
 
         $attributes = '';
-        foreach ( $atts as $attr => $value ) {
+        foreach ($atts as $attr => $value) {
             $attributes .= ' ' . $attr . '="' . esc_attr($value) . '"';
         }
 
@@ -131,16 +118,19 @@ class MM_Footer_Walker_Nav_Menu extends Walker_Nav_Menu {
         $output .= '<a' . $attributes . '>' . esc_html($title) . '</a>';
     }
 
-    function end_el( &$output, $item, $depth = 0, $args = null ) {
+    function end_el(&$output, $item, $depth = 0, $args = null)
+    {
         $output .= "</li>\n";
     }
 }
 
-class MM_Auth_Walker_Nav_Menu extends Walker_Nav_Menu {
+class MM_Auth_Walker_Nav_Menu extends Walker_Nav_Menu
+{
     function start_lvl(&$output, $depth = 0, $args = null) {}
     function end_lvl(&$output, $depth = 0, $args = null) {}
 
-    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
+    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
+    {
         // Detect "Sign In" or "Sign Up"
         $title_lower = strtolower($item->title);
         $is_sign_in = strpos($title_lower, 'sign in') !== false;
@@ -158,10 +148,11 @@ class MM_Auth_Walker_Nav_Menu extends Walker_Nav_Menu {
 
         $output .= '<li class="list-inline-item">';
         $output .= '<a href="' . esc_url($item->url) . '" class="' . esc_attr($classes) . '">'
-                 . esc_html($item->title) . '</a>';
+            . esc_html($item->title) . '</a>';
     }
 
-    function end_el(&$output, $item, $depth = 0, $args = null) {
+    function end_el(&$output, $item, $depth = 0, $args = null)
+    {
         $output .= '</li>';
     }
 }
@@ -888,7 +879,7 @@ function load_custom_template()
 add_action('template_redirect', 'load_custom_template');
 
 
-add_action('admin_init', function() {
+add_action('admin_init', function () {
     register_setting('general', 'default_referrer_username', [
         'type' => 'string',
         'sanitize_callback' => 'sanitize_text_field',
@@ -898,16 +889,16 @@ add_action('admin_init', function() {
     add_settings_field(
         'default_referrer_username',
         'Default Referrer Username',
-        function() {
+        function () {
             $value = get_option('default_referrer_username', '');
-            echo '<input type="text" name="default_referrer_username" value="'.esc_attr($value).'" class="regular-text">';
+            echo '<input type="text" name="default_referrer_username" value="' . esc_attr($value) . '" class="regular-text">';
         },
         'general'
     );
 });
 
 // Mark single as read
-add_action('wp_ajax_mark_notification_read', function(){
+add_action('wp_ajax_mark_notification_read', function () {
     check_ajax_referer('notifications_nonce', 'security');
     $user_id  = get_current_user_id();
     $notif_id = intval($_POST['notification_id']);
@@ -918,7 +909,7 @@ add_action('wp_ajax_mark_notification_read', function(){
 });
 
 // Mark all as read
-add_action('wp_ajax_mark_all_notifications_read', function(){
+add_action('wp_ajax_mark_all_notifications_read', function () {
     check_ajax_referer('notifications_nonce', 'security');
     $user_id = get_current_user_id();
 
@@ -928,7 +919,7 @@ add_action('wp_ajax_mark_all_notifications_read', function(){
 });
 
 // Clear all
-add_action('wp_ajax_clear_all_notifications', function(){
+add_action('wp_ajax_clear_all_notifications', function () {
     check_ajax_referer('notifications_nonce', 'security');
     $user_id = get_current_user_id();
 
@@ -938,7 +929,8 @@ add_action('wp_ajax_clear_all_notifications', function(){
 });
 
 // === ENQUEUE SCRIPTS ===
-function enqueue_notifications_assets() {
+function enqueue_notifications_assets()
+{
     // Enqueue your custom JS file
     wp_enqueue_script(
         'notifications', // handle
@@ -956,6 +948,11 @@ function enqueue_notifications_assets() {
 }
 add_action('wp_enqueue_scripts', 'enqueue_notifications_assets');
 
+add_action('wp_footer', function () {
+    if (function_exists('wp_enqueue_block_template_skip_link')) {
+        wp_enqueue_block_template_skip_link();
+    }
+}, 1);
 
 
 require_once get_template_directory() . '/inc/UserProfileData.php';
