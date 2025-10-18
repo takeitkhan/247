@@ -1,7 +1,7 @@
 
 
     <nav class="bg-dark-custom navbar d-lg-none">
-        <div class="container-fluid">
+        <div class="container">
             <button class="border-0 navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMobile"
                 aria-controls="sidebarMobile">
                 <i class="bi bi-list fs-2"></i>
@@ -49,7 +49,7 @@
         </div>
     </div>
 
-    <div class="p-0 container-fluid">
+    <div class="p-0 container">
         <div class="row g-0">
             <aside class="d-lg-flex flex-column p-5 col-md-2 d-none" style="min-height: 100vh;">
                 <div class="d-flex flex-column gap-4">

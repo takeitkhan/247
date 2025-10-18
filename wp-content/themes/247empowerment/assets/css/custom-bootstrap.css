@@ -1059,7 +1059,7 @@ progress {
 }
 
 .container,
-.container-fluid,
+.container,
 .container-xxl,
 .container-xl,
 .container-lg,
@@ -4222,7 +4222,7 @@ textarea.form-control-lg {
   padding: var(--bs-navbar-padding-y) var(--bs-navbar-padding-x);
 }
 .navbar > .container,
-.navbar > .container-fluid,
+.navbar > .container,
 .navbar > .container-sm,
 .navbar > .container-md,
 .navbar > .container-lg,

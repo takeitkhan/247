@@ -1,0 +1,154 @@
+@use 'variables' as *;
+.profile-page{
+    color : $gray_black !important
+}
+.post-row{
+    button{
+        width: 64px;
+        height: 49px;
+    }
+}
+.post-search{
+    background-color: $white;
+}
+.post{
+    background-color: $white;
+    margin-top: $spacing;
+
+    p{
+        margin-top: $spacing;
+    }
+    
+}
+.p-size{
+    padding: 10px 6px;
+    border-radius: 4px;
+}
+.active-icon{
+    top: 32px;
+    right:0;
+}
+.profile-pic{
+        max-height: 291px;
+        height: auto;
+        width: 100%;
+    }
+
+    .post-user{
+        .p_name{
+            font-size: 18px;
+            font-weight: 500;
+           
+            letter-spacing: 0;
+        }
+        span{
+            font-size: 14px;
+        }
+        .n-text{
+            color: $neural-text;
+            font-size: 14px;
+        }
+    }
+
+    .referal {
+        span{
+            font-size: 18px;
+            font-weight: 500;
+        }
+    }
+
+    .navbar-link {
+      
+        a{
+            color: $gray_black;
+            font-size: 18px;
+            font-weight: 500;
+            
+        }
+
+    }
+
+.nav-item {
+  padding: 10px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+ 
+ .icon-img{
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+ }
+
+  &:hover {
+    background: $primary-color; // your gradient variable
+    color: $white;
+
+    a {
+      color: $white; // make link text white
+    }
+
+    .icon-img {
+      filter: brightness(0) invert(1); // make icon white if it's dark
+    }
+  }
+}
+
+.u-title {
+
+        span{
+            background-color: $primary-color !important;
+            width: 24px !important;
+            height: 24px !important;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50% !important;
+            color: $white !important;
+        }
+    
+}
+
+.event-date{
+    padding:10px 4px;
+    background-color: $birthday;
+    width: 47px;
+    height: 54px;
+    font-size: 14px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: $white;
+    font-weight: 500;
+}
+.more-option{
+    color: $primary-color
+}
+.emoji-pos{
+    right: 10px;
+    top: 12px;
+}
+.modal-emoji{
+    position: absolute;
+    left: 12px;
+    bottom: 16px;
+}
+
+.modal-profile{
+    margin-left: 20px;
+    button{
+        padding: 6px 4px;
+        background-color: $supporting-neutral-hover;
+        border-radius: 4px;
+    }
+}
+
+.form-select {
+  padding: 6px 28px 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  width: auto;
+}

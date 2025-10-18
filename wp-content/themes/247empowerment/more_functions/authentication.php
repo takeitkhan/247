@@ -24,15 +24,15 @@ add_action('init', function () {
             return;
         }
 
-        // Consent validation
-        if (empty($_POST['consent_transactional']) || empty($_POST['consent_marketing'])) {
+        if (empty($_POST['consent']) || $_POST['consent'] !== 'yes') {
             set_transient('custom_user_message', [
                 'type' => 'danger',
-                'text' => 'You must agree to both consent checkboxes.',
+                'text' => 'You must agree to the consent checkbox.',
                 'old_input' => $_POST
             ], 30);
             return;
         }
+
 
         if (is_email($_POST['username'])) {
             set_transient('custom_user_message', [

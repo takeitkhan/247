@@ -2405,3 +2405,49 @@ Stack trace:
 [02-Oct-2025 14:26:35 UTC] PHP Deprecated:  Function the_block_template_skip_link is <strong>deprecated</strong> since version 6.4.0! Use wp_enqueue_block_template_skip_link() instead. in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
 [02-Oct-2025 14:26:36 UTC] PHP Deprecated:  Function the_block_template_skip_link is <strong>deprecated</strong> since version 6.4.0! Use wp_enqueue_block_template_skip_link() instead. in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
 [02-Oct-2025 14:40:50 UTC] PHP Warning:  Attempt to read property "title" on null in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-customize-widgets.php on line 926
+[05-Oct-2025 11:07:58 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[05-Oct-2025 11:08:01 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[05-Oct-2025 11:08:05 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[05-Oct-2025 11:10:28 UTC] Automatic updates starting...
+[05-Oct-2025 11:10:32 UTC] Automatic updates complete.
+[05-Oct-2025 11:34:39 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[05-Oct-2025 11:34:43 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[05-Oct-2025 11:34:48 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[05-Oct-2025 11:34:59 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[05-Oct-2025 11:35:03 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[05-Oct-2025 13:57:19 UTC] Automatic updates starting...
+[05-Oct-2025 13:57:22 UTC] Automatic updates complete.
+[05-Oct-2025 14:54:33 UTC] PHP Warning:  Undefined array key "last_name" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\authentication.php on line 14
+[17-Oct-2025 14:04:19 UTC] Automatic updates starting...
+[17-Oct-2025 14:04:21 UTC]   Automatic plugin updates starting...
+[17-Oct-2025 14:04:21 UTC]   Automatic plugin updates complete.
+[17-Oct-2025 14:04:22 UTC] Automatic updates complete.
+[17-Oct-2025 14:37:14 UTC] PHP Fatal error:  Uncaught Error: Class "MM_Walker_Nav_Menu_With_Icons" not found in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\header-main.php:168
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\template.php(810): require_once()
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', true, Array)
+#2 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(48): locate_template(Array, true, true, Array)
+#3 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\page-welcome.php(6): get_header('main')
+#4 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\page-login-router.php(9): include('D:\\oldwindows\\l...')
+#5 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#8 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\header-main.php on line 168
+[17-Oct-2025 15:16:56 UTC] PHP Fatal error:  Uncaught Error: Class "MM_Walker_Nav_Menu" not found in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\header-main.php:178
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\template.php(810): require_once()
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', true, Array)
+#2 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(48): locate_template(Array, true, true, Array)
+#3 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\page.php(5): get_header('main')
+#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
+#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#7 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\header-main.php on line 178
+[18-Oct-2025 03:48:16 UTC] Automatic updates starting...
+[18-Oct-2025 03:48:19 UTC]   Automatic plugin updates starting...
+[18-Oct-2025 03:48:19 UTC]   Automatic plugin updates complete.
+[18-Oct-2025 03:48:21 UTC] Automatic updates complete.
+[18-Oct-2025 05:33:40 UTC] PHP Warning:  Undefined array key "last_name" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\authentication.php on line 14
+[18-Oct-2025 05:35:35 UTC] PHP Warning:  Undefined array key "last_name" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\authentication.php on line 14

@@ -26,7 +26,7 @@ if (is_user_logged_in()) {
         </style>
 
 
-        <div class="my-5 container-fluid">
+        <div class="my-5 container">
             <ul class="nav nav-tabs fs-6" id="homeTab" role="tablist">
                 <?php
                 // Query to get the tabs
@@ -90,7 +90,7 @@ if (is_user_logged_in()) {
 
 </div>
 
-<div class="container-fluid">
+<div class="container">
     <div class="px-2 py-4 row">
         <?php while (have_posts()): the_post(); ?>
 

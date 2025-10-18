@@ -17,142 +17,163 @@ $message = get_transient('custom_user_message');
 $old_input = $message['old_input'] ?? [];
 ?>
 
+<div class="container">
+    <div class="justify-content-center row">
+        <div class="col-12">
+            <div class="">
+                <div class="text-white text-center empowerment-header"></div>
 
-<div class="container-fluid">
-    <div class="px-4 py-4 overflow-hidden row">
-        <div class="bg-white px-4 py-3 col-md-5">
-            <h2 class="">Sign Up Your Account</h2>
-            <h6 class="mb-5 text-muted">Getting started is simple — just fill out a few details below.</h6>
+                <div class="row g-md-4">
+                    <!-- Login Section -->
+                    <div class="py-5 col-lg-6">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div class="d-flex align-items-center gap-2">
+                                <img class="logo" src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/logo.png" alt="Logo">
+                                <span class="gradient-text">24/7 Empowerment</span>
+                            </div>
 
-            <?php if ($message = get_transient('custom_user_message')): ?>
-                <div class="alert alert-<?= esc_attr($message['type']) ?> mt-3" role="alert">
-                    <?= wp_kses_post($message['text']) ?>
-                </div>
-                <?php delete_transient('custom_user_message'); ?>
-            <?php endif; ?>
+                            <button class="d-flex align-items-center gap-2 go-back" onclick="window.history.back();">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/back.png" alt="Back">
+                                <span>Go back</span>
+                            </button>
+                        </div>
 
-            <form method="post">
-                <?php wp_nonce_field('custom_user_registration', 'custom_user_registration_nonce'); ?>
-                <?php if (isset($_GET['ref'])): ?>
-                    <input type="hidden" name="referrer" id="referrer" value="<?= esc_attr($_GET['ref']); ?>">
-                <?php endif; ?>
+                        <h2 class="mb-3 title">Join the Empowerment Movement</h2>
+                        <p class="mb-4">Create your free account and access support teams, tools, and growth opportunities.</p>
 
+                        <?php if ($message = get_transient('custom_user_message')): ?>
+                            <div class="alert alert-<?php echo esc_attr($message['type']); ?> mt-3" role="alert">
+                                <?php echo wp_kses_post($message['text']); ?>
+                            </div>
+                            <?php delete_transient('custom_user_message'); ?>
+                        <?php endif; ?>
 
-                <div class="mb-3">
-                    <label for="first_name" class="form-label">First Name</label>
-                    <input type="text" name="first_name" id="first_name"
-                        class="form-control" required
-                        value="<?php echo esc_attr($old_input['first_name'] ?? ''); ?>">
-                </div>
+                        <form method="post">
+                            <?php wp_nonce_field('custom_user_registration', 'custom_user_registration_nonce'); ?>
 
-                <div class="mb-3">
-                    <label for="last_name" class="form-label">Last Name</label>
-                    <input type="text" name="last_name" id="last_name"
-                        class="form-control" required
-                        value="<?php echo esc_attr($old_input['last_name'] ?? ''); ?>">
-                </div>
+                            <?php if (isset($_GET['ref'])): ?>
+                                <input type="hidden" name="referrer" id="referrer" value="<?php echo esc_attr($_GET['ref']); ?>">
+                            <?php endif; ?>
 
-                <div class="mb-3">
-                    <label for="dob" class="form-label">Date of Birth</label>
-                    <input type="date" name="dob" id="dob"
-                        class="form-control" required
-                        value="<?php echo esc_attr($old_input['dob'] ?? ''); ?>">
-                </div>
+                            <div class="mb-3">
+                                <label for="firstName" class="form-label fw-normal">First Name <span>*</span></label>
+                                <input type="text" class="input" id="firstName" name="first_name"
+                                    placeholder="Enter your first name"
+                                    value="<?php echo esc_attr($old_input['first_name'] ?? ''); ?>" required>
+                            </div>
 
-                <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" name="username" id="username"
-                        class="form-control" required
-                        value="<?php echo esc_attr($old_input['username'] ?? ''); ?>">
-                </div>
+                            <div class="mb-3">
+                                <label for="lastName" class="form-label fw-normal">Last Name <span>*</span></label>
+                                <input type="text" class="input" id="lastName" name="last_name"
+                                    placeholder="Enter your last name"
+                                    value="<?php echo esc_attr($old_input['last_name'] ?? ''); ?>" required>
+                            </div>
 
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email address</label>
-                    <input type="email" name="email" id="email"
-                        class="form-control" required
-                        value="<?php echo esc_attr($old_input['email'] ?? ''); ?>">
-                </div>
+                            <div class="mb-3">
+                                <label for="username" class="form-label fw-normal">Username <span>*</span></label>
+                                <input type="text" class="input" id="username" name="username"
+                                    placeholder="Enter your username"
+                                    value="<?php echo esc_attr($old_input['username'] ?? ''); ?>" required>
+                            </div>
 
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" name="password" id="password"
-                        class="form-control" required>
-                </div>
-                <!-- Consent Checkboxes -->
-                <div class="mb-2 form-check">
-                    <input class="form-check-input" type="checkbox" name="consent_transactional" id="consent_transactional" value="1" <?php checked(!empty($old_input['consent_transactional'])); ?> required>
-                    <label class="form-check-label small" for="consent_transactional">
-                        By checking this box, I consent to receive transactional messages related to my account, orders, or services I have requested.
-                        These messages may include appointment reminders, order confirmations, and account notifications, among others.
-                        Message frequency may vary. Message & Data rates may apply. Reply HELP for help or STOP to opt-out.
-                    </label>
-                </div>
+                            <div class="mb-3">
+                                <label for="dob" class="form-label fw-normal">Date of Birth <span>*</span></label>
+                                <input type="date" class="input" id="dob" name="dob"
+                                    value="<?php echo esc_attr($old_input['dob'] ?? ''); ?>" required>
+                            </div>
 
-                <div class="mb-4 form-check">
-                    <input class="form-check-input" type="checkbox" name="consent_marketing" id="consent_marketing" value="1" <?php checked(!empty($old_input['consent_marketing'])); ?> required>
-                    <label class="form-check-label small" for="consent_marketing">
-                        By checking this box, I consent to receive marketing and promotional messages, including special offers, discounts,
-                        and new product updates, among others.
-                        Message frequency may vary. Message & Data rates may apply. Reply HELP for help or STOP to opt-out.
-                    </label>
-                </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label fw-normal">Email <span>*</span></label>
+                                <input type="email" class="input" id="email" name="email"
+                                    placeholder="Enter your email"
+                                    value="<?php echo esc_attr($old_input['email'] ?? ''); ?>" required>
+                            </div>
 
-                <button type="submit" name="user_signup" class="w-25 btn btn-primary">Sign Up</button>
-            </form>
+                            <div class="mb-3">
+                                <label for="password" class="form-label fw-normal">Password <span>*</span></label>
+                                <div class="position-relative">
+                                    <input type="password" class="input" id="password" name="password"
+                                        placeholder="Enter your password" required>
+                                    <img class='pass-show' src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/pass-show.png" alt="">
+                                </div>
+                            </div>
 
-            <div class="mt-3 small footlinks" style="letter-spacing: 1px;">
-                <?php
-                wp_nav_menu([
-                    'theme_location' => 'secondary',
-                    'container' => false,
-                    'menu_class' => 'me-3  text-decoration-none',
-                    'items_wrap' => '%3$s',
-                    'walker' => new MM_Walker_Nav_Menu(),
-                    'fallback_cb' => false,
-                ]);
-                ?>
-            </div>
-        </div>
-        <div class="d-md-block bg-teal-100 p-3 pt-5 text-center col-md-7 d-none">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo_pet.png"
-                alt="Signup" class="w-25 img-fluid">
-            <h2 class="mb-4">Browse Exclusive Tailored Features</h2>
-            <h6 class="text-muted">Join us today — it only takes a few moments to create your account.</h6>
-            <section class="py-5">
-                <div class="text-center container">
-                    <h2 class="mb-4">How It Works</h2>
-                    <div class="row g-4">
-                        <div class="col-md-3">
-                            <div class="bg-white shadow-sm p-4 border rounded-3 h-100">
-                                <div class="mb-3 text-primary fs-1">1</div>
-                                <h5 class="mb-2">Sign Up</h5>
-                                <p class="text-muted">Create your account in just a few clicks.</p>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" id="consent" name="consent" class="form-check-input" value="yes" <?php checked(!empty($old_input['consent_transactional'])); ?> required>                           
+                                <label class="form-check-label" for="consent">
+                                    I agree to receive account-related updates (e.g. reminders, confirmations)
+                                    and occasional promotional messages (e.g. offers, discounts, updates).
+                                    Msg & Data rates may apply. Reply STOP to opt-out.
+                                </label>
+                            </div>
+                            <button type="submit" name="user_signup" class="mb-3 custom-btn">Sign up</button>
+
+                            <div class="mb-3 text-start">
+                                <p class="mb-0">Already have an account?</p>
+                            </div>
+                            <div>
+                                <a href="<?php echo wp_login_url(); ?>" class="mb-3 custom-btn-outline-none">Sign In</a>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Right Info Section -->
+                    <div class="col-lg-6">
+                        <div class="position-relative d-flex flex-column align-items-center justify-content-start px-5 px-md-5 border-singup overflow-hidden text-center">
+                            <img class="ellipse-size" src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/Ellipse.png" alt="">
+                            <div class="z-1 position-absolute">
+                                <p class="mb-3 pt-4 title">Get Started in 4 Easy Steps</p>
+                                <p class="mb-5 text-center">Sign up, personalize, explore — and you're in.</p>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="bg-white shadow-sm p-4 border rounded-3 h-100">
-                                <div class="mb-3 text-primary fs-1">2</div>
-                                <h5 class="mb-2">Setup Profile</h5>
-                                <p class="text-muted">Set up your profile and preferences easily.</p>
+
+                        <div class="position-relative d-flex flex-column align-items-center gap-4 px-4 px-md-5 border-singup overflow-hidden">
+                            <img class="d-md-block bottom-0 z-0 position-absolute d-none img-position"
+                                src="<?php echo get_template_directory_uri(); ?>/assets/img/Vector.png" alt="">
+
+                            <div class="s-card">
+                                <div class="d-flex align-items-center gap-4">
+                                    <span class="number-sign">1</span>
+                                    <div>
+                                        <p class="c-title">Sign Up</p>
+                                        <p class="c-des">Create your account in just a few clicks.</p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="bg-white shadow-sm p-4 border rounded-3 h-100">
-                                <div class="mb-3 text-primary fs-1">3</div>
-                                <h5 class="mb-2">Explore</h5>
-                                <p class="text-muted">Browse features and tools tailored to you.</p>
+
+                            <div class="s-card2">
+                                <div class="d-flex align-items-center gap-4">
+                                    <span class="number-sign">2</span>
+                                    <div>
+                                        <p class="c-title">Setup Profile</p>
+                                        <p class="c-des">Set up your profile and preferences easily.</p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="bg-white shadow-sm p-4 border rounded-3 h-100">
-                                <div class="mb-3 text-primary fs-1">4</div>
-                                <h5 class="mb-2">Start Using</h5>
-                                <p class="text-muted">Enjoy the full experience right away.</p>
+
+                            <div class="s-card3">
+                                <div class="d-flex align-items-center gap-4">
+                                    <span class="number-sign">3</span>
+                                    <div>
+                                        <p class="c-title">Explore</p>
+                                        <p class="c-des">Browse features and tools tailored to you.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="s-card4">
+                                <div class="d-flex align-items-center gap-4">
+                                    <span class="number-sign">4</span>
+                                    <div>
+                                        <p class="c-title">Start Using</p>
+                                        <p class="c-des">Enjoy the full experience right away.</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
     </div>
 </div>

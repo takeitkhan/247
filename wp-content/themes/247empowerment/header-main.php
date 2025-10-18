@@ -147,55 +147,66 @@ if (is_front_page()) {
             height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-    <header class="py-2">
-        <div class="container-fluid">
-            <div class="align-items-center px-4 overflow-hidden row">
+    <header class="custom-navbar">
+        <div class="d-flex align-items-center justify-content-between m-0 p-0 w-100 h-100 container">
+            <div class="d-flex align-items-center gap-2">
+                <a href="<?php echo esc_url(home_url('/')); ?>">
+                    <img
+                        src="<?php echo esc_url(get_theme_mod('large_logo')); ?>"
+                        alt="<?php echo esc_attr(get_bloginfo('name')); ?>"
+                        class="logo-nav">
+                </a>
+            </div>
 
-                <!-- Logo -->
-                <div class="col-2 col-md-2 col-lg-2">
-                    <a href="<?php echo esc_url(home_url('/')); ?>" class="d-inline-block">
-                        <img src="<?php echo esc_url(get_theme_mod('large_logo')); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>"
-                            class="img-fluid" style="width: 50px;">
-                    </a>
-                </div>
+            <!-- Main Navigation -->
+            <ul class="d-lg-flex gap-4 nav d-none">
+                <?php
+                wp_nav_menu([
+                    'theme_location' => 'primary',
+                    'container'      => false,
+                    'items_wrap'     => '%3$s', // Remove extra <ul>
+                    'depth'          => 2,
+                    'fallback_cb'    => false,
+                    'walker'         => new MM_Walker_Nav_Menu(),
+                ]);
+                ?>
+            </ul>
 
-                <!-- Navbar -->
-                <div class="col-8 col-md-8 col-lg-8">
-                    <nav class="bg-white p-0 navbar navbar-expand-lg navbar-light">
-                        <div class="p-0 container-fluid">
-                            <button class="navbar-toggler" ... data-bs-toggle="collapse" ...>
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-
-                            <div class="collapse navbar-collapse justify-content-center" id="mainNavbar">
-                                <?php
-                                wp_nav_menu([
-                                    'theme_location' => 'primary',
-                                    'container'      => false,
-                                    'menu_class'     => 'navbar-nav',
-                                    'fallback_cb'    => false,
-                                    'depth'          => 2,
-                                    'walker'         => new MM_Walker_Nav_Menu(),
-                                ]);
-                                ?>
-                            </div>
-                        </div>
-                    </nav>
-                </div>
-
-                <!-- Sign Up / Sign In -->
-                <div class="align-items-center text-end col-2 col-md-2 col-lg-2">
+            <!-- Right Side (Auth Buttons + Mobile Toggle) -->
+            <div class="d-flex align-items-center gap-1 gap-md-3">
+                <div class="d-flex align-items-center gap-3">
                     <?php
                     wp_nav_menu([
                         'theme_location' => 'authentication',
                         'container' => false,
-                        'menu_class' => 'list-inline mb-0',
+                        'menu_class' => 'd-flex align-items-center gap-3 list-unstyled mb-0',
                         'items_wrap' => '<ul class="%2$s">%3$s</ul>',
                         'walker' => new MM_Auth_Walker_Nav_Menu(),
                         'fallback_cb' => false,
                     ]);
                     ?>
                 </div>
+
+                <!-- Mobile toggle -->
+                <button class="btn btn-light d-lg-none" id="menuToggle">
+                    <i class="bi bi-list fs-4"></i>
+                </button>
             </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="bg-white shadow-sm mobile-menu d-lg-none">
+            <ul class="flex-column p-3 text-center nav">
+                <?php
+                wp_nav_menu([
+                    'theme_location' => 'primary',
+                    'container'      => false,
+                    'items_wrap'     => '%3$s', // directly insert <li> items
+                    'depth'          => 2,
+                    'fallback_cb'    => false,
+                    'walker'         => new MM_Walker_Nav_Menu(),
+                ]);
+                ?>
+            </ul>
         </div>
     </header>

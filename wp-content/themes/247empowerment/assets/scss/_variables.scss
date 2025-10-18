@@ -1,15 +1,38 @@
-:root {
-    --blue-color: #05489C;
-    --light-blur: #1A5DB1;
-    --box-shadow-color: #00000033;
-    --light-color: #FFD5F2;
-    --gray-color: #66676b;
-    --white-color: #ffffff;
-    --black-color: #09090a;
-    --red-color: #de3f4f;
-}
+// ==============================
+// VARIABLES
+// ==============================
 
-// Override Bootstrap color variables BEFORE importing Bootstrap
+// Colors and gradients
+$linear-gradient: linear-gradient(to right, #0c53ac 0%, #0c3e80 50%, #052246 100%);
+$white: #ffffff;
+$black: rgba(0, 0, 0, 1);
+$gray_black: #2E2E2E;
+$pink: rgba(235, 193, 222, 1);
+$light-blue: rgba(139, 167, 242, 0.1);
+$pink-light: rgba(224, 91, 182, 0.1);
+$red-color: #FF0000;
+$green-color: #01A701;
+$primary-color: rgba(5, 72, 156, 1);
+$light-s-blue: rgba(130, 141, 169, 1);
+$supporting-neutral: #BEC9E5;
+$supporting-neutral-hover: rgba(190, 201, 229, 0.1);
+$supporting: rgba(190, 201, 229, 0.2);
+$neural-text: #A0ABC7;
+$portal-bg: #F8FAFC;
+$violet-color: #9705F2;
+$birthday: #EAB308;
+$webinars: #3B82F6;
+$workshop: #A855F7;
+$notification: #FFF4CC;
+
+// Fonts
+$font-primary: "Plus Jakarta Sans", sans-serif;
+$font-secondary: "Barlow", sans-serif;
+
+// Sizes
+$spacing: 20px;
+
+// Bootstrap overrides
 $primary: #05489C;
 $secondary: #1A5DB1;
 $success: #16a34a;
@@ -20,10 +43,35 @@ $danger: #dc2626;
 $light: #f8f9fa;
 $dark: #111827;
 
-// Optionally change font, border radius, etc.
 $font-family-sans-serif: 'Plus Jakarta Sans', sans-serif;
 $border-radius: 0.5rem;
 
+// ==============================
+// ROOT CSS VARIABLES
+// ==============================
+:root {
+    --blue-color: #05489C;
+    --light-blur: #1A5DB1;
+    --box-shadow-color: #00000033;
+    --light-color: #FFD5F2;
+    --gray-color: #66676b;
+    --white-color: #ffffff;
+    --black-color: #09090a;
+    --red-color: #de3f4f;
+
+    --linear-gradient: linear-gradient(to right, #0c53ac 0%, #0c3e80 50%, #052246 100%);
+    --white: #ffffff;
+    --black: rgba(0, 0, 0, 1);
+    --pink: rgba(235, 193, 222, 1);
+    --light-blue: rgba(139, 167, 242, 0.1);
+    --pink-light: rgba(224, 91, 182, 0.1);
+    --primary-color: rgba(5, 72, 156, 1);
+    --light-s-blue: rgba(130, 141, 169, 1);
+}
+
+// ==============================
+// GLOBAL STYLES
+// ==============================
 * {
     margin: 0;
     padding: 0;
@@ -90,6 +138,25 @@ body {
 }
 
 // ==============================
+// Inputs
+// ==============================
+.input {
+    padding: 10px 16px;
+    border: 1px solid #bec9e51a;
+    color: #a0abc7;
+    width: 100%;
+    border-radius: 4px;
+    background-color: rgba(190, 201, 229, 0.1);
+}
+
+input:focus {
+    border: 2px solid var(--primary-color);
+    outline: none;
+    color: var(--black);
+    box-shadow: 0 0 0 0.25px var(--primary-color);
+}
+
+// ==============================
 // Buttons
 // ==============================
 .custom-btn {
@@ -119,7 +186,7 @@ body {
 }
 
 // ==============================
-// Responsive Containers
+// Containers
 // ==============================
 .main-container,
 .banner-container,
@@ -266,7 +333,7 @@ body {
 }
 
 // ==============================
-// Profile
+// Profile Section
 // ==============================
 .profile-section {
     margin-top: -20px;

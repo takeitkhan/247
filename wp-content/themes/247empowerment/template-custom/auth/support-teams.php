@@ -30,7 +30,7 @@ if (is_user_logged_in()) {
                     </a>
                 </div>
             </div>
-            <div class="my-5 container-fluid">
+            <div class="my-5 container">
                 <ul class="nav nav-tabs fs-6" id="homeTab" role="tablist">
                     <?php
                     // Query to get the tabs
