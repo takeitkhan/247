@@ -112,7 +112,7 @@ $old_input = $message['old_input'] ?? [];
                                 <p class="mb-0">Already have an account?</p>
                             </div>
                             <div>
-                                <a href="<?php echo wp_login_url(); ?>" class="mb-3 custom-btn-outline-none">Sign In</a>
+                                <a href="<?php echo site_url('/signin'); ?>" class="mb-3 custom-btn-outline-none">Sign In</a>
                             </div>
                         </form>
                     </div>

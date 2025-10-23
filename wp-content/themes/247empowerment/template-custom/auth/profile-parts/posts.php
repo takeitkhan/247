@@ -1,12 +1,7 @@
 <?php
 // Get the username from the URL (author_name is default WP var)
+$profile = $args['profile'] ?? null;
 $username = $profile['display_name'] ?? '';
-
-
-// echo '<pre>';
-// var_dump($username);
-// echo '</pre>';
-
 // Get the user profile instance
 $profile_instance = new UserProfileData($username);
 $profile = $profile_instance->getProfile();
@@ -36,80 +31,77 @@ if ($user_posts->have_posts()):
         $post_author = get_the_author();
         $post_image  = get_the_post_thumbnail_url($post_id, 'large');
 ?>
-        <div class="bg-white mb-3 post-card">
-            <div class="p-3">
-                <!-- Post Header with Author and Menu -->
-                <div class="d-flex align-items-start justify-content-between">
-                    <div class="d-flex post-author">
-                        <div class="me-3 post-author-img">
-                            <img
-                                class="rounded-circle w-100 h-100 object-fit-cover"
-                                src="<?php echo esc_url(get_user_meta($user_id, 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg'); ?>"
-                                alt="" />
-                        </div>
-                        <div>
-                            <h5 class="post-author-name">
-                                <?php echo esc_html($profile['first_name'] . ' ' . $profile['last_name']); ?>
-                            </h5>
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="post-time"><?php echo esc_html($post_time); ?></span>
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/loggedin_images/dot2.png" alt="" />
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/loggedin_images/earth.png" alt="" />
-                            </div>
-                        </div>
+
+
+        <div class="post custom-card">
+            <!-- Post Header -->
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="position-relative img44">
+                        <img src="<?php echo esc_url(get_user_meta($user_id, 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/nd/profile.png'); ?>" class="rounded-circle w-100 h-100 object-fit-cover" alt="Profile">
+                        <img class="position-absolute active-icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/active_icon.png" alt="">
                     </div>
-
-                    <!-- Three-dot dropdown menu -->
-                    <div class="dropdown">
-                        <button class="p-0 border-0 text-dark btn btn-link" type="button" id="postOptions<?php echo $post_id; ?>" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-three-dots fs-5"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="postOptions<?php echo $post_id; ?>">
-                            <!-- <li><a class="dropdown-item" href="#">Edit</a></li> -->
-                            <?php
-                            $redirect_url = urlencode(is_singular() ? get_permalink() : (wp_get_referer() ?: home_url()));
-
-                            $delete_url = wp_nonce_url(
-                                admin_url('admin-post.php?action=delete_custom_post&post_id=' . $post_id . '&redirect_to=' . $redirect_url),
-                                'delete_post_' . $post_id
-                            );
-                            ?>
-                            <li>
-                                <a class="text-danger dropdown-item"
-                                    href="<?php echo esc_url($delete_url); ?>"
-                                    onclick="return confirm('Are you sure you want to delete this post?');">
-                                    Delete
-                                </a>
-                            </li>
-
-                        </ul>
+                    <div class="d-flex flex-column post-user">
+                        <span class="p_name"><?php echo esc_html($profile['first_name'] . ' ' . $profile['last_name']); ?></span>
+                        <span><?php echo esc_html($post_time); ?></span>
                     </div>
                 </div>
-
-                <!-- Post Content -->
-                <?php
-                $raw_content = get_the_content();
-                $allowed_tags = ['br' => []];
-                $sanitized_content = wp_kses($raw_content, $allowed_tags);
-                $formatted_content = nl2br($sanitized_content);
-                $trimmed_content = wp_trim_words(strip_tags($formatted_content), 40, '...');
-                ?>
-                <p class="mt-3 mb-1 post-content-text"
-                    data-full="<?php echo esc_attr($formatted_content); ?>"
-                    data-trimmed="<?php echo esc_attr($trimmed_content); ?>">
-                    <?php echo $trimmed_content; ?>
-                    <span class="text-primary read-more-text" style="cursor:pointer;"> Read more</span>
-                </p>
+                <div>
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/post_option_icon.png" alt="Post Options">
+                </div>
             </div>
 
+            <!-- Post Content -->
+            <?php
+            $raw_content = get_the_content();
+            $allowed_tags = ['br' => []];
+            $sanitized_content = wp_kses($raw_content, $allowed_tags);
+            $formatted_content = nl2br($sanitized_content);
+            $trimmed_content = wp_trim_words(strip_tags($formatted_content), 40, '...');
+            ?>
+            <p class="mt-2 mb-2 post-content-text"
+                data-full="<?php echo esc_attr($formatted_content); ?>"
+                data-trimmed="<?php echo esc_attr($trimmed_content); ?>">
+                <?php echo $trimmed_content; ?>
+                <?php if (wp_strip_all_tags($formatted_content) !== $trimmed_content): ?>
+                    <span class="text-primary read-more-text" style="cursor:pointer;"> Read more</span>
+                <?php endif; ?>
+            </p>
+
+            <!-- Post Image -->
             <?php if ($post_image): ?>
-                <div class="post-content-img">
-                    <img class="w-100 h-100 object-fit-cover"
-                        src="<?php echo esc_url($post_image); ?>"
-                        alt="" />
+                <div class="mt-3 profile-pic post-image-container">
+                    <img src="<?php echo esc_url($post_image); ?>" class="w-100 h-100 object-fit-cover" alt="Post Image">
                 </div>
             <?php endif; ?>
+
+
+            <!-- <hr class="border-underline"> -->
+
+            <!-- Post Actions -->
+            <!-- <div class="d-flex gap-5">
+                <span class="d-flex align-items-center gap-1"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/like.png" alt=""> <?php echo esc_html($like_count ?? 0); ?></span>
+                <span class="d-flex align-items-center gap-1"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/comment.png" alt=""> <?php echo esc_html($comment_count ?? 0); ?></span>
+                <span class="d-flex align-items-center gap-1"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/share.png" alt=""> <?php echo esc_html($share_count ?? 0); ?></span>
+            </div> -->
+
+            <!-- Comment Input -->
+            <!-- <div class="d-flex align-items-center gap-3 pt-3">
+                <div>
+                    <div class="position-relative img44">
+                        <img src="<?php echo esc_url(get_user_meta(get_current_user_id(), 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/nd/profile.png'); ?>" class="rounded-circle w-100 h-100 object-fit-cover" alt="Profile">
+                        <img class="position-absolute active-icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/active_icon.png" alt="">
+                    </div>
+                </div>
+                <div class="position-relative w-100">
+                    <input type="text" class="w-100 input" placeholder="Write a comment..." data-post-id="<?php echo esc_attr($post_id); ?>">
+                    <img class="position-absolute emoji-pos" src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/imogi.png" alt="Emoji">
+                </div>
+            </div> -->
         </div>
+
+
+
 <?php
     endwhile;
     wp_reset_postdata();

@@ -81,6 +81,24 @@ function handle_profile_photo_upload()
     }
 }
 
+
+function enqueue_post_create_script() {
+    wp_enqueue_script(
+        'post-create-js', 
+        get_template_directory_uri() . '/assets/js/post-create.js', 
+        array('jquery'), 
+        null, 
+        true
+    );
+
+    wp_localize_script('post-create-js', 'ajax_object', array(
+        'ajax_url' => admin_url('admin-ajax.php')
+    ));
+}
+add_action('wp_enqueue_scripts', 'enqueue_post_create_script');
+
+
+
 add_action('wp_ajax_create_post', 'handle_create_post');
 function handle_create_post()
 {
@@ -89,9 +107,14 @@ function handle_create_post()
         wp_send_json_error(array('message' => 'Invalid nonce'), 403);
     }
 
-    // Example basic post creation logic
+    // Sanitize post content
     $post_content = sanitize_text_field($_POST['post_content']);
 
+    // Sanitize privacy option
+    $privacy_options = array('only_me', 'referral_partners', 'public');
+    $post_privacy = in_array($_POST['post_privacy'] ?? '', $privacy_options) ? $_POST['post_privacy'] : 'only_me';
+
+    // Create post
     $post_id = wp_insert_post(array(
         'post_type'    => 'post',
         'post_status'  => 'publish',
@@ -103,26 +126,30 @@ function handle_create_post()
         wp_send_json_error(array('message' => 'Failed to create post'));
     }
 
-    // Image handling (if needed)
+    // Save privacy as post meta
+    update_post_meta($post_id, '_post_privacy', $post_privacy);
+
+    // Image handling
     if (!empty($_FILES['post_image']['name'])) {
         require_once ABSPATH . 'wp-admin/includes/file.php';
         require_once ABSPATH . 'wp-admin/includes/image.php';
         $attachment_id = media_handle_upload('post_image', $post_id);
-
         if (!is_wp_error($attachment_id)) {
             set_post_thumbnail($post_id, $attachment_id);
         }
     }
 
-    wp_send_json_success(array('post_id' => $post_id));
+    wp_send_json_success(array(
+        'post_id' => $post_id,
+        'privacy' => $post_privacy
+    ));
 }
+
 
 // Add inside your theme's functions.php or a loaded plugin
 add_action('admin_post_delete_custom_post', 'handle_delete_custom_post');
 function handle_delete_custom_post()
 {
-
-
     if (!is_user_logged_in()) {
         wp_die('Unauthorized');
     }
@@ -217,7 +244,8 @@ function custom_meetings_rewrite_rule()
 }
 add_action('init', 'custom_meetings_rewrite_rule');
 
-function load_custom_meetings_template($template) {
+function load_custom_meetings_template($template)
+{
     if (get_query_var('meetings_page')) {
         return get_template_directory() . '/template-custom/auth/user-meetings.php';
     }

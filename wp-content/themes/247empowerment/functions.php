@@ -6,7 +6,8 @@ function mm_theme_setup()
 }
 add_action('after_setup_theme', 'mm_theme_setup');
 
-function mm_enqueue_assets() {
+function mm_enqueue_assets()
+{
     wp_enqueue_style('output', get_template_directory_uri() . '/assets/css/output.css', [], filemtime(get_template_directory() . '/assets/css/output.css'));
 
     wp_enqueue_style('mm-style', get_stylesheet_uri(), [], filemtime(get_stylesheet_directory() . '/style.css'));
@@ -14,145 +15,6 @@ function mm_enqueue_assets() {
     wp_enqueue_script('bootstrap-js', get_template_directory_uri() . '/assets/js/bootstrap.bundle.min.js', [], null, true);
 }
 add_action('wp_enqueue_scripts', 'mm_enqueue_assets');
-
-
-
-
-function register_my_menus()
-{
-    register_nav_menus([
-        'primary' => __('Primary Menu', 'mm'),
-        'secondary' => __('Footer Menu', 'mm'),
-        'authentication' => __('Authentication Menu', 'mm'),
-    ]);
-}
-add_action('after_setup_theme', 'register_my_menus');
-
-class MM_Walker_Nav_Menu extends Walker_Nav_Menu {
-
-    // Start level (sub-menu)
-    function start_lvl( &$output, $depth = 0, $args = null ) {
-        $indent = str_repeat("\t", $depth);
-        $submenu_class = ($depth > 0) ? ' dropdown-submenu' : '';
-        $output .= "\n$indent<ul class=\"dropdown-menu$submenu_class\">\n";
-    }
-
-    // Start element
-    function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
-        $classes = empty( $item->classes ) ? [] : (array) $item->classes;
-        $classes = array_filter($classes); // remove empty
-
-        $has_children = in_array('menu-item-has-children', $classes);
-
-        // Classes for <li>
-        $li_classes = ['nav-item'];
-        if ($has_children && $depth === 0) {
-            $li_classes[] = 'dropdown';
-        } elseif ($depth > 0 && $has_children) {
-            $li_classes[] = 'dropdown-submenu';
-        }
-
-        // Classes for <a>
-        $link_classes = ['nav-link'];
-        if ($depth === 0 && $has_children) {
-            $link_classes[] = 'dropdown-toggle';
-        } elseif ($depth > 0) {
-            $link_classes = ['dropdown-item'];
-        }
-
-        // Attributes for <a>
-        $attrs = '';
-        if ($has_children && $depth === 0) {
-            $attrs .= ' data-bs-toggle="dropdown" aria-expanded="false"';
-        }
-
-        $output .= '<li class="' . esc_attr(implode(' ', $li_classes)) . '">';
-        $output .= '<a href="' . esc_url($item->url) . '" class="' . esc_attr(implode(' ', $link_classes)) . '"' . $attrs . '>';
-        $output .= esc_html($item->title);
-        $output .= '</a>';
-    }
-
-    // End element
-    function end_el( &$output, $item, $depth = 0, $args = null ) {
-        $output .= "</li>\n";
-    }
-
-    // End level
-    function end_lvl( &$output, $depth = 0, $args = null ) {
-        $output .= "</ul>\n";
-    }
-}
-
-
-
-class MM_Footer_Walker_Nav_Menu extends Walker_Nav_Menu
-{
-    function start_lvl(&$output, $depth = 0, $args = null)
-    {
-        // No submenus for footer — skip
-    }
-
-    function end_lvl(&$output, $depth = 0, $args = null)
-    {
-        // No submenus for footer — skip
-    }
-
-    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
-    {
-        $output .= '<li class="footer-list-inline-item list-inline-item">';
-
-        $atts = [
-            'href'  => !empty($item->url) ? esc_url($item->url) : '#',
-            'class' => 'text-white text-decoration-none',
-        ];
-
-        $attributes = '';
-        foreach ($atts as $attr => $value) {
-            $attributes .= ' ' . $attr . '="' . esc_attr($value) . '"';
-        }
-
-        $title = apply_filters('the_title', $item->title, $item->ID);
-        $output .= '<a' . $attributes . '>' . esc_html($title) . '</a>';
-    }
-
-    function end_el(&$output, $item, $depth = 0, $args = null)
-    {
-        $output .= "</li>\n";
-    }
-}
-
-class MM_Auth_Walker_Nav_Menu extends Walker_Nav_Menu
-{
-    function start_lvl(&$output, $depth = 0, $args = null) {}
-    function end_lvl(&$output, $depth = 0, $args = null) {}
-
-    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
-    {
-        // Detect "Sign In" or "Sign Up"
-        $title_lower = strtolower($item->title);
-        $is_sign_in = strpos($title_lower, 'sign in') !== false;
-        $is_sign_up = strpos($title_lower, 'sign up') !== false;
-
-        // Assign classes
-        $classes = '';
-        if ($is_sign_in) {
-            $classes = 'btn btn-outline-primary btn-sm px-4';
-        } elseif ($is_sign_up) {
-            $classes = 'me-2 text-decoration-none';
-        } else {
-            $classes = 'text-decoration-none';
-        }
-
-        $output .= '<li class="list-inline-item">';
-        $output .= '<a href="' . esc_url($item->url) . '" class="' . esc_attr($classes) . '">'
-            . esc_html($item->title) . '</a>';
-    }
-
-    function end_el(&$output, $item, $depth = 0, $args = null)
-    {
-        $output .= '</li>';
-    }
-}
 
 
 Kirki::add_config('my_config', array(
@@ -238,6 +100,25 @@ function mm_customize_register($wp_customize)
         'title' => __('Hero Section Text', 'mm'),
         'priority' => 30,
     ));
+
+    // Section for Custom Subline (you can reuse existing section or create new one)
+    $wp_customize->add_section('mm_custom_subline_section', [
+        'title'    => __('Custom Subline', 'mm'),
+        'priority' => 31, // after your header section
+    ]);
+
+    // New Subline Setting
+    $wp_customize->add_setting('mm_custom_subline', [
+        'default'           => 'Your subline goes here',
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+
+    // Control for Subline
+    $wp_customize->add_control('mm_custom_subline', [
+        'label'   => __('Subline Text', 'mm'),
+        'section' => 'mm_custom_subline_section',
+        'type'    => 'text',
+    ]);
 
     // Textarea for custom HTML (like <span>)
     // $wp_customize->add_setting('hero_text_content', array(
@@ -467,62 +348,6 @@ add_filter('theme_page_templates', function ($templates) {
 
     return $templates;
 });
-
-// add_filter('template_include', function ($template) {
-//     $page_template = get_page_template_slug();
-//     if ($page_template && file_exists(get_theme_file_path($page_template))) {
-//         return get_theme_file_path($page_template);
-//     }
-
-
-//     $user_slug = get_query_var('user_profile');
-
-//     if ($user_slug) {
-//         $reserved_slugs = ['wp-admin', 'signin', 'signup', 'subscribe', 'lost-password', 'register', 'logout', 'my-account', 'dashboard', 'modify-profile', 'modify-links', 'chatgpt', 'faqs', 'video-library', 'disclaimer-empowerment-coaching', 'privacy-policy-247-empowerment', 'terms-of-use-empowerment'];
-
-//         if (in_array($user_slug, $reserved_slugs)) {
-//             return $template;
-//         }
-
-//         if (get_page_by_path($user_slug)) {
-//             return $template;
-//         }
-
-//         $user = get_user_by('slug', $user_slug);
-//         if ($user) {
-//             $custom_template = get_theme_file_path('template-custom/auth/user-profile.php');
-//             if (file_exists($custom_template)) {
-//                 return $custom_template;
-//             }
-//         }
-//     }
-
-//     if (is_front_page() && is_user_logged_in()) {
-//         // Admins → redirect to dashboard
-//         if (current_user_can('administrator')) {
-//             wp_redirect(home_url('/dashboard'));
-//             exit;
-//         }
-
-//         // Normal users → show custom home
-//         $custom_home = get_theme_file_path('template-custom/auth/home.php');
-//         if (file_exists($custom_home)) {
-//             return $custom_home;
-//         }
-//     }
-
-//     $custom_page = get_query_var('custom_page');
-
-//     if ($custom_page === 'report') {
-//         return get_template_directory() . '/template-custom/auth/report.php';
-//     }
-
-//     if ($custom_page === 'suggestion') {
-//         return get_template_directory() . '/template-custom/auth/suggestion.php';
-//     }
-
-//     return $template;
-// });
 
 add_filter('template_include', function ($template) {
     // Handle custom_page
@@ -955,8 +780,10 @@ add_action('wp_footer', function () {
 require_once get_template_directory() . '/inc/UserProfileData.php';
 require_once get_template_directory() . '/inc/Notifications.php';
 require_once get_template_directory() . '/inc/UserConnectionManager.php';
+require_once get_template_directory() . '/more_functions/walker-menu.php';
 require_once get_template_directory() . '/more_functions/authentication.php';
 require_once get_template_directory() . '/more_functions/profile.php';
 require_once get_template_directory() . '/more_functions/store.php';
 require_once get_template_directory() . '/more_functions/event.php';
+require_once get_template_directory() . '/more_functions/blog.php';
 require_once get_template_directory() . '/more_functions/issues.php';

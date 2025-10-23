@@ -151,160 +151,52 @@
   </head>
 
   <body>
-      <header
-          class="custom-z-index position-fixed bg-white custom-box-shadow header-navbar end-0 start-0">
-          <nav
-              class="d-flex flex-wrap w-100 h-100 navbar main-container navbar-expand-lg">
-              <div
-                  class="d-flex align-items-center justify-content-between w-100 h-full">
-                  <div class="d-flex align-items-center">
-                      <div class="me-2">
-                          <?php if (is_user_logged_in()): ?>
-                              <?php $user = UserProfileData::getInstance(); ?>
-                              <a
-                                  class="position-relative d-flex align-items-center justify-content-center logo-box"
-                                  href="<?php echo esc_url($user->getProfileUrl()); ?>">
-                                  <img class="bottom-0 position-absolute w-100 h-100 object-fit-cover" src="<?php echo esc_url(get_theme_mod('large_logo')); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>">
-                              </a>
-                          <?php endif; ?>
-                      </div>
 
-                      <?php
-                        $current_user = wp_get_current_user();
-                        $username = $current_user->user_nicename;
-                        $referrals_url = site_url("/{$username}/referrals/");
-                        ?>
+      <header class="custom-navbar">
+          <div class="d-flex align-items-center justify-content-between w-100 h-100 container">
 
-                      <form method="get" action="<?php echo esc_url($referrals_url); ?>">
-                          <div class="input-group d-lg-block d-none">
-                              <div class="position-relative">
-                                  <img class="img-icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/loggedin_images/search.png" alt="" />
-                                  <input
-                                      type="text"
-                                      name="search"
-                                      value="<?php echo esc_attr($_GET['search'] ?? ''); ?>"
-                                      placeholder="Search referral partners"
-                                      style="border-radius: 100px; width: 230px; padding-left: 2rem;"
-                                      aria-label="Search referrals"
-                                      class="form-control" />
-                              </div>
-                          </div>
-                      </form>
-
-
-                  </div>
-                  <?php $current_url = home_url(add_query_arg(array(), $wp->request)); ?>
-
-                  <div class="d-lg-block w-50 d-none">
-                      <div class="d-flex justify-content-evenly middle-col">
-
-                          <div>
-                              <a href="/" class="<?php echo (untrailingslashit(home_url('/')) === untrailingslashit($current_url)) ? 'active-menu' : ''; ?>">
-                                  <i class="bi bi-house fs-4"></i>
-                              </a>
-                          </div>
-
-                          <div>
-                              <a href="<?php echo esc_url(home_url("/$username/store")); ?>" class="<?php echo (home_url("/$username/store") === $current_url) ? 'active-menu' : ''; ?>">
-                                  <i class="bi bi-shop fs-4"></i>
-                              </a>
-                          </div>
-
-                          <div>
-                              <a href="<?php echo esc_url(home_url("/$username/referrals")); ?>" class="<?php echo (home_url("/$username/referrals") === $current_url) ? 'active-menu' : ''; ?>">
-                                  <i class="bi bi-people fs-4"></i>
-                              </a>
-                          </div>
-
-                          <div>
-                              <a href="<?php echo esc_url(home_url("/$username/events")); ?>" class="<?php echo (home_url("/$username/events") === $current_url) ? 'active-menu' : ''; ?>">
-                                  <i class="bi bi-calendar-event fs-4"></i>
-                              </a>
-                          </div>
-
-
-                      </div>
-                  </div>
-
-
-                  <div>
-                      <div class="d-flex">
-                          <ul
-                              class="right-navbar-gap flex-row align-items-center navbar-nav">
-                              <!-- <li
-                                  class="right-navbar-li position-relative rounded-circle text-center nav-item">
-                                  <a
-                                      class="d-flex align-items-center justify-content-center w-100 h-100 nav-link"
-                                      href="#">
-                                      <img class="dropdown-icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/loggedin_images/union.png" alt="" />
-                                  </a>
-                              </li> -->
-
-                              <li class="rounded-circle list-style-none nav-item dropdown">
-                                  <a
-                                      href="#"
-                                      class="right-navbar-li position-relative d-flex align-items-center justify-content-center p-0 rounded-circle nav-link"
-                                      id="iconDropdown"
-                                      role="button"
-                                      data-bs-toggle="dropdown"
-                                      aria-expanded="false">
-                                      <img
-                                          class="z-0 rounded-circle w-100 h-100 dropdown-icon"
-                                          src="<?php echo esc_url(get_user_meta(get_current_user_id(), 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg'); ?>"
-                                          alt="Dropdown Icon" />
-                                      <div class="bottom-0 z-2 position-absolute d-flex align-content-center justify-content-center border-2 border-white rounded-circle text-center end-0 avatar-size">
-
-                                          <i class="rounded-circle w-100 h-100 fa-caret-down fa-solid"></i>
-
-                                      </div>
-                                  </a>
-                                  <ul
-                                      class="position-absolute dropdown-menu navbar-ul-width dropdown-menu-end"
-                                      aria-labelledby="iconDropdown">
-                                      <?php
-                                        if (is_user_logged_in()) :
-                                            $current_user = wp_get_current_user();
-                                            $first_name = $current_user->first_name;
-                                            $last_name = $current_user->last_name;
-
-                                            // Get the current user's username (slug)
-                                            $user_slug = $current_user->user_login;
-
-                                            // Create the profile URL using the username
-                                            $profile_url = home_url('/' . $user_slug);  // This should link to the user's profile page
-
-                                        ?>
-                                          <li>
-                                              <a class="dropdown-item" href="<?php echo esc_url($profile_url); ?>">
-                                                  <?php echo esc_html($first_name . ' ' . $last_name); ?>
-                                              </a>
-                                          </li>
-                                      <?php endif; ?>
-                                      <li>
-                                          <a class="dropdown-item" href="<?php echo esc_url('/modify-profile'); ?>">Update Profile</a>
-                                      </li>
-                                      <li>
-                                          <?php if (current_user_can('administrator')) : ?>
-                                              <a class="dropdown-item" href="<?php echo esc_url(admin_url()); ?>">Dashboard</a>
-                                          <?php endif; ?>
-                                      </li>
-                                      <?php if (is_user_logged_in()) : ?>
-                                          <li>
-                                              <a class="dropdown-item" href="<?php echo esc_url(home_url('/report')); ?>">Report an issue</a>
-                                          </li>
-                                      <?php endif; ?>
-                                      <?php if (is_user_logged_in()) : ?>
-                                          <li>
-                                              <a class="dropdown-item" href="<?php echo esc_url(home_url('/suggestion')); ?>">Make a suggestion</a>
-                                          </li>
-                                      <?php endif; ?>
-
-                                      <li><a class="dropdown-item" href="<?php echo wp_logout_url(home_url('/')); ?>">Logout</a></li>
-                                  </ul>
-                              </li>
-                          </ul>
-                      </div>
-                  </div>
+              <!-- logo-nav -->
+              <div class="d-flex align-items-center gap-2">
+                  <?php if (is_user_logged_in()): ?>
+                      <?php $user = UserProfileData::getInstance(); ?>
+                      <a
+                          class="position-relative d-flex align-items-center justify-content-center logo-box"
+                          href="<?php echo esc_url($user->getProfileUrl()); ?>">
+                          <img
+                              class="logo-nav"
+                              src="<?php echo esc_url(get_theme_mod('large_logo')); ?>"
+                              alt="<?php echo esc_attr(get_bloginfo('name')); ?>">
+                      </a>
+                  <?php endif; ?>
               </div>
-          </nav>
+
+              <?php
+                wp_nav_menu([
+                    'theme_location' => 'portalmenu',
+                    'menu_class'     => 'd-lg-flex gap-4 nav d-none',
+                    'walker'         => new Image_Icon_Walker_Nav_Menu(),
+                ]);
+                ?>
+
+
+              <div class="d-flex align-items-center gap-1 gap-md-3">
+                  <?php get_template_part('template-parts/portal-header/header', 'search'); ?>
+                  <?php get_template_part('template-parts/portal-header/header', 'messages'); ?>
+                  <?php get_template_part('template-parts/portal-header/header', 'notifications'); ?>
+                  <?php get_template_part('template-parts/portal-header/header', 'profile-dropdown'); ?>
+
+                  <button class="btn btn-light d-lg-none" id="menuToggle"><i class="bi bi-list fs-4"></i></button>
+              </div>
+          </div>
+
+          <div class="bg-white shadow-sm mobile-menu d-lg-none">
+              <?php
+                wp_nav_menu([
+                    'theme_location' => 'portalmobilemenu',
+                    'menu_class'     => 'flex-column p-3 text-center nav',
+                    'container'      => false,
+                    'walker'         => new Image_Icon_Walker_Nav_Menu(),
+                ]);
+                ?>
+          </div>
       </header>

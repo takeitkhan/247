@@ -1,3 +1,49 @@
+jQuery(document).ready(function($) {
+    $('#photoUpload').on('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $('#image-preview').attr('src', e.target.result).show();
+            }
+            reader.readAsDataURL(file);
+        } else {
+            $('#image-preview').hide();
+        }
+    });
+});
+
+jQuery(document).ready(function ($) {
+    $('#create-post-form').on('submit', function (e) {
+        e.preventDefault();
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            url: ajax_object.ajax_url,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (res) {
+                console.log(res); // debug response
+                if (res.success) {
+                    //alert('Post created successfully! ID: ' + res.data.post_id);
+                    location.reload();
+                } else {
+                    alert('Error: ' + (res.data?.message || 'Something went wrong'));
+                }
+            },
+            error: function (xhr, status, err) {
+                console.error('AJAX error:', status, err);
+                //alert('AJAX error occurred.');
+            }
+        });
+    });
+});
+
+
+
 jQuery(document).ready(function ($) {
     $('#createPostForm').on('submit', function (e) {
         e.preventDefault();

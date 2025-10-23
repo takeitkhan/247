@@ -79,13 +79,15 @@ nav ul li {
 
     &:hover {
         color: #05489C !important;
-        text-decoration: none;
     }
 }
 
 .footer-list-inline-item a {
-    color: #FFFFFF !important;
     font-weight: 400 !important;
+
+    &:hover {
+        color: #000000 !important;
+    }
 }
 
 
@@ -130,7 +132,10 @@ nav ul li {
     background-color: #ccfbf1 !important; // Tailwind's teal-100
 }
 
-.small, small { font-size: 0.675em !important; }
+.small,
+small {
+    font-size: 0.675em !important;
+}
 
 
 /* sign up page */
@@ -292,7 +297,9 @@ nav ul li {
 // =============================
 
 
-.text-custom-dark { color: var(--black-color); }
+.text-custom-dark {
+    color: var(--black-color);
+}
 
 
 .custom-btn {
@@ -355,7 +362,7 @@ nav ul li {
 }
 
 .has-text-align-center {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     line-height: 160%;
     font-family: "Plus Jakarta Sans", sans-serif;
     font-weight: 500;
@@ -699,5 +706,241 @@ h1.fs-giant {
         -webkit-text-fill-color: transparent;
         background-clip: text;
         font-weight: 700;
+    }
+}
+
+// Gutenberg Content Styling with Bootstrap 5 equivalents
+// Paragraphs
+.wp-block-paragraph {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    line-height: 2rem;
+    color: #212529;
+}
+
+.wp-block-paragraph p strong {
+    font-weight: 600;
+}
+
+// Headings
+.wp-block-heading {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+
+    &.has-text-align-center {
+        text-align: center;
+    }
+}
+
+// Unordered lists
+ul.wp-block-lists,
+ul.wp-block-lists {
+    list-style: none; // remove default bullets
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+
+    li {
+        margin-bottom: 0.5rem;
+        position: relative;
+        padding-left: 0.5rem;
+        list-style: none;
+
+        &::before {
+            content: "\2713";
+            color: #000000; // Bootstrap primary color
+            position: absolute;
+            left: 0;
+        }
+    }
+}
+
+// Ordered lists
+ol.wp-block-lists,
+ol.wp-block-list {
+    counter-reset: list-counter;
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+
+    li {
+        counter-increment: list-counter;
+        margin-bottom: 0.5rem;
+        position: relative;
+        padding-left: 2rem;
+        list-style: none;
+
+        &::before {
+            content: counter(list-counter) ". ";
+            font-weight: 500;
+            color: #000000;
+            position: absolute;
+            left: 0;
+        }
+    }
+}
+
+/* Custom ordered list with counter and centered items */
+.wp-block-list ol {
+    counter-reset: list-counter;
+    margin-bottom: 1rem;
+    padding-left: 0; // reset padding; spacing handled in flex
+    list-style: none;
+
+    li {
+        counter-increment: list-counter;
+        display: flex;
+        align-items: center; // vertical center
+        gap: 0.5rem; // space between number and text
+        margin-bottom: 0.75rem;
+
+        &::before {
+            content: counter(list-counter) ".";
+            font-weight: 500;
+            color: #0d6efd; // Bootstrap primary
+            min-width: 2rem; // space for numbers
+            text-align: right; // align numbers right
+        }
+    }
+}
+
+
+// Links
+.wp-block-paragraph a,
+.wp-block-list a {
+    text-decoration: none; // remove underline
+    color: #0d6efd;
+
+    &:hover {
+        text-decoration: underline;
+        color: #0a58ca;
+    }
+}
+
+// Blockquotes
+.wp-block-quote {
+    margin: 1.5rem 0;
+    padding-left: 1.25rem;
+    border-left: 0.25rem solid #0d6efd;
+    color: #495057;
+    font-style: italic;
+}
+
+// Images
+.wp-block-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.25rem;
+}
+
+/* Strong text inside large font-size blocks */
+.has-large-font-size strong {
+    padding: 20px 0 10px 0;
+    border-radius: 0;
+    font-size: 25px;
+    color: #000000;
+    display: block;
+}
+
+.sidebar-blog-categories {
+    li {
+        color: var(--black-color) !important;
+        font-weight: 400;
+
+        &:hover {
+            color: var(--white) !important;
+
+            a {
+                color: var(--white) !important;
+            }
+        }
+
+        a {
+            color: var(--black-color) !important;
+            text-decoration: none;
+            transition: color 0.3s;
+
+            &:hover {
+                color: var(--white) !important;
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+.marginabove-30 {
+    margin-top: 30px;
+}
+
+
+/* --------------------------------
+   📱 Mobile Responsive Adjustments
+----------------------------------- */
+@media (max-width: 767.98px) {
+
+    // Paragraphs
+    .wp-block-paragraph {
+        font-size: 0.95rem;
+        line-height: 1.8rem;
+    }
+
+    // Headings
+    .wp-block-heading {
+        font-size: 1.5rem; // smaller headings
+        margin-top: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    // Lists
+    ul.wp-block-lists,
+    ol.wp-block-lists,
+    ol.wp-block-list,
+    .wp-block-list ol {
+        padding-left: 1rem;
+
+        li {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            padding-left: 1.25rem;
+        }
+    }
+
+    // Blockquote
+    .wp-block-quote {
+        font-size: 0.95rem;
+        padding-left: 1rem;
+        margin: 1rem 0;
+    }
+
+    // Images
+    .wp-block-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 0.25rem;
+    }
+
+    // Large strong text
+    .has-large-font-size strong {
+        font-size: 20px;
+        padding: 10px 0 5px 0;
+    }
+
+    // Sidebar categories (stack neatly)
+    .sidebar-blog-categories li {
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+
+        a {
+            display: inline-block;
+            padding: 0.25rem 0;
+        }
+    }
+
+    .marginabove-30 {
+        margin-top: 20px;
+    }
+
+    .mobile-mtmb {
+        margin-top: 1rem !important;
+        margin-bottom: 2.5rem !important;
     }
 }

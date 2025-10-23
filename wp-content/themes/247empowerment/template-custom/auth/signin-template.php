@@ -70,7 +70,7 @@ $old_input = $message['old_input'] ?? [];
                             <p class="mb-0">Don't have an account?</p>
                         </div>
                         <div>
-                            <a href="<?php echo site_url('/signup'); ?>" class="d-inline-block mb-3 custom-btn-outline-none">Sign Up</a>
+                            <a href="<?php echo site_url('/signup'); ?>" class="mb-3 custom-btn-outline-none">Sign Up</a>
                         </div>
                     </form>
                 </div>

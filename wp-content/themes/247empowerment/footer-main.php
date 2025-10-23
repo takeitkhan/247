@@ -1,5 +1,5 @@
 </div> <!-- Closing main container if opened earlier -->
-<footer class="text-white footer-gradient footer-height">
+<footer class="border-top xtext-white xfooter-gradient footer-height" style="border-top-color: #BEC8E4 !important;">
     <div class="pt-0 pb-0 h-100 container custom-card">
 
         <!-- Site Name -->
@@ -9,40 +9,48 @@
 
             <!-- Site Description / Info -->
             <div class="col-md-5">
-                <p class="mt-2 mt-md-0 mb-0 text-white fs14">
-                    <?php echo get_bloginfo('description'); ?>
+                <p class="mt-2 mt-md-0 mb-0 xtext-white fs14">
+                    <?php echo get_theme_mod('mm_custom_subline', 'Default subline here'); ?>
                 </p>
             </div>
 
             <!-- Social Links -->
             <div class="col-md-3">
-                <ul class="list-inline d-flex mb-0 gap12">
+                <ul class="list-inline d-flex mb-2 gap12">
                     <?php
-                    // Example dynamic social links (replace with ACF/theme options if needed)
-                    $social_links = [
-                        'twitter' => 'https://twitter.com/yourhandle',
-                        'facebook' => 'https://facebook.com/yourpage',
-                        'instagram' => 'https://instagram.com/yourhandle',
-                        'linkedin' => 'https://linkedin.com/yourpage',
-                        'youtube' => 'https://youtube.com/yourchannel'
-                    ];
-                    $social_icons = [
-                        'twitter' => 'twitter.png',
-                        'facebook' => 'fb.png',
+                    // Social media platforms and icon filenames
+                    $social_platforms = [
+                        'facebook'  => 'fb.png',
+                        'twitter'   => 'twitter.png',
                         'instagram' => 'instagram.png',
-                        'linkedin' => 'linkedin.png',
-                        'youtube' => 'youtube.png'
+                        'linkedin'  => 'linkedin.png',
+                        'youtube'   => 'youtube.png'
                     ];
 
-                    foreach ($social_links as $key => $url) :
+                    // Loop through each platform and show only those with URLs set in the Customizer
+                    foreach ($social_platforms as $platform => $icon) :
+                        $url = get_theme_mod("{$platform}_url"); // Get from Customizer
+                        if (!empty($url)) :
                     ?>
-                        <li class="list-inline-item">
-                            <a href="<?php echo esc_url($url); ?>" class="text-white text-decoration-none fs-3" aria-label="<?php echo ucfirst($key); ?>">
-                                <img src="<?php echo get_template_directory_uri() . '/assets/img/nd/' . $social_icons[$key]; ?>" alt="<?php echo ucfirst($key); ?>">
-                            </a>
-                        </li>
-                    <?php endforeach; ?>
+                            <li class="list-inline-item">
+                                <a href="<?php echo esc_url($url); ?>"
+                                    class="text-decoration-none xtext-white fs-3"
+                                    target="_blank"
+                                    rel="noopener"
+                                    aria-label="<?php echo ucfirst($platform); ?>">
+                                    <img
+                                        src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/nd/' . $icon); ?>"
+                                        alt="<?php echo ucfirst($platform); ?>"
+                                        width="24"
+                                        height="24">
+                                </a>
+                            </li>
+                    <?php
+                        endif;
+                    endforeach;
+                    ?>
                 </ul>
+
             </div>
 
             <!-- Footer Menu -->
@@ -51,7 +59,7 @@
                 wp_nav_menu([
                     'theme_location' => 'secondary',
                     'container' => false,
-                    'menu_class' => 'list-inline d-flex justify-content-between mb-0',
+                    'menu_class' => 'list-inline d-flex justify-content-end mb-0 gap-4',
                     'items_wrap' => '<ul id="%1$s" class="%2$s">%3$s</ul>',
                     'walker' => new MM_Footer_Walker_Nav_Menu(),
                     'fallback_cb' => false,

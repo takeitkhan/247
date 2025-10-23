@@ -22,7 +22,7 @@ if (is_user_logged_in()) {
 
     <div class="container">
         <div class="xcustom-box-shadow mb-3 p-3 xcustom-border-radius xbg-white">
-            <div class="p-4">
+            <div class="wp-block-image wp-block-paragraph xwp-block-quote p-4">
                 <?php the_content(); ?>
             </div>
         </div>
