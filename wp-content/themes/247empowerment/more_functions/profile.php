@@ -15,12 +15,15 @@ add_action('wp_enqueue_scripts', function () {
     }
 });
 
-add_action('wp_ajax_upload_cover_photo', 'handle_cover_photo_upload');
+add_action('wp_enqueue_scripts', function () {
+    wp_enqueue_style('dashicons');
+});
 
+add_action('wp_ajax_upload_cover_photo', 'handle_cover_photo_upload');
 function handle_cover_photo_upload()
 {
     if (!is_user_logged_in()) {
-        wp_send_json_error(['message' => 'Not logged in']);
+        wp_send_json_error(['message' => 'Unauthorized']);
     }
 
     if (!function_exists('wp_handle_upload')) {
@@ -28,7 +31,7 @@ function handle_cover_photo_upload()
     }
 
     if (empty($_FILES['cover_photo'])) {
-        wp_send_json_error(['message' => 'No file received']);
+        wp_send_json_error(['message' => 'No file uploaded']);
     }
 
     $uploadedfile = $_FILES['cover_photo'];
@@ -37,8 +40,7 @@ function handle_cover_photo_upload()
     $movefile = wp_handle_upload($uploadedfile, $upload_overrides);
 
     if ($movefile && !isset($movefile['error'])) {
-        $user_id = get_current_user_id();
-        update_user_meta($user_id, 'profile_cover_photo', esc_url_raw($movefile['url']));
+        update_user_meta(get_current_user_id(), 'cover_photo', esc_url_raw($movefile['url']));
         wp_send_json_success(['url' => esc_url($movefile['url'])]);
     } else {
         $error = isset($movefile['error']) ? $movefile['error'] : 'Unknown error';
@@ -47,9 +49,6 @@ function handle_cover_photo_upload()
 }
 
 
-add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_style('dashicons');
-});
 
 
 add_action('wp_ajax_upload_profile_photo', 'handle_profile_photo_upload');
@@ -82,12 +81,13 @@ function handle_profile_photo_upload()
 }
 
 
-function enqueue_post_create_script() {
+function enqueue_post_create_script()
+{
     wp_enqueue_script(
-        'post-create-js', 
-        get_template_directory_uri() . '/assets/js/post-create.js', 
-        array('jquery'), 
-        null, 
+        'post-create-js',
+        get_template_directory_uri() . '/assets/js/post-create.js',
+        array('jquery'),
+        null,
         true
     );
 

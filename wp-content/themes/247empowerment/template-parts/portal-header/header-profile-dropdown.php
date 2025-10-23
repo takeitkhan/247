@@ -68,7 +68,7 @@
                     <li class="py-2 list-unstyled">
                         <a class="d-flex align-content-center dropdown-item gap10 fs18 fw-medium" href="<?php echo esc_url(admin_url()); ?>">
                             <div class="img24">
-                                <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/nd/dashboard.png'); ?>" class="w-100 h-100 object-fit-contain" alt="">
+                                <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/nd/nav-pen.png'); ?>" class="w-100 h-100 object-fit-contain" alt="">
                             </div>
                             Dashboard
                         </a>

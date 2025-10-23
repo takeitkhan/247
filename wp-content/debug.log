@@ -15,3 +15,61 @@
 [23-Oct-2025 14:18:34 UTC] PHP Notice:  Function wp_enqueue_script was called <strong>incorrectly</strong>. Scripts and styles should not be registered or enqueued until the <code>wp_enqueue_scripts</code>, <code>admin_enqueue_scripts</code>, or <code>login_enqueue_scripts</code> hooks. This notice was triggered by the <code>post-create-js</code> handle. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 3.3.0.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
 [23-Oct-2025 14:18:34 UTC] PHP Notice:  Function wp_enqueue_script was called <strong>incorrectly</strong>. Scripts and styles should not be registered or enqueued until the <code>wp_enqueue_scripts</code>, <code>admin_enqueue_scripts</code>, or <code>login_enqueue_scripts</code> hooks. This notice was triggered by the <code>post-create-js</code> handle. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 3.3.0.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
 [23-Oct-2025 14:19:06 UTC] PHP Notice:  Function wp_enqueue_script was called <strong>incorrectly</strong>. Scripts and styles should not be registered or enqueued until the <code>wp_enqueue_scripts</code>, <code>admin_enqueue_scripts</code>, or <code>login_enqueue_scripts</code> hooks. This notice was triggered by the <code>post-create-js</code> handle. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 3.3.0.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
+[23-Oct-2025 20:39:03 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 6
+[23-Oct-2025 20:39:03 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 6
+[23-Oct-2025 20:39:03 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 25
+[23-Oct-2025 20:39:03 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 25
+[23-Oct-2025 20:39:03 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 40
+[23-Oct-2025 20:39:03 UTC] PHP Warning:  Trying to access array offset on value of type null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 40
+[23-Oct-2025 20:39:03 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 40
+[23-Oct-2025 20:39:03 UTC] PHP Warning:  Trying to access array offset on value of type null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 40
+[23-Oct-2025 20:39:03 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 44
+[23-Oct-2025 20:39:03 UTC] PHP Warning:  Trying to access array offset on value of type null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 44
+[23-Oct-2025 20:39:03 UTC] PHP Fatal error:  Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, null given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php:45
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\template.php(812): require()
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', false, Array)
+#2 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(206): locate_template(Array, true, false, Array)
+#3 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php(26): get_template_part('template-custom...', 'section', Array)
+#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
+#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#7 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 45
+[23-Oct-2025 20:39:23 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 6
+[23-Oct-2025 20:39:23 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 6
+[23-Oct-2025 20:39:23 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 25
+[23-Oct-2025 20:39:23 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 25
+[23-Oct-2025 20:39:23 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 40
+[23-Oct-2025 20:39:23 UTC] PHP Warning:  Trying to access array offset on value of type null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 40
+[23-Oct-2025 20:39:23 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 40
+[23-Oct-2025 20:39:23 UTC] PHP Warning:  Trying to access array offset on value of type null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 40
+[23-Oct-2025 20:39:23 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 44
+[23-Oct-2025 20:39:23 UTC] PHP Warning:  Trying to access array offset on value of type null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 44
+[23-Oct-2025 20:39:23 UTC] PHP Fatal error:  Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, null given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php:45
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\template.php(812): require()
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', false, Array)
+#2 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(206): locate_template(Array, true, false, Array)
+#3 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php(26): get_template_part('template-custom...', '', Array)
+#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
+#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#7 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 45
+[23-Oct-2025 20:40:15 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 9
+[23-Oct-2025 20:40:15 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 9
+[23-Oct-2025 20:40:15 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 28
+[23-Oct-2025 20:40:15 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 28
+[23-Oct-2025 21:08:29 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php on line 37
+[23-Oct-2025 21:08:29 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php on line 57
+[23-Oct-2025 21:08:29 UTC] PHP Warning:  Undefined array key "first_name" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php on line 74
+[23-Oct-2025 21:08:29 UTC] PHP Warning:  Undefined array key "last_name" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php on line 74
+[23-Oct-2025 21:08:29 UTC] PHP Warning:  Undefined array key "referred_users" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php on line 78
+[23-Oct-2025 21:08:29 UTC] PHP Fatal error:  Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, null given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php:79
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include()
+#1 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#3 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php on line 79

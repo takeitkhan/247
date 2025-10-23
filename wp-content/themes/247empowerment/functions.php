@@ -12,7 +12,7 @@ function mm_enqueue_assets()
 
     wp_enqueue_style('mm-style', get_stylesheet_uri(), [], filemtime(get_stylesheet_directory() . '/style.css'));
 
-    wp_enqueue_script('bootstrap-js', get_template_directory_uri() . '/assets/js/bootstrap.bundle.min.js', [], null, true);
+    //wp_enqueue_script('bootstrap-js', get_template_directory_uri() . '/assets/js/bootstrap.bundle.min.js', [], null, true);
 }
 add_action('wp_enqueue_scripts', 'mm_enqueue_assets');
 
