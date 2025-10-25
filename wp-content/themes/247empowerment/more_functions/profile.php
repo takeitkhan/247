@@ -97,6 +97,26 @@ function enqueue_post_create_script()
 }
 add_action('wp_enqueue_scripts', 'enqueue_post_create_script');
 
+function enqueue_profile_map_script() {
+    if (is_page_template('template-custom/auth/modify-profile.php')) {
+        wp_enqueue_script(
+            'profile-map',
+            get_template_directory_uri() . '/assets/js/profile-map.js',
+            [],
+            null,
+            true
+        );
+        wp_enqueue_script(
+            'google-maps',
+            'https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initProfileMap',
+            [],
+            null,
+            true
+        );
+    }
+}
+add_action('wp_enqueue_scripts', 'enqueue_profile_map_script');
+
 
 
 add_action('wp_ajax_create_post', 'handle_create_post');
@@ -342,3 +362,15 @@ function save_referred_by_field($user_id)
 }
 add_action('personal_options_update', 'save_referred_by_field');
 add_action('edit_user_profile_update', 'save_referred_by_field');
+
+// Handle delete profile photo
+add_action('wp_ajax_delete_profile_photo', function() {
+    if (!is_user_logged_in()) wp_send_json_error('Not authorized');
+
+    $user_id = get_current_user_id();
+    delete_user_meta($user_id, 'profile_photo');
+
+    wp_send_json_success('Profile photo deleted');
+});
+
+

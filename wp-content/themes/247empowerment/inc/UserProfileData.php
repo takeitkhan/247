@@ -31,14 +31,28 @@ class UserProfileData
     {
         if (!$this->user) return null;
 
+        // Fetch the array of category IDs
         $user_categories = get_user_meta($this->user->ID, 'user_categories', true);
+
+
+
+        // Initialize the names array
         $user_category_names = [];
+
+        // Assuming the user categories are stored in the default 'category' taxonomy
+        $category_taxonomy = 'category';
 
         if (!empty($user_categories) && is_array($user_categories)) {
             foreach ($user_categories as $cat_id) {
-                $term = get_term($cat_id);
-                if ($term && !is_wp_error($term)) {
-                    $user_category_names[] = $term->name;
+                // Check if the ID is numeric to prevent errors
+                if (is_numeric($cat_id)) {
+                    // Pass both the ID and the taxonomy name to retrieve the term object
+                    $term = get_term((int)$cat_id, $category_taxonomy);
+
+                    if ($term && !is_wp_error($term)) {
+                        // Add the category name to the array
+                        $user_category_names[] = $term->name;
+                    }
                 }
             }
         }
@@ -117,36 +131,6 @@ class UserProfileData
 
         return get_users($args);
     }
-
-
-    // public static function getReferredUsersBy($referrer_user)
-    // {
-    //     if (!$referrer_user instanceof WP_User) {
-    //         $referrer_user = get_user_by('id', (int)$referrer_user);
-    //     }
-
-    //     if (!$referrer_user) {
-    //         return [];
-    //     }
-
-    //     $referrer_id = $referrer_user->ID;
-    //     $referrer_login = $referrer_user->user_login;
-
-    //     $args = [
-    //         'meta_query' => [
-    //             [
-    //                 'key'     => 'referrer',
-    //                 'value'   => [$referrer_id, $referrer_login],
-    //                 'compare' => 'IN'
-    //             ]
-    //         ],
-    //         'orderby' => 'registered',
-    //         'order'   => 'DESC',
-    //         'number' => 7,
-    //     ];
-
-    //     return get_users($args);
-    // }
 
     public static function getReferredUsersBy($referrer_user)
     {

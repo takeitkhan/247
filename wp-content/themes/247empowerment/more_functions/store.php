@@ -231,3 +231,94 @@ add_action('template_redirect', function () {
     wp_redirect($clean_url, 301);
     exit;
 });
+
+
+// Add field to Add New Term form
+add_action('course_category_add_form_fields', function () {
+?>
+    <div class="form-field">
+        <label for="term_icon">Icon Image</label>
+        <input type="hidden" id="term_icon" name="term_icon" value="">
+        <div id="term_icon_preview"></div>
+        <button type="button" class="button upload_term_icon_button">Upload Icon</button>
+        <button type="button" class="button remove_term_icon_button" style="display:none;">Remove Icon</button>
+    </div>
+<?php
+});
+
+// Add field to Edit Term form
+add_action('course_category_edit_form_fields', function ($term) {
+    $icon_id = get_term_meta($term->term_id, 'term_icon', true);
+    $icon_url = $icon_id ? wp_get_attachment_url($icon_id) : '';
+?>
+    <tr class="form-field">
+        <th scope="row"><label for="term_icon">Icon Image</label></th>
+        <td>
+            <input type="hidden" id="term_icon" name="term_icon" value="<?php echo esc_attr($icon_id); ?>">
+            <div id="term_icon_preview">
+                <?php if ($icon_url): ?>
+                    <img src="<?php echo esc_url($icon_url); ?>" alt="" style="max-width:80px; display:block; margin-bottom:10px;">
+                <?php endif; ?>
+            </div>
+            <button type="button" class="button upload_term_icon_button"><?php echo $icon_url ? 'Change Icon' : 'Upload Icon'; ?></button>
+            <button type="button" class="button remove_term_icon_button" <?php if (!$icon_url) echo 'style="display:none;"'; ?>>Remove Icon</button>
+        </td>
+    </tr>
+<?php
+});
+
+// Save term meta
+add_action('created_course_category', 'save_course_category_icon');
+add_action('edited_course_category', 'save_course_category_icon');
+function save_course_category_icon($term_id)
+{
+    if (isset($_POST['term_icon'])) {
+        update_term_meta($term_id, 'term_icon', sanitize_text_field($_POST['term_icon']));
+    }
+}
+
+add_action('admin_enqueue_scripts', function ($hook) {
+    // Load only on taxonomy pages
+    if (!in_array($hook, ['edit-tags.php', 'term.php'])) return;
+
+    wp_enqueue_media();
+    wp_enqueue_script('jquery');
+
+    wp_add_inline_script('jquery', "
+        jQuery(document).ready(function($){
+            let frame;
+
+            function setImage(input, url, id) {
+                input.val(id);
+                input.siblings('#term_icon_preview').html('<img src=\"'+url+'\" style=\"max-width:80px; display:block; margin-bottom:10px;\">');
+                input.siblings('.remove_term_icon_button').show();
+            }
+
+            $(document).on('click', '.upload_term_icon_button', function(e){
+                e.preventDefault();
+                const button = $(this);
+                const input = button.siblings('#term_icon');
+
+                frame = wp.media({
+                    title: 'Select or Upload Icon',
+                    button: { text: 'Use this image' },
+                    multiple: false
+                });
+
+                frame.on('select', function(){
+                    const attachment = frame.state().get('selection').first().toJSON();
+                    setImage(input, attachment.url, attachment.id);
+                });
+
+                frame.open();
+            });
+
+            $(document).on('click', '.remove_term_icon_button', function(){
+                const button = $(this);
+                button.siblings('#term_icon').val('');
+                button.siblings('#term_icon_preview').html('');
+                button.hide();
+            });
+        });
+    ");
+});

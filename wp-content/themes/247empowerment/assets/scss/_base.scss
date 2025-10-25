@@ -17,32 +17,40 @@ Tags: custom-colors, custom-menu, multi-column, custom-logo, editor-style, featu
 */
 
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
-*{
+
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   width: 100%;
   font-family: $font-primary;
   color: $black;
 }
-button{
+
+button {
   border: none;
   outline: none;
   cursor: pointer;
   background: none;
 }
-b, strong {
-  font-weight: 400 !important;
+
+b,
+strong {
+  font-weight: 500 !important;
 }
-p{
+
+p {
   padding: 0;
   margin: 0;
 }
-a{
+
+a {
   text-decoration: none;
 }
+
 .bg-dark-custom {
   background-color: $portal-bg !important;
 }

@@ -9,6 +9,7 @@ function register_my_menus()
         'secondary' => __('Footer Menu', 'mm'),
         'authentication' => __('Authentication Menu', 'mm'),
         'profilemenu' => __('Profile Menu', 'mm'),
+        'editprofilemenu' => __('Edit Profile Menu', 'mm'),
     ]);
 }
 add_action('after_setup_theme', 'register_my_menus');
@@ -207,17 +208,21 @@ class Image_Icon_Walker_Nav_Menu extends Walker_Nav_Menu
     }
 }
 
-class Profile_Menu_Walker extends Walker_Nav_Menu {
+class Profile_Menu_Walker extends Walker_Nav_Menu
+{
 
-    function start_lvl(&$output, $depth = 0, $args = null) {
+    function start_lvl(&$output, $depth = 0, $args = null)
+    {
         $output .= "\n<ul class=\"nav d-flex flex-column gap-2\">\n";
     }
 
-    function end_lvl(&$output, $depth = 0, $args = null) {
+    function end_lvl(&$output, $depth = 0, $args = null)
+    {
         $output .= "</ul>\n";
     }
 
-    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
+    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
+    {
         // Correct ACF call
         $icon_url   = get_field('menu_icon_image', $item);
         $icon_class = get_field('menu_icon_class', $item) ?: 'img24';
@@ -232,7 +237,22 @@ class Profile_Menu_Walker extends Walker_Nav_Menu {
         $output .= '<a href="' . esc_url($item->url) . '" class="p-0 text">' . esc_html($item->title) . '</a>';
     }
 
-    function end_el(&$output, $item, $depth = 0, $args = null) {
+    function end_el(&$output, $item, $depth = 0, $args = null)
+    {
         $output .= "</li>\n";
+    }
+}
+
+class Edit_Profile_Walker extends Walker_Nav_Menu
+{
+    function start_el(&$output, $item, $depth = 0, $args = array(), $id = 0)
+    {
+        $icon = get_field('menu_icon_image', $item); // ACF icon field (optional)
+        $output .= '<li class="d-flex align-items-center nav-item gap10">';
+        if ($icon) {
+            $output .= '<img src="' . esc_url($icon) . '" alt="' . esc_attr($item->title) . '" class="icon-img">';
+        }
+        $output .= '<a href="' . esc_url($item->url) . '" class="p-0 text">' . esc_html($item->title) . '</a>';
+        $output .= '</li>';
     }
 }

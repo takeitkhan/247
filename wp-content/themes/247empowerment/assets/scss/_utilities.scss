@@ -3,72 +3,90 @@
 .text-shadow-lg {
   text-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
 }
+
 .container {
   max-width: 1440px !important;
   margin-right: 24px !important;
   margin-left: 24px !important;
   margin: 0 auto !important;
 }
+
 .custom-card {
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 20px;
 }
+
 .custom-padding-top {
   padding-top: 50px;
   padding-bottom: 50px;
 }
+
 .img44 {
   width: 44px !important;
   height: 44px !important;
 }
-.gap12{
-  gap:12px;
+
+.gap12 {
+  gap: 12px;
 }
-.gap10{
+
+.gap10 {
   gap: 10px;
 }
+
 .img271 {
   width: auto !important;
   height: 271px !important;
+
   img {
     border-radius: 8px;
   }
 }
+
 .img177 {
   width: 177px !important;
   height: 177px !important;
 }
+
 .img24 {
   width: 24px;
   height: 24px;
 }
+
 .img20 {
   width: 20px;
   height: 20px;
 }
+
 .img18 {
   width: 18px;
   height: 18px;
 }
-.img16{
+
+.img16 {
   width: 16px;
   height: 20px;
 }
+
 .img29 {
   width: 29.27px;
   height: 28.33px;
 }
+
 .img240 {
   min-width: 240px;
   height: 220px;
+
   img {
     border-radius: 6px;
   }
 }
+
 .border-underline {
   border-bottom: 1px solid $supporting-neutral;
 }
+
 .bg-teal-100 {
   background-color: #ccfbf1 !important;
 }
@@ -92,6 +110,7 @@
   .offcanvas-start {
     width: 80% !important;
   }
+
   h1.fs-giant {
     font-size: 1.5rem;
   }
@@ -108,50 +127,62 @@
     font-size: 2.5rem;
   }
 }
+
 .text-green-color {
   color: $green-color !important;
 }
+
 .text-blue-color {
   color: $primary-color !important;
 }
+
 .text-gradient-color {
-  color :$linear-gradient !important;
+  color: $linear-gradient !important;
 }
 
 .btn-custom {
+
   &:focus,
-  &:active{
+  &:active {
     box-shadow: 0 0 0 2px $primary-color !important; // Facebook-style ring
     outline: none;
   }
 }
 
-.text-red-color{
+.text-red-color {
   color: $red-color !important;
 }
+
 .text-violet-color {
   color: $violet-color !important;
 }
+
 .text-color-neutral {
   color: $neural-text !important;
 }
-.text-color-neural{
+
+.text-color-neural {
   color: $supporting-neutral !important;
 }
-.bg-neutral-color{
+
+.bg-neutral-color {
   background-color: $supporting-neutral-hover !important;
 }
-.bg-blue-color{
+
+.bg-blue-color {
   background-color: $primary-color !important
 }
-.bg-supporting{
- background-color: $supporting;
+
+.bg-supporting {
+  background-color: $supporting;
 }
-.btn{
-  &:hover{
+
+.btn {
+  &:hover {
     background-color: transparent;
   }
 }
+
 // Apply background color class
 .bg-supporting-neutral {
   background-color: $supporting-neutral !important;
@@ -161,53 +192,96 @@
     background-color: $supporting-neutral-hover !important;
   }
 }
+
 .mr12 {
   margin-right: 12px;
 }
-.mr10{
+
+.mr10 {
   margin-right: 10px;
 }
-.pt20{
- padding-top: 20px;
+
+.pt20 {
+  padding-top: 20px;
 }
+
 .portal-bg {
   background-color: $portal-bg !important;
 }
+
 .img-white {
   filter: brightness(0) invert(1);
 }
+
 .ml12 {
   margin-right: 12px;
 }
+
 .portal-title {
   font-size: clamp(20px, 4vw, 24px) !important;
   font-weight: bold !important;
-  color: $black !important  ;
+  color: $black !important;
   text-align: center;
 }
+
 .profile-title {
   font-size: clamp(20px, 4vw, 32px) !important;
   font-weight: 500 !important;
-  color: $gray_black !important  ;
+  color: $gray_black !important;
 }
+
+.fs10 {
+  font-size: 10px;
+}
+
+.fs12 {
+  font-size: 12px;
+}
+
 .fs14 {
   font-size: 14px;
 }
-.modal-width{
-  max-width: 800px !important;
-  width: 100% !important;
+
+.fs16 {
+  font-size: clamp(16px, 4vw, 16px) !important;
+  color: $gray_black;
+  font-weight: bold;
+  line-height: 1.6;
 }
+
 .fs18 {
   font-size: clamp(16px, 4vw, 18px) !important;
   color: $gray_black;
   font-weight: bold;
   line-height: 1.6;
 }
+
 .fs20 {
   font-size: clamp(18px, 4vw, 20px);
   font-weight: bold;
   line-height: 1.6;
   color: $gray_black;
+}
+
+.fs24 {
+  font-size: clamp(18px, 4vw, 24px);
+  font-weight: medium;
+  line-height: 1.6;
+  color: $gray_black;
+}
+
+.fs32 {
+  background: $primary-color;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: clamp(24px, 2.5vw, 32px);
+  font-weight: bold;
+}
+
+.modal-width {
+  max-width: 800px !important;
+  width: 100% !important;
 }
 
 .pb-4 {
@@ -223,43 +297,31 @@
   font-weight: bold;
 }
 
-.fs32 {
-  background: $primary-color;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: clamp(24px, 2.5vw, 32px);
-  font-weight: bold;
-}
-
-.fs24 {
-  font-size: clamp(18px, 4vw, 24px);
-  font-weight: medium;
-  line-height: 1.6;
-  color: $gray_black;
-}
-
 // remove bootstrap default class
 .modal-header .btn-clos {
   padding: 0;
 }
-.pb10{
-padding-bottom: 10px;
+
+.pb10 {
+  padding-bottom: 10px;
 }
 
 .modal-header {
   border: none !important;
 }
+
 .copy-img {
   width: 19.6px;
   height: 19.6px;
   object-fit: contain;
 }
+
 .w14 {
   width: 14px;
   height: 14px;
 }
-.img60{
+
+.img60 {
   width: 60px;
   height: 60px;
 }

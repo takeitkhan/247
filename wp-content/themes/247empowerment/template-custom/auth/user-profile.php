@@ -26,8 +26,8 @@ if (!is_user_logged_in()) {
             <?php get_template_part('template-custom/auth/profile-parts/cover-photo-section', null, ['profile' => $profile, 'user' => $user]);  ?>
             <div class="row">
                 <div class="col-lg-3">
-                    <?php get_template_part('template-custom/auth/profile-parts/home-left-sidebar', null, ['profile' => $profile]); ?>
-
+                    <?php get_template_part('template-custom/auth/profile-parts/profile-card', null, ['profile' => $profile]); ?>
+                    <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
                 </div>
                 <div class="mb-4 col-lg-6">
                     <?php get_template_part('template-custom/auth/profile-parts/create-post', null, ['profile' => $profile]); ?>
@@ -35,7 +35,7 @@ if (!is_user_logged_in()) {
                     <?php get_template_part('template-custom/auth/profile-parts/posts', null, ['profile' => $profile]); ?>
                 </div>
                 <div class="col-lg-3">
-                    <?php get_template_part('template-custom/auth/profile-parts/referral-partners', null, ['profile' => $profile]); ?>
+                    <?php get_template_part('template-custom/auth/profile-parts/referral-partners', null, ['profile' => $profile, 'user' => $user]); ?>
                 </div>
             </div>
         </div>
