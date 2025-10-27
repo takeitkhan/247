@@ -55,7 +55,6 @@ if ($user) {
         </div>
         <div class="mb-4 col-lg-6">
             <?php get_template_part('template-custom/auth/feed-parts/create-post', null, ['profile' => $profile]); ?>
-
             <?php get_template_part('template-custom/auth/feed-parts/feeds', null, ['profile' => $profile]); ?>
         </div>
         <div class="col-lg-3">
@@ -63,30 +62,6 @@ if ($user) {
         </div>
     </div>
 </div>
-
-<!-- 
-<main>
-    <div class="main-container" style="padding-top: 80px">
-        <div class="">
-            <div class="row g-3">
-                <div class="d-lg-block col d-none">
-                    <?php //include 'profile-parts/home-left-sidebar.php'; ?>
-                </div>
-                <div class="mx-auto col-lg-6 col-sm-8">
-                    <div class="mb-3">
-                        <?php //include 'profile-parts/create-post.php'; ?>
-                    </div>
-                    <div>
-                        <?php //include 'profile-parts/feeds.php'; ?>
-                    </div>
-                </div>
-                <div class="d-lg-block sticky-right col d-none">
-                    <?php //include 'profile-parts/referral-partners-birthday.php'; ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</main> -->
 <?php
 if (is_user_logged_in()) {
     get_footer('portal');

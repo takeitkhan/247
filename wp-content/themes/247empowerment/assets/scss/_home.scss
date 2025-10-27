@@ -93,13 +93,22 @@
         background: $primary-color; // your gradient variable
         color: $white;
 
-        a {
-            // color: $white; // make link text white
+        a {            
             color: $white !important;
         }
 
         .icon-img {
             filter: brightness(0) invert(1); // make icon white if it's dark
+        }
+    }
+}
+
+.menu-portal-menu-container {
+    .nav-item {
+        &:hover {
+            a {            
+                color: $primary-color !important;
+            }
         }
     }
 }

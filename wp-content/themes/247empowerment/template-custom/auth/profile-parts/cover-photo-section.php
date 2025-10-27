@@ -1,9 +1,9 @@
 <?php
 $profile = isset($args['profile']) ? $args['profile'] : [];
 $user = isset($args['user']) ? $args['user'] : null;
+$profileUrl = esc_url($profile['profile_url']);
 ?>
 <div class="bg-white mt-0 ps-0 pe-0 pt-0 custom-card">
-    <!-- Cover Photo Section -->
     <div class="profile-top">
         <div class="position-relative profile_img">
             <img class="w-100 h-100 object-fit-cover banner-img"
@@ -49,6 +49,15 @@ $user = isset($args['user']) ? $args['user'] : null;
                 <span class='mt-1 p-r fw-medium'>
                     <span><?php echo esc_html($referralCount); ?></span> referral partner<?php echo $referralCount === 1 ? '' : 's'; ?>
                 </span>
+                <span class="mt-1 p-r fw-medium">
+                    <a href="<?php echo $profileUrl; ?>"
+                        class="text-secondary-color text-decoration-none"
+                        onclick="copyPersonalLink(event, '<?php echo esc_url($profileUrl); ?>')">
+                        @<?php echo esc_html($profile['username']); ?>
+                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/copy.png"
+                            alt="Copy Personal Link" style="cursor: pointer;">
+                    </a>
+                </span>
             </div>
         </div>
 
@@ -62,3 +71,35 @@ $user = isset($args['user']) ? $args['user'] : null;
         </div>
     </div>
 </div>
+
+<script>
+    function copyPersonalLink(event, link) {
+        event.preventDefault(); // prevent redirect
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(link)
+                .then(() => showToast("Link copied to clipboard!"))
+                .catch(() => showToast("Failed to copy link", true));
+        } else {
+            // fallback for older browsers
+            const textarea = document.createElement("textarea");
+            textarea.value = link;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+            showToast("Link copied to clipboard!");
+        }
+    }
+
+    function showToast(message, isError = false) {
+        Toastify({
+            text: message,
+            duration: 3000,
+            close: true,
+            gravity: "bottom",
+            position: "left",
+            backgroundColor: isError ? "#e74c3c" : "#4CAF50",
+            stopOnFocus: true,
+        }).showToast();
+    }
+</script>

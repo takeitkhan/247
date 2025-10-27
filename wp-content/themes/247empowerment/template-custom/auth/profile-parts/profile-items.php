@@ -62,7 +62,7 @@
             <?php elseif ($should_truncate): ?>
                 <span class="about-short"><?php echo esc_html(mb_strimwidth($about_me_raw, 0, 150, '...')); ?></span>
                 <span class="about-full d-none"><?php echo esc_html($about_me_raw); ?></span>
-                <a href="#" class="ms-2 text-primary see-toggle">See more</a>
+                <a href="#" class="ms-2 text-primary-color see-toggle">See more</a>
             <?php else: ?>
                 <?php echo esc_html($about_me_raw); ?>
             <?php endif; ?>
@@ -244,7 +244,7 @@
                             <?php $iconClass = $iconMap[$link['platform']] ?? 'bi-link-45deg'; ?>
                             <li>
                                 <a href="<?php echo esc_url($link['url']); ?>" target="_blank" class="d-flex align-items-center gap-2 text-decoration-none">
-                                    <i class="bi <?php echo esc_attr($iconClass); ?> text-primary fs-5"></i>
+                                    <i class="bi <?php echo esc_attr($iconClass); ?> text-primary-color fs-5"></i>
                                     <span class="text-dark"><?php echo esc_html($link['label']); ?></span>
                                 </a>
                             </li>

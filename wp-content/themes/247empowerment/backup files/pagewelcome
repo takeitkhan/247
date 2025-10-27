@@ -288,7 +288,7 @@
                     <div class="col-md-6 col-lg-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="0">
                         <div class="d-flex flex-column justify-content-between gap-5 p-4 rounded-4 h-100 service-card">
                             <div>
-                                <span class="d-inline-block mb-4 text-primary icon fs-3">
+                                <span class="d-inline-block mb-4 text-primary-color icon fs-3">
                                     <i class="bi bi-cpu"></i>
                                 </span>
                                 <h3 class="mb-3 fs-5">AI (BASIC & SPECIALIZED)</h3>
@@ -308,7 +308,7 @@
                     <div class="col-md-6 col-lg-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
                         <div class="d-flex flex-column justify-content-between gap-5 p-4 rounded-4 h-100 service-card">
                             <div>
-                                <span class="d-inline-block mb-4 text-primary icon fs-3">
+                                <span class="d-inline-block mb-4 text-primary-color icon fs-3">
                                     <i class="bi bi-bar-chart-line"></i>
                                 </span>
                                 <h3 class="mb-3 fs-5">MARKETING, REVENUE STREAMS & PROFIT-SHARING</h3>
@@ -329,7 +329,7 @@
                     <div class="col-md-6 col-lg-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="300">
                         <div class="d-flex flex-column justify-content-between gap-5 p-4 rounded-4 h-100 service-card">
                             <div>
-                                <span class="d-inline-block mb-4 text-primary icon fs-3">
+                                <span class="d-inline-block mb-4 text-primary-color icon fs-3">
                                     <i class="bi bi-people"></i>
                                 </span>
                                 <h3 class="mb-3 fs-5">TEAMWORK & COLABORATION</h3>
@@ -347,7 +347,7 @@
                     <div class="col-md-6 col-lg-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="400">
                         <div class="d-flex flex-column justify-content-between gap-5 p-4 rounded-4 h-100 service-card">
                             <div>
-                                <span class="d-inline-block mb-4 text-primary icon fs-3">
+                                <span class="d-inline-block mb-4 text-primary-color icon fs-3">
                                     <i class="bi bi-star"></i> <!-- Reputation Icon -->
                                 </span>
                                 <h3 class="mb-3 fs-5">REPUTATION MANAGEMENT</h3>
@@ -362,7 +362,7 @@
                     <div class="col-md-6 col-lg-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
                         <div class="d-flex flex-column justify-content-between gap-5 p-4 rounded-4 h-100 service-card">
                             <div>
-                                <span class="d-inline-block mb-4 text-primary icon fs-3">
+                                <span class="d-inline-block mb-4 text-primary-color icon fs-3">
                                     <i class="bi bi-share"></i> <!-- Autoposting Icon -->
                                 </span>
                                 <h3 class="mb-3 fs-5">CONCURRENT SOCIAL – AUTOPOSTING</h3>

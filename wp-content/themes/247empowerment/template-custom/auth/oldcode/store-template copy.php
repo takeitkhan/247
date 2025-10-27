@@ -185,7 +185,7 @@ if ($user) {
                                             <div class="d-flex align-items-center justify-content-end gap-3 mt-1">
                                                 <button
                                                     type="button"
-                                                    class="d-flex align-items-center gap-2 text-primary"
+                                                    class="d-flex align-items-center gap-2 text-primary-color"
                                                     onclick="copySharableLink('<?= esc_url($shareable_link); ?>')">
                                                     <img class="copy-img" src="<?= get_template_directory_uri(); ?>/assets/img/copy-link.png" alt=""> Copy link
                                                 </button>

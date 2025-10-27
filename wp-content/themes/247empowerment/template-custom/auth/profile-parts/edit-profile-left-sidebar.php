@@ -2,7 +2,7 @@
 
 <div class="d-md-block bottom-0 position-sticky col-md-3 d-none">
     <div class="bg-white shadow p-4 rounded" style="height: 90vh; overflow-y: auto;">
-        <h5 class="mb-4 text-primary fw-semibold">Profile Navigation</h5>
+        <h5 class="mb-4 text-primary-color fw-semibold">Profile Navigation</h5>
         <ul class="list-group list-group-flush">
             <li class="list-group-item mb-2 px-0 border-0">
                 <a href="<?php echo esc_url(home_url('/modify-profile')); ?>" class="d-flex align-items-center text-decoration-none <?php echo (strpos($current_url, '/modify-profile') !== false) ? 'active-nav' : 'text-dark'; ?>">

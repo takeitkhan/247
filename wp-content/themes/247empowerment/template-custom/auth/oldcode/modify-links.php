@@ -131,51 +131,11 @@ $saved_links = get_user_meta($user_id, 'custom_social_links', true) ?: [];
 <div class="container profile-page pt20">
     <div class="row">
         <div class="order-3 order-lg-1 col-lg-3">
-            <?php get_template_part('template-custom/auth/common-parts/editprofilemenu', null, ['profile' => $profile]); ?>            
+            <?php get_template_part('template-custom/auth/common-parts/editprofilemenu', null, ['profile' => $profile]); ?>
             <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
         </div>
         <div class="order-2 order-lg-2 mb-0 rounded-end-0 col-lg-6">
-            <div class="bg-white custom-box-shadow mb-3 p-3 custom-border-radius">
-                <div class="row">
-                    <div class="col-12">
-                        <h5 class="mb-5">🔗 Manage Social/Business Links</h5>
-                    </div>
-                </div>
-                <form method="post">
-                    <?php wp_nonce_field('frontend_links_update', 'frontend_links_nonce'); ?>
 
-                    <div class="mb-4">
-                        <label class="form-label">Social / Business Links</label>
-                        <div id="social-links-group">
-                            <?php foreach ($saved_links as $index => $item): ?>
-                                <div class="align-items-center mb-2 row g-2 social-link-row">
-                                    <div class="col-md-3">
-                                        <select name="links[<?php echo $index; ?>][platform]" class="form-select">
-                                            <?php foreach ($platform_options as $value => $label): ?>
-                                                <option value="<?php echo esc_attr($value); ?>" <?php selected($item['platform'], $value); ?>>
-                                                    <?php echo esc_html($label); ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="text" name="links[<?php echo $index; ?>][label]" class="form-control" placeholder="Custom name" value="<?php echo esc_attr($item['label']); ?>">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="url" name="links[<?php echo $index; ?>][url]" class="form-control" placeholder="https://example.com" value="<?php echo esc_url($item['url']); ?>">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button type="button" class="w-100 btn btn-danger remove-link">Remove</button>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                        <button type="button" class="btn btn-secondary btn-sm" id="add-social-link">+ Add Link</button>
-                    </div>
-
-                    <button type="submit" name="update_links" class="btn btn-primary">Update Links</button>
-                </form>
-            </div>
         </div>
         <div class="order-1 order-lg-3 rounded-start-0 col-lg-3">
             <?php get_template_part('template-custom/auth/editprofile-parts/profile-photo-form', null, ['profile' => $profile, 'user' => $user]); ?>
@@ -183,6 +143,58 @@ $saved_links = get_user_meta($user_id, 'custom_social_links', true) ?: [];
     </div>
 </div>
 
+
+<main>
+    <div class="main-container" style="padding-top: 80px">
+        <div class="row g-3">
+            <?php include get_template_directory() . '/template-custom/auth/profile-parts/edit-profile-left-sidebar.php'; ?>
+
+            <div class="ms-md-auto col-12 col-md-8 col-lg-9 col-xl-9">
+                <div class="bg-white custom-box-shadow mb-3 p-3 custom-border-radius">
+                    <div class="row">
+                        <div class="col-12">
+                            <h5 class="mb-5">🔗 Manage Social/Business Links</h5>
+                        </div>
+                    </div>
+                    <form method="post">
+                        <?php wp_nonce_field('frontend_links_update', 'frontend_links_nonce'); ?>
+
+                        <div class="mb-4">
+                            <label class="form-label">Social / Business Links</label>
+                            <div id="social-links-group">
+                                <?php foreach ($saved_links as $index => $item): ?>
+                                    <div class="align-items-center mb-2 row g-2 social-link-row">
+                                        <div class="col-md-3">
+                                            <select name="links[<?php echo $index; ?>][platform]" class="form-select">
+                                                <?php foreach ($platform_options as $value => $label): ?>
+                                                    <option value="<?php echo esc_attr($value); ?>" <?php selected($item['platform'], $value); ?>>
+                                                        <?php echo esc_html($label); ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="text" name="links[<?php echo $index; ?>][label]" class="form-control" placeholder="Custom name" value="<?php echo esc_attr($item['label']); ?>">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="url" name="links[<?php echo $index; ?>][url]" class="form-control" placeholder="https://example.com" value="<?php echo esc_url($item['url']); ?>">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="button" class="w-100 btn btn-danger remove-link">Remove</button>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm" id="add-social-link">+ Add Link</button>
+                        </div>
+
+                        <button type="submit" name="update_links" class="btn btn-primary">Update Links</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -219,7 +231,6 @@ $saved_links = get_user_meta($user_id, 'custom_social_links', true) ?: [];
         });
     });
 </script>
-
 
 <?php
 if (is_user_logged_in()) {

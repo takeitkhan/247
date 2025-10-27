@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     <div class="row">
         <!-- Sidebar -->
         <div class="col-lg-3">
-            <?php get_template_part('template-custom/auth/common-parts/editprofilemenu', null, ['profile' => $profile]); ?>
+            <?php get_template_part('template-custom/auth/common-parts/editprofilemenu', null, ['profile' => $profile]); ?>            
             <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
         </div>
         <div class="mb-0 rounded-end-0 col-lg-6">
@@ -192,11 +192,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                                 </div>
                             </div>
 
-                            <div id="place-autocomplete-card">
+                            <!-- <div id="place-autocomplete-card">
                                 <p>Search for a place here:</p>
                             </div>
 
-                            <div id="map" style="height: 300px; border-radius: 10px;"></div>
+                            <div id="map" style="height: 300px; border-radius: 10px;"></div> -->
 
                             <div class="col-12">
                                 <label class="form-label">Latitude:</label>

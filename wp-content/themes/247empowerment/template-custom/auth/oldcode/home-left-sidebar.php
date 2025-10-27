@@ -25,7 +25,7 @@ $profile = isset($args['profile']) ? $args['profile'] : [];
             <li class="d-flex align-items-center justify-content-between gap-2">
                 <div class="d-flex gap-2">
                     <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/link.png" class="icon-img" alt="Website">
-                    <a href="<?php echo esc_url($profile['website']); ?>" target="_blank" class="p-0 p-link text-primary">
+                    <a href="<?php echo esc_url($profile['website']); ?>" target="_blank" class="p-0 p-link text-primary-color">
                         <?php echo esc_html(wp_trim_words($profile['website'], 3, '...')); ?>
                     </a>
                 </div>

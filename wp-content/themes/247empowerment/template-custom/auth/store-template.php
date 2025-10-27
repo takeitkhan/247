@@ -57,12 +57,12 @@ if ($user) {
 ?>
 
 
-<div class="container profile-page pt20">
+<div class="pb-5 container profile-page pt20">
     <div class="row">
         <!-- Sidebar -->
         <div class="col-lg-3">
 
-            <?php get_template_part('template-custom/auth/common-parts/editprofilemenu', null, ['profile' => $profile]); ?>
+            <?php get_template_part('template-custom/auth/feed-parts/profile-card', null, ['profile' => $profile]); ?>
             <?php
             $current_user = wp_get_current_user();
             $username = get_query_var('store_user') ?: $current_user->user_nicename;
@@ -152,65 +152,78 @@ if ($user) {
                         $shareable_link = home_url("/{$store_user}/store/{$course_slug}/?shareable=1");
                 ?>
 
-                        <a href="<?= esc_url($custom_permalink); ?>" class="text-reset text-decoration-none">
-                            <div class="bg-white custom-card">
-                                <div class="d-flex">
-                                    <div class="d-md-flex flex-row gap-3 res-card">
-                                        <div>
-                                            <div class="img240">
-                                                <img class="w-100 h-100 object-fit-cover" src="<?= esc_url($thumbnail_url); ?>" alt="<?= esc_attr(get_the_title()); ?>">
-                                            </div>
+                        <div class="bg-white p-3 custom-card">
+                            <div class="d-flex flex-column flex-md-row align-items-start gap-3">
+
+                                <!-- Image Section -->
+                                <div class="flex-shrink-0 img240">
+                                    <a href="<?= esc_url($custom_permalink); ?>">
+                                        <img class="w-100 h-100 object-fit-cover" src="<?= esc_url($thumbnail_url); ?>" alt="<?= esc_attr(get_the_title()); ?>">
+                                    </a>
+                                </div>
+
+                                <!-- Content Section -->
+                                <div class="d-flex flex-grow-1 flex-column justify-content-between content-col">
+                                    <div>
+                                        <span class="d-block mb-1 fs14 emp-color">
+                                            <?php
+                                            $terms = get_the_terms(get_the_ID(), 'course_category');
+                                            if (!empty($terms) && !is_wp_error($terms)) {
+                                                $term_names = wp_list_pluck($terms, 'name');
+                                                echo esc_html(implode(', ', $term_names));
+                                            }
+                                            ?>
+                                        </span>
+
+                                        <!-- Title and Price -->
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <a href="<?= esc_url($custom_permalink); ?>" class="text-reset text-decoration-none fs18 fw-semibold">
+                                                <?= esc_html(get_the_title()); ?>
+                                            </a>
+                                            <span class="gradient-fs24"><?= $price ? '$' . esc_html($price) : ''; ?></span>
                                         </div>
-                                        <div class="d-flex flex-column gap-1 mt-3 mt-md-0">
-                                            <span class="fs14 emp-color">
-                                                <?php
-                                                $terms = get_the_terms(get_the_ID(), 'course_category');
-                                                if (!empty($terms) && !is_wp_error($terms)) {
-                                                    $term_names = wp_list_pluck($terms, 'name');
-                                                    echo esc_html(implode(', ', $term_names));
-                                                }
-                                                ?>
 
-                                            </span>
-                                            <p class="d-flex justify-content-between">
-                                                <span class="fs20"><?= esc_html(get_the_title()); ?></span>
-                                                <span class="gradient-fs24"><?= $price ? '$' . esc_html($price) : ''; ?></span>
-                                            </p>
-                                            <p class="d-flex align-items-center">
-                                                <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/star.png" alt="Rating">
-                                                <span class="ms-2 fw-medium"><?= esc_html($rating); ?></span>
-                                            </p>
-                                            <p>
-                                                <?php
-                                                $words = explode(' ', wp_strip_all_tags($short_details));
-                                                $short_text = implode(' ', array_slice($words, 0, 12));
-                                                echo esc_html($short_text) . (count($words) > 12 ? '...' : '');
-                                                ?>
-                                            </p>
+                                        <!-- Rating -->
+                                        <p class="d-flex align-items-center mb-1">
+                                            <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/star.png" alt="Rating">
+                                            <span class="ms-2 fw-medium"><?= esc_html($rating); ?></span>
+                                        </p>
 
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <?php if ($instructor) : ?>
-                                                    <p><span class="fw-medium">Instructor:</span> <?= esc_html($instructor); ?></p>
-                                                <?php endif; ?>
-                                                <?php if ($duration) : ?>
-                                                    <p><span class="fw-medium">Duration:</span> <span class="p-price"><?= esc_html($duration); ?></span></p>
-                                                <?php endif; ?>
-                                            </div>
+                                        <!-- Short Description -->
+                                        <p class="mb-2">
+                                            <?php
+                                            $words = explode(' ', wp_strip_all_tags($short_details));
+                                            $short_text = implode(' ', array_slice($words, 0, 6));
+                                            echo esc_html($short_text) . (count($words) > 6 ? '...' : '');
+                                            ?>
+                                        </p>
+                                    </div>
 
-                                            <div class="d-flex align-items-center justify-content-end gap-3 mt-1">
-                                                <button
-                                                    type="button"
-                                                    class="d-flex gap-2 text-primary"
-                                                    onclick="copySharableLink('<?= esc_url($shareable_link); ?>')">
-                                                    <img class="copy-img" src="<?= get_template_directory_uri(); ?>/assets/img/nd/copy-link.png" alt=""> Copy link
-                                                </button>
-                                                <a href="<?= esc_url($custom_permalink); ?>" class="text-white text-decoration-none custom-btn-size background-primary">More</a>
-                                            </div>
-                                        </div>
+                                    <!-- Instructor and Duration -->
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <?php if (!empty($instructor)): ?>
+                                            <p class="mb-0"><span class="fw-medium">Instructor:</span> <?= esc_html($instructor); ?></p>
+                                        <?php endif; ?>
+                                        <?php if (!empty($duration)): ?>
+                                            <p class="mb-0"><span class="fw-medium">Duration:</span> <?= esc_html($duration); ?></p>
+                                        <?php endif; ?>
+                                    </div>
+
+                                    <!-- Buttons -->
+                                    <div class="d-flex justify-content-end gap-3">
+                                        <button
+                                            type="button"
+                                            class="d-flex align-items-center gap-2 bg-transparent border-0 text-primary-color"
+                                            onclick="copySharableLink('<?= esc_url($shareable_link); ?>')">
+                                            <img class="copy-img" src="<?= get_template_directory_uri(); ?>/assets/img/nd/copy-link.png" alt=""> Copy link
+                                        </button>
+                                        <a href="<?= esc_url($custom_permalink); ?>" class="text-white text-decoration-none custom-btn-size background-primary">More</a>
                                     </div>
                                 </div>
+
                             </div>
-                        </a>
+                        </div>
+
                     <?php endwhile;
                     wp_reset_postdata();
                 else : ?>
@@ -292,29 +305,6 @@ if ($user) {
 </div>
 
 <script>
-    // function copySharableLink(link) {
-    //     if (navigator.clipboard && window.isSecureContext) {
-    //         navigator.clipboard.writeText(link)
-    //             .then(() => alert("Link copied to clipboard!"))
-    //             .catch(err => alert("Copy failed: " + err));
-    //     } else {
-    //         // Fallback
-    //         const textarea = document.createElement("textarea");
-    //         textarea.value = link;
-    //         textarea.style.position = "fixed"; // Avoid scrolling to bottom
-    //         document.body.appendChild(textarea);
-    //         textarea.focus();
-    //         textarea.select();
-    //         try {
-    //             document.execCommand('copy');
-    //             alert("Link copied to clipboard!");
-    //         } catch (err) {
-    //             alert("Copy failed (fallback): " + err);
-    //         }
-    //         document.body.removeChild(textarea);
-    //     }
-    // }
-
     function copySharableLink(link) {
         if (navigator.clipboard && window.isSecureContext) {
             navigator.clipboard.writeText(link)

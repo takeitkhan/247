@@ -87,10 +87,10 @@ jQuery(document).ready(function ($) {
 
         if ($this.hasClass('expanded')) {
             // Collapse to trimmed
-            parent.html(trimmed + ' <span class="read-more-text text-primary" style="cursor:pointer;"> Read more</span>');
+            parent.html(trimmed + ' <span class="read-more-text text-primary-color" style="cursor:pointer;"> Read more</span>');
         } else {
             // Expand to full
-            parent.html(full + '<br><span class="read-more-text text-primary expanded" style="cursor:pointer;"> Show less</span>');
+            parent.html(full + '<br><span class="read-more-text text-primary-color expanded" style="cursor:pointer;"> Show less</span>');
         }
     });
 });
