@@ -235,3 +235,14 @@ Stack trace:
 [27-Oct-2025 07:30:02 UTC] PHP Warning:  Undefined variable $icon_path in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-links.php on line 200
 [27-Oct-2025 07:30:02 UTC] PHP Warning:  Undefined variable $icon_path in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-links.php on line 224
 [27-Oct-2025 07:30:02 UTC] PHP Deprecated:  ltrim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 4486
+[27-Oct-2025 14:15:50 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[27-Oct-2025 14:15:55 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[27-Oct-2025 14:16:49 UTC] Automatic updates starting...
+[27-Oct-2025 14:16:56 UTC] Automatic updates complete.
+[27-Oct-2025 14:37:55 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 58
+[27-Oct-2025 14:37:55 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 59
+[27-Oct-2025 14:40:09 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 2
+[27-Oct-2025 14:40:19 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 50
+[27-Oct-2025 14:40:19 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 51
+[27-Oct-2025 14:44:17 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 48
+[27-Oct-2025 14:44:17 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 49

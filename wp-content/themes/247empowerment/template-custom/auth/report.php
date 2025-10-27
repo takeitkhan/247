@@ -5,11 +5,7 @@
  * Custom Report Template
  */
 
-if (is_user_logged_in()) {
-    get_header('portal');
-} else {
-    get_header('main');
-}
+get_header_based_on_login();
 ?>
 
 <main>
@@ -174,10 +170,4 @@ if (is_user_logged_in()) {
     </div>
 </main>
 
-<?php
-if (is_user_logged_in()) {
-    get_footer('portal');
-} else {
-    get_footer('main');
-}
-?>
+<?php get_footer_based_on_login(); ?>

@@ -1,10 +1,6 @@
 <?php
 /* Template Name: Modify Social Links */
-if (is_user_logged_in()) {
-    get_header('portal');
-} else {
-    get_header('main');
-}
+get_header_based_on_login();
 
 if (!is_user_logged_in()) {
     wp_redirect(wp_login_url());
@@ -131,7 +127,7 @@ $saved_links = get_user_meta($user_id, 'custom_social_links', true) ?: [];
 <div class="container profile-page pt20">
     <div class="row">
         <div class="order-3 order-lg-1 col-lg-3">
-            <?php get_template_part('template-custom/auth/common-parts/editprofilemenu', null, ['profile' => $profile]); ?>            
+            <?php get_template_part('template-custom/auth/common-parts/editprofilemenu', null, ['profile' => $profile]); ?>
             <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
         </div>
         <div class="order-2 order-lg-2 mb-0 rounded-end-0 col-lg-6">
@@ -221,10 +217,4 @@ $saved_links = get_user_meta($user_id, 'custom_social_links', true) ?: [];
 </script>
 
 
-<?php
-if (is_user_logged_in()) {
-    get_footer('portal');
-} else {
-    get_footer('main');
-}
-?>
+<?php get_footer_based_on_login(); ?>

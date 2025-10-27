@@ -1,10 +1,4 @@
-<?php
-if (is_user_logged_in()) {
-    get_header('portal');
-} else {
-    get_header('main');
-}
-?>
+<?php get_header_based_on_login(); ?>
 
 <h1>Archive</h1>
 <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
@@ -13,10 +7,4 @@ if (is_user_logged_in()) {
 <?php endwhile;
 endif; ?>
 
-<?php
-if (is_user_logged_in()) {
-    get_footer('portal'); // loads footer-custom.php
-} else {
-    get_footer('main'); // loads footer-main.php
-}
-?>
+<?php get_footer_based_on_login(); ?>

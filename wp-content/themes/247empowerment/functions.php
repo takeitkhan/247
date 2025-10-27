@@ -12,7 +12,7 @@ function mm_enqueue_assets()
 
     wp_enqueue_style('mm-style', get_stylesheet_uri(), [], filemtime(get_stylesheet_directory() . '/style.css'));
 
-    wp_enqueue_script( 'bootstrap-js', get_template_directory_uri() . '/assets/js/bootstrap.bundle.min.js', array('jquery'), '5.3.3', true );    
+    wp_enqueue_script('bootstrap-js', get_template_directory_uri() . '/assets/js/bootstrap.bundle.min.js', array('jquery'), '5.3.3', true);
 }
 add_action('wp_enqueue_scripts', 'mm_enqueue_assets');
 
@@ -39,6 +39,17 @@ Kirki::add_field('my_config', [
         'media_buttons'  => false,
     ],
 ]);
+
+// Utility functions
+function get_header_based_on_login()
+{
+    get_header(is_user_logged_in() ? 'portal' : 'main');
+}
+
+function get_footer_based_on_login()
+{
+    get_footer(is_user_logged_in() ? 'portal' : 'main');
+}
 
 
 function mm_customize_register($wp_customize)

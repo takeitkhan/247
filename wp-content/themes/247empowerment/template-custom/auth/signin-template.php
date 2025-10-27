@@ -7,11 +7,8 @@
 
 defined('ABSPATH') || exit;
 
-if (is_user_logged_in()) {
-    get_header('portal');
-} else {
-    get_header('main');
-}
+get_header_based_on_login();
+
 $message = get_transient('custom_user_message');
 $old_input = $message['old_input'] ?? [];
 ?>
@@ -122,10 +119,4 @@ $old_input = $message['old_input'] ?? [];
     }
 </script>
 
-<?php
-if (is_user_logged_in()) {
-    get_footer('portal');
-} else {
-    get_footer('main');
-}
-?>
+<?php get_footer_based_on_login(); ?>

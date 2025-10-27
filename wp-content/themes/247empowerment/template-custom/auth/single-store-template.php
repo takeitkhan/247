@@ -12,19 +12,11 @@ $course = get_page_by_path($course_slug, OBJECT, 'course');
 
 if (!$course) {
     if (!$is_shareable) {
-        if (is_user_logged_in()) {
-            get_header('portal');
-        } else {
-            get_header('main');
-        }
+        get_header_based_on_login();
     }
     echo '<p class="text-danger">Course not found.</p>';
     if (!$is_shareable) {
-        if (is_user_logged_in()) {
-            get_footer('portal');
-        } else {
-            get_footer('main');
-        }
+        get_header_based_on_login();
     }
     exit;
 }
@@ -87,11 +79,7 @@ if ($user) {
 
 // Only load header if NOT shareable
 if (!$is_shareable) {
-    if (is_user_logged_in()) {
-        get_header('portal');
-    } else {
-        get_header('main');
-    }
+    get_header_based_on_login();
 }
 
 ?>
@@ -416,10 +404,4 @@ if (!$is_shareable) {
     </script>
 
 
-<?php
-    if (is_user_logged_in()) {
-        get_footer('portal');
-    } else {
-        get_footer('main');
-    }
-}
+<?php get_footer_based_on_login(); ?>

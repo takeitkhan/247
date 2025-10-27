@@ -1,10 +1,6 @@
 <?php
 /* Template Name: Welcome Page */
-if (is_user_logged_in()) {
-    get_header('portal');
-} else {
-    get_header('main');
-}
+get_header_based_on_login();
 ?>
 <div class="position-relative" style="xheight: 30vh; xoverflow: hidden;">
     <?php $hero_img = get_theme_mod('hero_image');
@@ -30,10 +26,4 @@ if (is_user_logged_in()) {
     </div>
 </div>
 
-<?php
-if (is_user_logged_in()) {
-    get_footer('portal');
-} else {
-    get_footer('main');
-}
-?>
+<?php get_footer_based_on_login(); ?>

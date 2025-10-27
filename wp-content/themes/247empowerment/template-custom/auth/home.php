@@ -3,11 +3,7 @@
 /**
  * Template Name: Logged In Front Page
  */
-if (is_user_logged_in()) {
-    get_header('portal');
-} else {
-    get_header('main');
-}
+get_header_based_on_login();
 // Get current logged-in user ID (used as a fallback if no slug is provided)
 $current_user_id = get_current_user_id();
 

@@ -4,20 +4,13 @@
  * Template Name: ChatGPT Bot
  */
 
-if (is_user_logged_in()) {
-    get_header('portal');
-} else {
-    get_header('main');
-}
+get_header_based_on_login();
 
 // Only allow logged-in users
 if (!is_user_logged_in()) {
     echo "<p>You must be logged in to access the Basic AI.</p>";
-    if (is_user_logged_in()) {
-        get_footer('portal');
-    } else {
-        get_footer('main');
-    }
+    
+    get_header_based_on_login();
 
     exit;
 }
@@ -87,10 +80,4 @@ if (!is_user_logged_in()) {
     }
 </script>
 
-<?php
-if (is_user_logged_in()) {
-    get_footer('portal');
-} else {
-    get_footer('main');
-}
-?>
+<?php get_footer_based_on_login(); ?>

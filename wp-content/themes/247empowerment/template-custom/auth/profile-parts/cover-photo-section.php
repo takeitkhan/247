@@ -49,12 +49,12 @@ $profileUrl = esc_url($profile['profile_url']);
                 <span class='mt-1 p-r fw-medium'>
                     <span><?php echo esc_html($referralCount); ?></span> referral partner<?php echo $referralCount === 1 ? '' : 's'; ?>
                 </span>
-                <span class="mt-1 p-r fw-medium">
+                <span class="mt-1 p-r fw-medium fs18">
                     <a href="<?php echo $profileUrl; ?>"
                         class="text-secondary-color text-decoration-none"
                         onclick="copyPersonalLink(event, '<?php echo esc_url($profileUrl); ?>')">
                         @<?php echo esc_html($profile['username']); ?>
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/copy.png"
+                        <img class="mx-2" src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/copy.png"
                             alt="Copy Personal Link" style="cursor: pointer;">
                     </a>
                 </span>

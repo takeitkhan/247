@@ -1,14 +1,24 @@
 <?php
-
+if (is_user_logged_in()) {
+    get_header('portal');
+} else {
+    get_header('main');
+}
 
 $referral_user_slug = get_query_var('referral_user');
 $user = get_user_by('slug', $referral_user_slug);
+
+
+
 if (!$user) {
     echo '<div class="py-5 container"><h2>User not found.</h2></div>';
-    get_header_based_on_login();
+    if (is_user_logged_in()) {
+        get_footer('portal');
+    } else {
+        get_footer('main');
+    }
     return;
 }
-
 
 $profileData = new UserProfileData($user);
 $referrals = $profileData::getReferredUsersBy($user);
@@ -42,36 +52,6 @@ if ($search) {
 }
 
 ?>
-<div class="container profile-page pt20">
-    <div class="row">
-        <div class="col-lg-3">
-            <?php get_template_part('template-custom/auth/feed-parts/profile-card', null, ['profile' => $profile]); ?>
-            <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
-        </div>
-        <div class="col-lg-6">
-
-        </div>
-        <div class="col-lg-3">
-            <div class="bg-white upcoming-events custom-card">
-                <div class="d-flex align-items-center justify-content-between pb-4 u-title">
-                    <h5 class="portal-title">Events from partners</h5>
-                    <span class="">12</span>
-                </div>
-                <div class="d-flex align-items-center gap-3 pb-3 border-underline event">
-                    <span class="event-date">Oct 20</span>
-                    <div>
-                        <span class="fw-medium">Birthday</span><br>
-                        <span class="fs14">Dr. Alicia Stone</span>
-                    </div>
-                </div>
-                <div>
-                    <button class="d-flex align-items-center justify-content-center gap-2 pt-3 w-100 more-option"><img src="./images/loading.png" alt=""> More</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <main>
     <div class="main-container" style="padding-top: 80px">
         <div class="py-5 container">
