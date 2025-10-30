@@ -612,73 +612,7 @@ function give_referral_commission($buyer_id, $course_price, $course_id)
     ];
     update_option('referral_commission_global_log', $global_logs);
 }
-add_action('wp_ajax_load_more_referrals', 'load_more_referrals_callback');
-add_action('wp_ajax_nopriv_load_more_referrals', 'load_more_referrals_callback');
 
-function load_more_referrals_callback()
-{
-    $user_id = isset($_GET['user']) ? intval($_GET['user']) : 0;
-    $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
-    $limit = 40;
-
-    if (!$user_id) {
-        wp_send_json_error('Invalid user ID');
-    }
-
-    $user = get_user_by('id', $user_id);
-    if (!$user) {
-        wp_send_json_error('User not found');
-    }
-
-    $profileData = new UserProfileData($user);
-    $referrals = $profileData::getReferredUsersBy($user);
-
-    // Slice the referrals array from offset with limit
-    $slice = array_slice($referrals, $offset, $limit);
-
-    if (empty($slice)) {
-        wp_send_json_success(''); // No more data
-    }
-
-    $html = '';
-
-    foreach ($slice as $ref_user) {
-        $ref_user = is_array($ref_user) ? (object) $ref_user : $ref_user;
-
-        $ref_id = isset($ref_user->id) ? $ref_user->id : 0;
-        $ref_email = isset($ref_user->email) ? trim($ref_user->email) : '';
-        $ref_login = isset($ref_user->username) ? $ref_user->username : '';
-        $ref_registered = isset($ref_user->user_registered) ? $ref_user->user_registered : '';
-
-        $photo = get_user_meta($ref_id, 'profile_photo', true);
-        $photo = $photo ?: 'https://www.gravatar.com/avatar/' . md5(strtolower($ref_email)) . '?s=150&d=mm';
-        $profile_url = site_url('/' . $ref_login);
-        $join_date = $ref_registered ? date('F j, Y', strtotime($ref_registered)) : '—';
-
-        $first_name = isset($ref_user->first_name) ? $ref_user->first_name : '';
-        $last_name = isset($ref_user->last_name) ? $ref_user->last_name : '';
-
-        $html .= '
-            <div class="col referral-card">
-                <a href="' . esc_url($profile_url) . '" class="text-dark text-decoration-none">
-                    <div class="h-100 text-center card">
-                        <img src="' . esc_url($photo) . '" class="card-img-top mx-auto mt-3 rounded-circle" alt="' . esc_attr($ref_user->display_name ?? '') . '" style="width: 100px; height: 100px; object-fit: cover;">
-                        <div class="card-body">
-                            <h6 class="card-title">' . esc_html($first_name . ' ' . $last_name) . '</h6>
-                            <p class="text-muted text-small card-text">
-                                <small>' . esc_html($join_date) . '</small>
-                            </p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        ';
-    }
-
-    wp_send_json_success($html);
-}
-add_action('wp_ajax_load_more_referrals', 'load_more_referrals_callback');
-add_action('wp_ajax_nopriv_load_more_referrals', 'load_more_referrals_callback');
 
 function custom_support_faq_video_routes()
 {

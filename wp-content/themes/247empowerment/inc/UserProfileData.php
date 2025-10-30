@@ -166,7 +166,19 @@ class UserProfileData
             $user_id = $user->ID;
 
             $user_categories = get_user_meta($user_id, 'user_categories', true) ?: [];
-            $user_category_names = get_user_meta($user_id, 'user_category_names', true) ?: [];
+
+            // ✅ Dynamically get category names
+            $user_category_names = [];
+            if (!empty($user_categories) && is_array($user_categories)) {
+                foreach ($user_categories as $cat_id) {
+                    if (is_numeric($cat_id)) {
+                        $term = get_term((int)$cat_id, 'category');
+                        if ($term && !is_wp_error($term)) {
+                            $user_category_names[] = $term->name;
+                        }
+                    }
+                }
+            }
 
             $zoom_access_token = get_user_meta($user_id, 'zoom_access_token', true);
             $zoom_refresh_token = get_user_meta($user_id, 'zoom_refresh_token', true);
@@ -188,7 +200,7 @@ class UserProfileData
                 'longitude' => get_user_meta($user_id, 'longitude', true),
                 'place_display_name' => get_user_meta($user_id, 'place_display_name', true),
                 'user_categories' => $user_categories,
-                'user_category_names' => $user_category_names,
+                'user_category_names' => $user_category_names, // ✅ Now dynamically fetched
                 'bio' => get_user_meta($user_id, 'description', true),
                 'profile_photo' => get_user_meta($user_id, 'profile_photo', true),
                 'cover_photo' => get_user_meta($user_id, 'profile_cover_photo', true),

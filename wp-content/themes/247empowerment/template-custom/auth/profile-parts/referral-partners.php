@@ -54,25 +54,8 @@ $default_profile_img = get_template_directory_uri() . '/assets/img/loggedin_imag
              $user_categories = $user_data['user_categories'] ?? [];
 
             // Initialize the names array
-            $user_category_names = [];
+            $user_category_names =  $user_data['user_category_names'] ?? [];
 
-            // Assuming the user categories are stored in the default 'category' taxonomy
-            $category_taxonomy = 'category';
-
-            if (!empty($user_categories) && is_array($user_categories)) {
-                foreach ($user_categories as $cat_id) {
-                    // Check if the ID is numeric to prevent errors
-                    if (is_numeric($cat_id)) {
-                        // Pass both the ID and the taxonomy name to retrieve the term object
-                        $term = get_term((int)$cat_id, $category_taxonomy);
-
-                        if ($term && !is_wp_error($term)) {
-                            // Add the category name to the array
-                            $user_category_names[] = $term->name;
-                        }
-                    }
-                }
-            }
             if ($counter >= $max_display_users) {
                 break;
             }

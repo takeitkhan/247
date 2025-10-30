@@ -1,6 +1,5 @@
 <?php
 $profile = isset($args['profile']) ? $args['profile'] : [];
-
 ?>
 <div class="profile-left bg-white custom-card">
     <div class="d-flex align-items-center justify-content-between pb-4 u-title">

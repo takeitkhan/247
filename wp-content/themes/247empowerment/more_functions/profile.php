@@ -97,7 +97,8 @@ function enqueue_post_create_script()
 }
 add_action('wp_enqueue_scripts', 'enqueue_post_create_script');
 
-function enqueue_profile_map_script() {
+function enqueue_profile_map_script()
+{
     if (is_page_template('template-custom/auth/modify-profile.php')) {
         wp_enqueue_script(
             'profile-map',
@@ -294,48 +295,102 @@ add_action('template_redirect', function () {
 });
 
 
-add_action('wp_ajax_load_more_referrals', 'load_more_referrals');
-add_action('wp_ajax_nopriv_load_more_referrals', 'load_more_referrals');
-
-function load_more_referrals()
+// Load referral partners script
+function load_more_referrals_callback()
 {
-    $user_id = intval($_GET['user']);
-    $offset = intval($_GET['offset']);
+    $user_id = isset($_GET['user']) ? intval($_GET['user']) : 0;
+    $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+    $limit = 40;
+
+    if (!$user_id) {
+        wp_send_json_error('Invalid user ID');
+    }
 
     $user = get_user_by('id', $user_id);
-    if (!$user) wp_die();
+    if (!$user) {
+        wp_send_json_error('User not found');
+    }
 
-    $referrals = UserProfileData::getReferredUsersBy($user);
+    $profileData = new UserProfileData($user);
+    $referrals = $profileData::getReferredUsersBy($user);
 
-    $slice = array_slice($referrals, $offset, 40);
+    $slice = array_slice($referrals, $offset, $limit);
+
+    if (empty($slice)) {
+        wp_send_json_success(''); // No more data
+    }
+
+    $html = '';
 
     foreach ($slice as $ref_user) {
-        $photo = get_user_meta($ref_user->ID, 'profile_photo', true);
-        $photo = $photo ?: 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($ref_user->user_email))) . '?s=150&d=mm';
-        $profile_url = site_url('/' . $ref_user->user_login);
-?>
-        <div class="col referral-card" data-index="<?php echo $offset; ?>">
-            <a href="<?php echo esc_url($profile_url); ?>" class="text-dark text-decoration-none">
-                <div class="h-100 text-center card">
-                    <img src="<?php echo esc_url($photo); ?>" class="card-img-top mx-auto mt-3 rounded-circle" alt="<?php echo esc_attr($ref_user->display_name); ?>" style="width: 100px; height: 100px; object-fit: cover;">
-                    <div class="card-body">
-                        <h6 class="card-title"><?php echo esc_html($ref_user->display_name); ?></h6>
+        $ref_user = is_array($ref_user) ? (object) $ref_user : $ref_user;
+
+        $ref_id = isset($ref_user->id) ? $ref_user->id : 0;
+        $ref_email = isset($ref_user->email) ? trim($ref_user->email) : '';
+        $ref_login = isset($ref_user->username) ? $ref_user->username : '';
+        $ref_display = isset($ref_user->display_name) ? $ref_user->display_name : ($ref_user->first_name ?? '') . ' ' . ($ref_user->last_name ?? '');        
+
+        $photo = get_user_meta($ref_id, 'profile_photo', true);
+        $photo = $photo ?: 'https://www.gravatar.com/avatar/' . md5(strtolower($ref_email)) . '?s=150&d=mm';
+        $profile_url = site_url('/' . $ref_login);
+        
+        is_array($ref_user->user_category_names) && !empty($ref_user->user_category_names) ? $has_categories = true : $has_categories = false;
+
+        $html .= '
+        <div class="d-flex flex-column flex-lg-row justify-content-between py-3" data-index="' . intval($offset) . '">
+            <div>
+                <div class="d-flex align-items-center gap-3 pb-3">
+                    <div class="img60">
+                        <img src="' . esc_url($photo) . '" class="w-100 h-100 object-fit-contain" alt="' . esc_attr($ref_display) . '">
+                    </div>
+                    <div class="d-flex flex-column gap-1 post-user">
+                        <div class="d-flex flex-wrap gap-1 gap-sm-4">
+                            <span class="text-black p_name fw-bold">                            
+                                <a href="' . esc_url($profile_url) . '">' .  esc_html($ref_user->first_name . ' ' . $ref_user->last_name) . '</a>
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center gap-1 mt-1 n-text a">
+                            <div class="img24">
+                                <img class="w-100 h-100 object-fit-contain" src="' . esc_url(get_template_directory_uri() . '/assets/img/nd/market_bag.png') . '" alt="">
+                            </div>
+                            <p>'. implode(', ', $ref_user->user_category_names) .'</p>
+                        </div>
                     </div>
                 </div>
-            </a>
-        </div>
-    <?php
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center justify-content-end my-3">
+                    <div class="dropdown">
+                        <button class="d-flex align-items-center justify-content-center rounded-circle h-bg btn" type="button" data-bs-toggle="dropdown" data-bs-offset="0,8" aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical fs-5"></i>
+                        </button>
+                        <ul class="shadow-sm p-2 dropdown-menu dropdown-menu-end custom-modal">
+                            <li>
+                                <button class="d-flex align-items-center gap-2 border-0 w-100 btn remove-partner-btn">
+                                    <i class="bi bi-trash fs-5"></i>
+                                    <span>Remove Partner</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>';
         $offset++;
     }
 
-    wp_die();
+    wp_send_json_success($html);
 }
+
+add_action('wp_ajax_load_more_referrals', 'load_more_referrals_callback');
+add_action('wp_ajax_nopriv_load_more_referrals', 'load_more_referrals_callback');
+
 
 // Display referred_by field in user profile
 function show_referred_by_field($user)
 {
     $referred_by = get_user_meta($user->ID, 'referrer', true);
-    ?>
+?>
     <h3>Referral Info</h3>
     <table class="form-table">
         <tr>
@@ -364,7 +419,7 @@ add_action('personal_options_update', 'save_referred_by_field');
 add_action('edit_user_profile_update', 'save_referred_by_field');
 
 // Handle delete profile photo
-add_action('wp_ajax_delete_profile_photo', function() {
+add_action('wp_ajax_delete_profile_photo', function () {
     if (!is_user_logged_in()) wp_send_json_error('Not authorized');
 
     $user_id = get_current_user_id();
@@ -372,5 +427,3 @@ add_action('wp_ajax_delete_profile_photo', function() {
 
     wp_send_json_success('Profile photo deleted');
 });
-
-

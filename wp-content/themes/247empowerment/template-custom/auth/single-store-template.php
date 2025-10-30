@@ -287,7 +287,7 @@ endif;
 
 wp_reset_postdata();
 
-if (!$is_shareable) {
+if (!$is_shareable) :
 ?>
     <!-- ✅ Load PayPal SDK -->
     <script src="https://www.paypal.com/sdk/js?client-id=AZa6Vc9ozb9u_jAWi2osWWV_l5N118jTksbXvPJVID0HXixe_7NYbI4L9TV6OdpY110MEUgW4j7zqAal&currency=USD"></script>
@@ -402,6 +402,6 @@ if (!$is_shareable) {
             }
         });
     </script>
-
+<?php endif; ?>
 
 <?php get_footer_based_on_login(); ?>

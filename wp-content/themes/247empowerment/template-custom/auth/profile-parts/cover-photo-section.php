@@ -37,7 +37,7 @@ $profileUrl = esc_url($profile['profile_url']);
                 <?php endif; ?>
             </div>
 
-            <div class="d-flex flex-column align-items-center align-items-lg-start post-user">
+            <div class="d-flex flex-column align-items-center align-items-lg-start mt-3 post-user">
                 <span class="profile-title">
                     <?php echo esc_html($profile['first_name'] . ' ' . $profile['last_name']); ?>
                 </span>
