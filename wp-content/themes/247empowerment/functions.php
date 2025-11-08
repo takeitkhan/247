@@ -721,7 +721,6 @@ add_action('wp_footer', function () {
     }
 }, 1);
 
-
 require_once get_template_directory() . '/inc/UserProfileData.php';
 require_once get_template_directory() . '/inc/Notifications.php';
 require_once get_template_directory() . '/inc/UserConnectionManager.php';

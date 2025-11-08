@@ -41,7 +41,9 @@ $old_input = $message['old_input'] ?? [];
                         <?php delete_transient('custom_user_message'); ?>
                     <?php endif; ?>
 
-                    <form method="post">
+                    <form method="POST" action="">
+                        <!-- Hidden action for custom login -->
+                        <input type="hidden" name="action" value="custom_user_login">
                         <?php wp_nonce_field('custom_user_login', 'custom_user_login_nonce'); ?>
 
                         <div class="mb-3">
@@ -61,7 +63,7 @@ $old_input = $message['old_input'] ?? [];
                             <a href="<?php echo wp_lostpassword_url(); ?>" class="text-decoration-none forgot-text">Forgot your password?</a>
                         </div>
 
-                        <button type="submit" name="user_login" class="mb-3 custom-btn">Sign In</button>
+                        <button type="submit" class="mb-3 custom-btn">Sign In</button>
 
                         <div class="mb-3 text-start">
                             <p class="mb-0">Don't have an account?</p>
@@ -70,6 +72,7 @@ $old_input = $message['old_input'] ?? [];
                             <a href="<?php echo site_url('/signup'); ?>" class="mb-3 custom-btn-outline-none">Sign Up</a>
                         </div>
                     </form>
+
                 </div>
 
                 <!-- Right Info Section -->

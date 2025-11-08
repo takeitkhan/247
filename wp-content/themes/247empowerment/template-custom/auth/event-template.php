@@ -4,108 +4,343 @@
  * Template Name: Logged In Events
  */
 get_header_based_on_login();
+
+
+if (!is_user_logged_in()) {
+    wp_redirect(wp_login_url());
+    exit;
+}
+
+$current_user = wp_get_current_user();
+
+// Get current logged-in user ID (used as a fallback if no slug is provided)
+$current_user_id = get_current_user_id();
+
+// 1. Get the user slug from the query variable
+$user_slug = get_query_var('user_profile');
+
+// 2. Determine the target user
+if ($user_slug) {
+    // If a slug is present, try to get the user by their slug (login or nicename)
+    $user = get_user_by('slug', $user_slug);
+} else {
+    // If no slug, fall back to the currently logged-in user
+    $user = get_user_by('ID', $current_user_id);
+}
+
+// 3. Instantiate the UserProfileData class and get the profile array
+if ($user) {
+    // We pass the WP_User object to the class constructor, or the ID/slug depending on the class's constructor.
+    // Given your original line: $profile = (new UserProfileData($user_slug))->getProfile();
+    // We'll update it to pass the $user object for better data handling, assuming the class supports it.
+    // If the class REQUIRES a slug, use $user_slug or $user->user_login.
+
+    // Option A: If UserProfileData takes a WP_User object (Recommended)
+    $profile_data_instance = new UserProfileData($user);
+
+    // Option B: If UserProfileData only takes the slug (Sticking closer to your original code)
+    // Use the slug if present, otherwise use the current user's login.
+    $target_identifier = $user_slug ? $user_slug : $user->user_login;
+    $profile_data_instance = new UserProfileData($target_identifier);
+
+    // Get the profile array
+    $profile = $profile_data_instance->getProfile();
+} else {
+    // Set variables to null if no user could be determined
+    $user = null;
+    $profile = null;
+}
 ?>
-<main>
-    <div class="main-container s-main-con">
-        <div class="row g-3">
-            <div class="d-md-block bottom-0 position-sticky col d-none">
-                <div class="bg-white custom-box-shadow p-3 custom-border-radius h-100">
-                    <?php include 'event-parts/left-column.php'; ?>
-                </div>
-            </div>
 
-            <div class="ms-md-auto col-12 col-md-8 col-lg-9 col-xl-9">
-                <div class="">
-                    <div class="bg-white custom-box-shadow mb-3 p-3 custom-border-radius">
-                        <h3 class="fw-bold market-title">Events</h3>
-                        <p class="m-text">Browse upcoming events from your favorite organizers.</p>
+<div class="container profile-page pt20">
+    <div class="row">
+        <div class="col-lg-3">
+            <?php get_template_part('template-custom/auth/feed-parts/profile-card', null, ['profile' => $profile]); ?>
+            <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
+
+        </div>
+
+        <!-- Main Feed -->
+        <div class="mb-4 col-lg-6">
+            <div class="custom-card post-search">
+                <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center gap-3 text-start res-card">
+                    <div class="gap-3 mb-2 post-row">
+                        <div class="d-flex pb-3 u-title">
+                            <h5 class="portal-title">Events</h5>
+                        </div>
+                        <p>Browse upcoming events from your favorite organizers.</p>
                     </div>
-                    <div class="mb-3">
-                        <?php
-                        $store_user = get_query_var('store_user');
-                        $category_slug = isset($_GET['category']) ? sanitize_text_field($_GET['category']) : '';
+                    <!-- Create Event Button -->
+                    <?php if (is_user_logged_in()): ?>
+                        <div>
+                            <button class="d-flex align-items-center justify-content-center gap-2 w-100 custom-btn"
+                                data-bs-toggle="modal" data-bs-target="#createEventModal">
+                                <img class="pe-1" src="<?= get_template_directory_uri(); ?>/assets/img/nd/plus.png" alt=""> Create an event
+                            </button>
+                        </div>
+                    <?php endif; ?>
 
-                        $args = [
-                            'post_type' => 'event',
-                            'posts_per_page' => -1,
-                        ];
+                    <!-- Create Event Modal -->
+                    <div class="modal fade" id="createEventModal" tabindex="-1" aria-labelledby="createEventModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="shadow border-0 rounded-4 modal-content custom-card">
+                                <div class="mb-0 pb-0 border-0 modal-header">
+                                    <h5 class="text-start portal-title" id="createEventModalLabel">Create new event</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
 
-                        if (!empty($category_slug)) {
-                            $args['tax_query'] = [
-                                [
-                                    'taxonomy' => 'event_category',
-                                    'field'    => 'slug',
-                                    'terms'    => $category_slug,
-                                ],
-                            ];
-                        }
+                                <div class="modal-body">
+                                    <form class="row g-3" method="post" enctype="multipart/form-data" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+                                        <input type="hidden" name="action" value="submit_event_form">
+                                        <?php wp_nonce_field('event_submission', 'event_submission_nonce'); ?>
 
-                        $query = new WP_Query($args);
+                                        <!-- Event Name -->
+                                        <div class="col-12">
+                                            <label class="form-label">Event Name <span>*</span></label>
+                                            <input type="text" name="event_title" class="form-control input" placeholder="ex. Empower Growth Webinar" required>
+                                        </div>
 
-                        if ($query->have_posts()) : ?>
-                            <div class="d-flex flex-column gap-3">
-                                <?php while ($query->have_posts()) : $query->the_post();
-                                    $event_date = get_field('event_date');
-                                    $location   = get_field('location');
-                                    $thumbnail_url = get_the_post_thumbnail_url(get_the_ID(), 'medium') ?: '/img/banner.jpg';
-                                    $event_user = get_query_var('event_user'); // username from URL
-                                    $event_slug = get_post_field('post_name', get_the_ID());
-                                    $custom_permalink = home_url("/{$event_user}/event/{$event_slug}/");
-                                ?>
-                                    <div class="bg-white custom-box-shadow p-3 custom-border-radius">
-                                        <div class="d-flex flex-column flex-md-row">
-                                            <div class="me-md-3 mb-3 mb-md-0">
-                                                <div class="fixed-thumb">
-                                                    <a href="<?= esc_url($custom_permalink); ?>">
-                                                        <img
-                                                            src="<?= esc_url($thumbnail_url); ?>"
-                                                            alt="<?= esc_attr(get_the_title()); ?>" />
-                                                    </a>
+                                        <!-- Event Type -->
+                                        <div class="d-flex flex-column post-user col-12">
+                                            <label class="form-label">Event Type <span>*</span></label>
+                                            <?php $event_types = ['Workshop', 'Webinar', 'Conference', 'Meetup']; ?>
+                                            <select name="event_type" class="bg-neutral-color border-0 w-auto input" required>
+                                                <option selected disabled>Select Type</option>
+                                                <?php foreach ($event_types as $type): ?>
+                                                    <option value="<?php echo esc_attr($type); ?>"><?php echo esc_html($type); ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                        <!-- Date, Time, Duration -->
+                                        <div class="col-md-4">
+                                            <label class="form-label">Date <span>*</span></label>
+                                            <input type="date" name="event_date" class="form-control input" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Time <span>*</span></label>
+                                            <input type="time" name="event_time" class="form-control input" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Duration <span>*</span></label>
+                                            <input type="text" name="event_duration" class="form-control input" placeholder="ex. 3h 45min" required>
+                                        </div>
+
+                                        <!-- Description -->
+                                        <div class="col-12">
+                                            <label class="form-label">Description (optional)</label>
+                                            <textarea name="event_description" class="form-control input" rows="3" placeholder="ex. An inspiring group session to boost confidence and break mental barriers"></textarea>
+                                        </div>
+
+                                        <!-- Event Link -->
+                                        <div class="col-12">
+                                            <label class="form-label">Event Link <span>*</span></label>
+                                            <input type="url" name="event_link" class="form-control input" placeholder="ex. zoom.com/djslslkdnbkfn" required>
+                                        </div>
+
+                                        <!-- Event Cover -->
+                                        <div class="col-12">
+                                            <label class="form-label">Event Cover (optional)</label>
+                                            <label for="eventCover" class="d-flex align-items-center justify-content-center cursor-pointer event-cover-upload gap12">
+                                                <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/gallery.png" alt="Upload" class="icon-img">
+                                                <span>Upload image</span>
+                                            </label>
+                                            <input type="file" name="eventCover" class="form-control d-none" id="eventCover" accept="image/*">
+                                        </div>
+
+                                        <!-- Registration Type -->
+                                        <div class="d-flex flex-column flex-md-row align-content-center gap-2 gap-md-5 col-12">
+                                            <div>
+                                                <label class="form-label">Registration Type <span>*</span></label>
+                                                <div class="d-flex align-items-center gap-5 mt-2">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="registrationType" id="free" value="Free" checked>
+                                                        <label class="form-check-label" for="free">Free</label>
+                                                    </div>
+                                                    <div class="d-flex align-items-center gap-2 form-check">
+                                                        <input class="form-check-input" type="radio" name="registrationType" id="paid" value="Paid">
+                                                        <label class="form-check-label" for="paid">Paid</label>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="flex-fill">
-                                                <h5 class="m-top-title d-flex justify-content-between fw-medium">
-                                                    <a href="<?= esc_url($custom_permalink); ?>" class="text-dark text-decoration-none">
+                                            <div>
+                                                <label class="form-label">Price (if paid)</label>
+                                                <input type="text" name="event_price" class="w-100 form-control input" placeholder="ex. $75">
+                                            </div>
+                                        </div>
+
+                                        <!-- Submit -->
+                                        <div class="border-0 modal-footer">
+                                            <button type="button" class="w-auto text-blue-color custom-btn-size" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="w-auto custom-btn">Create Event</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="d-flex">
+                <?php if (isset($_GET['event_submitted']) && $_GET['event_submitted'] === 'true'): ?>
+                    <div class="mt-3 alert alert-success">✅ Event submitted successfully!</div>
+                <?php endif; ?>
+            </div>
+            <div class="d-flex flex-column">
+                <?php
+                $store_user = get_query_var('store_user');
+                $category_slug = isset($_GET['category']) ? sanitize_text_field($_GET['category']) : '';
+
+                $current_user = wp_get_current_user();
+                // Get referral partners
+                $referred_users = UserProfileData::getReferredUsersBy($current_user);
+
+                // Collect author IDs: include current user + referred users
+                $author_ids = [$current_user->ID];
+
+                if (!empty($referred_users)) {
+                    foreach ($referred_users as $ref_user) {
+                        $author_ids[] = $ref_user['id']; // from your enriched array
+                    }
+                }
+
+                $args = [
+                    'post_type'      => 'event',
+                    'posts_per_page' => -1,
+                    'author__in'     => $author_ids, // 👈 include both personal + referral partner events
+                ];
+
+                if (!empty($category_slug)) {
+                    $args['tax_query'] = [
+                        [
+                            'taxonomy' => 'event_category',
+                            'field'    => 'slug',
+                            'terms'    => $category_slug,
+                        ],
+                    ];
+                }
+
+                $query = new WP_Query($args);
+
+                if ($query->have_posts()) : ?>
+
+                    <?php while ($query->have_posts()) : $query->the_post();
+                        $event_date = get_field('event_date');
+                        $location   = get_field('location');
+                        $thumbnail_url = get_the_post_thumbnail_url(get_the_ID(), 'medium') ?: '/img/banner.jpg';
+                        $event_user = get_query_var('event_user'); // username from URL
+                        $event_slug = get_post_field('post_name', get_the_ID());
+                        $custom_permalink = home_url("/{$event_user}/event/{$event_slug}/");
+                    ?>
+                        <div class="bg-white custom-card">
+                            <div class="d-flex">
+                                <div>
+                                    <div class="d-md-flex flex-row gap-3 res-card t">
+                                        <div>
+                                            <div class="img240">
+                                                <a href="<?= esc_url($custom_permalink); ?>">
+                                                    <img class="w-100 h-100 object-fit-cover" src="<?= esc_url($thumbnail_url); ?>"
+                                                        alt="<?= esc_attr(get_the_title()); ?>">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column gap-1 gap-1 mt-3 mt-md-0">
+                                            <span class="pb-1 fs14 emp-color">Created by Referral Partner</span>
+                                            <p class="d-flex justify-content-between">
+                                                <span class="fs20">
+                                                    <a href="<?= esc_url($custom_permalink); ?>">
                                                         <?= esc_html(get_the_title()); ?>
                                                     </a>
-                                                </h5>
+                                                </span>
+                                                <span class="gradient-fs24">Free</span>
+                                            </p>
 
-                                                <div class="d-flex flex-wrap gap-3 mb-3">
-                                                    <?php if ($event_date) : ?>
-                                                        <span><strong>Date:</strong> <?= esc_html($event_date); ?></span>
-                                                    <?php endif; ?>
-                                                    <?php if ($location) : ?>
-                                                        <span><strong>Location:</strong> <?= esc_html($location); ?></span>
-                                                    <?php endif; ?>
-                                                </div>
+                                            <p class="mb-2 mb-md-0">
+                                                <?= esc_html(get_the_excerpt()); ?>
+                                            </p>
 
-                                                <div class="d-flex align-items-center gap-2 mb-2">
-                                                    <span class="m-text"><?= esc_html(get_the_excerpt()); ?></span>
+                                            <div class="d-flex align-items-center justify-content-between gap-3 mt-auto">
+                                                <div>
+                                                    <div class="d-flex gap-2">
+                                                        <?php if ($event_date) : ?>
+                                                            <span class="text-blue-color fw-medium">
+                                                                Date:
+                                                            </span>
+                                                            <span>
+                                                                <?= esc_html($event_date); ?>
+                                                            </span>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                    <div class="d-flex gap-2">
+                                                        <?php if ($location) : ?>
+                                                            <span class="text-blue-color fw-medium">
+                                                                Location:
+                                                            </span>
+                                                            <span>
+                                                                <?= esc_html($location); ?>
+                                                            </span>
+                                                        <?php endif; ?>
+                                                    </div>
                                                 </div>
-
-                                                <div class="d-flex flex-wrap gap-2 mt-3">
-                                                    <!-- View Event Button -->
-                                                    <a
-                                                        href="<?= esc_url($custom_permalink); ?>"
-                                                        class="d-flex align-items-center shadow-sm px-3 btn-outline-primary btn btn-sm">
-                                                        <i class="me-1 bi bi-eye-fill"></i> View Event
-                                                    </a>
-                                                </div>
+                                                <a href="<?= esc_url($custom_permalink); ?>" class="text-white custom-btn-size background-primary">
+                                                    View Event
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                <?php endwhile; ?>
+                                </div>
                             </div>
+                        </div>
+                    <?php endwhile; ?>
 
-                            <?php wp_reset_postdata(); ?>
-                        <?php else : ?>
-                            <p>No events found.</p>
-                        <?php endif; ?>
+                    <?php wp_reset_postdata(); ?>
+                <?php else : ?>
+                    <p>No events found.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Upcoming Events -->
+        <div class="col-lg-3">
+            <div class="bg-white upcoming-events custom-card">
+                <div class="d-flex align-items-center justify-content-between pb-4 u-title">
+                    <h5 class="portal-title">Popular events</h5>
+                    <span class="">12</span>
+                </div>
+                <div class="d-flex align-items-center gap-3 pb-3 border-underline event">
+                    <span class="event-date">Oct 20</span>
+                    <div>
+                        <span class="fw-medium">Birthday</span><br>
+                        <span class="fs14">Dr. Alicia Stone</span>
                     </div>
+                </div>
+                <div>
+                    <button class="d-flex align-items-center justify-content-center gap-2 pt-3 w-100 more-option"><img src="./images/loading.png" alt=""> More</button>
                 </div>
             </div>
         </div>
+        <!-- <div>
+            <nav aria-label="Page navigation example" class="d-flex justify-content-center py-5">
+                <ul class="mb-0 pagination custom-pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <img src="./images/prev.png" alt="">
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#">17</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <img src="./images/next.png" alt="">
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div> -->
     </div>
-</main>
-
+</div>
 <?php get_footer_based_on_login(); ?>

@@ -96,26 +96,30 @@ add_action('init', function () {
     }
 });
 
-
-
 // -----------------------------
 // Custom User Login
 // -----------------------------
-add_action('init', function () {
+function handle_custom_user_login()
+{
+
+    // Only trigger on our custom login form
     if (
-        isset($_POST['user_login']) &&
+        !empty($_POST['action']) &&
+        $_POST['action'] === 'custom_user_login' &&
         check_admin_referer('custom_user_login', 'custom_user_login_nonce')
     ) {
+
         $creds = [
             'user_login'    => sanitize_user($_POST['username']),
             'user_password' => $_POST['password'],
-            'remember'      => true
+            'remember'      => true,
         ];
 
         $user = wp_signon($creds, false);
 
         if (!is_wp_error($user)) {
-            // ✅ Check for first login
+
+            // First login trigger
             if (function_exists('mm_trigger_action')) {
                 $last_login = get_user_meta($user->ID, 'last_login', true);
                 if (empty($last_login)) {
@@ -124,9 +128,12 @@ add_action('init', function () {
                 update_user_meta($user->ID, 'last_login', current_time('mysql'));
             }
 
+            // Redirect to modify profile
             wp_redirect(home_url('/modify-profile'));
             exit;
         } else {
+
+            // Preserve safe error message with "Lost your password?" replacement
             $raw_error_msg = $user->get_error_message();
             $allowed_tags = ['a' => ['href' => [], 'class' => []], 'strong' => [], 'em' => []];
             $safe_error_msg = wp_kses($raw_error_msg, $allowed_tags);
@@ -140,16 +147,78 @@ add_action('init', function () {
                 $safe_error_msg
             );
 
+            // Save transient for displaying on signin page
             set_transient('custom_user_message', [
                 'type' => 'error',
                 'text' => $safe_error_msg
             ], 30);
 
+            // Redirect back to signin
             wp_redirect(home_url('/signin'));
             exit;
         }
     }
-});
+}
+add_action('init', 'handle_custom_user_login');
+
+
+
+// add_action('init', function () {
+//     // 🛑 GATES: Only execute this block if the specific hidden field is present.
+//     if (! isset($_POST['action']) || $_POST['action'] !== 'custom_user_login_form_submit') {
+//         return; // Exit early if it's not the intended login form submission
+//     }
+//     // Corrected condition to check for login action on event form submissions
+//     if (
+//         isset($_POST['action']) && $_POST['action'] === 'custom_user_login' &&
+//         check_admin_referer('custom_user_login', 'custom_user_login_nonce')
+//     ) {
+//         $creds = [
+//             'user_login'    => sanitize_user($_POST['username']),
+//             'user_password' => $_POST['password'],
+//             'remember'      => true
+//         ];
+
+//         $user = wp_signon($creds, false);
+
+//         if (!is_wp_error($user)) {
+//             // ✅ Check for first login
+//             if (function_exists('mm_trigger_action')) {
+//                 $last_login = get_user_meta($user->ID, 'last_login', true);
+//                 if (empty($last_login)) {
+//                     mm_trigger_action('first_login', $user->ID);
+//                 }
+//                 update_user_meta($user->ID, 'last_login', current_time('mysql'));
+//             }
+
+//             if (!is_wp_error($user)) {                
+//                 wp_redirect(home_url('/modify-profile'));
+//                 exit; // This exit will now only run for successful logins
+//             }
+//         } else {
+//             $raw_error_msg = $user->get_error_message();
+//             $allowed_tags = ['a' => ['href' => [], 'class' => []], 'strong' => [], 'em' => []];
+//             $safe_error_msg = wp_kses($raw_error_msg, $allowed_tags);
+
+//             $safe_error_msg = preg_replace_callback(
+//                 '#<a href="[^"]+">Lost your password\?</a>#i',
+//                 function () {
+//                     $url = esc_url(home_url('/lost-password'));
+//                     return '<a href="' . $url . '" class="alert-link">Lost your password?</a>';
+//                 },
+//                 $safe_error_msg
+//             );
+
+//             set_transient('custom_user_message', [
+//                 'type' => 'error',
+//                 'text' => $safe_error_msg
+//             ], 30);
+
+//             wp_redirect(home_url('/signin'));
+//             exit;
+//         }
+//     }
+// });
 
 
 add_action('init', function () {
@@ -189,11 +258,24 @@ add_filter('query_vars', function ($vars) {
 // Admin Area Restriction
 // -----------------------------
 add_action('admin_init', function () {
-    if (!current_user_can('administrator') && !wp_doing_ajax()) {
+
+    // Exclude event form submissions
+    if (isset($_POST['action']) && $_POST['action'] === 'submit_event_form') {
+        return; // Allow event submission to continue
+    }
+
+    // Exclude AJAX requests
+    if (wp_doing_ajax()) {
+        return;
+    }
+
+    // Only allow admins to access admin area
+    if (!current_user_can('administrator')) {
         wp_redirect(home_url('/modify-profile'));
         exit;
     }
 });
+
 
 add_action('template_redirect', function () {
     // Redirect lost password requests from wp-login.php to custom page

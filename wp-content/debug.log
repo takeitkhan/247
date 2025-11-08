@@ -1,539 +1,117 @@
-[23-Oct-2025 12:41:02 UTC] Menu Item: Empowerment Teams | Icon URL: 
-[23-Oct-2025 12:41:02 UTC] Menu Item: Marketing | Icon URL: 
-[23-Oct-2025 12:41:02 UTC] Menu Item: AI | Icon URL: 
-[23-Oct-2025 12:41:02 UTC] Menu Item: Reputation | Icon URL: 
-[23-Oct-2025 12:41:02 UTC] Menu Item: Collaboration | Icon URL: 
-[23-Oct-2025 12:51:46 UTC] Automatic updates starting...
-[23-Oct-2025 12:51:49 UTC] Automatic updates complete.
-[23-Oct-2025 14:15:51 UTC] PHP Notice:  Function wp_enqueue_script was called <strong>incorrectly</strong>. Scripts and styles should not be registered or enqueued until the <code>wp_enqueue_scripts</code>, <code>admin_enqueue_scripts</code>, or <code>login_enqueue_scripts</code> hooks. This notice was triggered by the <code>post-create-js</code> handle. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 3.3.0.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
-[23-Oct-2025 14:17:05 UTC] PHP Notice:  Function wp_enqueue_script was called <strong>incorrectly</strong>. Scripts and styles should not be registered or enqueued until the <code>wp_enqueue_scripts</code>, <code>admin_enqueue_scripts</code>, or <code>login_enqueue_scripts</code> hooks. This notice was triggered by the <code>post-create-js</code> handle. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 3.3.0.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
-[23-Oct-2025 14:17:52 UTC] PHP Notice:  Function wp_enqueue_script was called <strong>incorrectly</strong>. Scripts and styles should not be registered or enqueued until the <code>wp_enqueue_scripts</code>, <code>admin_enqueue_scripts</code>, or <code>login_enqueue_scripts</code> hooks. This notice was triggered by the <code>post-create-js</code> handle. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 3.3.0.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
-[23-Oct-2025 14:18:32 UTC] PHP Notice:  Function wp_enqueue_script was called <strong>incorrectly</strong>. Scripts and styles should not be registered or enqueued until the <code>wp_enqueue_scripts</code>, <code>admin_enqueue_scripts</code>, or <code>login_enqueue_scripts</code> hooks. This notice was triggered by the <code>post-create-js</code> handle. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 3.3.0.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
-[23-Oct-2025 14:18:33 UTC] PHP Notice:  Function wp_enqueue_script was called <strong>incorrectly</strong>. Scripts and styles should not be registered or enqueued until the <code>wp_enqueue_scripts</code>, <code>admin_enqueue_scripts</code>, or <code>login_enqueue_scripts</code> hooks. This notice was triggered by the <code>post-create-js</code> handle. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 3.3.0.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
-[23-Oct-2025 14:18:33 UTC] PHP Notice:  Function wp_enqueue_script was called <strong>incorrectly</strong>. Scripts and styles should not be registered or enqueued until the <code>wp_enqueue_scripts</code>, <code>admin_enqueue_scripts</code>, or <code>login_enqueue_scripts</code> hooks. This notice was triggered by the <code>post-create-js</code> handle. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 3.3.0.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
-[23-Oct-2025 14:18:33 UTC] PHP Notice:  Function wp_enqueue_script was called <strong>incorrectly</strong>. Scripts and styles should not be registered or enqueued until the <code>wp_enqueue_scripts</code>, <code>admin_enqueue_scripts</code>, or <code>login_enqueue_scripts</code> hooks. This notice was triggered by the <code>post-create-js</code> handle. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 3.3.0.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
-[23-Oct-2025 14:18:34 UTC] PHP Notice:  Function wp_enqueue_script was called <strong>incorrectly</strong>. Scripts and styles should not be registered or enqueued until the <code>wp_enqueue_scripts</code>, <code>admin_enqueue_scripts</code>, or <code>login_enqueue_scripts</code> hooks. This notice was triggered by the <code>post-create-js</code> handle. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 3.3.0.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
-[23-Oct-2025 14:18:34 UTC] PHP Notice:  Function wp_enqueue_script was called <strong>incorrectly</strong>. Scripts and styles should not be registered or enqueued until the <code>wp_enqueue_scripts</code>, <code>admin_enqueue_scripts</code>, or <code>login_enqueue_scripts</code> hooks. This notice was triggered by the <code>post-create-js</code> handle. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 3.3.0.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
-[23-Oct-2025 14:19:06 UTC] PHP Notice:  Function wp_enqueue_script was called <strong>incorrectly</strong>. Scripts and styles should not be registered or enqueued until the <code>wp_enqueue_scripts</code>, <code>admin_enqueue_scripts</code>, or <code>login_enqueue_scripts</code> hooks. This notice was triggered by the <code>post-create-js</code> handle. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 3.3.0.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
-[23-Oct-2025 20:39:03 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 6
-[23-Oct-2025 20:39:03 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 6
-[23-Oct-2025 20:39:03 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 25
-[23-Oct-2025 20:39:03 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 25
-[23-Oct-2025 20:39:03 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 40
-[23-Oct-2025 20:39:03 UTC] PHP Warning:  Trying to access array offset on value of type null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 40
-[23-Oct-2025 20:39:03 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 40
-[23-Oct-2025 20:39:03 UTC] PHP Warning:  Trying to access array offset on value of type null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 40
-[23-Oct-2025 20:39:03 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 44
-[23-Oct-2025 20:39:03 UTC] PHP Warning:  Trying to access array offset on value of type null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 44
-[23-Oct-2025 20:39:03 UTC] PHP Fatal error:  Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, null given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php:45
+[31-Oct-2025 12:06:42 UTC] PHP Warning:  Undefined variable $is_shareable in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\suggestion.php on line 54
+[31-Oct-2025 12:22:48 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\report.php on line 14
+[31-Oct-2025 12:22:48 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\report.php on line 15
+[31-Oct-2025 12:22:48 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\report.php on line 190
+[31-Oct-2025 12:22:48 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\report.php on line 190
+[31-Oct-2025 12:22:48 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 6
+[31-Oct-2025 12:22:48 UTC] PHP Warning:  Attempt to read property "display_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 9
+[31-Oct-2025 12:22:48 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 10
+[31-Oct-2025 12:22:48 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 11
+[03-Nov-2025 09:06:58 UTC] Automatic updates starting...
+[03-Nov-2025 09:06:59 UTC]   Automatic plugin updates starting...
+[03-Nov-2025 09:06:59 UTC]   Automatic plugin updates complete.
+[03-Nov-2025 09:07:00 UTC] Automatic updates complete.
+[03-Nov-2025 09:35:00 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1450
+[03-Nov-2025 09:35:00 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1453
+[03-Nov-2025 09:35:53 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1450
+[03-Nov-2025 09:35:53 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1453
+[03-Nov-2025 09:36:02 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1450
+[03-Nov-2025 09:36:02 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1453
+[03-Nov-2025 09:38:33 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1450
+[03-Nov-2025 09:38:33 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1453
+[03-Nov-2025 09:38:47 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1450
+[03-Nov-2025 09:38:47 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1453
+[03-Nov-2025 09:40:57 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1450
+[03-Nov-2025 09:40:57 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1453
+[03-Nov-2025 09:41:07 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1450
+[03-Nov-2025 09:41:07 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1453
+[03-Nov-2025 09:41:31 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1450
+[03-Nov-2025 09:41:31 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1453
+[04-Nov-2025 09:54:11 UTC] Automatic updates starting...
+[04-Nov-2025 09:54:14 UTC] Automatic updates complete.
+[04-Nov-2025 15:47:29 UTC] Automatic updates starting...
+[04-Nov-2025 15:47:31 UTC] Automatic updates complete.
+[05-Nov-2025 04:52:16 UTC] Automatic updates starting...
+[05-Nov-2025 04:52:19 UTC] Automatic updates complete.
+[06-Nov-2025 02:51:26 UTC] Automatic updates starting...
+[06-Nov-2025 02:51:29 UTC] Automatic updates complete.
+[07-Nov-2025 05:02:51 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[07-Nov-2025 05:03:17 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[07-Nov-2025 05:03:22 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[07-Nov-2025 05:03:26 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[07-Nov-2025 05:03:28 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[07-Nov-2025 05:03:32 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[07-Nov-2025 05:04:40 UTC] Automatic updates starting...
+[07-Nov-2025 05:04:44 UTC] Automatic updates complete.
+[07-Nov-2025 05:49:09 UTC] PHP Warning:  Undefined variable $current_points in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 131
+[07-Nov-2025 06:28:18 UTC] PHP Warning:  Undefined variable $logs in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\referral-commission.php on line 124
+[07-Nov-2025 06:57:26 UTC] PHP Warning:  Undefined variable $total_pages in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\referral-commission.php on line 63
+[07-Nov-2025 06:57:26 UTC] PHP Warning:  Undefined variable $total_pages_points in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\earned-points.php on line 44
+[07-Nov-2025 06:58:48 UTC] PHP Warning:  Undefined variable $total_pages in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\referral-commission.php on line 63
+[07-Nov-2025 06:59:42 UTC] PHP Warning:  Undefined variable $logs_page in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 178
+[07-Nov-2025 06:59:42 UTC] PHP Warning:  Undefined variable $total_pages in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\referral-commission.php on line 63
+[07-Nov-2025 07:01:14 UTC] PHP Warning:  Undefined variable $total_pages in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\referral-commission.php on line 63
+[08-Nov-2025 05:19:16 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_wp_theme_files_patterns-ea29836a576169022959c834a1adfa2a' made by require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option
+[08-Nov-2025 05:19:16 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_timeout_wp_theme_files_patterns-ea29836a576169022959c834a1adfa2a' made by require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option
+[08-Nov-2025 05:19:39 UTC] Automatic updates starting...
+[08-Nov-2025 05:19:46 UTC] Automatic updates complete.
+[08-Nov-2025 09:19:41 UTC] PHP Warning:  Undefined variable $user_balance in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 109
+[08-Nov-2025 09:19:41 UTC] PHP Warning:  Undefined variable $user_points_logs in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 110
+[08-Nov-2025 09:19:41 UTC] PHP Warning:  Undefined variable $current_points in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php on line 55
+[08-Nov-2025 09:20:47 UTC] PHP Warning:  Undefined variable $user_balance in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 109
+[08-Nov-2025 09:20:47 UTC] PHP Warning:  Undefined variable $user_points_logs in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 110
+[08-Nov-2025 09:20:47 UTC] PHP Fatal error:  Uncaught TypeError: number_format(): Argument #1 ($num) must be of type float, array given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php:27
 Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-includes\template.php(812): require()
-#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', false, Array)
-#2 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(206): locate_template(Array, true, false, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php(26): get_template_part('template-custom...', 'section', Array)
-#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
-#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#7 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 45
-[23-Oct-2025 20:39:23 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 6
-[23-Oct-2025 20:39:23 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 6
-[23-Oct-2025 20:39:23 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 25
-[23-Oct-2025 20:39:23 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 25
-[23-Oct-2025 20:39:23 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 40
-[23-Oct-2025 20:39:23 UTC] PHP Warning:  Trying to access array offset on value of type null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 40
-[23-Oct-2025 20:39:23 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 40
-[23-Oct-2025 20:39:23 UTC] PHP Warning:  Trying to access array offset on value of type null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 40
-[23-Oct-2025 20:39:23 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 44
-[23-Oct-2025 20:39:23 UTC] PHP Warning:  Trying to access array offset on value of type null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 44
-[23-Oct-2025 20:39:23 UTC] PHP Fatal error:  Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, null given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php:45
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php(27): number_format(Array, 2)
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(812): require('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', false, Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(206): locate_template(Array, true, false, Array)
+#4 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php(105): get_template_part('template-custom...', '', Array)
+#5 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#8 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php on line 27
+[08-Nov-2025 09:21:16 UTC] PHP Warning:  Undefined variable $user_balance in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 109
+[08-Nov-2025 09:21:16 UTC] PHP Warning:  Undefined variable $user_points_logs in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 110
+[08-Nov-2025 09:21:16 UTC] PHP Fatal error:  Uncaught TypeError: number_format(): Argument #1 ($num) must be of type float, array given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php:27
 Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-includes\template.php(812): require()
-#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', false, Array)
-#2 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(206): locate_template(Array, true, false, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php(26): get_template_part('template-custom...', '', Array)
-#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
-#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#7 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 45
-[23-Oct-2025 20:40:15 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 9
-[23-Oct-2025 20:40:15 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 9
-[23-Oct-2025 20:40:15 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 28
-[23-Oct-2025 20:40:15 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\cover-photo-section.php on line 28
-[23-Oct-2025 21:08:29 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php on line 37
-[23-Oct-2025 21:08:29 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php on line 57
-[23-Oct-2025 21:08:29 UTC] PHP Warning:  Undefined array key "first_name" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php on line 74
-[23-Oct-2025 21:08:29 UTC] PHP Warning:  Undefined array key "last_name" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php on line 74
-[23-Oct-2025 21:08:29 UTC] PHP Warning:  Undefined array key "referred_users" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php on line 78
-[23-Oct-2025 21:08:29 UTC] PHP Fatal error:  Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, null given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php:79
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php(27): number_format(Array, 2)
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(812): require('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', false, Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(206): locate_template(Array, true, false, Array)
+#4 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php(105): get_template_part('template-custom...', '', Array)
+#5 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#8 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php on line 27
+[08-Nov-2025 09:22:06 UTC] PHP Warning:  Undefined variable $user_balance in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 109
+[08-Nov-2025 09:22:06 UTC] PHP Warning:  Undefined variable $user_points_logs in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 110
+[08-Nov-2025 09:22:06 UTC] PHP Fatal error:  Uncaught TypeError: number_format(): Argument #1 ($num) must be of type float, array given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php:27
 Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include()
-#1 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#2 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#3 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php on line 79
-[24-Oct-2025 08:00:40 UTC] Automatic updates starting...
-[24-Oct-2025 08:00:45 UTC] Automatic updates complete.
-[24-Oct-2025 09:00:06 UTC] PHP Warning:  Undefined variable $referred_users_count in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 39
-[24-Oct-2025 09:00:06 UTC] PHP Warning:  Undefined variable $max_display_users in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 45
-[24-Oct-2025 09:00:06 UTC] PHP Warning:  Undefined variable $max_display_users in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 107
-[24-Oct-2025 09:00:06 UTC] PHP Warning:  Undefined variable $referred_users_count in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 107
-[24-Oct-2025 09:01:03 UTC] PHP Warning:  Undefined variable $max_display_users in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 45
-[24-Oct-2025 09:01:03 UTC] PHP Warning:  Undefined variable $max_display_users in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 107
-[24-Oct-2025 09:01:03 UTC] PHP Warning:  Undefined variable $referred_users_count in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 107
-[24-Oct-2025 09:01:36 UTC] PHP Warning:  Undefined variable $max_display_users in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 48
-[24-Oct-2025 09:01:36 UTC] PHP Warning:  Undefined variable $max_display_users in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 110
-[24-Oct-2025 09:01:36 UTC] PHP Warning:  Undefined variable $referred_users_count in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 110
-[24-Oct-2025 09:16:13 UTC] PHP Warning:  Undefined array key 0 in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 90
-[24-Oct-2025 09:16:13 UTC] PHP Warning:  Undefined array key 0 in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 90
-[24-Oct-2025 09:16:13 UTC] PHP Warning:  Undefined array key 0 in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 90
-[24-Oct-2025 09:16:13 UTC] PHP Warning:  Undefined array key 0 in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 90
-[24-Oct-2025 09:16:13 UTC] PHP Warning:  Undefined array key 0 in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 90
-[24-Oct-2025 09:16:13 UTC] PHP Warning:  Undefined array key 0 in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 90
-[24-Oct-2025 09:16:13 UTC] PHP Warning:  Undefined array key 0 in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 90
-[24-Oct-2025 09:47:02 UTC] PHP Warning:  Undefined array key "user_category_names" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\referral-partners.php on line 36
-[24-Oct-2025 10:12:31 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 19
-[24-Oct-2025 10:13:54 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 18
-[24-Oct-2025 10:21:51 UTC] PHP Warning:  include(profile-parts/home-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:21:51 UTC] PHP Warning:  include(): Failed opening 'profile-parts/home-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:23:32 UTC] PHP Warning:  include(profile-parts/home-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:23:32 UTC] PHP Warning:  include(): Failed opening 'profile-parts/home-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:24:01 UTC] PHP Warning:  include(profile-parts/home-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:24:01 UTC] PHP Warning:  include(): Failed opening 'profile-parts/home-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:25:12 UTC] PHP Warning:  include(profile-parts/home-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:25:12 UTC] PHP Warning:  include(): Failed opening 'profile-parts/home-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:25:34 UTC] PHP Warning:  include(profile-parts/home-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:25:34 UTC] PHP Warning:  include(): Failed opening 'profile-parts/home-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:26:03 UTC] PHP Warning:  include(profile-parts/home-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:26:03 UTC] PHP Warning:  include(): Failed opening 'profile-parts/home-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:26:14 UTC] PHP Warning:  include(profile-parts/home-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:26:14 UTC] PHP Warning:  include(): Failed opening 'profile-parts/home-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:27:08 UTC] PHP Warning:  include(profile-parts/home-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:27:08 UTC] PHP Warning:  include(): Failed opening 'profile-parts/home-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:27:43 UTC] PHP Warning:  include(profile-parts/home-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:27:43 UTC] PHP Warning:  include(): Failed opening 'profile-parts/home-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 71
-[24-Oct-2025 10:28:10 UTC] PHP Warning:  include(profile-parts/home-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 73
-[24-Oct-2025 10:28:10 UTC] PHP Warning:  include(): Failed opening 'profile-parts/home-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php on line 73
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 14
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Attempt to read property "first_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 14
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 20
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Attempt to read property "last_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 20
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 26
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Attempt to read property "user_email" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 26
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 29
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 29
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Undefined variable $phone in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 37
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 40
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 40
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Undefined variable $dob in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 48
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 54
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 54
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 61
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 61
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 69
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 69
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 75
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 75
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 81
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 81
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 87
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 87
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 90
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 90
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Undefined variable $referrer in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 98
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 106
-[24-Oct-2025 11:26:07 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 106
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 18
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Attempt to read property "first_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 18
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 24
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Attempt to read property "last_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 24
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 30
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Attempt to read property "user_email" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 30
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 33
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 33
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Undefined variable $phone in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 41
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 44
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 44
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Undefined variable $dob in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 52
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 58
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 58
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 65
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 65
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 73
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 73
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 79
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 79
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 85
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 85
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 91
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 91
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 94
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 94
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Undefined variable $referrer in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 102
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Undefined variable $current_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 110
-[24-Oct-2025 11:27:04 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\edit-profile-form.php on line 110
-[24-Oct-2025 11:40:06 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 6
-[24-Oct-2025 11:40:06 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 10
-[24-Oct-2025 11:40:06 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 11
-[24-Oct-2025 12:51:42 UTC] Automatic updates starting...
-[24-Oct-2025 12:51:46 UTC] Automatic updates complete.
-[24-Oct-2025 14:15:34 UTC] PHP Warning:  include(profileCard.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 19
-[24-Oct-2025 14:15:34 UTC] PHP Warning:  include(): Failed opening 'profileCard.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 19
-[24-Oct-2025 14:15:34 UTC] PHP Warning:  include(navLink.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 47
-[24-Oct-2025 14:15:34 UTC] PHP Warning:  include(): Failed opening 'navLink.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 47
-[24-Oct-2025 15:50:01 UTC] PHP Warning:  include(profileCard.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 19
-[24-Oct-2025 15:50:01 UTC] PHP Warning:  include(): Failed opening 'profileCard.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 19
-[24-Oct-2025 15:50:01 UTC] PHP Warning:  include(navLink.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 47
-[24-Oct-2025 15:50:01 UTC] PHP Warning:  include(): Failed opening 'navLink.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 47
-[24-Oct-2025 15:50:10 UTC] PHP Warning:  include(profileCard.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 19
-[24-Oct-2025 15:50:10 UTC] PHP Warning:  include(): Failed opening 'profileCard.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 19
-[24-Oct-2025 15:50:10 UTC] PHP Warning:  include(navLink.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 47
-[24-Oct-2025 15:50:10 UTC] PHP Warning:  include(): Failed opening 'navLink.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 47
-[24-Oct-2025 23:45:37 UTC] PHP Warning:  include(profileCard.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 19
-[24-Oct-2025 23:45:37 UTC] PHP Warning:  include(): Failed opening 'profileCard.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 19
-[24-Oct-2025 23:45:37 UTC] PHP Warning:  include(navLink.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 47
-[24-Oct-2025 23:45:37 UTC] PHP Warning:  include(): Failed opening 'navLink.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 47
-[24-Oct-2025 23:51:55 UTC] PHP Warning:  include(navLink.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 94
-[24-Oct-2025 23:51:55 UTC] PHP Warning:  include(): Failed opening 'navLink.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php on line 94
-[25-Oct-2025 00:02:43 UTC] PHP Parse error:  syntax error, unexpected token "}", expecting "elseif" or "else" or "endif" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\store.php on line 335
-[25-Oct-2025 00:02:44 UTC] PHP Warning:  Trying to access array offset on value of type bool in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-recovery-mode-email-service.php on line 367
-[25-Oct-2025 00:02:44 UTC] PHP Warning:  Trying to access array offset on value of type bool in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-recovery-mode-email-service.php on line 368
-[25-Oct-2025 00:02:46 UTC] PHP Parse error:  syntax error, unexpected token "}", expecting "elseif" or "else" or "endif" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\store.php on line 335
-[25-Oct-2025 00:02:57 UTC] PHP Parse error:  syntax error, unexpected token "}", expecting "elseif" or "else" or "endif" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\store.php on line 335
-[25-Oct-2025 00:04:58 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\store.php on line 236
-[25-Oct-2025 00:05:16 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\store.php on line 236
-[25-Oct-2025 00:05:17 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\store.php on line 236
-[25-Oct-2025 00:05:17 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\store.php on line 236
-[25-Oct-2025 00:51:24 UTC] Automatic updates starting...
-[25-Oct-2025 00:51:27 UTC] Automatic updates complete.
-[25-Oct-2025 11:33:02 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\single-store-template.php on line 85
-[25-Oct-2025 11:33:02 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\single-store-template.php on line 122
-[25-Oct-2025 13:38:57 UTC] Automatic updates starting...
-[25-Oct-2025 13:39:03 UTC] Automatic updates complete.
-[26-Oct-2025 04:36:17 UTC] PHP Warning:  wp_update_themes(): An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="https://wordpress.org/support/forums/">support forums</a>. (WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
-[26-Oct-2025 04:36:37 UTC] PHP Warning:  wp_version_check(): An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="https://wordpress.org/support/forums/">support forums</a>. (WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
-[26-Oct-2025 04:36:57 UTC] PHP Warning:  wp_update_plugins(): An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="https://wordpress.org/support/forums/">support forums</a>. (WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.) in D:\oldwindows\laragon\www\pet\wp-includes\functions.php on line 6121
-[26-Oct-2025 10:07:01 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_wp_theme_files_patterns-ea29836a576169022959c834a1adfa2a' made by require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option
-[26-Oct-2025 10:07:01 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_wp_theme_files_patterns-ea29836a576169022959c834a1adfa2a' made by require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option
-[26-Oct-2025 10:07:01 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_timeout_wp_theme_files_patterns-ea29836a576169022959c834a1adfa2a' made by require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option
-[26-Oct-2025 10:07:01 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_timeout_wp_theme_files_patterns-ea29836a576169022959c834a1adfa2a' made by require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option
-[26-Oct-2025 10:07:03 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_kirki_googlefonts_cache' made by require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Kirki\Module\Webfonts->run, Kirki\Module\Webfonts\Google::get_instance, Kirki\Module\Webfonts\Google->__construct, Kirki\Module\Webfonts\Fonts::get_google_fonts, Kirki\GoogleFonts->get_google_fonts, get_site_transient, delete_site_option, delete_network_option, delete_option
-[26-Oct-2025 10:07:03 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_kirki_googlefonts_cache' made by require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Kirki\Module\Webfonts->run, Kirki\Module\Webfonts\Google::get_instance, Kirki\Module\Webfonts\Google->__construct, Kirki\Module\Webfonts\Fonts::get_google_fonts, Kirki\GoogleFonts->get_google_fonts, get_site_transient, delete_site_option, delete_network_option, delete_option
-[27-Oct-2025 05:26:52 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[27-Oct-2025 05:26:52 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[27-Oct-2025 05:26:56 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[27-Oct-2025 05:27:01 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[27-Oct-2025 05:27:05 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[27-Oct-2025 05:27:08 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[27-Oct-2025 05:27:12 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[27-Oct-2025 05:28:27 UTC] Automatic updates starting...
-[27-Oct-2025 05:28:32 UTC] Automatic updates complete.
-[27-Oct-2025 07:24:30 UTC] PHP Warning:  Undefined variable $icon_path in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-links.php on line 200
-[27-Oct-2025 07:24:30 UTC] PHP Warning:  Undefined variable $icon_path in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-links.php on line 224
-[27-Oct-2025 07:24:30 UTC] PHP Deprecated:  ltrim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 4486
-[27-Oct-2025 07:30:02 UTC] PHP Warning:  Undefined variable $icon_path in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-links.php on line 200
-[27-Oct-2025 07:30:02 UTC] PHP Warning:  Undefined variable $icon_path in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-links.php on line 224
-[27-Oct-2025 07:30:02 UTC] PHP Deprecated:  ltrim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 4486
-[27-Oct-2025 14:15:50 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[27-Oct-2025 14:15:55 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[27-Oct-2025 14:16:49 UTC] Automatic updates starting...
-[27-Oct-2025 14:16:56 UTC] Automatic updates complete.
-[27-Oct-2025 14:37:55 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 58
-[27-Oct-2025 14:37:55 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 59
-[27-Oct-2025 14:40:09 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 2
-[27-Oct-2025 14:40:19 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 50
-[27-Oct-2025 14:40:19 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 51
-[27-Oct-2025 14:44:17 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 48
-[27-Oct-2025 14:44:17 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 49
-[27-Oct-2025 15:00:20 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 48
-[27-Oct-2025 15:00:20 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 49
-[27-Oct-2025 15:00:30 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 48
-[27-Oct-2025 15:00:30 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 49
-[27-Oct-2025 15:05:02 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 48
-[27-Oct-2025 15:05:02 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 49
-[27-Oct-2025 15:06:19 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method UserProfileData::getProfileData() in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php:18
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php(291): include()
-#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): {closure}('')
-#2 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(13): do_action('template_redire...')
-#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#7 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 18
-[27-Oct-2025 15:15:54 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method UserProfileData::getProfileData() in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php:18
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php(291): include()
-#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): {closure}('')
-#2 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(13): do_action('template_redire...')
-#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#7 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 18
-[27-Oct-2025 15:15:59 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method UserProfileData::getProfileData() in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php:18
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php(291): include()
-#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): {closure}('')
-#2 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(13): do_action('template_redire...')
-#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#7 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 18
-[27-Oct-2025 15:16:01 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method UserProfileData::getProfileData() in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php:18
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php(291): include()
-#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): {closure}('')
-#2 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(13): do_action('template_redire...')
-#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#7 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 18
-[27-Oct-2025 15:16:14 UTC] PHP Fatal error:  Uncaught Error: Cannot use object of type UserProfileData as array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\feed-parts\profile-card.php:8
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-includes\template.php(812): require()
-#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', false, Array)
-#2 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(206): locate_template(Array, true, false, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php(53): get_template_part('template-custom...', '', Array)
-#4 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php(291): include('D:\\oldwindows\\l...')
-#5 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): {closure}('')
-#6 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
-#7 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#8 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(13): do_action('template_redire...')
-#9 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#10 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#11 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\feed-parts\profile-card.php on line 8
-[27-Oct-2025 15:16:39 UTC] PHP Warning:  Undefined variable $user_slug in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 18
-[27-Oct-2025 15:42:00 UTC] PHP Warning:  Undefined variable $offset in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 319
-[27-Oct-2025 15:42:00 UTC] PHP Warning:  Undefined variable $profile_url in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 320
-[27-Oct-2025 15:42:00 UTC] PHP Deprecated:  ltrim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 4486
-[27-Oct-2025 15:42:00 UTC] PHP Warning:  Undefined variable $photo in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 322
-[27-Oct-2025 15:42:00 UTC] PHP Deprecated:  ltrim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 4486
-[27-Oct-2025 15:42:00 UTC] PHP Warning:  Undefined variable $ref_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 322
-[27-Oct-2025 15:42:00 UTC] PHP Warning:  Attempt to read property "display_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 322
-[27-Oct-2025 15:42:00 UTC] PHP Warning:  Undefined variable $ref_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 324
-[27-Oct-2025 15:42:00 UTC] PHP Warning:  Attempt to read property "display_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 324
-[27-Oct-2025 15:42:01 UTC] PHP Warning:  Undefined variable $offset in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 319
-[27-Oct-2025 15:42:01 UTC] PHP Warning:  Undefined variable $profile_url in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 320
-[27-Oct-2025 15:42:01 UTC] PHP Deprecated:  ltrim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 4486
-[27-Oct-2025 15:42:01 UTC] PHP Warning:  Undefined variable $photo in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 322
-[27-Oct-2025 15:42:01 UTC] PHP Deprecated:  ltrim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 4486
-[27-Oct-2025 15:42:01 UTC] PHP Warning:  Undefined variable $ref_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 322
-[27-Oct-2025 15:42:01 UTC] PHP Warning:  Attempt to read property "display_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 322
-[27-Oct-2025 15:42:01 UTC] PHP Warning:  Undefined variable $ref_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 324
-[27-Oct-2025 15:42:01 UTC] PHP Warning:  Attempt to read property "display_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 324
-[27-Oct-2025 15:42:02 UTC] PHP Warning:  Undefined variable $offset in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 319
-[27-Oct-2025 15:42:02 UTC] PHP Warning:  Undefined variable $profile_url in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 320
-[27-Oct-2025 15:42:02 UTC] PHP Deprecated:  ltrim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 4486
-[27-Oct-2025 15:42:02 UTC] PHP Warning:  Undefined variable $photo in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 322
-[27-Oct-2025 15:42:02 UTC] PHP Deprecated:  ltrim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 4486
-[27-Oct-2025 15:42:02 UTC] PHP Warning:  Undefined variable $ref_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 322
-[27-Oct-2025 15:42:02 UTC] PHP Warning:  Attempt to read property "display_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 322
-[27-Oct-2025 15:42:02 UTC] PHP Warning:  Undefined variable $ref_user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 324
-[27-Oct-2025 15:42:02 UTC] PHP Warning:  Attempt to read property "display_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 324
-[27-Oct-2025 17:42:33 UTC] PHP Warning:  Attempt to read property "ID" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 313
-[27-Oct-2025 17:42:33 UTC] PHP Warning:  Attempt to read property "user_email" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 314
-[27-Oct-2025 17:42:33 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 314
-[27-Oct-2025 17:42:33 UTC] PHP Warning:  Attempt to read property "user_login" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 315
-[27-Oct-2025 17:42:33 UTC] PHP Warning:  Attempt to read property "display_name" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 320
-[27-Oct-2025 17:42:33 UTC] PHP Warning:  Attempt to read property "display_name" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 322
-[27-Oct-2025 17:42:33 UTC] PHP Warning:  Attempt to read property "ID" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 313
-[27-Oct-2025 17:42:33 UTC] PHP Warning:  Attempt to read property "user_email" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 314
-[27-Oct-2025 17:42:33 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 314
-[27-Oct-2025 17:42:33 UTC] PHP Warning:  Attempt to read property "user_login" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 315
-[27-Oct-2025 17:42:33 UTC] PHP Warning:  Attempt to read property "display_name" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 320
-[27-Oct-2025 17:42:33 UTC] PHP Warning:  Attempt to read property "display_name" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 322
-[27-Oct-2025 17:42:33 UTC] PHP Warning:  Attempt to read property "ID" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 313
-[27-Oct-2025 17:42:33 UTC] PHP Warning:  Attempt to read property "user_email" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 314
-[27-Oct-2025 17:42:33 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 314
-[27-Oct-2025 17:42:33 UTC] PHP Warning:  Attempt to read property "user_login" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 315
-[27-Oct-2025 17:42:33 UTC] PHP Warning:  Attempt to read property "display_name" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 320
-[27-Oct-2025 17:42:33 UTC] PHP Warning:  Attempt to read property "display_name" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 322
-[27-Oct-2025 17:42:41 UTC] PHP Warning:  Attempt to read property "ID" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 313
-[27-Oct-2025 17:42:41 UTC] PHP Warning:  Attempt to read property "user_email" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 314
-[27-Oct-2025 17:42:41 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 314
-[27-Oct-2025 17:42:41 UTC] PHP Warning:  Attempt to read property "user_login" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 315
-[27-Oct-2025 17:42:41 UTC] PHP Warning:  Attempt to read property "display_name" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 320
-[27-Oct-2025 17:42:41 UTC] PHP Warning:  Attempt to read property "display_name" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 322
-[27-Oct-2025 17:42:41 UTC] PHP Warning:  Attempt to read property "ID" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 313
-[27-Oct-2025 17:42:41 UTC] PHP Warning:  Attempt to read property "user_email" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 314
-[27-Oct-2025 17:42:41 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 314
-[27-Oct-2025 17:42:41 UTC] PHP Warning:  Attempt to read property "user_login" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 315
-[27-Oct-2025 17:42:41 UTC] PHP Warning:  Attempt to read property "display_name" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 320
-[27-Oct-2025 17:42:41 UTC] PHP Warning:  Attempt to read property "display_name" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 322
-[27-Oct-2025 17:42:41 UTC] PHP Warning:  Attempt to read property "ID" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 313
-[27-Oct-2025 17:42:41 UTC] PHP Warning:  Attempt to read property "user_email" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 314
-[27-Oct-2025 17:42:41 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 314
-[27-Oct-2025 17:42:41 UTC] PHP Warning:  Attempt to read property "user_login" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 315
-[27-Oct-2025 17:42:41 UTC] PHP Warning:  Attempt to read property "display_name" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 320
-[27-Oct-2025 17:42:41 UTC] PHP Warning:  Attempt to read property "display_name" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 322
-[27-Oct-2025 17:54:21 UTC] PHP Warning:  Array to string conversion in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 1096
-[27-Oct-2025 17:54:21 UTC] PHP Warning:  Array to string conversion in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 1096
-[27-Oct-2025 17:54:21 UTC] PHP Warning:  Array to string conversion in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 1096
-[27-Oct-2025 17:54:21 UTC] PHP Warning:  Array to string conversion in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 1096
-[27-Oct-2025 18:04:31 UTC] PHP Fatal error:  Uncaught Error: Attempt to assign property "join_date" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php:49
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php(291): include()
-#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): {closure}('')
-#2 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(13): do_action('template_redire...')
-#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#7 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 49
-[27-Oct-2025 18:05:11 UTC] PHP Fatal error:  Uncaught Error: Attempt to assign property "join_date" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php:50
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php(291): include()
-#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): {closure}('')
-#2 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(13): do_action('template_redire...')
-#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#7 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 50
-[27-Oct-2025 18:05:58 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 74
-[27-Oct-2025 18:05:58 UTC] PHP Warning:  Attempt to read property "first_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 74
-[27-Oct-2025 18:05:58 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 74
-[27-Oct-2025 18:05:58 UTC] PHP Warning:  Attempt to read property "last_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 74
-[27-Oct-2025 18:05:58 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 232
-[27-Oct-2025 18:05:58 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 232
-[27-Oct-2025 18:06:22 UTC] PHP Warning:  Undefined property: stdClass::$ID in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 232
-[27-Oct-2025 18:25:28 UTC] PHP Warning:  Array to string conversion in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 356
-[27-Oct-2025 18:25:28 UTC] PHP Warning:  Array to string conversion in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 356
-[27-Oct-2025 18:25:28 UTC] PHP Warning:  Array to string conversion in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 356
-[27-Oct-2025 18:29:43 UTC] PHP Parse error:  syntax error, unexpected token "if" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 356
-[27-Oct-2025 18:29:43 UTC] PHP Warning:  Trying to access array offset on value of type bool in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-recovery-mode-email-service.php on line 367
-[27-Oct-2025 18:29:43 UTC] PHP Warning:  Trying to access array offset on value of type bool in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-recovery-mode-email-service.php on line 368
-[27-Oct-2025 18:31:44 UTC] PHP Parse error:  syntax error, unexpected token "if" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 356
-[27-Oct-2025 18:33:45 UTC] PHP Parse error:  syntax error, unexpected token "if" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 356
-[27-Oct-2025 18:35:46 UTC] PHP Parse error:  syntax error, unexpected token "if" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 356
-[27-Oct-2025 18:36:17 UTC] PHP Fatal error:  Uncaught Error: Cannot use object of type stdClass as array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php:356
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): load_more_referrals_callback('')
-#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
-#2 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#3 D:\oldwindows\laragon\www\pet\wp-admin\admin-ajax.php(192): do_action('wp_ajax_load_mo...')
-#4 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 356
-[27-Oct-2025 19:08:58 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method UserProfileData::getProfileData() in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php:49
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php(292): include()
-#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): {closure}('')
-#2 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(13): do_action('template_redire...')
-#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#7 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 49
-[27-Oct-2025 19:09:15 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method UserProfileData::getProfileData() in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php:49
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php(292): include()
-#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): {closure}('')
-#2 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(13): do_action('template_redire...')
-#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#7 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 49
-[27-Oct-2025 19:10:48 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method UserProfileData::getProfileData() in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php:49
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php(292): include()
-#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): {closure}('')
-#2 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(13): do_action('template_redire...')
-#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#7 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 49
-[27-Oct-2025 19:10:58 UTC] PHP Parse error:  Unclosed '{' on line 290 in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\single-store-template.php on line 407
-[27-Oct-2025 19:11:51 UTC] PHP Parse error:  syntax error, unexpected token "endif", expecting end of file in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\single-store-template.php on line 407
-[27-Oct-2025 19:19:52 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method UserProfileData::getProfileData() in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php:47
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php(292): include()
-#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): {closure}('')
-#2 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(13): do_action('template_redire...')
-#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#7 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 47
-[28-Oct-2025 01:30:49 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[28-Oct-2025 01:30:54 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[28-Oct-2025 01:30:56 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[28-Oct-2025 01:31:00 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[28-Oct-2025 01:31:02 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[28-Oct-2025 01:31:06 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[28-Oct-2025 01:31:08 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[28-Oct-2025 01:31:53 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method UserProfileData::getProfileData() in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php:47
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php(292): include()
-#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): {closure}('')
-#2 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(13): do_action('template_redire...')
-#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#7 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 47
-[28-Oct-2025 01:31:55 UTC] Automatic updates starting...
-[28-Oct-2025 01:31:58 UTC] Automatic updates complete.
-[28-Oct-2025 01:40:36 UTC] PHP Fatal error:  Uncaught TypeError: trim(): Argument #1 ($string) must be of type string, WP_User given in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-user.php:218
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-user.php(218): trim(Object(WP_User))
-#1 D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php(102): WP_User::get_data_by('slug', Object(WP_User))
-#2 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php(13): get_user_by('slug', Object(WP_User))
-#3 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php(292): include('D:\\oldwindows\\l...')
-#4 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): {closure}('')
-#5 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
-#6 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#7 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(13): do_action('template_redire...')
-#8 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#9 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#10 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-user.php on line 218
-[28-Oct-2025 01:41:32 UTC] PHP Fatal error:  Uncaught TypeError: trim(): Argument #1 ($string) must be of type string, WP_User given in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-user.php:218
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-user.php(218): trim(Object(WP_User))
-#1 D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php(102): WP_User::get_data_by('slug', Object(WP_User))
-#2 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php(18): get_user_by('slug', Object(WP_User))
-#3 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php(292): include('D:\\oldwindows\\l...')
-#4 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): {closure}('')
-#5 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
-#6 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#7 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(13): do_action('template_redire...')
-#8 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#9 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#10 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-user.php on line 218
-[28-Oct-2025 01:43:56 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method UserProfileData::getProfileData() in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php:76
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php(292): include()
-#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(324): {closure}('')
-#2 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters(NULL, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#4 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(13): do_action('template_redire...')
-#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#7 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 76
-[28-Oct-2025 13:48:21 UTC] Automatic updates starting...
-[28-Oct-2025 13:48:24 UTC] Automatic updates complete.
-[30-Oct-2025 05:06:51 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[30-Oct-2025 05:07:48 UTC] Automatic updates starting...
-[30-Oct-2025 05:07:51 UTC]   Automatic plugin updates starting...
-[30-Oct-2025 05:07:51 UTC]   Automatic plugin updates complete.
-[30-Oct-2025 05:07:51 UTC] Automatic updates complete.
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php(27): number_format(Array, 2)
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(812): require('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', false, Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(206): locate_template(Array, true, false, Array)
+#4 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php(105): get_template_part('template-custom...', '', Array)
+#5 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#8 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php on line 27
+[08-Nov-2025 09:22:36 UTC] PHP Warning:  Undefined variable $user_balance in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 109
+[08-Nov-2025 09:22:36 UTC] PHP Warning:  Undefined variable $user_points_logs in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 110
+[08-Nov-2025 09:23:15 UTC] PHP Warning:  Undefined variable $user_balance in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 106
+[08-Nov-2025 09:23:15 UTC] PHP Warning:  Undefined variable $user_points_logs in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 107
+[08-Nov-2025 09:27:09 UTC] PHP Warning:  Undefined variable $current_points in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php on line 47
+[08-Nov-2025 09:47:30 UTC] PHP Warning:  include(D:\oldwindows\laragon\www\pet/wp-content/themes/247empowerment/template-custom/auth/profile-parts/edit-profile-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\connect-zoom.php on line 12
+[08-Nov-2025 09:47:30 UTC] PHP Warning:  include(): Failed opening 'D:\oldwindows\laragon\www\pet/wp-content/themes/247empowerment/template-custom/auth/profile-parts/edit-profile-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\connect-zoom.php on line 12
+[08-Nov-2025 09:47:58 UTC] PHP Warning:  include(D:\oldwindows\laragon\www\pet/wp-content/themes/247empowerment/template-custom/auth/profile-parts/edit-profile-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\connect-zoom.php on line 12
+[08-Nov-2025 09:47:58 UTC] PHP Warning:  include(): Failed opening 'D:\oldwindows\laragon\www\pet/wp-content/themes/247empowerment/template-custom/auth/profile-parts/edit-profile-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\connect-zoom.php on line 12
+[08-Nov-2025 09:48:13 UTC] PHP Warning:  include(D:\oldwindows\laragon\www\pet/wp-content/themes/247empowerment/template-custom/auth/profile-parts/edit-profile-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-password.php on line 36
+[08-Nov-2025 09:48:13 UTC] PHP Warning:  include(): Failed opening 'D:\oldwindows\laragon\www\pet/wp-content/themes/247empowerment/template-custom/auth/profile-parts/edit-profile-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-password.php on line 36
+[08-Nov-2025 12:47:47 UTC] PHP Warning:  include(D:\oldwindows\laragon\www\pet/wp-content/themes/247empowerment/template-custom/auth/profile-parts/edit-profile-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-password.php on line 85
+[08-Nov-2025 12:47:47 UTC] PHP Warning:  include(): Failed opening 'D:\oldwindows\laragon\www\pet/wp-content/themes/247empowerment/template-custom/auth/profile-parts/edit-profile-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-password.php on line 85
+[08-Nov-2025 12:50:41 UTC] Automatic updates starting...
+[08-Nov-2025 12:50:44 UTC] Automatic updates complete.

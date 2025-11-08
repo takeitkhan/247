@@ -10,17 +10,26 @@
   border-radius: 6px;
   width: 100%;
   padding: clamp(8px, 1.2vw, 10px) clamp(10px, 1.5vw, 12px);
+  transition: all 0.1s ease;
+
+  &:focus {
+    box-shadow: 0 0 0 2px $white, 0 0 0 5px $primary-color;
+  }
 }
-.background-primary{
+
+.background-primary {
   background-color: $primary-color;
 }
-.background-gray{
+
+.background-gray {
   background-color: $gray_black;
 }
-.text-primary{
-  color: $primary-color
+
+.text-primary-color {
+  color: $primary-color !important
 }
-.custom-btn-size{
+
+.custom-btn-size {
   color: $white;
   font-weight: 500;
   font-size: clamp(16px, 1vw, 18px);
@@ -65,5 +74,11 @@
     background: $linear-gradient;
     -webkit-text-fill-color: $white;
     color: $white;
+  }
+}
+
+.btn-focus {
+  &:focus {
+    box-shadow: 0 0 0 2px $white, 0 0 0 5px $primary-color;
   }
 }

@@ -8,21 +8,25 @@
 function register_event_post_type()
 {
     $labels = [
-        'name'          => 'Events',
+        'name' => 'Events',
         'singular_name' => 'Event',
-        'menu_name'     => 'Events',
+        'add_new' => 'Add New',
+        'add_new_item' => 'Add New Event',
+        'edit_item' => 'Edit Event',
+        'new_item' => 'New Event',
+        'view_item' => 'View Event',
+        'search_items' => 'Search Events',
+        'not_found' => 'No events found',
+        'not_found_in_trash' => 'No events found in Trash',
     ];
 
     $args = [
-        'labels'        => $labels,
-        'public'        => true,
-        'has_archive'   => true,
-        'rewrite'       => ['slug' => 'events'],
-        'supports'      => ['title', 'editor', 'thumbnail'],
-        'menu_icon'     => 'dashicons-calendar-alt',
-        'show_in_rest'  => true,
-        'capability_type'    => 'post',
-        'map_meta_cap'       => true,
+        'labels' => $labels,
+        'public' => true,
+        'has_archive' => true,
+        'menu_icon' => 'dashicons-calendar-alt',
+        'supports' => ['title', 'editor', 'author', 'thumbnail'],
+        'show_in_rest' => true, // enables block editor + API
     ];
 
     register_post_type('event', $args);
@@ -98,109 +102,6 @@ function add_event_caps_to_subscribers()
 }
 add_action('init', 'add_event_caps_to_subscribers');
 
-function event_submission_form() {
-    if (!is_user_logged_in()) {
-        echo '<div class="alert alert-warning">You must be logged in to submit an event.</div>';
-        return;
-    }
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['event_title'])) {
-        if (!isset($_POST['event_submission_nonce']) || !wp_verify_nonce($_POST['event_submission_nonce'], 'event_submission')) {
-            echo '<div class="alert alert-danger">Nonce verification failed!</div>';
-        } else {
-
-            // Prepare post data
-            $event_id = wp_insert_post([
-                'post_title'   => sanitize_text_field($_POST['event_title']),
-                'post_content' => wp_kses_post($_POST['event_description']),
-                'post_type'    => 'event',
-                'post_status'  => 'publish',
-                'post_author'  => get_current_user_id(),
-            ]);
-
-            if ($event_id) {
-                // Save custom fields (ACF or post meta)
-                update_post_meta($event_id, 'event_location', sanitize_text_field($_POST['event_location']));
-                update_post_meta($event_id, 'event_start_date', sanitize_text_field($_POST['event_start_date']));
-                update_post_meta($event_id, 'event_end_date', sanitize_text_field($_POST['event_end_date']));
-                update_post_meta($event_id, 'event_privacy', sanitize_text_field($_POST['event_privacy']));
-
-                echo '<div class="alert alert-success">✅ Event posted successfully!</div>';
-            } else {
-                echo '<div class="alert alert-danger">Failed to post the event.</div>';
-            }
-        }
-    }
-    ?>
-
-    <form method="post" action="" class="needs-validation" novalidate enctype="multipart/form-data">
-        <?php wp_nonce_field('event_submission', 'event_submission_nonce'); ?>
-
-        <div class="mb-3">
-            <label for="event_title" class="form-label">Event Name</label>
-            <input type="text" name="event_title" class="form-control" id="event_title" required>
-            <div class="invalid-feedback">Please enter the event name.</div>
-        </div>
-
-        <div class="mb-3">
-            <label for="event_description" class="form-label">Description</label>
-            <textarea name="event_description" class="form-control" id="event_description" rows="5"></textarea>
-        </div>
-
-        <div class="mb-3">
-            <label for="event_location" class="form-label">Location</label>
-            <input type="text" name="event_location" class="form-control" id="event_location">
-        </div>
-
-        <div class="mb-3 row g-3">
-            <div class="col-md-6">
-                <label for="event_start_date" class="form-label">Start Date & Time</label>
-                <input type="datetime-local" name="event_start_date" class="form-control" id="event_start_date">
-            </div>
-            <div class="col-md-6">
-                <label for="event_end_date" class="form-label">End Date & Time</label>
-                <input type="datetime-local" name="event_end_date" class="form-control" id="event_end_date">
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <label for="event_privacy" class="form-label">Privacy</label>
-            <select name="event_privacy" class="form-select" id="event_privacy">
-                <option value="public">Public</option>
-                <option value="friends">Friends</option>
-                <option value="private">Private</option>
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="event_image" class="form-label">Event Image</label>
-            <input type="file" name="event_image" class="form-control" id="event_image" accept="image/*">
-        </div>
-
-        <button type="submit" class="btn btn-primary">Submit Event</button>
-    </form>
-
-    <script>
-        // Bootstrap form validation
-        (function () {
-            'use strict'
-            var forms = document.querySelectorAll('.needs-validation')
-            Array.prototype.slice.call(forms).forEach(function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })()
-    </script>
-
-<?php
-}
-add_shortcode('event_submission_form', 'event_submission_form');
-
 function add_event_query_vars($vars)
 {
     $vars[] = 'event_user';
@@ -255,3 +156,73 @@ if (function_exists('mm_register_action')) {
     mm_register_action('event_edited', 'Event Edited');
     mm_register_action('event_deleted', 'Event Deleted');
 }
+
+function handle_submit_event_form()
+{
+
+    // ✅ Security check
+    if (
+        !isset($_POST['event_submission_nonce']) ||
+        !wp_verify_nonce($_POST['event_submission_nonce'], 'event_submission')
+    ) {
+        wp_die('Security check failed.');
+    }
+
+    // ✅ Ensure user is logged in
+    if (!is_user_logged_in()) {
+        wp_die('You must be logged in to submit an event.');
+    }
+
+    // ✅ Prepare data
+    $user_id = get_current_user_id();
+    $event_title = sanitize_text_field($_POST['event_title']);
+    $event_type = sanitize_text_field($_POST['event_type']);
+    $event_date = sanitize_text_field($_POST['event_date']);
+    $event_time = sanitize_text_field($_POST['event_time']);
+    $event_duration = sanitize_text_field($_POST['event_duration']);
+    $event_desc = sanitize_textarea_field($_POST['event_description']);
+    $event_link = esc_url_raw($_POST['event_link']);
+    $registrationType = sanitize_text_field($_POST['registrationType']);
+    $event_price = sanitize_text_field($_POST['event_price']);
+
+    // ✅ Insert event post
+    $post_id = wp_insert_post([
+        'post_title'   => $event_title,
+        'post_content' => $event_desc,
+        'post_status'  => 'publish',
+        'post_type'    => 'event',
+        'post_author'  => $user_id,
+    ]);
+
+    if (is_wp_error($post_id)) {
+        wp_die('Error creating event.');
+    }
+
+    // ✅ Save meta
+    update_post_meta($post_id, 'event_type', $event_type);
+    update_post_meta($post_id, 'event_date', $event_date);
+    update_post_meta($post_id, 'event_time', $event_time);
+    update_post_meta($post_id, 'event_duration', $event_duration);
+    update_post_meta($post_id, 'event_link', $event_link);
+    update_post_meta($post_id, 'registration_type', $registrationType);
+    update_post_meta($post_id, 'event_price', $event_price);
+
+    // ✅ Handle cover image
+    if (!empty($_FILES['eventCover']['name'])) {
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+
+        $attachment_id = media_handle_upload('eventCover', $post_id);
+        if (!is_wp_error($attachment_id)) {
+            set_post_thumbnail($post_id, $attachment_id);
+        }
+    }
+
+    // ✅ Redirect safely
+    $redirect_url = add_query_arg('event_submitted', 'true', wp_get_referer() ?: home_url());
+    wp_safe_redirect($redirect_url);
+    exit;
+}
+add_action('admin_post_submit_event_form', 'handle_submit_event_form');
+add_action('admin_post_nopriv_submit_event_form', 'handle_submit_event_form');

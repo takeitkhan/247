@@ -135,10 +135,10 @@ $referred_users_count = count($referrals);
                         $ref_id = isset($ref_user->ID) ? $ref_user->ID : 0;
                         $ref_email = isset($ref_user->user_email) ? trim($ref_user->user_email) : '';
                         $ref_login = isset($ref_user->user_login) ? $ref_user->user_login : '';
-
+                        $ref_username = isset($ref_user->username) ? $ref_user->username : '';
                         $photo = get_user_meta($ref_id, 'profile_photo', true);
                         $photo = $photo ?: 'https://www.gravatar.com/avatar/' . md5(strtolower($ref_email)) . '?s=150&d=mm';
-                        $profile_url = site_url('/' . $ref_login);
+                        $profile_url = site_url('/' . $ref_username);
 
                     ?>
 
