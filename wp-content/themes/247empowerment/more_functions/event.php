@@ -27,11 +27,12 @@ function register_event_post_type()
         'menu_icon' => 'dashicons-calendar-alt',
         'supports' => ['title', 'editor', 'author', 'thumbnail'],
         'show_in_rest' => true, // enables block editor + API
+        'taxonomies' => ['event_category'], // <-- attach taxonomy here
     ];
 
     register_post_type('event', $args);
 }
-add_action('init', 'register_event_post_type');
+add_action('init', 'register_event_post_type', 1);
 
 function add_event_caps()
 {
@@ -65,11 +66,12 @@ function register_event_category_taxonomy()
         ],
         'public'       => true,
         'hierarchical' => true,
+        'show_admin_column' => true,
         'rewrite'      => ['slug' => 'event-category'],
         'show_in_rest' => true,
     ]);
 }
-add_action('init', 'register_event_category_taxonomy');
+add_action('init', 'register_event_category_taxonomy', 0);
 
 function add_custom_event_rewrite_rule()
 {
@@ -146,17 +148,6 @@ add_filter('post_row_actions', function ($actions, $post) {
     return $actions;
 }, 10, 2);
 
-
-// Register Event Submission Action
-if (function_exists('mm_register_action')) {
-    mm_register_action('event_submission', 'Event Submission');
-
-    // Optionally, you can register more specific actions if needed
-    mm_register_action('event_created', 'Event Created');
-    mm_register_action('event_edited', 'Event Edited');
-    mm_register_action('event_deleted', 'Event Deleted');
-}
-
 function handle_submit_event_form()
 {
 
@@ -175,8 +166,7 @@ function handle_submit_event_form()
 
     // ✅ Prepare data
     $user_id = get_current_user_id();
-    $event_title = sanitize_text_field($_POST['event_title']);
-    $event_type = sanitize_text_field($_POST['event_type']);
+    $event_title = sanitize_text_field($_POST['event_title']);    
     $event_date = sanitize_text_field($_POST['event_date']);
     $event_time = sanitize_text_field($_POST['event_time']);
     $event_duration = sanitize_text_field($_POST['event_duration']);
@@ -198,8 +188,22 @@ function handle_submit_event_form()
         wp_die('Error creating event.');
     }
 
-    // ✅ Save meta
-    update_post_meta($post_id, 'event_type', $event_type);
+    if (!empty($_POST['event_category'])) {
+        $term_slug = sanitize_text_field($_POST['event_category']);
+
+        // ✅ Get the term by slug
+        $term = get_term_by('slug', $term_slug, 'event_category');
+
+        if ($term && !is_wp_error($term)) {
+            wp_set_post_terms($post_id, [$term->term_id], 'event_category', false);
+        } else {
+            error_log('Event category term not found for slug: ' . $term_slug);
+        }
+    }
+
+    error_log('POST data: ' . print_r($_POST, true));
+
+    // ✅ Save meta    
     update_post_meta($post_id, 'event_date', $event_date);
     update_post_meta($post_id, 'event_time', $event_time);
     update_post_meta($post_id, 'event_duration', $event_duration);

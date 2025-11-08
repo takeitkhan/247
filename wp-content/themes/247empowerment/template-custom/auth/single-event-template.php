@@ -4,21 +4,52 @@
  * Template Name: Single Event Template
  */
 
-$event_user = get_query_var('event_user');
-$is_shareable = get_query_var('shareable'); // '1' if shareable URL
+$current_user = wp_get_current_user();
+$current_user_id = get_current_user_id();
 
-$event_slug = get_query_var('event_slug');
+// get query vars
+$user_slug    = get_query_var('user_profile');
+$event_user   = get_query_var('event_user');
+$is_shareable = get_query_var('shareable'); // '1' if shareable URL
+$event_slug   = get_query_var('event_slug');
+
+// resolve user
+if ($user_slug) {
+    $user = get_user_by('slug', $user_slug);
+} else {
+    $user = get_user_by('ID', $current_user_id);
+}
+
+// instantiate profile data safely
+if ($user) {
+    // prefer passing WP_User object if supported
+    $target_identifier = $user_slug ? $user_slug : $user->user_login;
+
+    // If your UserProfileData accepts a WP_User object, pass $user
+    // Otherwise pass $target_identifier (slug/login)
+    // I'll try slug/login to be conservative:
+    $profile_data_instance = new UserProfileData($target_identifier);
+    $profile = $profile_data_instance->getProfile();
+} else {
+    $user = null;
+    $profile = null;
+}
+
+// Find event by slug
 $event = get_page_by_path($event_slug, OBJECT, 'event');
 
-
 if (!$event) {
+    // Only load header for non-shareable
     if (!$is_shareable) {
         get_header_based_on_login();
     }
+
     echo '<p class="text-danger">Event not found.</p>';
+
     if (!$is_shareable) {
-        get_header_based_on_login();
+        get_footer_based_on_login();
     }
+
     exit;
 }
 
@@ -30,24 +61,25 @@ if (!is_user_logged_in() && !$is_shareable) {
 
 setup_postdata($event);
 
-$price = get_field('price', $event->ID);
-$instructor = get_field('instructor', $event->ID);
-$duration = get_field('duration', $event->ID);
-$short_details = get_field('short_details', $event->ID);
+// ACF fields (with fallbacks)
+$price         = get_field('price', $event->ID) ?: '';
+$instructor    = get_field('instructor', $event->ID) ?: '';
+$duration      = get_field('duration', $event->ID) ?: '';
+$short_details = get_field('short_details', $event->ID) ?: '';
 $thumbnail_url = get_the_post_thumbnail_url($event->ID, 'large') ?: '/img/banner.jpg';
 $custom_permalink = home_url("/{$event_user}/event/{$event_slug}/");
 
-// Only load header if NOT shareable
-if (!$is_shareable) {
-    get_header_based_on_login();
-}
+// Prepare a shareable link fallback so json_encode won't break
+$shareable_link = $shareable_link ?? $custom_permalink ?? home_url();
 
 ?>
-<?php if ($is_shareable): ?>
-    <?php
-    $path = $_SERVER['REQUEST_URI'];
-    $segments = explode('/', trim($path, '/'));
 
+
+<?php if ($is_shareable): ?>
+
+    <?php
+    $path = $_SERVER['REQUEST_URI'] ?? '';
+    $segments = explode('/', trim($path, '/'));
     $referrer_username = $segments[0] ?? null;
 
     $login_url = home_url('/signin');
@@ -58,116 +90,147 @@ if (!$is_shareable) {
         $register_url = add_query_arg('ref', $referrer_username, $register_url);
     }
 
+    // include the shareable event partial (this file should itself be valid PHP/HTML)
     include __DIR__ . '/event-parts/shareable-event.php';
     ?>
 
 <?php else: ?>
 
-    <main>
-        <div class="main-container s-main-con">
-            <div class="row g-3">
-                <div class="d-md-block bottom-0 position-sticky col d-none">
-                    <div class="bg-white custom-box-shadow p-3 custom-border-radius h-100">
-                        <?php include 'event-parts/left-column.php'; ?>
-                    </div>
-                </div>
-                <div class="ms-md-auto col-12 col-md-8 col-lg-9 col-xl-9">
-                    <div class="bg-white custom-box-shadow mb-3 p-3 custom-border-radius">
-                        <nav aria-label="breadcrumb" class="mb-4">
-                            <ol class="d-flex align-items-center breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="<?= esc_url(home_url("/{$event_user}/event")); ?>">Event</a>
-                                </li>
-                                <li class="breadcrumb-item active" aria-current="page">
-                                    <?= esc_html(get_the_title($event)); ?>
-                                </li>
-                            </ol>
-                        </nav>
+    <?php get_header_based_on_login(); ?>
+    <div class="container profile-page pt20">
+        <div class="row">
+            <div class="col-lg-3">
+                <?php get_template_part('template-custom/auth/feed-parts/profile-card', null, ['profile' => $profile]); ?>
+                <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
+            </div>
 
-                        <div class="col-md-12">
-                            <img
-                                src="<?= esc_url($thumbnail_url); ?>"
-                                alt="<?= esc_attr(get_the_title($event)); ?>"
-                                class="shadow-sm rounded img-fluid" />
-                        </div>
-                        <div class="col-md-12">
-                            <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mt-3 mb-4">
-                                <h1 class="flex-grow-1 mb-0 h3"><?= esc_html(get_the_title($event)); ?></h1>
-                            </div>
-
-                            <div class="text-end" style="flex: 1 1 100%; margin-top:1rem;">
-                                <?php
-                                $shareable_link = home_url("/{$event_user}/event/{$event_slug}/?shareable=1");
-                                ?>
-                                <button id="copyLinkBtn" class="btn-outline-primary btn btn-sm">
-                                    <i class="bi bi-link-45deg"></i> Copy Shareable Link
-                                </button>
-                            </div>
-
-                            <h2 class="mb-3 h4">Event Description</h2>
-
-                            <div class="mb-4">
-                                <?= apply_filters('the_content', $event->post_content); ?>
-                            </div>
-                            <?php
-                            if (is_user_logged_in()) {
-                                $current_user_id = get_current_user_id();
-                                $referrer = get_user_meta($current_user_id, 'referrer', true);
-
-                                if ($referrer) {
-                                    // Get user object by ID or login
-                                    $referrer_user = is_numeric($referrer)
-                                        ? get_user_by('ID', $referrer)
-                                        : get_user_by('login', $referrer);
-
-                                    if ($referrer_user) {
-                                        $referrer_name = $referrer_user->display_name;
-                                        $referrer_profile = home_url('/' . $referrer_user->user_login);
-                            ?>
-                                        <div class="mb-5">
-                                            <div class="d-flex align-items-center alert alert-info">
-                                                <i class="text-primary bi bi-stars fs-6"></i>
-                                                <div>
-                                                    <strong>Referred by:</strong>
-                                                    <a href="<?= esc_url($referrer_profile); ?>" class="text-primary">
-                                                        <?= esc_html($referrer_name); ?>
-                                                    </a>
-                                                </div>
+            <div class="bg-white mb-0 rounded col-lg-9 custom-card">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="post-search">
+                            <div class="gap-3 post-row">
+                                <div>
+                                    <h1 class="pb-4 text-start portal-title">
+                                        <?= esc_html(get_the_title($event)); ?>
+                                    </h1>
+                                </div>
+                                <div class="d-flex flex-column flex-sm-row justify-content-between u-title">
+                                    <div>
+                                        <a href="<?= esc_url(home_url("/{$event_user}/events")); ?>" class="d-flex align-items-center gap-2 w-100 text-primary-color fs18 fw-medium">
+                                            <img class="object-fit-contain w14" src="<?= get_template_directory_uri(); ?>/assets/img/nd/back-emp.png" alt=""> Go back
+                                        </a>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>
+                                            <?php $shareable_link = home_url("/{$event_user}/event/{$event_slug}/?shareable=1"); ?>
+                                            <button id="copyLinkBtn" class="w-100 text-blue-color custom-btn-size">
+                                                <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/copy-link.png" class="mr12" alt="">Copy link
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <div>
+                                                <button class="w-100 custom-btn-size background-primary"
+                                                    data-bs-toggle="modal" data-bs-target="#createEventModal">
+                                                    <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/pen.png" class="mr12" alt="">Edit event
+                                                </button>
                                             </div>
                                         </div>
-                            <?php
-                                    }
-                                }
-                            }
-                            ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column mt-4">
+                            <div class="">
+                                <div class="">
+                                    <div>
+                                        <div>
+                                            <div class="pb-4">
+                                                <div class="img271">
+                                                    <img class="w-100 h-100 object-fit-cover" src="<?= esc_url($thumbnail_url); ?>" 
+                                                        alt="<?= esc_attr(get_the_title($event)); ?>">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <?= apply_filters('the_content', $event->post_content); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="upcoming-events">
+                            <div class="d-flex u-title">
+                                <h5 class="pb-4 portal-title">Free Registration</h5>
 
+                            </div>
+                            <div class="d-flex flex-column gap-3 pb-4 border-underline">
+                                <div>
+                                    <p>Join the Empower Growth Webinar at no cost — learn mindset tools, connect with our empowerment community, and take your first step toward personal growth.</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="my-4">
+                                    <p class="d-flex align-items-center gap-3"><span class="fs24">Price:</span><span class="fs32">Free</span></p>
+                                </div>
+                                <div>
+                                    <div class="pb-4">
+                                        <button class="custom-btn">Add People</button>
+                                    </div>
+                                    <div class="d-flex align-content-center justify-content-center pb-4">
+                                        <button class="custom-btn-outline text-blue-color fs18 fw-medium"> <img class="mr12" src="<?= get_template_directory_uri(); ?>/assets/img/nd/share_png.png" alt=""> Share</button>
+                                    </div>
+
+                                    <div>
+                                        <p class="pb-4 text-center fs20"> Limited spots available — register now!</p>
+                                    </div>
+
+                                    <!-- <div>
+                                        <div class="d-flex align-items-center gap12">
+                                            <div class="d-flex">
+                                                <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/profile.png" alt="user" class="avatar-img">
+                                                <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/profile.png" alt="user" class="avatar-img">
+                                                <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/profile.png" alt="user" class="avatar-img">
+                                                <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/profile.png" alt="user" class="avatar-img">
+                                            </div>
+                                            <p class="mb-0 text-black fw-medium">14 people are joining</p>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
-    </main>
-<?php
-endif;
+    </div>
+<?php endif; ?>
 
-wp_reset_postdata();
+<?php wp_reset_postdata(); ?>
 
-if (!$is_shareable) {
-?>
+<?php if (!$is_shareable): ?>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var button = document.getElementById('copyLinkBtn');
-            var link = <?= json_encode($shareable_link); ?>;
+            var link = <?php echo json_encode($shareable_link); ?>;
 
-            button.addEventListener('click', function() {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(link)
-                        .then(() => alert("Sharable link copied!"))
-                        .catch(() => fallbackCopy(link));
-                } else {
-                    fallbackCopy(link);
-                }
-            });
+            if (button) {
+                button.addEventListener('click', function() {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(link)
+                            .then(function() {
+                                alert("Sharable link copied!");
+                            })
+                            .catch(function() {
+                                fallbackCopy(link);
+                            });
+                    } else {
+                        fallbackCopy(link);
+                    }
+                });
+            }
 
             function fallbackCopy(text) {
                 var textarea = document.createElement("textarea");
@@ -184,4 +247,6 @@ if (!$is_shareable) {
             }
         });
     </script>
+<?php endif; ?>
+
 <?php get_footer_based_on_login(); ?>

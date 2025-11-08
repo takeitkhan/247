@@ -1,117 +1,16 @@
-[31-Oct-2025 12:06:42 UTC] PHP Warning:  Undefined variable $is_shareable in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\suggestion.php on line 54
-[31-Oct-2025 12:22:48 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\report.php on line 14
-[31-Oct-2025 12:22:48 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\report.php on line 15
-[31-Oct-2025 12:22:48 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\report.php on line 190
-[31-Oct-2025 12:22:48 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\report.php on line 190
-[31-Oct-2025 12:22:48 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 6
-[31-Oct-2025 12:22:48 UTC] PHP Warning:  Attempt to read property "display_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 9
-[31-Oct-2025 12:22:48 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 10
-[31-Oct-2025 12:22:48 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 11
-[03-Nov-2025 09:06:58 UTC] Automatic updates starting...
-[03-Nov-2025 09:06:59 UTC]   Automatic plugin updates starting...
-[03-Nov-2025 09:06:59 UTC]   Automatic plugin updates complete.
-[03-Nov-2025 09:07:00 UTC] Automatic updates complete.
-[03-Nov-2025 09:35:00 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1450
-[03-Nov-2025 09:35:00 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1453
-[03-Nov-2025 09:35:53 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1450
-[03-Nov-2025 09:35:53 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1453
-[03-Nov-2025 09:36:02 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1450
-[03-Nov-2025 09:36:02 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1453
-[03-Nov-2025 09:38:33 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1450
-[03-Nov-2025 09:38:33 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1453
-[03-Nov-2025 09:38:47 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1450
-[03-Nov-2025 09:38:47 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1453
-[03-Nov-2025 09:40:57 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1450
-[03-Nov-2025 09:40:57 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1453
-[03-Nov-2025 09:41:07 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1450
-[03-Nov-2025 09:41:07 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1453
-[03-Nov-2025 09:41:31 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1450
-[03-Nov-2025 09:41:31 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\oldwindows\laragon\www\pet\wp-includes\general-template.php:3716) in D:\oldwindows\laragon\www\pet\wp-includes\pluggable.php on line 1453
-[04-Nov-2025 09:54:11 UTC] Automatic updates starting...
-[04-Nov-2025 09:54:14 UTC] Automatic updates complete.
-[04-Nov-2025 15:47:29 UTC] Automatic updates starting...
-[04-Nov-2025 15:47:31 UTC] Automatic updates complete.
-[05-Nov-2025 04:52:16 UTC] Automatic updates starting...
-[05-Nov-2025 04:52:19 UTC] Automatic updates complete.
-[06-Nov-2025 02:51:26 UTC] Automatic updates starting...
-[06-Nov-2025 02:51:29 UTC] Automatic updates complete.
-[07-Nov-2025 05:02:51 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[07-Nov-2025 05:03:17 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[07-Nov-2025 05:03:22 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[07-Nov-2025 05:03:26 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[07-Nov-2025 05:03:28 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[07-Nov-2025 05:03:32 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
-[07-Nov-2025 05:04:40 UTC] Automatic updates starting...
-[07-Nov-2025 05:04:44 UTC] Automatic updates complete.
-[07-Nov-2025 05:49:09 UTC] PHP Warning:  Undefined variable $current_points in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 131
-[07-Nov-2025 06:28:18 UTC] PHP Warning:  Undefined variable $logs in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\referral-commission.php on line 124
-[07-Nov-2025 06:57:26 UTC] PHP Warning:  Undefined variable $total_pages in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\referral-commission.php on line 63
-[07-Nov-2025 06:57:26 UTC] PHP Warning:  Undefined variable $total_pages_points in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\earned-points.php on line 44
-[07-Nov-2025 06:58:48 UTC] PHP Warning:  Undefined variable $total_pages in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\referral-commission.php on line 63
-[07-Nov-2025 06:59:42 UTC] PHP Warning:  Undefined variable $logs_page in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 178
-[07-Nov-2025 06:59:42 UTC] PHP Warning:  Undefined variable $total_pages in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\referral-commission.php on line 63
-[07-Nov-2025 07:01:14 UTC] PHP Warning:  Undefined variable $total_pages in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\referral-commission.php on line 63
-[08-Nov-2025 05:19:16 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_wp_theme_files_patterns-ea29836a576169022959c834a1adfa2a' made by require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option
-[08-Nov-2025 05:19:16 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_timeout_wp_theme_files_patterns-ea29836a576169022959c834a1adfa2a' made by require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option
-[08-Nov-2025 05:19:39 UTC] Automatic updates starting...
-[08-Nov-2025 05:19:46 UTC] Automatic updates complete.
-[08-Nov-2025 09:19:41 UTC] PHP Warning:  Undefined variable $user_balance in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 109
-[08-Nov-2025 09:19:41 UTC] PHP Warning:  Undefined variable $user_points_logs in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 110
-[08-Nov-2025 09:19:41 UTC] PHP Warning:  Undefined variable $current_points in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php on line 55
-[08-Nov-2025 09:20:47 UTC] PHP Warning:  Undefined variable $user_balance in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 109
-[08-Nov-2025 09:20:47 UTC] PHP Warning:  Undefined variable $user_points_logs in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 110
-[08-Nov-2025 09:20:47 UTC] PHP Fatal error:  Uncaught TypeError: number_format(): Argument #1 ($num) must be of type float, array given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php:27
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php(27): number_format(Array, 2)
-#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(812): require('D:\\oldwindows\\l...')
-#2 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', false, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(206): locate_template(Array, true, false, Array)
-#4 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php(105): get_template_part('template-custom...', '', Array)
-#5 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#7 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#8 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php on line 27
-[08-Nov-2025 09:21:16 UTC] PHP Warning:  Undefined variable $user_balance in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 109
-[08-Nov-2025 09:21:16 UTC] PHP Warning:  Undefined variable $user_points_logs in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 110
-[08-Nov-2025 09:21:16 UTC] PHP Fatal error:  Uncaught TypeError: number_format(): Argument #1 ($num) must be of type float, array given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php:27
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php(27): number_format(Array, 2)
-#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(812): require('D:\\oldwindows\\l...')
-#2 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', false, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(206): locate_template(Array, true, false, Array)
-#4 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php(105): get_template_part('template-custom...', '', Array)
-#5 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#7 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#8 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php on line 27
-[08-Nov-2025 09:22:06 UTC] PHP Warning:  Undefined variable $user_balance in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 109
-[08-Nov-2025 09:22:06 UTC] PHP Warning:  Undefined variable $user_points_logs in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 110
-[08-Nov-2025 09:22:06 UTC] PHP Fatal error:  Uncaught TypeError: number_format(): Argument #1 ($num) must be of type float, array given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php:27
-Stack trace:
-#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php(27): number_format(Array, 2)
-#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(812): require('D:\\oldwindows\\l...')
-#2 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', false, Array)
-#3 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(206): locate_template(Array, true, false, Array)
-#4 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php(105): get_template_part('template-custom...', '', Array)
-#5 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
-#6 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
-#7 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
-#8 {main}
-  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php on line 27
-[08-Nov-2025 09:22:36 UTC] PHP Warning:  Undefined variable $user_balance in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 109
-[08-Nov-2025 09:22:36 UTC] PHP Warning:  Undefined variable $user_points_logs in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 110
-[08-Nov-2025 09:23:15 UTC] PHP Warning:  Undefined variable $user_balance in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 106
-[08-Nov-2025 09:23:15 UTC] PHP Warning:  Undefined variable $user_points_logs in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet.php on line 107
-[08-Nov-2025 09:27:09 UTC] PHP Warning:  Undefined variable $current_points in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\wallet-parts\wallet-count.php on line 47
-[08-Nov-2025 09:47:30 UTC] PHP Warning:  include(D:\oldwindows\laragon\www\pet/wp-content/themes/247empowerment/template-custom/auth/profile-parts/edit-profile-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\connect-zoom.php on line 12
-[08-Nov-2025 09:47:30 UTC] PHP Warning:  include(): Failed opening 'D:\oldwindows\laragon\www\pet/wp-content/themes/247empowerment/template-custom/auth/profile-parts/edit-profile-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\connect-zoom.php on line 12
-[08-Nov-2025 09:47:58 UTC] PHP Warning:  include(D:\oldwindows\laragon\www\pet/wp-content/themes/247empowerment/template-custom/auth/profile-parts/edit-profile-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\connect-zoom.php on line 12
-[08-Nov-2025 09:47:58 UTC] PHP Warning:  include(): Failed opening 'D:\oldwindows\laragon\www\pet/wp-content/themes/247empowerment/template-custom/auth/profile-parts/edit-profile-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\connect-zoom.php on line 12
-[08-Nov-2025 09:48:13 UTC] PHP Warning:  include(D:\oldwindows\laragon\www\pet/wp-content/themes/247empowerment/template-custom/auth/profile-parts/edit-profile-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-password.php on line 36
-[08-Nov-2025 09:48:13 UTC] PHP Warning:  include(): Failed opening 'D:\oldwindows\laragon\www\pet/wp-content/themes/247empowerment/template-custom/auth/profile-parts/edit-profile-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-password.php on line 36
-[08-Nov-2025 12:47:47 UTC] PHP Warning:  include(D:\oldwindows\laragon\www\pet/wp-content/themes/247empowerment/template-custom/auth/profile-parts/edit-profile-left-sidebar.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-password.php on line 85
-[08-Nov-2025 12:47:47 UTC] PHP Warning:  include(): Failed opening 'D:\oldwindows\laragon\www\pet/wp-content/themes/247empowerment/template-custom/auth/profile-parts/edit-profile-left-sidebar.php' for inclusion (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-password.php on line 85
-[08-Nov-2025 12:50:41 UTC] Automatic updates starting...
-[08-Nov-2025 12:50:44 UTC] Automatic updates complete.
+[08-Nov-2025 15:36:08 UTC] POST data: Array
+(
+    [action] => submit_event_form
+    [event_submission_nonce] => 41320a1034
+    [_wp_http_referer] => /joseph/events/
+    [event_title] => fadfasdf
+    [event_category] => conference
+    [event_date] => 2025-11-08
+    [event_time] => 21:35
+    [event_duration] => 3
+    [event_description] => asfasdf
+    [event_link] => https://zoom.com
+    [registrationType] => Free
+    [event_price] => 
+)
+

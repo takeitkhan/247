@@ -57,7 +57,6 @@ if ($user) {
         <div class="col-lg-3">
             <?php get_template_part('template-custom/auth/feed-parts/profile-card', null, ['profile' => $profile]); ?>
             <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
-
         </div>
 
         <!-- Main Feed -->
@@ -102,12 +101,23 @@ if ($user) {
 
                                         <!-- Event Type -->
                                         <div class="d-flex flex-column post-user col-12">
-                                            <label class="form-label">Event Type <span>*</span></label>
-                                            <?php $event_types = ['Workshop', 'Webinar', 'Conference', 'Meetup']; ?>
-                                            <select name="event_type" class="bg-neutral-color border-0 w-auto input" required>
-                                                <option selected disabled>Select Type</option>
-                                                <?php foreach ($event_types as $type): ?>
-                                                    <option value="<?php echo esc_attr($type); ?>"><?php echo esc_html($type); ?></option>
+                                            <label class="form-label">Event Category <span>*</span></label>
+
+                                            <?php
+                                            $event_categories = get_terms([
+                                                'taxonomy'   => 'event_category',
+                                                'hide_empty' => false,
+                                            ]);
+
+                                            $selected_slug = ''; // For new posts, leave empty
+                                            ?>
+
+                                            <select name="event_category" class="bg-neutral-color border-0 w-auto input" required>
+                                                <option value="">Select Category</option>
+                                                <?php foreach ($event_categories as $cat) : ?>
+                                                    <option value="<?php echo esc_attr($cat->slug); ?>" <?php selected($selected_slug, $cat->slug); ?>>
+                                                        <?php echo esc_html($cat->name); ?>
+                                                    </option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
@@ -225,73 +235,113 @@ if ($user) {
 
                 if ($query->have_posts()) : ?>
 
-                    <?php while ($query->have_posts()) : $query->the_post();
+                    <?php
+                    while ($query->have_posts()) : $query->the_post();
+
                         $event_date = get_field('event_date');
                         $location   = get_field('location');
                         $thumbnail_url = get_the_post_thumbnail_url(get_the_ID(), 'medium') ?: '/img/banner.jpg';
                         $event_user = get_query_var('event_user'); // username from URL
+                        $author_user_nicename = get_the_author_meta('user_nicename');
                         $event_slug = get_post_field('post_name', get_the_ID());
-                        $custom_permalink = home_url("/{$event_user}/event/{$event_slug}/");
-                    ?>
-                        <div class="bg-white custom-card">
-                            <div class="d-flex">
-                                <div>
-                                    <div class="d-md-flex flex-row gap-3 res-card t">
-                                        <div>
-                                            <div class="img240">
-                                                <a href="<?= esc_url($custom_permalink); ?>">
-                                                    <img class="w-100 h-100 object-fit-cover" src="<?= esc_url($thumbnail_url); ?>"
-                                                        alt="<?= esc_attr(get_the_title()); ?>">
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex flex-column gap-1 gap-1 mt-3 mt-md-0">
-                                            <span class="pb-1 fs14 emp-color">Created by Referral Partner</span>
-                                            <p class="d-flex justify-content-between">
-                                                <span class="fs20">
-                                                    <a href="<?= esc_url($custom_permalink); ?>">
-                                                        <?= esc_html(get_the_title()); ?>
-                                                    </a>
-                                                </span>
-                                                <span class="gradient-fs24">Free</span>
-                                            </p>
+                        $event_registration_type = get_post_field('registration_type', get_the_ID());
+                        $event_price             = get_post_meta(get_the_ID(), 'event_price', true);
 
-                                            <p class="mb-2 mb-md-0">
+                        echo '<pre>';
+                            var_dump( wp_get_post_terms( get_the_ID(), 'event_category', [ 'fields' => 'slugs' ] ) );
+                        echo '</pre>';
+
+                        if ($event_registration_type === 'paid' && !empty($event_price)) {
+                            $display_type = '$' . number_format((float)$event_price, 2); // Format price
+                        } else {
+                            $display_type = 'Free';
+                        }
+                        $custom_permalink = home_url("/{$author_user_nicename}/event/{$event_slug}/");
+                    ?>
+                        <div class="bg-white p-3 custom-card">
+                            <div class="d-md-flex">
+                                <!-- Image -->
+                                <div class="flex-shrink-0 img240">
+                                    <a href="<?= esc_url($custom_permalink); ?>">
+                                        <img class="w-100 h-100 object-fit-cover" src="<?= esc_url($thumbnail_url); ?>" alt="<?= esc_attr(get_the_title()); ?>">
+                                    </a>
+                                </div>
+
+                                <div class="d-flex flex-grow-1 flex-column justify-content-between ms-3">
+                                    <div class="d-flex align-items-start justify-content-between">
+                                        <div>
+                                            <?php
+                                            $author_id   = get_the_author_meta('ID');
+                                            $author_name = get_the_author_meta('display_name');
+                                            $label       = '';
+
+                                            if ($author_id == $current_user->ID) {
+                                                $label = 'Created by You';
+                                            } else {
+                                                $is_referral_partner = false;
+                                                if (!empty($referred_users)) {
+                                                    foreach ($referred_users as $ref_user) {
+                                                        if ($ref_user['id'] == $author_id) {
+                                                            $is_referral_partner = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                if ($is_referral_partner) {
+                                                    $label = "Created by Referral Partner";
+                                                } else {
+                                                    $label = "Created by {$author_name}";
+                                                }
+                                            }
+                                            ?>
+                                            <span class="fs14 emp-color">
+                                                <?= esc_html($label); ?>
+                                            </span>
+
+                                            <!-- Event Title -->
+                                            <h5 class="mt-1 mb-1">
+                                                <a href="<?= esc_url($custom_permalink); ?>">
+                                                    <?= esc_html(get_the_title()); ?>
+                                                </a>
+                                            </h5>
+
+                                            <!-- Event Excerpt -->
+                                            <p class="mb-1">
                                                 <?= esc_html(get_the_excerpt()); ?>
                                             </p>
 
-                                            <div class="d-flex align-items-center justify-content-between gap-3 mt-auto">
-                                                <div>
-                                                    <div class="d-flex gap-2">
-                                                        <?php if ($event_date) : ?>
-                                                            <span class="text-blue-color fw-medium">
-                                                                Date:
-                                                            </span>
-                                                            <span>
-                                                                <?= esc_html($event_date); ?>
-                                                            </span>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                    <div class="d-flex gap-2">
-                                                        <?php if ($location) : ?>
-                                                            <span class="text-blue-color fw-medium">
-                                                                Location:
-                                                            </span>
-                                                            <span>
-                                                                <?= esc_html($location); ?>
-                                                            </span>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                </div>
-                                                <a href="<?= esc_url($custom_permalink); ?>" class="text-white custom-btn-size background-primary">
-                                                    View Event
-                                                </a>
+                                            <!-- Event Date & Location -->
+                                            <div class="d-flex flex-wrap gap-3">
+                                                <?php if ($event_date) : ?>
+                                                    <span class="text-blue-color fw-medium">Date:</span>
+                                                    <span><?= esc_html($event_date); ?></span>
+                                                <?php endif; ?>
+
+                                                <?php if ($location) : ?>
+                                                    <span class="text-blue-color fw-medium">Location:</span>
+                                                    <span><?= esc_html($location); ?></span>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
+
+                                        <!-- Event Type (far right top) -->
+                                        <div class="ms-3">
+                                            <span class="gradient-fs24">
+                                                <?= esc_html($display_type); ?>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bottom: View Event Button (aligned right) -->
+                                    <div class="d-flex justify-content-end mt-3">
+                                        <a href="<?= esc_url($custom_permalink); ?>" class="text-white custom-btn-size background-primary">
+                                            View Event
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     <?php endwhile; ?>
 
                     <?php wp_reset_postdata(); ?>
