@@ -355,3 +355,14 @@
   border-bottom: 0;
   border-left: 0em solid transparent;
 }
+
+.notif-bubble {
+  background: red;
+  color: #fff;
+  font-size: 10px;
+  border-radius: 50%;
+  padding: 4px 10px;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+}

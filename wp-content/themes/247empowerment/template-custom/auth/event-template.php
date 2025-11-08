@@ -246,12 +246,15 @@ if ($user) {
                         $event_slug = get_post_field('post_name', get_the_ID());
                         $event_registration_type = get_post_field('registration_type', get_the_ID());
                         $event_price             = get_post_meta(get_the_ID(), 'event_price', true);
+                        $categories = wp_get_post_terms(get_the_ID(), 'event_category', ['fields' => 'names']);
+                        $category_list = !empty($categories) ? implode(', ', $categories) : '';
 
-                        echo '<pre>';
-                            var_dump( wp_get_post_terms( get_the_ID(), 'event_category', [ 'fields' => 'slugs' ] ) );
-                        echo '</pre>';
+                        // echo '<pre>';
+                        // //     var_dump( wp_get_post_terms( get_the_ID(), 'event_category', [ 'fields' => 'slugs' ] ) );
+                        // var_dump($event_registration_type);
+                        // echo '</pre>';
 
-                        if ($event_registration_type === 'paid' && !empty($event_price)) {
+                        if ($event_registration_type === 'Paid' && !empty($event_price)) {
                             $display_type = '$' . number_format((float)$event_price, 2); // Format price
                         } else {
                             $display_type = 'Free';
@@ -311,17 +314,29 @@ if ($user) {
                                             </p>
 
                                             <!-- Event Date & Location -->
-                                            <div class="d-flex flex-wrap gap-3">
+                                            <div class="d-flex flex-column gap-2">
                                                 <?php if ($event_date) : ?>
-                                                    <span class="text-blue-color fw-medium">Date:</span>
-                                                    <span><?= esc_html($event_date); ?></span>
+                                                    <div>
+                                                        <span class="text-blue-color fw-medium">Date:</span>
+                                                        <span><?= esc_html($event_date); ?></span>
+                                                    </div>
+                                                <?php endif; ?>
+
+                                                <?php if ($category_list) : ?>
+                                                    <div>
+                                                        <span class="text-blue-color fw-medium">Category:</span>
+                                                        <span><?= esc_html($category_list); ?></span>
+                                                    </div>
                                                 <?php endif; ?>
 
                                                 <?php if ($location) : ?>
-                                                    <span class="text-blue-color fw-medium">Location:</span>
-                                                    <span><?= esc_html($location); ?></span>
+                                                    <div>
+                                                        <span class="text-blue-color fw-medium">Location:</span>
+                                                        <span><?= esc_html($location); ?></span>
+                                                    </div>
                                                 <?php endif; ?>
                                             </div>
+
                                         </div>
 
                                         <!-- Event Type (far right top) -->

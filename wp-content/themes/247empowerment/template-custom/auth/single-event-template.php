@@ -22,12 +22,7 @@ if ($user_slug) {
 
 // instantiate profile data safely
 if ($user) {
-    // prefer passing WP_User object if supported
     $target_identifier = $user_slug ? $user_slug : $user->user_login;
-
-    // If your UserProfileData accepts a WP_User object, pass $user
-    // Otherwise pass $target_identifier (slug/login)
-    // I'll try slug/login to be conservative:
     $profile_data_instance = new UserProfileData($target_identifier);
     $profile = $profile_data_instance->getProfile();
 } else {
@@ -39,17 +34,13 @@ if ($user) {
 $event = get_page_by_path($event_slug, OBJECT, 'event');
 
 if (!$event) {
-    // Only load header for non-shareable
     if (!$is_shareable) {
         get_header_based_on_login();
     }
-
     echo '<p class="text-danger">Event not found.</p>';
-
     if (!$is_shareable) {
         get_footer_based_on_login();
     }
-
     exit;
 }
 
@@ -61,16 +52,24 @@ if (!is_user_logged_in() && !$is_shareable) {
 
 setup_postdata($event);
 
-// ACF fields (with fallbacks)
-$price         = get_field('price', $event->ID) ?: '';
-$instructor    = get_field('instructor', $event->ID) ?: '';
-$duration      = get_field('duration', $event->ID) ?: '';
-$short_details = get_field('short_details', $event->ID) ?: '';
-$thumbnail_url = get_the_post_thumbnail_url($event->ID, 'large') ?: '/img/banner.jpg';
-$custom_permalink = home_url("/{$event_user}/event/{$event_slug}/");
+// Get meta fields (with fallbacks)
+$event_date     = get_post_meta($event->ID, 'event_date', true);
+$event_time     = get_post_meta($event->ID, 'event_time', true);
+$event_duration = get_post_meta($event->ID, 'event_duration', true);
+$event_link     = get_post_meta($event->ID, 'event_link', true);
+$event_price    = get_post_meta($event->ID, 'event_price', true);
+$registration_type = get_post_meta($event->ID, 'registration_type', true);
+$location       = get_post_meta($event->ID, 'event_location', true); // optional
 
-// Prepare a shareable link fallback so json_encode won't break
-$shareable_link = $shareable_link ?? $custom_permalink ?? home_url();
+// Get taxonomy terms
+$categories = wp_get_post_terms($event->ID, 'event_category', ['fields' => 'names']);
+$category_list = !empty($categories) ? implode(', ', $categories) : '—';
+
+// Thumbnail
+$thumbnail_url = get_the_post_thumbnail_url($event->ID, 'large') ?: get_template_directory_uri() . '/assets/img/default-event.jpg';
+
+// Share link
+$shareable_link = home_url("/{$event_user}/event/{$event_slug}/?shareable=1");
 
 ?>
 
@@ -122,82 +121,86 @@ $shareable_link = $shareable_link ?? $custom_permalink ?? home_url();
                                     </div>
                                     <div class="d-flex">
                                         <div>
-                                            <?php $shareable_link = home_url("/{$event_user}/event/{$event_slug}/?shareable=1"); ?>
-                                            <button id="copyLinkBtn" class="w-100 text-blue-color custom-btn-size">
+                                            <button id="copyLinkBtn" class="w-100 text-blue-color custom-btn-size" data-link="<?= esc_url($shareable_link); ?>">
                                                 <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/copy-link.png" class="mr12" alt="">Copy link
                                             </button>
                                         </div>
                                         <div>
-                                            <div>
-                                                <button class="w-100 custom-btn-size background-primary"
-                                                    data-bs-toggle="modal" data-bs-target="#createEventModal">
-                                                    <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/pen.png" class="mr12" alt="">Edit event
-                                                </button>
-                                            </div>
+                                            <button class="w-100 custom-btn-size background-primary" data-bs-toggle="modal" data-bs-target="#createEventModal">
+                                                <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/pen.png" class="mr12" alt="">Edit event
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <div class="d-flex flex-column mt-4">
-                            <div class="">
-                                <div class="">
-                                    <div>
-                                        <div>
-                                            <div class="pb-4">
-                                                <div class="img271">
-                                                    <img class="w-100 h-100 object-fit-cover" src="<?= esc_url($thumbnail_url); ?>" 
-                                                        alt="<?= esc_attr(get_the_title($event)); ?>">
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <?= apply_filters('the_content', $event->post_content); ?>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="pb-4">
+                                <div class="img271">
+                                    <img class="w-100 h-100 object-fit-cover" src="<?= esc_url($thumbnail_url); ?>" alt="<?= esc_attr(get_the_title($event)); ?>">
                                 </div>
+                            </div>
+
+                            <div class="pb-4 event-details">
+                                <?php if ($event_date) : ?>
+                                    <p><span class="text-blue-color fw-medium">Date:</span> <?= esc_html($event_date); ?></p>
+                                <?php endif; ?>
+
+                                <?php if ($category_list) : ?>
+                                    <p><span class="text-blue-color fw-medium">Category:</span> <?= esc_html($category_list); ?></p>
+                                <?php endif; ?>
+
+                                <?php if ($location) : ?>
+                                    <p><span class="text-blue-color fw-medium">Location:</span> <?= esc_html($location); ?></p>
+                                <?php endif; ?>
+
+                                <?php if ($event_duration) : ?>
+                                    <p><span class="text-blue-color fw-medium">Duration:</span> <?= esc_html($event_duration); ?></p>
+                                <?php endif; ?>
+
+                                <?php if ($event_time) : ?>
+                                    <p><span class="text-blue-color fw-medium">Time:</span> <?= esc_html($event_time); ?></p>
+                                <?php endif; ?>
+                            </div>
+
+                            <div>
+                                <?= apply_filters('the_content', $event->post_content); ?>
                             </div>
                         </div>
                     </div>
+
                     <div class="col-lg-4">
                         <div class="upcoming-events">
                             <div class="d-flex u-title">
-                                <h5 class="pb-4 portal-title">Free Registration</h5>
-
+                                <h5 class="pb-4 portal-title"><?= $registration_type === 'paid' ? 'Paid Registration' : 'Free Registration'; ?></h5>
                             </div>
+
                             <div class="d-flex flex-column gap-3 pb-4 border-underline">
                                 <div>
-                                    <p>Join the Empower Growth Webinar at no cost — learn mindset tools, connect with our empowerment community, and take your first step toward personal growth.</p>
+                                    <p>Join this event and connect with like-minded people. Don’t miss your chance to participate!</p>
                                 </div>
                             </div>
+
+                            <div class="my-4">
+                                <p class="d-flex align-items-center gap-3">
+                                    <span class="fs24">Price:</span>
+                                    <span class="fs32"><?= $event_price ? esc_html($event_price) : 'Free'; ?></span>
+                                </p>
+                            </div>
+
+                            <div class="pb-4">
+                                <button class="custom-btn">Add People</button>
+                            </div>
+
+                            <div class="d-flex align-content-center justify-content-center pb-4">
+                                <button class="custom-btn-outline text-blue-color fs18 fw-medium">
+                                    <img class="mr12" src="<?= get_template_directory_uri(); ?>/assets/img/nd/share_png.png" alt=""> Share
+                                </button>
+                            </div>
+
                             <div>
-                                <div class="my-4">
-                                    <p class="d-flex align-items-center gap-3"><span class="fs24">Price:</span><span class="fs32">Free</span></p>
-                                </div>
-                                <div>
-                                    <div class="pb-4">
-                                        <button class="custom-btn">Add People</button>
-                                    </div>
-                                    <div class="d-flex align-content-center justify-content-center pb-4">
-                                        <button class="custom-btn-outline text-blue-color fs18 fw-medium"> <img class="mr12" src="<?= get_template_directory_uri(); ?>/assets/img/nd/share_png.png" alt=""> Share</button>
-                                    </div>
-
-                                    <div>
-                                        <p class="pb-4 text-center fs20"> Limited spots available — register now!</p>
-                                    </div>
-
-                                    <!-- <div>
-                                        <div class="d-flex align-items-center gap12">
-                                            <div class="d-flex">
-                                                <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/profile.png" alt="user" class="avatar-img">
-                                                <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/profile.png" alt="user" class="avatar-img">
-                                                <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/profile.png" alt="user" class="avatar-img">
-                                                <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/profile.png" alt="user" class="avatar-img">
-                                            </div>
-                                            <p class="mb-0 text-black fw-medium">14 people are joining</p>
-                                        </div>
-                                    </div> -->
-                                </div>
+                                <p class="pb-4 text-center fs20">Limited spots available — register now!</p>
                             </div>
                         </div>
                     </div>

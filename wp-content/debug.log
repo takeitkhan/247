@@ -14,3 +14,21 @@
     [event_price] => 
 )
 
+[08-Nov-2025 15:39:45 UTC] POST data: Array
+(
+    [action] => submit_event_form
+    [event_submission_nonce] => 41320a1034
+    [_wp_http_referer] => /joseph/events/
+    [event_title] => Event from sibchar
+    [event_category] => meetup
+    [event_date] => 2025-11-08
+    [event_time] => 21:39
+    [event_duration] => 2
+    [event_description] => event_registration_type
+    [event_link] => https://zoom.com
+    [registrationType] => Paid
+    [event_price] => 300
+)
+
+[08-Nov-2025 15:42:45 UTC] PHP Warning:  Undefined variable $category in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\event-template.php on line 322
+[08-Nov-2025 15:42:45 UTC] PHP Warning:  Undefined variable $category in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\event-template.php on line 322

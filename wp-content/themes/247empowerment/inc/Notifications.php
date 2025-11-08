@@ -210,4 +210,47 @@ class Notifications
             ['referred_user_id' => $referred_user_id]
         );
     }
+
+    // Get unread count for notification bubble
+    public function getUnreadCount($user_id)
+    {
+        if (!$user_id) {
+            return 0;
+        }
+
+        $notifications = get_user_meta($user_id, $this->notifications_key, true);
+
+        if (!is_array($notifications) || empty($notifications)) {
+            return 0;
+        }
+
+        $unread = array_filter($notifications, function ($n) {
+            return empty($n['read']);
+        });
+
+        return count($unread);
+    }
+
+    // Mark all notifications as read
+    public function markAllAsRead($user_id)
+    {
+        if (!$user_id) {
+            return false;
+        }
+
+        $notifications = get_user_meta($user_id, $this->notifications_key, true);
+        if (!is_array($notifications) || empty($notifications)) {
+            return false;
+        }
+
+        foreach ($notifications as &$notification) {
+            $notification['read'] = true;
+        }
+
+        update_user_meta($user_id, $this->notifications_key, $notifications);
+
+        do_action('notifications_all_marked_read', $user_id);
+        return true;
+    }
+
 }
