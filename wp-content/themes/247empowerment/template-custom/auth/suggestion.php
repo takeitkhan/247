@@ -4,6 +4,60 @@
  * Template Name: Suggestion Template
  * Custom Suggestion Template
  */
+?>
+<?php
+if (isset($_POST['submit_suggestion'])) {
+    $name         = sanitize_text_field($_POST['name']);
+    $email        = sanitize_email($_POST['email']);
+    $phone        = sanitize_text_field($_POST['phone']);
+    $subject      = sanitize_text_field($_POST['subject']);
+    $suggestion_type = sanitize_text_field($_POST['suggestion_type']);
+    $description  = sanitize_textarea_field($_POST['description']);
+    $datetime     = sanitize_text_field($_POST['datetime']);
+    $page_url     = esc_url_raw($_POST['page_url']);
+    $consent      = isset($_POST['consent']) ? 'Yes' : 'No';
+
+    $attachment_url = '';
+    if (!empty($_FILES['attachment']['name'])) {
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+
+        $uploaded = media_handle_upload('attachment', 0);
+        if (!is_wp_error($uploaded)) {
+            $attachment_url = wp_get_attachment_url($uploaded);
+        }
+    }
+
+    // Insert into WP
+    $post_id = wp_insert_post([
+        'post_type'   => 'suggestion_report', // Or create custom post type like 'suggestion'
+        'post_title'  => $subject . ' (' . $name . ')',
+        'post_status' => 'publish',
+    ]);
+
+    if ($post_id && !is_wp_error($post_id)) {
+        update_post_meta($post_id, 'type', 'suggestion');
+        update_post_meta($post_id, 'name', $name);
+        update_post_meta($post_id, 'email', $email);
+        update_post_meta($post_id, 'phone', $phone);
+        update_post_meta($post_id, 'suggestion_type', $suggestion_type);
+        update_post_meta($post_id, 'description', $description);
+        update_post_meta($post_id, 'datetime', $datetime);
+        update_post_meta($post_id, 'page_url', $page_url);
+        update_post_meta($post_id, 'consent', $consent);
+        update_post_meta($post_id, 'attachment_url', $attachment_url);
+    }
+
+    // ✅ Use current URL safely
+    $current_url = home_url(add_query_arg(null, null)); // get the current URL
+    $redirect_url = add_query_arg('suggestion', 'success', $current_url);
+
+    wp_redirect($redirect_url);
+    exit;
+}
+?>
+<?php
 
 get_header_based_on_login();
 
@@ -56,53 +110,6 @@ if ($user) {
             <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
         </div>
         <div class="mb-0 rounded-end-0 col-lg-6">
-            <?php
-            if (isset($_POST['submit_suggestion'])) {
-                $name         = sanitize_text_field($_POST['name']);
-                $email        = sanitize_email($_POST['email']);
-                $phone        = sanitize_text_field($_POST['phone']);
-                $subject      = sanitize_text_field($_POST['subject']);
-                $suggestion_type = sanitize_text_field($_POST['suggestion_type']);
-                $description  = sanitize_textarea_field($_POST['description']);
-                $datetime     = sanitize_text_field($_POST['datetime']);
-                $page_url     = esc_url_raw($_POST['page_url']);
-                $consent      = isset($_POST['consent']) ? 'Yes' : 'No';
-
-                $attachment_url = '';
-                if (!empty($_FILES['attachment']['name'])) {
-                    require_once ABSPATH . 'wp-admin/includes/image.php';
-                    require_once ABSPATH . 'wp-admin/includes/file.php';
-                    require_once ABSPATH . 'wp-admin/includes/media.php';
-
-                    $uploaded = media_handle_upload('attachment', 0);
-                    if (!is_wp_error($uploaded)) {
-                        $attachment_url = wp_get_attachment_url($uploaded);
-                    }
-                }
-
-                // Insert into WP
-                $post_id = wp_insert_post([
-                    'post_type'   => 'suggestion_report', // Or create custom post type like 'suggestion'
-                    'post_title'  => $subject . ' (' . $name . ')',
-                    'post_status' => 'publish',
-                ]);
-
-                if ($post_id && !is_wp_error($post_id)) {
-                    update_post_meta($post_id, 'type', 'suggestion');
-                    update_post_meta($post_id, 'name', $name);
-                    update_post_meta($post_id, 'email', $email);
-                    update_post_meta($post_id, 'phone', $phone);
-                    update_post_meta($post_id, 'suggestion_type', $suggestion_type);
-                    update_post_meta($post_id, 'description', $description);
-                    update_post_meta($post_id, 'datetime', $datetime);
-                    update_post_meta($post_id, 'page_url', $page_url);
-                    update_post_meta($post_id, 'consent', $consent);
-                    update_post_meta($post_id, 'attachment_url', $attachment_url);
-                }
-
-                //echo '<div class="alert alert-success">Thank you for your suggestion!</div>';
-            }
-            ?>
             <div class="bg-white custom-card post-search">
                 <div class="gap-3 post-row">
                     <div>
@@ -110,14 +117,11 @@ if ($user) {
                     </div>
 
                     <div class="">
-                        <?php
-                        if (isset($_POST['submit_suggestion'])) {
-                            // Your existing PHP processing code here
-                            echo '<div class="alert alert-success">Thank you for your suggestion!</div>';
-                        }
-                        ?>
+                        <?php if (isset($_GET['suggestion']) && $_GET['suggestion'] === 'success') : ?>
+                            <div class="alert alert-success">Thank you for your suggestion!</div>
+                        <?php endif; ?>
 
-                        <form method="post" enctype="multipart/form-data" class="row g-3">
+                        <form method="post" enctype="multipart/form-data" class="row g-3" action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>">
                             <div class="col-12 col-md-6">
                                 <label class="form-label">Your Name (optional):</label>
                                 <input type="text" name="name" class="form-control input" placeholder="Enter your name">

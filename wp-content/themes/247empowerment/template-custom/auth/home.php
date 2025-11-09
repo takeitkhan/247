@@ -58,10 +58,4 @@ if ($user) {
         </div>
     </div>
 </div>
-<?php
-if (is_user_logged_in()) {
-    get_footer('portal');
-} else {
-    get_footer('main');
-}
-?>
+<?php get_footer_based_on_login(); ?>

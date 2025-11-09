@@ -8,12 +8,7 @@ if (!is_user_logged_in()) {
     include __DIR__ . '/profile-parts/shareable-profile.php';
     return;
 } else {
-    if (is_user_logged_in()) {
-        get_header('portal');
-    } else {
-        get_header('main');
-    }
-
+    get_header_based_on_login();
     // Get the user slug (username) from the URL
     $user_slug = get_query_var('user_profile');
     $user = get_user_by('slug', $user_slug);  // Get user by slug
@@ -166,12 +161,6 @@ if (!is_user_logged_in()) {
         });
     </script>
 
-    <?php
-    if (is_user_logged_in()) {
-        get_footer('portal');
-    } else {
-        get_footer('main');
-    }
-    ?>
+<?php get_footer_based_on_login(); ?>
 <?php
 }

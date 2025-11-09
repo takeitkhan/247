@@ -1,10 +1,6 @@
 <?php
 /* Template Name: User Meetings Page */
-if (is_user_logged_in()) {
-    get_header('portal');
-} else {
-    get_header('main');
-}
+get_header_based_on_login();
 
 $user_slug = get_query_var('user_profile');
 $user = get_user_by('slug', $user_slug);
@@ -47,11 +43,4 @@ $profile = (new UserProfileData($user_slug))->getProfile();
     </div>
     </div>
 </main>
-
-<?php
-if (is_user_logged_in()) {
-    get_footer('portal');
-} else {
-    get_footer('main');
-}
-?>
+<?php get_footer_based_on_login(); ?>

@@ -4,86 +4,43 @@
  * Template Name: Report Template
  * Custom Report Template
  */
-
-get_header_based_on_login();
-
-$current_user = wp_get_current_user();
-
-// Get current logged-in user ID (used as a fallback if no slug is provided)
-$current_user_id = get_current_user_id();
-
-// 1. Get the user slug from the query variable
-$user_slug = get_query_var('user_profile');
-
-// 2. Determine the target user
-if ($user_slug) {
-    // If a slug is present, try to get the user by their slug (login or nicename)
-    $user = get_user_by('slug', $user_slug);
-} else {
-    // If no slug, fall back to the currently logged-in user
-    $user = get_user_by('ID', $current_user_id);
-}
-
-// 3. Instantiate the UserProfileData class and get the profile array
-if ($user) {
-    // We pass the WP_User object to the class constructor, or the ID/slug depending on the class's constructor.
-    // Given your original line: $profile = (new UserProfileData($user_slug))->getProfile();
-    // We'll update it to pass the $user object for better data handling, assuming the class supports it.
-    // If the class REQUIRES a slug, use $user_slug or $user->user_login.
-
-    // Option A: If UserProfileData takes a WP_User object (Recommended)
-    $profile_data_instance = new UserProfileData($user);
-
-    // Option B: If UserProfileData only takes the slug (Sticking closer to your original code)
-    // Use the slug if present, otherwise use the current user's login.
-    $target_identifier = $user_slug ? $user_slug : $user->user_login;
-    $profile_data_instance = new UserProfileData($target_identifier);
-
-    // Get the profile array
-    $profile = $profile_data_instance->getProfile();
-} else {
-    // Set variables to null if no user could be determined
-    $user = null;
-    $profile = null;
-}
 ?>
-<div class="container profile-page pt20">
-    <div class="row">
-        <!-- Sidebar -->
-        <div class="col-lg-3">
-            <?php get_template_part('template-custom/auth/common-parts/editprofilemenu', null, ['profile' => $profile]); ?>
-            <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
-        </div>
-        <div class="mb-0 rounded-end-0 col-lg-6">
-            <?php
-            if (isset($_POST['submit_report'])) {
-                $name           = sanitize_text_field($_POST['name']);
-                $email          = sanitize_email($_POST['email']);
-                $phone          = sanitize_text_field($_POST['phone']);
-                $subject        = sanitize_text_field($_POST['subject']);
-                $problem_type   = sanitize_text_field($_POST['problem_type']);
-                $description    = sanitize_textarea_field($_POST['description']);
-                $steps          = sanitize_textarea_field($_POST['steps']);
-                $expected       = sanitize_textarea_field($_POST['expected']);
-                $actual         = sanitize_textarea_field($_POST['actual']);
-                $datetime       = sanitize_text_field($_POST['issue_datetime']);
-                $page_url       = esc_url_raw($_POST['page_url']);
-                $consent        = isset($_POST['consent']) ? 'Yes' : 'No';
+<?php
 
-                $attachment_url = '';
-                if (!empty($_FILES['screenshot']['name'])) {
-                    require_once ABSPATH . 'wp-admin/includes/image.php';
-                    require_once ABSPATH . 'wp-admin/includes/file.php';
-                    require_once ABSPATH . 'wp-admin/includes/media.php';
+/* ------------------ FORM PROCESSING SECTION ------------------ */
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_report'])) {
+    $name         = sanitize_text_field($_POST['name']);
+    $email        = sanitize_email($_POST['email']);
+    $phone        = sanitize_text_field($_POST['phone']);
+    $subject      = sanitize_text_field($_POST['subject']);
+    $problem_type = sanitize_text_field($_POST['problem_type']);
+    $description  = sanitize_textarea_field($_POST['description']);
+    $steps        = sanitize_textarea_field($_POST['steps']);
+    $expected     = sanitize_textarea_field($_POST['expected']);
+    $actual       = sanitize_textarea_field($_POST['actual']);
+    $datetime     = sanitize_text_field($_POST['issue_datetime']);
+    $page_url     = esc_url_raw($_POST['page_url']);
+    $consent      = isset($_POST['consent']) ? 'Yes' : 'No';
 
-                    $uploaded = media_handle_upload('screenshot', 0);
-                    if (!is_wp_error($uploaded)) {
-                        $attachment_url = wp_get_attachment_url($uploaded);
-                    }
-                }
+    $attachment_url = '';
+    if (!empty($_FILES['screenshot']['name'])) {
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
 
+        $uploaded = media_handle_upload('screenshot', 0);
+        if (!is_wp_error($uploaded)) {
+            $attachment_url = wp_get_attachment_url($uploaded);
+        }
+    }
 
-                $message = "
+    $post_id = wp_insert_post([
+        'post_type'   => 'issue_report',
+        'post_title'  => $subject . ' (' . $name . ')',
+        'post_status' => 'publish',
+    ]);
+
+    $message = "
                 Name: $name
                 Email: $email
                 Phone: $phone
@@ -99,32 +56,62 @@ if ($user) {
                 Attachment: $attachment_url
                 ";
 
-                //wp_mail(get_option('admin_email'), 'New Issue Reported: ' . $subject, $message);
+    //wp_mail(get_option('admin_email'), 'New Issue Reported: ' . $subject, $message);
 
-                $post_id = wp_insert_post([
-                    'post_type'   => 'issue_report',
-                    'post_title'  => $subject . ' (' . $name . ')',
-                    'post_status' => 'publish',
-                ]);
+    if ($post_id && !is_wp_error($post_id)) {
+        update_post_meta($post_id, 'name', $name);
+        update_post_meta($post_id, 'email', $email);
+        update_post_meta($post_id, 'phone', $phone);
+        update_post_meta($post_id, 'problem_type', $problem_type);
+        update_post_meta($post_id, 'description', $description);
+        update_post_meta($post_id, 'steps', $steps);
+        update_post_meta($post_id, 'expected', $expected);
+        update_post_meta($post_id, 'actual', $actual);
+        update_post_meta($post_id, 'datetime', $datetime);
+        update_post_meta($post_id, 'page_url', $page_url);
+        update_post_meta($post_id, 'consent', $consent);
+        update_post_meta($post_id, 'attachment_url', $attachment_url);
 
-                if ($post_id && !is_wp_error($post_id)) {
-                    update_post_meta($post_id, 'name', $name);
-                    update_post_meta($post_id, 'email', $email);
-                    update_post_meta($post_id, 'phone', $phone);
-                    update_post_meta($post_id, 'problem_type', $problem_type);
-                    update_post_meta($post_id, 'description', $description);
-                    update_post_meta($post_id, 'steps', $steps);
-                    update_post_meta($post_id, 'expected', $expected);
-                    update_post_meta($post_id, 'actual', $actual);
-                    update_post_meta($post_id, 'datetime', $datetime);
-                    update_post_meta($post_id, 'page_url', $page_url);
-                    update_post_meta($post_id, 'consent', $consent);
-                    update_post_meta($post_id, 'attachment_url', $attachment_url);
-                }
+        // ✅ Use current URL safely
+        $current_url = home_url(add_query_arg(null, null)); // get the current URL
+        $redirect_url = add_query_arg('report', 'success', $current_url);
 
-                echo '<div class="alert alert-success">Thank you for your report!</div>';
-            }
-            ?>
+        wp_redirect($redirect_url);
+        exit;
+    }
+}
+?>
+<?php
+
+get_header_based_on_login();
+
+$current_user = wp_get_current_user();
+$current_user_id = get_current_user_id();
+$user_slug = get_query_var('user_profile');
+
+if ($user_slug) {
+    $user = get_user_by('slug', $user_slug);
+} else {
+    $user = get_user_by('ID', $current_user_id);
+}
+
+if ($user) {
+    $target_identifier = $user_slug ? $user_slug : $user->user_login;
+    $profile_data_instance = new UserProfileData($target_identifier);
+    $profile = $profile_data_instance->getProfile();
+} else {
+    $user = null;
+    $profile = null;
+}
+?>
+<div class="container profile-page pt20">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <?php get_template_part('template-custom/auth/common-parts/editprofilemenu', null, ['profile' => $profile]); ?>
+            <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
+        </div>
+        <div class="mb-0 rounded-end-0 col-lg-6">
             <div class="bg-white custom-card post-search">
                 <div class="gap-3 post-row">
                     <div>
@@ -132,14 +119,13 @@ if ($user) {
                     </div>
 
                     <div class="">
-                        <?php
-                        if (isset($_POST['submit_report'])) {
-                            // Your existing PHP processing code remains the same
-                            echo '<div class="alert alert-success">Thank you for your report!</div>';
-                        }
-                        ?>
+                        <?php if (isset($_GET['report']) && $_GET['report'] === 'success') : ?>
+                            <div class="alert alert-success">Thank you for your report!</div>
+                        <?php endif; ?>
 
-                        <form method="post" enctype="multipart/form-data" class="row g-3">
+
+                        <form method="post" enctype="multipart/form-data" class="row g-3" action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>">
+
                             <div class="col-12 col-md-6">
                                 <label class="form-label">Your Name (optional):</label>
                                 <input type="text" name="name" class="form-control input" placeholder="Enter your name">

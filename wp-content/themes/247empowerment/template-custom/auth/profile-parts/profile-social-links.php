@@ -4,53 +4,49 @@ $social_links = $profile['social_links'] ?? [];
 ?>
 <div class="profile-left bg-white custom-card">
     <div class="d-flex align-items-center justify-content-between pb-4 u-title">
-        <h5 class="portal-title">Social Links</h5>        
+        <h5 class="portal-title">Social Links</h5>
     </div>
     <?php if (!empty($social_links)): ?>
         <ul class="d-flex flex-column gap-2 nav">
 
             <?php
             $iconMap = [
-                'facebook' => 'bi-facebook',
-                'youtube' => 'bi-youtube',
-                'linkedin' => 'bi-linkedin',
-                'x' => 'bi-twitter',
-                'instagram' => 'bi-instagram',
-                'google_business' => 'bi-geo-alt-fill',
-                'yelp' => 'bi-star-fill',
-                'meetup' => 'bi-people-fill',
-                'website' => 'bi-globe',
-                'tiktok' => 'bi-tiktok',
-                'twitch' => 'bi-twitch',
-                'pinterest' => 'bi-pinterest',
-                'snapchat' => 'bi-snapchat',
-                'whatsapp' => 'bi-whatsapp',
-                'whatsapp_business' => 'bi-whatsapp',
-                'zoom' => 'bi-camera-video-fill',
-                'discord' => 'bi-discord',
-                'github' => 'bi-github',
-                'google' => 'bi-google',
-                'custom' => 'bi-link-45deg',
-                'other' => 'bi-question-circle-fill',
-                'email' => 'bi-envelope-fill',
-                'phone' => 'bi-telephone-fill',
-                'telegram' => 'bi-telegram',
-                'signal' => 'bi-shield-lock-fill',
-                'viber' => 'bi-phone-vibrate-fill',
-                'sheet' => 'bi-table',
-                'slack' => 'bi-slack',
-                'reddit' => 'bi-reddit',
-                'messenger' => 'bi-messenger',
-                'meet' => 'bi-camera-video',
-                'calendar' => 'bi-calendar-event',
-                'default' => 'bi-link-45deg',
+                'facebook' => 'facebook.svg',
+                'youtube' => 'youtube.svg',
+                'linkedin' => 'linked.svg',
+                'x' => 'x.svg',
+                'instagram' => 'insta.svg',
+                'google_business' => 'google businness.svg',
+                'yelp' => 'yelp.svg',
+                'meetup' => 'meetup.svg',
+                'website' => 'website.svg',
+                'tiktok' => 'tiktok.svg', // If you add tiktok icon later
+                'twitch' => 'twitch.svg', // If you add twitch icon later
+                'pinterest' => 'pinterest.svg',
+                'snapchat' => 'snapchat.svg', // If you add snapchat icon later
+                'whatsapp' => 'whats.svg',
+                'whatsapp_business' => 'whats.svg',
+                'zoom' => 'Zoom.svg',
+                'discord' => 'discord.svg', // If you add discord icon later
+                'github' => 'github.svg',
+                'google' => 'google.svg', // If you add google icon later
+                'custom' => 'link.svg',
+                'other' => 'link.svg',
+                'email' => 'link.svg',
+                'phone' => 'link.svg',
+                'telegram' => 'telegram.svg',
+                'meet' => 'meet.svg',
+                'calendar' => 'link.svg',
+                'default' => 'link.svg',
             ];
             ?>
             <?php foreach ($social_links as $link): ?>
-                <?php $iconClass = $iconMap[$link['platform']] ?? 'bi-link-45deg'; ?>
+                <?php
+                $iconFile = $iconMap[$link['platform']] ?? 'link.svg';
+                ?>
                 <li class="d-flex align-items-center gap-2">
                     <a href="<?php echo esc_url($link['url']); ?>" target="_blank" class="d-flex align-items-center gap-2 text-decoration-none">
-                        <img src="http://pet.test/wp-content/themes/247empowerment/assets/img/nd/location_p.png" class="icon-img" alt="Location">                        
+                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/logo/<?php echo $iconFile; ?>" class="icon-img" alt="<?php echo esc_attr($link['platform']); ?>">
                         <span class="text-dark"><?php echo esc_html($link['label']); ?></span>
                     </a>
                 </li>

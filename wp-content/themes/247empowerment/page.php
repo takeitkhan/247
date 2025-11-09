@@ -22,6 +22,4 @@
         </div>
     </div>
 </main>
-
-
 <?php get_footer_based_on_login(); ?>

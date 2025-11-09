@@ -9,11 +9,7 @@ if (!is_user_logged_in()) {
     exit;
 }
 
-if (is_user_logged_in()) {
-    get_header('portal');
-} else {
-    get_header('main');
-}
+get_header_based_on_login();
 
 $current_user = wp_get_current_user();
 
@@ -193,10 +189,4 @@ $profile = (new UserProfileData($user_slug))->getProfile();
     });
 </script>
 
-<?php
-if (is_user_logged_in()) {
-    get_footer('portal');
-} else {
-    get_footer('main');
-}
-?>
+<?php get_footer_based_on_login(); ?>
