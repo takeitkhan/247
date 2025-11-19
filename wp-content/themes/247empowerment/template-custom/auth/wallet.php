@@ -65,6 +65,10 @@ $logs_page = array_slice($logs, ($page - 1) * $logs_per_page, $logs_per_page);
 
 
 $points_logs = get_user_meta($current_user_id, 'earned_points_logs', true);
+echo '<pre>';
+print_r($points_logs);
+echo '</pre>';
+
 $points_logs = is_array($points_logs) ? array_reverse($points_logs) : []; // latest first
 
 $points_per_page = 20; // number of logs per page

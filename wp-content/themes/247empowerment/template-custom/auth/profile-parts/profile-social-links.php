@@ -16,7 +16,7 @@ $social_links = $profile['social_links'] ?? [];
                 'linkedin' => 'linked.svg',
                 'x' => 'x.svg',
                 'instagram' => 'insta.svg',
-                'google_business' => 'google businness.svg',
+                'google_business' => 'googlebusinness.svg',
                 'yelp' => 'yelp.svg',
                 'meetup' => 'meetup.svg',
                 'website' => 'website.svg',
@@ -26,7 +26,7 @@ $social_links = $profile['social_links'] ?? [];
                 'snapchat' => 'snapchat.svg', // If you add snapchat icon later
                 'whatsapp' => 'whats.svg',
                 'whatsapp_business' => 'whats.svg',
-                'zoom' => 'Zoom.svg',
+                'zoom' => 'zoom.svg',
                 'discord' => 'discord.svg', // If you add discord icon later
                 'github' => 'github.svg',
                 'google' => 'google.svg', // If you add google icon later
@@ -38,6 +38,7 @@ $social_links = $profile['social_links'] ?? [];
                 'meet' => 'meet.svg',
                 'calendar' => 'link.svg',
                 'default' => 'link.svg',
+                'bluesky' => 'bluesky.svg',                
             ];
             ?>
             <?php foreach ($social_links as $link): ?>

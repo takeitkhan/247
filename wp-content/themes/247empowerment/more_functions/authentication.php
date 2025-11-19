@@ -24,6 +24,16 @@ add_action('init', function () {
             return;
         }
 
+        // Reject username containing any special characters
+        if (!preg_match('/^[a-zA-Z0-9]+$/', $username)) {
+            set_transient('custom_user_message', [
+                'type' => 'danger',
+                'text' => 'Username can only contain letters and numbers.',
+                'old_input' => $_POST
+            ], 30);
+            return;
+        }
+
         if (empty($_POST['consent']) || $_POST['consent'] !== 'yes') {
             set_transient('custom_user_message', [
                 'type' => 'danger',

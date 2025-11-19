@@ -4,10 +4,10 @@
  * Template Name: User Profile Template
  */
 
-if (!is_user_logged_in()) {
+if (!is_user_logged_in()) :
     include __DIR__ . '/profile-parts/shareable-profile.php';
     return;
-} else {
+else:
     get_header_based_on_login();
     // Get the user slug (username) from the URL
     $user_slug = get_query_var('user_profile');
@@ -43,85 +43,76 @@ if (!is_user_logged_in()) {
     <script>
         var ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
 
+        /**
+         * Shows the gamification modal and header notification.
+         * @param {object} notification - The notification data from the server.
+         */
+        function showGamificationNotification(notification) {
+            if (!notification) return;
+
+            // --- 1. Show Header Notification ---
+            // This uses the Toastify.js library already included in your theme.
+            Toastify({
+                text: notification.message,
+                duration: 5000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                stopOnFocus: true,
+            }).showToast();
+
+            // --- 2. Show Modal Popup ---
+            const modal = document.getElementById('gamificationPointsModal');
+            if (modal) {
+                const modalTitle = document.getElementById('gamification-modal-title');
+                const modalMessage = document.getElementById('gamification-modal-message');
+
+                if (modalTitle) modalTitle.innerText = notification.title;
+                if (modalMessage) modalMessage.innerHTML = notification.message;
+
+                var gamificationModal = new bootstrap.Modal(modal);
+                gamificationModal.show();
+            }
+
+            // --- 3. Play Sound ---
+            const audio = new Audio("<?= get_template_directory_uri(); ?>/sounds/coin.mp3");
+            audio.play().catch(e => console.error("Audio play failed:", e));
+        }
+
+        /**
+         * Handles the file upload via AJAX and processes the response.
+         * @param {File} file - The file to upload.
+         * @param {string} action - The AJAX action name ('upload_profile_photo' or 'upload_cover_photo').
+         * @param {string} fieldName - The name of the file field ('profile_photo' or 'cover_photo').
+         * @param {string} previewSelector - The CSS selector for the image preview element.
+         */
+        function handlePhotoUpload(file, action, fieldName, previewSelector) {
+            const formData = new FormData();
+            formData.append('action', action);
+            formData.append(fieldName, file);
+
+            fetch(ajaxurl, {
+                method: 'POST',
+                body: formData,
+            })
+            .then(res => res.json())
+            .then(response => {
+                if (response.success) {
+                    const previewElement = document.querySelector(previewSelector);
+                    if (previewElement) {
+                        previewElement.src = response.data.url;
+                    }
+                    // Show notification and modal from the AJAX response
+                    showGamificationNotification(response.data.notification);
+                } else {
+                    alert('Upload failed: ' + (response.data.message || 'Unknown error'));
+                }
+            })
+            .catch(err => console.error('Error:', err));
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
-            const editBtn = document.getElementById('edit-profile-photo-btn');
-            const fileInput = document.getElementById('profile-photo-input');
-
-            if (!editBtn || !fileInput) {
-                console.error('Profile photo input or button not found');
-                return;
-            }
-
-            editBtn.addEventListener('click', function() {
-                fileInput.click();
-            });
-
-            fileInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-
-                const formData = new FormData();
-                formData.append('action', 'upload_profile_photo');
-                formData.append('profile_photo', file);
-
-                fetch(ajaxurl, {
-                        method: 'POST',
-                        body: formData,
-                    })
-                    .then((res) => res.json())
-                    .then((data) => {
-                        if (data.success) {
-                            document.querySelector('.img-p').src = data.data.url; // update photo
-                            console.log('Uploaded:', data.data.url);
-                        } else {
-                            console.error(data.data.message || 'Upload failed');
-                        }
-                    })
-                    .catch((err) => console.error('Error:', err));
-            });
-
-
-            /* -------------------------
-               PROFILE PHOTO UPLOAD
-            ------------------------- */
-            const uploadInput = document.getElementById('profile-photo-upload');
-            const previewImg = document.getElementById('profile-photo-preview');
-
-            if (uploadInput && previewImg) {
-                uploadInput.addEventListener('change', function() {
-                    const file = this.files[0];
-                    if (!file) return;
-
-                    const formData = new FormData();
-                    formData.append('action', 'upload_profile_photo');
-                    formData.append('profile_photo', file);
-
-                    console.log('🚀 Uploading profile photo...');
-                    fetch('<?php echo admin_url("admin-ajax.php"); ?>', {
-                            method: 'POST',
-                            credentials: 'same-origin',
-                            body: formData
-                        })
-                        .then(res => res.json())
-                        .then(response => {
-                            console.log('Profile response:', response);
-                            if (response.success && response.data?.url) {
-                                previewImg.src = response.data.url;
-                            } else {
-                                alert('Profile upload failed: ' + (response.data?.message || 'Unknown error'));
-                            }
-                        })
-                        .catch(err => console.error('Fetch error:', err));
-                });
-            } else {
-                console.log('❌ Profile upload elements not found');
-            }
-
-
-            // -------------------------
-            // COVER PHOTO UPLOAD
-            // -------------------------
+            // --- Cover Photo Upload ---
             const coverEditBtn = document.getElementById('edit-cover-photo-btn');
             const coverInput = document.getElementById('cover-photo-input');
 
@@ -133,34 +124,29 @@ if (!is_user_logged_in()) {
                 coverInput.addEventListener('change', function(e) {
                     const file = e.target.files[0];
                     if (!file) return;
-
-                    const formData = new FormData();
-                    formData.append('action', 'upload_cover_photo');
-                    formData.append('cover_photo', file);
-
-                    fetch(ajaxurl, {
-                            method: 'POST',
-                            body: formData,
-                        })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) {
-                                document.querySelector('.profile_img img').src = data.data.url;
-                                console.log('✅ Cover photo updated:', data.data.url);
-                            } else {
-                                console.error('❌ Cover photo upload failed:', data.data.message);
-                            }
-                        })
-                        .catch(err => console.error('Error:', err));
+                    handlePhotoUpload(file, 'upload_cover_photo', 'cover_photo', '.profile_img img');
                 });
             } else {
                 console.log('❌ Cover photo elements not found');
             }
 
+            // --- Profile Photo Upload ---
+            const profileEditBtn = document.getElementById('edit-profile-photo-btn');
+            const profileInput = document.getElementById('profile-photo-input');
 
+            if (profileEditBtn && profileInput) {
+                profileEditBtn.addEventListener('click', () => profileInput.click());
+                profileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    handlePhotoUpload(file, 'upload_profile_photo', 'profile_photo', '.img-p');
+                });
+            } else {
+                console.log('❌ Profile photo elements not found');
+            }
         });
     </script>
 
-<?php get_footer_based_on_login(); ?>
-<?php
-}
+    <?php get_footer_based_on_login(); ?>
+    
+<?php endif; ?>

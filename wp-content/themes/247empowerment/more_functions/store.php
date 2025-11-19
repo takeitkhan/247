@@ -71,12 +71,6 @@ function load_store_template($template)
 }
 add_filter('template_include', 'load_store_template');
 
-
-add_action('wp_ajax_handle_course_purchase', 'handle_course_purchase');
-add_action('wp_ajax_nopriv_handle_course_purchase', 'handle_course_purchase');
-
-
-
 // Add custom action link for each course row in admin
 add_filter('post_row_actions', 'add_purchaser_link_to_course_row', 10, 2);
 
@@ -181,34 +175,38 @@ function render_course_purchasers_page()
 
 
 
-/**
- * Summary of handle_course_purchase
- * @return void
- */
-function handle_course_purchase()
-{
-    $user_id = get_current_user_id();
-    $course_id = isset($_POST['course_id']) ? (int) $_POST['course_id'] : 0;
-    $amount = isset($_POST['amount']) ? floatval($_POST['amount']) : 0;
+// add_action('wp_ajax_handle_course_purchase', 'handle_course_purchase');
+// add_action('wp_ajax_nopriv_handle_course_purchase', 'handle_course_purchase');
 
-    if (!$user_id || !$course_id || $amount <= 0) {
-        wp_send_json_error(['message' => 'Invalid purchase data']);
-    }
 
-    // ✅ Save purchased course
-    $purchased_courses = get_user_meta($user_id, 'purchased_courses', true);
-    $purchased_courses = is_array($purchased_courses) ? $purchased_courses : [];
+// /**
+//  * Summary of handle_course_purchase
+//  * @return void
+//  */
+// function handle_course_purchase()
+// {
+//     $user_id = get_current_user_id();
+//     $course_id = isset($_POST['course_id']) ? (int) $_POST['course_id'] : 0;
+//     $amount = isset($_POST['amount']) ? floatval($_POST['amount']) : 0;
 
-    if (!in_array($course_id, $purchased_courses)) {
-        $purchased_courses[] = $course_id;
-        update_user_meta($user_id, 'purchased_courses', $purchased_courses);
-    }
+//     if (!$user_id || !$course_id || $amount <= 0) {
+//         wp_send_json_error(['message' => 'Invalid purchase data']);
+//     }
 
-    // ✅ Share commission if user was referred
-    give_referral_commission($user_id, $amount, $course_id);
+//     // ✅ Save purchased course
+//     $purchased_courses = get_user_meta($user_id, 'purchased_courses', true);
+//     $purchased_courses = is_array($purchased_courses) ? $purchased_courses : [];
 
-    wp_send_json_success(['message' => 'Purchase successful, referral commission processed']);
-}
+//     if (!in_array($course_id, $purchased_courses)) {
+//         $purchased_courses[] = $course_id;
+//         update_user_meta($user_id, 'purchased_courses', $purchased_courses);
+//     }
+
+//     // ✅ Share commission if user was referred
+//     give_referral_commission($user_id, $amount, $course_id);
+
+//     wp_send_json_success(['message' => 'Purchase successful, referral commission processed']);
+// }
 
 
 

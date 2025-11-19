@@ -83,9 +83,16 @@ $platform_options = [
     'reddit' => 'Reddit',
     'messenger' => 'Messenger',
     'meet' => 'Meet',
+    'bluesky' => 'Bluesky',
+    'skype' => 'Skype',
+    'snapchat_business' => 'Snapchat Business',
+    'twitter_business' => 'Twitter Business',
+    'facebook_business' => 'Facebook Business',
+    'linkedin_business' => 'LinkedIn Business',
+    'instagram_business' => 'Instagram Business',
     'whatsapp_business' => 'WhatsApp Business',
     'calendar' => 'Calendar',
-    'default' => 'Default Link',
+    'default' => 'Default Link',    
 ];
 
 // Handle form submission

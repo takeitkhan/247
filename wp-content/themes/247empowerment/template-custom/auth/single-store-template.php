@@ -289,8 +289,16 @@ wp_reset_postdata();
 
 if (!$is_shareable) :
 ?>
+    <?php
+    $paypal = get_paypal_api_credentials();
+    $client_id = esc_js($paypal['client_id']);
+    $is_live   = (get_option('paypal_environment') === 'live');
+    $paypal_sdk_url = $is_live
+        ? "https://www.paypal.com/sdk/js?client-id={$client_id}&currency=USD"
+        : "https://www.paypal.com/sdk/js?client-id={$client_id}&currency=USD&debug=true";
+    ?>
     <!-- ✅ Load PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AZa6Vc9ozb9u_jAWi2osWWV_l5N118jTksbXvPJVID0HXixe_7NYbI4L9TV6OdpY110MEUgW4j7zqAal&currency=USD"></script>
+    <script src="<?= $paypal_sdk_url; ?>"></script>
 
     <!-- ✅ PayPal Button Script -->
     <script>

@@ -6,9 +6,6 @@ class MM_Gamification_Admin
     public function __construct()
     {
         add_action('admin_menu', [$this, 'register_admin_menus']);
-
-        // 👇 Hook here, inside constructor, so it runs when the class is instantiated
-        add_action('user_earned_points', [$this, 'handle_user_earned_points'], 10, 3);
     }
 
     public function register_admin_menus()
@@ -142,6 +139,7 @@ class MM_Gamification_Admin
                     ], ['id' => $edit_id]);
                     
                     echo '<div class="notice notice-success is-dismissible"><p>Action updated successfully!</p></div>';
+                    $action_to_edit = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE id = %d", $edit_id)); // Re-fetch to show updated data
                 } else {
                     $wpdb->insert($table, [
                         'action_key' => $action_key,
@@ -152,8 +150,6 @@ class MM_Gamification_Admin
                     
                     echo '<div class="notice notice-success is-dismissible"><p>Action added successfully!</p></div>';
                 }
-
-                echo '<div class="notice notice-success is-dismissible"><p>Action Added Successfully!</p></div>';
             }
         }
     ?>
@@ -167,24 +163,34 @@ class MM_Gamification_Admin
                         <td>
                             <select name="action_key_dropdown" id="action_key_dropdown">
                                 <option value="">-- Select an Action --</option>
-                                <?php foreach ($available_actions as $key => $label) : ?>
-                                    <option value="<?php echo esc_attr($key); ?>"><?php echo esc_html($label); ?></option>
+                                <?php
+                                $current_action_key = $action_to_edit->action_key ?? '';
+                                foreach ($available_actions as $key => $label) : ?>
+                                    <option value="<?php echo esc_attr($key); ?>" <?php selected($current_action_key, $key); ?>>
+                                        <?php echo esc_html($label); ?>
+                                    </option>
                                 <?php endforeach; ?>
                             </select>
                             <br>
                             <small>Or enter a custom action below:</small>
                             <br>
-                            <input type="text" name="action_key_custom" placeholder="Custom action key" class="regular-text" value="<?= esc_attr($action_to_edit->action_key ?? '') ?>">
+                            <?php
+                            $custom_key_value = '';
+                            if ($edit_id && !array_key_exists($current_action_key, $available_actions)) {
+                                $custom_key_value = $current_action_key;
+                            }
+                            ?>
+                            <input type="text" name="action_key_custom" placeholder="Custom action key" class="regular-text" value="<?= esc_attr($custom_key_value) ?>">
                         </td>
                     </tr>
                     <tr>
                         <th><label for="custom_message">Custom Message</label></th>
-                        <td><textarea name="custom_message" rows="4" class="large-text" required><?= esc_textarea($action_to_edit->custom_message ?? '') ?></textarea></td>
+                        <td><textarea name="custom_message" rows="4" class="large-text" required><?= esc_textarea(isset($action_to_edit->custom_message) ? stripslashes($action_to_edit->custom_message) : '') ?></textarea></td>
                     </tr>
                     <tr>
                         <th><label for="notification_message">Notification Message</label></th>
                         <td>
-                            <input type="text" name="notification_message" placeholder="Optional notification message" class="regular-text" value="<?= esc_attr($action_to_edit->notification_message ?? '') ?>">
+                            <input type="text" name="notification_message" placeholder="Optional notification message" class="regular-text" value="<?= esc_attr(isset($action_to_edit->notification_message) ? stripslashes($action_to_edit->notification_message) : '') ?>">
                             <p class="description">This will be shown in user notifications when points are awarded.</p>
                         </td>
                     </tr>
@@ -200,40 +206,4 @@ class MM_Gamification_Admin
 <?php
     }
 
-    /**
-     * Handle the user_earned_points hook
-     */
-    public function handle_user_earned_points($user_id, $points, $activity)
-    {
-        if (!$user_id || !$points) {
-            return;
-        }
-
-        global $wpdb;
-        $table = $wpdb->prefix . 'gamification_actions';
-        $action = $wpdb->get_row(
-            $wpdb->prepare("SELECT notification_message FROM $table WHERE action_key = %s", $activity)
-        );
-
-        if ($action && !empty($action->notification_message)) {
-            $message = str_replace(
-                ['{points}', '{activity}'],
-                [$points, esc_html($activity)],
-                $action->notification_message
-            );
-        } else {
-            $message = sprintf("You earned %d points for %s 🎉", $points, esc_html($activity));
-        }
-
-        $notifications = Notifications::getInstance();
-        $notifications->addNotification(
-            $user_id,
-            'success',
-            $message,
-            [
-                'points'   => $points,
-                'activity' => $activity
-            ]
-        );
-    }
 }

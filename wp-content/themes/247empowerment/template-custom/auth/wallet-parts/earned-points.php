@@ -14,49 +14,55 @@ $total_pages    = $args['total_pages'] ?? 1;
         <div class="post-search">
             <div class="gap-3 post-row">
                 <div>
-                    <h5 class="pb-4 text-start portal-title">Rewards Points</h5>
-                    <p>Your referral earning history showing below.</p>
+                    <h5 class="pb-4 text-start portal-title"><?php esc_html_e( 'Rewards Points', '247empowerment' ); ?></h5>
+                    <p><?php esc_html_e( 'Your referral earning history showing below.', '247empowerment' ); ?></p>
                 </div>
             </div>
             <div class="mt-3">
                 <div class="d-flex flex-column gap-3">
-                    <?php foreach (array_reverse($points_logs) as $log):
-                        $referred_user = get_user_by('ID', $log['referred_user_id']);
-                        // echo '<pre>';
-                        // var_dump($referred_user);
-                        // echo '</pre>';
+                    <?php
+                    foreach ( $points_logs as $log ) :
+
+                        // Safely get referred user ID
+                        $referred_user_id = $log['referred_user_id'] ?? null;
+                        $course_post      = ! empty( $log['earned_for_id'] ) ? get_post( $log['earned_for_id'] ) : null;
+
+                        $referred_user = $referred_user_id ? get_user_by( 'ID', $referred_user_id ) : null;
                     ?>
-                        <?php
-                        // Get user slug (profile owner)
-                        $current_user = get_userdata(get_current_user_id());
-                        $user_slug = $current_user ? $current_user->user_nicename : esc_html($profile['display_name']);
-
-                        // Get post slug
-                        $post = get_post($log['earned_for_id']);
-                        $post_slug = $post ? $post->post_name : '';
-
-                        // Build the full profile link
-                        $profile_link = home_url("/{$user_slug}/store/{$post_slug}/");
-                        ?>
-
-
                         <div class="d-flex justify-content-between bg-light mt-1 p-2 rounded">
                             <div class="d-inline-flex align-items-center gap-2">
-                                <!-- <img class="img24" src="<?php //echo get_template_directory_uri(); 
-                                                                ?>/assets/img/nd/user.svg" alt=""> -->
                                 <span class="gap-5">
-                                    Your referred user <a href="<?= home_url("/{$referred_user->display_name}"); ?>">
-                                        <?= esc_html($referred_user ? $referred_user->display_name : 'User #' . $log['referred_user_id']); ?>
-                                    </a> purchased a course (
-                                    <a href="<?= esc_url($profile_link); ?>">
-                                        <?= esc_html($log['earned_for']); ?>
-                                    </a>
-                                    ) from 24/7 Empowerment's store at <?= esc_html(date('F j, Y H:i', strtotime($log['date']))); ?>
+                                    <?php esc_html_e( 'Your referred user', '247empowerment' ); ?>
+
+                                    <?php if ( $referred_user ) : ?>
+                                        <a href="<?php echo esc_url( get_author_posts_url( $referred_user->ID, $referred_user->user_nicename ) ); ?>">
+                                            <?php echo esc_html( $referred_user->display_name ); ?>
+                                        </a>
+                                    <?php else : ?>
+                                        <?php echo esc_html( $referred_user_id ? 'User #' . $referred_user_id : 'Unknown User' ); ?>
+                                    <?php endif; ?>
+
+                                    <?php esc_html_e( 'purchased a course', '247empowerment' ); ?> (
+
+                                    <?php if ( $course_post ) : ?>
+                                        <a href="<?php echo esc_url( get_permalink( $course_post ) ); ?>">
+                                            <?php echo esc_html( $log['earned_for'] ?? 'Unknown Course' ); ?>
+                                        </a>
+                                    <?php else : ?>
+                                        <span><?php echo esc_html( $log['earned_for'] ?? 'Unknown Course' ); ?></span>
+                                    <?php endif; ?>
+
+                                    ) <?php esc_html_e( 'from 24/7 Empowerment\'s store at', '247empowerment' ); ?>
+                                    <?php echo esc_html( date( 'F j, Y H:i', strtotime( $log['date'] ?? 'now' ) ) ); ?>
                                 </span>
                             </div>
-                            <span class="ml-1 text-primary-color text-end fs18 fw-bold">+$<?= number_format((float)$log['amount'], 2); ?></span>
+
+                            <span class="ml-1 text-primary-color text-end fs18 fw-bold">
+                                +$<?= number_format( (float) ( $log['amount'] ?? 0 ), 2 ); ?>
+                            </span>
                         </div>
                     <?php endforeach; ?>
+
                 </div>
             </div>
         </div>

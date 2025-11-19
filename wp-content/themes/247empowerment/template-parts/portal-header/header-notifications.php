@@ -38,7 +38,7 @@ usort($all_notifications, function ($a, $b) {
             <?php if (!empty($all_notifications)) : ?>
                 <?php
                 // Sort latest first
-                usort($all_notifications, function($a, $b){
+                usort($all_notifications, function ($a, $b) {
                     return strtotime($b['created_at']) - strtotime($a['created_at']);
                 });
 
