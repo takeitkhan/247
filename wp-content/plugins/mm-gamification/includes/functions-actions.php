@@ -24,6 +24,7 @@ if (!function_exists('mm_get_available_actions')) {
 
 mm_register_action('user_register', 'User Registration');
 mm_register_action('first_login', 'First Login');
+mm_register_action('daily_login', 'Daily Login');
 
 //Newly added actions
 mm_register_action('first_concurrent_post', 'First concurrent post');
@@ -34,6 +35,16 @@ mm_register_action('next_concurrent_posts', 'Next concurrent posts');
 mm_register_action('next_event_posts', 'Next event posts');
 mm_register_action('birthday_update', 'Birthday update');
 mm_register_action('location_update', 'Location update');
+
+/**
+ * Starts a session if one doesn't already exist.
+ */
+function mm_gamification_start_session() {
+    if (!session_id()) {
+        session_start();
+    }
+}
+add_action('init', 'mm_gamification_start_session');
 
 
 function gamification_award_points($user_id, $action_key) {
@@ -73,7 +84,9 @@ function gamification_notify_user($user_id, $action) {
         'points'  => (float)$action->points,
     ];
 
-    set_transient("gamification_notify_{$user_id}", $notification_data, 60); // Store for 60 seconds
+    // Use session instead of transient for reliability across redirects.
+    $_SESSION["gamification_notify_{$user_id}"] = $notification_data;
+
     return $notification_data;
 }
 

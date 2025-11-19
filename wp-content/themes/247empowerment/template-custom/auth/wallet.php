@@ -65,10 +65,6 @@ $logs_page = array_slice($logs, ($page - 1) * $logs_per_page, $logs_per_page);
 
 
 $points_logs = get_user_meta($current_user_id, 'earned_points_logs', true);
-echo '<pre>';
-print_r($points_logs);
-echo '</pre>';
-
 $points_logs = is_array($points_logs) ? array_reverse($points_logs) : []; // latest first
 
 $points_per_page = 20; // number of logs per page
@@ -81,13 +77,6 @@ $points_logs_page = array_slice($points_logs, ($page - 1) * $points_per_page, $p
 
 // calculate current points (sum of all logs)
 $current_points = array_sum(array_column($points_logs, 'points'));
-
-if (!empty($points_logs)) {
-    foreach ($points_logs as $log) {
-        $current_points += (float) $log['points'];
-    }
-}
-
 $current_user = get_userdata($current_user_id);
 $user_slug = $current_user ? $current_user->user_nicename : '';
 

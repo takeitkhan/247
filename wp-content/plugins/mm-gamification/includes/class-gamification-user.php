@@ -326,7 +326,7 @@ function mm_gamification_enqueue_modal_scripts() {
     // Check for a notification transient on page load for the current user.
     if (is_user_logged_in()) {
         $user_id = get_current_user_id();
-        $notification = get_transient("gamification_notify_{$user_id}");
+        $notification = $_SESSION["gamification_notify_{$user_id}"] ?? null;
 
         if ($notification) {
             // Prepare data for JavaScript and pass it.
@@ -337,8 +337,8 @@ function mm_gamification_enqueue_modal_scripts() {
             ];
             wp_localize_script('modal-plugin-js', 'gamificationNotification', $data);
 
-            // The transient has been used, so we can delete it.
-            delete_transient("gamification_notify_{$user_id}");
+            // The session data has been used, so we can unset it.
+            unset($_SESSION["gamification_notify_{$user_id}"]);
         }
     }
 }
