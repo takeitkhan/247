@@ -32,70 +32,30 @@ class MM_Gamification_Admin
 
     public function actions_list_page()
     {
-        global $wpdb;
-        $table = $wpdb->prefix . 'gamification_actions';
-        $actions = $wpdb->get_results("SELECT * FROM $table ORDER BY id DESC");
+        if (isset($_GET['delete']) && check_admin_referer('mm_delete_action_nonce')) {
+            global $wpdb;
+            $table = $wpdb->prefix . 'gamification_actions';
+            $wpdb->delete($table, ['id' => intval($_GET['delete'])]);
 
-        if (isset($_GET['delete'])) {
-            $delete_id = intval($_GET['delete']);
-            if (check_admin_referer('mm_delete_action_nonce')) {
-                global $wpdb;
-                $table = $wpdb->prefix . 'gamification_actions';
-                $wpdb->delete($table, ['id' => $delete_id]);
-                echo '<div class="notice notice-success is-dismissible"><p>Action deleted successfully!</p></div>';
-            }
+            echo '<div class="notice notice-success is-dismissible"><p>Action deleted.</p></div>';
         }
 
+        require_once plugin_dir_path(__FILE__) . 'class-gamification-actions-table.php';
+
+        $table = new Gamification_Actions_Table();
+        $table->prepare_items();
 ?>
         <div class="wrap">
             <h1 class="wp-heading-inline">Gamification Actions</h1>
             <a href="<?php echo admin_url('admin.php?page=mm-gamification-add'); ?>" class="page-title-action">Add New</a>
             <hr class="wp-header-end">
-
-            <table class="fixed widefat striped">
-                <thead>
-                    <tr>
-                        <th style="width: 3%;">ID</th>
-                        <th style="width: 12%;">Action Key</th>
-                        <th>Message</th>
-                        <th>Notification Message</th>
-                        <th style="width: 4%;">Points</th>
-                        <th style="width: 10%;">Created</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($actions) : ?>
-                        <?php foreach ($actions as $a) : ?>
-                        <tr>
-                            <td><?php echo $a->id; ?></td>
-                            <td>
-                                <?php echo esc_html($a->action_key); ?>
-                                <div class="row-actions">
-                                    <span class="edit">
-                                        <a href="<?php echo admin_url('admin.php?page=mm-gamification-add&action=edit&id=' . $a->id); ?>">Edit</a>
-                                    </span> | 
-                                    <span class="trash">
-                                        <a href="<?php echo wp_nonce_url(admin_url('admin.php?page=mm-gamification&delete=' . $a->id), 'mm_delete_action_nonce'); ?>" 
-                                        onclick="return confirm('Are you sure you want to delete this action?');">Delete</a>
-                                    </span>
-                                </div>
-                            </td>
-                            <td><?php echo esc_html($a->custom_message); ?></td>
-                            <td><?= isset($a->notification_message) ? esc_html($a->notification_message) : ''; ?></td>
-                            <td><?php echo $a->points; ?></td>
-                            <td><?php echo $a->created_at; ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    <?php else : ?>
-                        <tr>
-                            <td colspan="6">No actions found.</td> <!-- updated colspan to 6 -->
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+            <form method="post">
+                <?php $table->display(); ?>
+            </form>
         </div>
     <?php
     }
+
 
 
     public function add_action_page()
@@ -129,7 +89,6 @@ class MM_Gamification_Admin
                 $points         = intval($_POST['points']);
                 $notification_message = sanitize_textarea_field($_POST['notification_message']);
 
-
                 if ($edit_id) {
                     $wpdb->update($table, [
                         'action_key' => $action_key,
@@ -137,9 +96,8 @@ class MM_Gamification_Admin
                         'notification_message' => $notification_message,
                         'points' => $points
                     ], ['id' => $edit_id]);
-                    
+
                     echo '<div class="notice notice-success is-dismissible"><p>Action updated successfully!</p></div>';
-                    $action_to_edit = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE id = %d", $edit_id)); // Re-fetch to show updated data
                 } else {
                     $wpdb->insert($table, [
                         'action_key' => $action_key,
@@ -147,11 +105,34 @@ class MM_Gamification_Admin
                         'notification_message' => $notification_message,
                         'points' => $points
                     ]);
-                    
+
+                    // Build debug info
+                    $debug = [
+                        'Inserted Data' => [
+                            'action_key' => $action_key,
+                            'custom_message' => $custom_message,
+                            'notification_message' => $notification_message,
+                            'points' => $points
+                        ],
+                        'Last Query'   => $wpdb->last_query,
+                        'Last Error'   => $wpdb->last_error,
+                        'Insert ID'    => $wpdb->insert_id,
+                        'Rows Affected' => $wpdb->rows_affected,
+                    ];
+
+                    // Dump everything with wp_die()
+                    // wp_die(
+                    //     '<h2>Gamification Debug Dump</h2><pre>' .
+                    //         print_r($debug, true) .
+                    //         '</pre>'
+                    // );
+
+
                     echo '<div class="notice notice-success is-dismissible"><p>Action added successfully!</p></div>';
                 }
             }
         }
+
     ?>
         <div class="wrap">
             <h1>Add New Action</h1>
@@ -205,5 +186,4 @@ class MM_Gamification_Admin
         </div>
 <?php
     }
-
 }

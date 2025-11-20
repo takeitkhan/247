@@ -3,7 +3,8 @@
 /**
  * Plugin Name: MM Gamification
  * Description: Custom gamification plugin to manage user actions and points system.
- * Version: 1.0.0
+ * Version: 1.0.1
+ * License: MIT
  * Author: Samrat Khan
  * Text Domain: mm-gamification
  */
@@ -32,10 +33,11 @@ class MM_Gamification
         $table = $wpdb->prefix . 'gamification_actions';
         $charset_collate = $wpdb->get_charset_collate();
 
-        $sql = "CREATE TABLE IF NOT EXISTS $table (
+        $sql = "CREATE TABLE $table (
             id mediumint(9) NOT NULL AUTO_INCREMENT,
             action_key varchar(100) NOT NULL,
             custom_message text NOT NULL,
+            notification_message text NULL,
             points int NOT NULL,
             created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
             PRIMARY KEY  (id)

@@ -144,7 +144,7 @@ class Notifications
         // Prepare notification message
         if ($referrer_name) {
             $message = sprintf(
-                'You were referred by %s. Welcome aboard!',
+                'You were referred by %s. Welcome in the board!',
                 esc_html($referrer_name)
             );
         } else {

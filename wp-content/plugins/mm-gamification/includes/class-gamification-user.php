@@ -232,9 +232,10 @@ class MM_Gamification_User
 
         // Use the specific notification message if available, otherwise generate a default.
         if ($action && !empty($action->notification_message)) {
-            $message = $action->notification_message;
+            // Replace the {points} placeholder with the actual point value.
+            $message = str_replace('{points}', (int)$points, $action->notification_message);
         } else {
-            $fallback_message = $action->custom_message ?? str_replace('_', ' ', $activity);
+            $fallback_message = $action->custom_message ?? ucwords(str_replace('_', ' ', $activity));
             $message = sprintf("You earned %d points for: %s", (int)$points, esc_html($fallback_message));
         }
 

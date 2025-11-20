@@ -6,9 +6,9 @@ $user_id = get_current_user_id();
 $unread_count = $notifications_instance->getUnreadCount($user_id);
 $all_notifications = $notifications_instance->getNotifications($user_id);
 
-echo '<pre>';
-print_r($all_notifications);
-echo '</pre>';
+// echo '<pre>';
+// print_r($all_notifications);
+// echo '</pre>';
 
 // Sort latest first
 usort($all_notifications, function ($a, $b) {
