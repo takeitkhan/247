@@ -88,8 +88,9 @@ else:
          */
         function handlePhotoUpload(file, action, fieldName, previewSelector) {
             const formData = new FormData();
-            formData.append('action', action);
-            formData.append(fieldName, file);
+            formData.append('action', 'upload_profile_photo');
+            formData.append('profile_photo', file);
+            formData.append('nonce', '<?php echo wp_create_nonce("update_profile_photo_nonce"); ?>');
 
             fetch(ajaxurl, {
                 method: 'POST',

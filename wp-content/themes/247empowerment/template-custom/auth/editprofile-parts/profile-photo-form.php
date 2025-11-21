@@ -24,10 +24,8 @@ $profession = get_user_meta($user->ID, 'about_me_short', true);
             <!-- Upload photo -->
             <div>
                 <form method="post" enctype="multipart/form-data" id="profile-photo-form">
-                    <input type="file" id="uploadPhoto" name="profile_photo" class="d-none" accept="image/*">
-                    <label for="uploadPhoto" class="d-inline-flex align-items-center justify-content-center m-lg-0 w-100 w-auto custom-btn">                        
-                        Change photo
-                    </label>
+                    <input type="file" id="profile-photo-input" name="profile_photo" class="d-none" accept="image/*">
+                    <label for="profile-photo-input">Change photo</label>
                     <input type="hidden" name="action" value="update_profile_photo">
                     <?php wp_nonce_field('update_profile_photo_nonce', 'profile_photo_nonce'); ?>
                 </form>
@@ -62,51 +60,85 @@ $profession = get_user_meta($user->ID, 'about_me_short', true);
 </div>
 
 <script>
-    document.getElementById('edit-profile-photo-btn')?.addEventListener('click', () => {
-        document.getElementById('profile-photo-input').click();
-    });
+    var ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
 
-    document.getElementById('profile-photo-input')?.addEventListener('change', function() {
-        const file = this.files[0];
-        if (!file) return;
+    /**
+     * Shows the gamification modal and header notification.
+     * @param {object} notification - The notification data from the server.
+     */
+    function showGamificationNotification(notification) {
+        if (!notification) return;
 
+        // --- 1. Show Header Notification ---
+        // This uses the Toastify.js library already included in your theme.
+        Toastify({
+            text: notification.message,
+            duration: 5000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+            stopOnFocus: true,
+        }).showToast();
+
+        // --- 2. Show Modal Popup ---
+        const modal = document.getElementById('gamificationPointsModal');
+        if (modal) {
+            const modalTitle = document.getElementById('gamification-modal-title');
+            const modalMessage = document.getElementById('gamification-modal-message');
+
+            if (modalTitle) modalTitle.innerText = notification.title;
+            if (modalMessage) modalMessage.innerHTML = notification.message;
+
+            var gamificationModal = new bootstrap.Modal(modal);
+            gamificationModal.show();
+        }
+
+        // --- 3. Play Sound ---
+        const audio = new Audio("<?= get_template_directory_uri(); ?>/sounds/coin.mp3");
+        audio.play().catch(e => console.error("Audio play failed:", e));
+    }
+
+    /**
+     * Handles the file upload via AJAX and processes the response.
+     * @param {File} file - The file to upload.
+     * @param {string} action - The AJAX action name ('upload_profile_photo' or 'upload_cover_photo').
+     * @param {string} fieldName - The name of the file field ('profile_photo' or 'cover_photo').
+     * @param {string} previewSelector - The CSS selector for the image preview element.
+     */
+    function handlePhotoUpload(file, action, fieldName, previewSelector) {
         const formData = new FormData();
-        formData.append('action', 'upload_profile_photo');
-        formData.append('profile_photo', file);
+        formData.append('action', action); // use the dynamic action passed in
+        formData.append(fieldName, file); // use the dynamic field name
+        formData.append('nonce', '<?php echo wp_create_nonce("update_profile_photo_nonce"); ?>');
 
-        // Optional: show temporary preview
-        const preview = document.getElementById('profile-photo-preview');
-        preview.src = URL.createObjectURL(file);
-
-        fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+        fetch(ajaxurl, {
                 method: 'POST',
-                body: formData
+                body: formData,
             })
             .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    preview.src = data.data.url; // Update image with uploaded URL
+            .then(response => {
+                if (response.success) {
+                    const previewElement = document.querySelector(previewSelector);
+                    if (previewElement) previewElement.src = response.data.url;
                 } else {
-                    alert(data.data?.message || 'Upload failed');
+                    alert('Upload failed: ' + (response.data.message || 'Unknown error'));
                 }
             })
-            .catch(() => alert('Something went wrong. Please try again.'));
-    });
+            .catch(err => console.error('Error:', err));
+    }
 
-    document.getElementById('delete-photo-btn')?.addEventListener('click', async () => {
-        if (!confirm('Are you sure you want to delete your profile photo?')) return;
 
-        const response = await fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
-                action: 'delete_profile_photo'
-            })
-        });
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileEditBtn = document.getElementById('profile-photo-input-label');
+        const profileInput = document.getElementById('profile-photo-input');
 
-        const result = await response.json();
-        if (result.success) location.reload();
+        if (profileInput) {
+            profileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                handlePhotoUpload(file, 'upload_profile_photo', 'profile_photo', '.img-p');
+            });
+        }
     });
 </script>

@@ -77,7 +77,7 @@ $default_profile_img = get_template_directory_uri() . '/assets/img/loggedin_imag
         ?>
             <div>
                 <div class="">
-                    <a href="<?php echo 'http://pet.test/' . esc_attr($username_for_url); ?>" class="d-flex align-items-center gap-3 text-dark text-decoration-none">
+                    <a href="<?php echo esc_url(site_url('/' . $username_for_url)); ?>" class="d-flex align-items-center gap-3 text-dark text-decoration-none">
                         <div class="position-relative img44">
                             <img src="<?php echo esc_url($profile_photo_url); ?>" class="rounded-circle w-100 h-100 object-fit-cover" alt="<?php echo esc_attr($full_name); ?> Profile">
                         </div>

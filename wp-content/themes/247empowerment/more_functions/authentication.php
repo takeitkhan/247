@@ -173,6 +173,57 @@ function handle_custom_user_login()
 }
 add_action('init', 'handle_custom_user_login');
 
+// Handle profile photo upload
+add_action('wp_ajax_upload_profile_photo', function () {
+    check_ajax_referer('update_profile_photo_nonce', 'nonce');
+
+    if (!is_user_logged_in() || empty($_FILES['profile_photo'])) {
+        wp_send_json_error(['message' => 'No file uploaded or not logged in']);
+    }
+
+    $user_id = get_current_user_id();
+    $file = $_FILES['profile_photo'];
+
+    // Use WordPress media uploader
+    require_once(ABSPATH . 'wp-admin/includes/file.php');
+    require_once(ABSPATH . 'wp-admin/includes/image.php');
+    require_once(ABSPATH . 'wp-admin/includes/media.php');
+
+    $attachment_id = media_handle_upload('profile_photo', 0); // 0 = no parent post
+    if (is_wp_error($attachment_id)) {
+        wp_send_json_error(['message' => $attachment_id->get_error_message()]);
+    }
+
+    // Save the attachment URL in user meta
+    $url = wp_get_attachment_url($attachment_id);
+    update_user_meta($user_id, 'profile_photo', $url);
+
+    wp_send_json_success(['url' => $url]);
+});
+
+// Handle profile photo deletion
+add_action('wp_ajax_delete_profile_photo', function () {
+    check_ajax_referer('update_profile_photo_nonce', 'nonce');
+
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Not logged in']);
+    }
+
+    $user_id = get_current_user_id();
+    $photo_url = get_user_meta($user_id, 'profile_photo', true);
+
+    if ($photo_url) {
+        // Get attachment ID from URL
+        $attachment_id = attachment_url_to_postid($photo_url);
+        if ($attachment_id) {
+            wp_delete_attachment($attachment_id, true); // delete from Media Library
+        }
+        delete_user_meta($user_id, 'profile_photo');
+    }
+
+    wp_send_json_success();
+});
+
 
 
 // add_action('init', function () {
