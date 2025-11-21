@@ -2,6 +2,8 @@
 // -----------------------------
 // Custom User Registration
 // -----------------------------
+
+
 add_action('init', function () {
     if (
         isset($_POST['user_signup']) &&

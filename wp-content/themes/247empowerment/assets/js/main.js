@@ -13,26 +13,37 @@
    * Apply .scrolled class to the body as the page is scrolled down
    */
   function toggleScrolled() {
-    const selectBody = document.querySelector('body');
-    const selectHeader = document.querySelector('#header');
-    if (!selectHeader.classList.contains('scroll-up-sticky') && !selectHeader.classList.contains('sticky-top') && !selectHeader.classList.contains('fixed-top')) return;
-    window.scrollY > 100 ? selectBody.classList.add('scrolled') : selectBody.classList.remove('scrolled');
+    const header = document.querySelector('.header');
+    if (!header) return; // stop if element not found
+
+    if (window.scrollY > 100) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
   }
 
-  document.addEventListener('scroll', toggleScrolled);
-  window.addEventListener('load', toggleScrolled);
+  document.addEventListener('DOMContentLoaded', toggleScrolled);
+  window.addEventListener('scroll', toggleScrolled);
+
 
   /**
    * Mobile nav toggle
    */
-  const mobileNavToggleBtn = document.querySelector('.mobile-nav-toggle');
+  document.addEventListener('DOMContentLoaded', function () {
+    const mobileNavToggleBtn = document.querySelector('.mobile-nav-toggle');
 
-  function mobileNavToogle() {
-    document.querySelector('body').classList.toggle('mobile-nav-active');
-    mobileNavToggleBtn.classList.toggle('bi-list');
-    mobileNavToggleBtn.classList.toggle('bi-x');
-  }
-  mobileNavToggleBtn.addEventListener('click', mobileNavToogle);
+    if (mobileNavToggleBtn) {
+      function mobileNavToogle() {
+        document.body.classList.toggle('mobile-nav-active');
+        mobileNavToggleBtn.classList.toggle('bi-list');
+        mobileNavToggleBtn.classList.toggle('bi-x');
+      }
+
+      mobileNavToggleBtn.addEventListener('click', mobileNavToogle);
+    }
+  });
+
 
   /**
    * Hide mobile nav on same-page/hash links
@@ -57,6 +68,24 @@
       e.stopImmediatePropagation();
     });
   });
+
+  /** Password Icon Toggle */
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggle = document.getElementById('togglePassword');
+    const passwordField = document.getElementById('password');
+
+    // Only run if both elements exist
+    if (toggle && passwordField) {
+      toggle.addEventListener('click', function () {
+        const isHidden = passwordField.type === "password";
+        passwordField.type = isHidden ? "text" : "password";
+        this.src = isHidden
+          ? themeData.dir + "/assets/img/nd/pass-open-eye.svg"
+          : themeData.dir + "/assets/img/nd/pass-close-eye.svg";
+      });
+    }
+  });
+
 
 
 
@@ -89,23 +118,32 @@
   /**
    * Scroll top button
    */
-  let scrollTop = document.querySelector('.scroll-top');
+  document.addEventListener('DOMContentLoaded', function () {
+    const scrollTop = document.querySelector('.scroll-top');
 
-  function toggleScrollTop() {
     if (scrollTop) {
-      window.scrollY > 100 ? scrollTop.classList.add('active') : scrollTop.classList.remove('active');
+      // Show/hide scroll-top button
+      function toggleScrollTop() {
+        window.scrollY > 100
+          ? scrollTop.classList.add('active')
+          : scrollTop.classList.remove('active');
+      }
+
+      // Click event to scroll to top
+      scrollTop.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+
+      // Events
+      window.addEventListener('load', toggleScrollTop);
+      document.addEventListener('scroll', toggleScrollTop);
     }
-  }
-  scrollTop.addEventListener('click', (e) => {
-    e.preventDefault();
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
   });
 
-  window.addEventListener('load', toggleScrollTop);
-  document.addEventListener('scroll', toggleScrollTop);
 
   /**
    * Animation on scroll function and init

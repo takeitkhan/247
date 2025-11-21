@@ -90,14 +90,16 @@ $old_input = $message['old_input'] ?? [];
                             <div class="mb-3">
                                 <label for="password" class="form-label fw-normal">Password <span>*</span></label>
                                 <div class="position-relative">
-                                    <input type="password" class="input" id="password" name="password"
-                                        placeholder="Enter your password" required>
-                                    <img class='pass-show' src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/pass-show.png" alt="">
+                                    <input type="password" class="input" id="password" name="password" placeholder="Enter your password" required>
+                                    <img id="togglePassword" class="pass-show"
+                                        src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/pass-close-eye.svg"
+                                        alt="Show Password"
+                                        style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; width: 20px; height: 20px;">
                                 </div>
                             </div>
 
                             <div class="mb-3 form-check">
-                                <input type="checkbox" id="consent" name="consent" class="form-check-input" value="yes" <?php checked(!empty($old_input['consent_transactional'])); ?> required>                           
+                                <input type="checkbox" id="consent" name="consent" class="form-check-input" value="yes" <?php checked(!empty($old_input['consent_transactional'])); ?> required>
                                 <label class="form-check-label" for="consent">
                                     I agree to receive account-related updates (e.g. reminders, confirmations)
                                     and occasional promotional messages (e.g. offers, discounts, updates).

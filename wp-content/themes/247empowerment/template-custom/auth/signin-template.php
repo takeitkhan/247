@@ -55,7 +55,10 @@ $old_input = $message['old_input'] ?? [];
                             <label for="password" class="form-label fw-normal">Password <span>*</span></label>
                             <div class="position-relative">
                                 <input type="password" class="input" id="password" name="password" placeholder="Enter your password" required>
-                                <img class="pass-show" src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/pass-show.png" alt="Show Password" onclick="togglePassword()">
+                                <img id="togglePassword" class="pass-show"
+                                    src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/pass-close-eye.svg"
+                                    alt="Show Password"
+                                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; width: 20px; height: 20px;">
                             </div>
                         </div>
 
