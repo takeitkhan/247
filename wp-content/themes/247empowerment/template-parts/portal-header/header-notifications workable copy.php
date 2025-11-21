@@ -2,17 +2,18 @@
 $notifications_instance = Notifications::getInstance();
 $user_id = get_current_user_id();
 
+// Get unread count & all notifications
 $unread_count = $notifications_instance->getUnreadCount($user_id);
 $all_notifications = $notifications_instance->getNotifications($user_id);
+
+// echo '<pre>';
+// print_r($all_notifications);
+// echo '</pre>';
 
 // Sort latest first
 usort($all_notifications, function ($a, $b) {
     return strtotime($b['created_at']) - strtotime($a['created_at']);
 });
-
-// Limit dropdown notifications
-$limit = 5;
-$notifications_to_show = array_slice($all_notifications, 0, $limit);
 ?>
 
 <div class="dropdown">
@@ -23,6 +24,7 @@ $notifications_to_show = array_slice($all_notifications, 0, $limit);
         data-bs-auto-close="outside"
         aria-expanded="false">
         <img class="object-fit-contain notification-png" src="<?= esc_url(get_template_directory_uri() . '/assets/img/nd/notification.png'); ?>" alt="">
+
         <?php if ($unread_count > 0) : ?>
             <span class="notif-bubble"><?= esc_html($unread_count); ?></span>
         <?php endif; ?>
@@ -37,8 +39,14 @@ $notifications_to_show = array_slice($all_notifications, 0, $limit);
                 <?php endif; ?>
             </div>
 
-            <?php if (!empty($notifications_to_show)) : ?>
-                <?php foreach ($notifications_to_show as $notif) :
+            <?php if (!empty($all_notifications)) : ?>
+                <?php
+                // Sort latest first
+                usort($all_notifications, function ($a, $b) {
+                    return strtotime($b['created_at']) - strtotime($a['created_at']);
+                });
+
+                foreach ($all_notifications as $notif) :
                     $is_unread = empty($notif['read']);
                     $created_time = human_time_diff(strtotime($notif['created_at']), current_time('timestamp')) . ' ago';
                     $user_img = get_template_directory_uri() . '/assets/img/nd/profile.png';
@@ -52,7 +60,7 @@ $notifications_to_show = array_slice($all_notifications, 0, $limit);
                             <?php endif; ?>
                             <div class="position-relative img44">
                                 <img src="<?= esc_url($user_img); ?>" class="rounded-circle w-100 h-100 object-fit-cover" alt="Profile">
-                                <img class="position-absolute active-icon" src="<?= esc_url(get_template_directory_uri() . '/assets/img/nd/active_icon.png'); ?>" alt="Active">
+                                <img class="position-absolute active-icon" src="<?= esc_url(get_template_directory_uri() . '/assets/img/nd/active_icon.png'); ?>" alt="">
                             </div>
                         </div>
                         <div class="d-flex flex-column gap-2 post-user">
@@ -61,14 +69,6 @@ $notifications_to_show = array_slice($all_notifications, 0, $limit);
                         </div>
                     </div>
                 <?php endforeach; ?>
-
-                <!-- See all link -->
-                <div class="mt-2 text-center">
-                    <a href="<?php echo site_url('/notifications/'); ?>" class="text-blue-color text-decoration-none fs14">
-                        See all notifications
-                    </a>
-                </div>
-
             <?php else : ?>
                 <p class="text-muted text-center">No notifications yet.</p>
             <?php endif; ?>
