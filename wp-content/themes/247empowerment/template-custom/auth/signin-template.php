@@ -31,16 +31,31 @@ $old_input = $message['old_input'] ?? [];
                         </button>
                     </div>
 
+
+                    <?php
+                    if ($message = get_transient('custom_user_message')) {
+                        $type = $message['type']; // 'success' or 'danger'
+                        $text = $message['text'];
+
+                        // Allowed HTML tags for safety
+                        $allowed_tags = [
+                            'span' => ['style' => []],
+                            'strong' => [],
+                            'em' => [],
+                            'a' => ['href' => [], 'class' => []],
+                        ];
+                        echo '<div class="alert" style="background-color: #E8EEFB;">';
+                        echo '<p style="color: #E835B0; font-size: 20px;">Thank You for Registering!</p>';
+                        echo '<p style="color: #555555; font-size: 20px; margin-top: 10px;">' . wp_kses($text, $allowed_tags) . '</p>';
+                        echo '</div>';
+
+                        // Delete transient after showing
+                        delete_transient('custom_user_message');
+                    }
+                    ?>
+
                     <h2 class="mb-3 title">Welcome Back</h2>
                     <p class="mb-4">Log in to continue your empowerment journey.</p>
-
-                    <?php if ($message): ?>
-                        <div class="alert alert-<?php echo esc_attr($message['type']); ?> mt-3" role="alert">
-                            <?php echo wp_kses_post($message['text']); ?>
-                        </div>
-                        <?php delete_transient('custom_user_message'); ?>
-                    <?php endif; ?>
-
                     <form method="POST" action="">
                         <!-- Hidden action for custom login -->
                         <input type="hidden" name="action" value="custom_user_login">

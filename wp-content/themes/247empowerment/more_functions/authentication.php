@@ -26,8 +26,18 @@ add_action('init', function () {
             return;
         }
 
+        // Reject uppercase characters
+        if (preg_match('/[A-Z]/', $_POST['username'])) {
+            set_transient('custom_user_message', [
+                'type' => 'danger',
+                'text' => 'Username must be lowercase only.',
+                'old_input' => $_POST
+            ], 30);
+            return;
+        }
+
         // Reject username containing any special characters
-        if (!preg_match('/^[a-zA-Z0-9]+$/', $username)) {
+        if (!preg_match('/^[a-z0-9_]+$/', $username)) {
             set_transient('custom_user_message', [
                 'type' => 'danger',
                 'text' => 'Username can only contain letters and numbers.',
@@ -95,10 +105,16 @@ add_action('init', function () {
                 mm_trigger_action('user_register', $user_id);
             }
 
+            // Set success message
             set_transient('custom_user_message', [
                 'type' => 'success',
-                'text' => '🎉 Thank you for registering! <a href="/signin" class="alert-link">Login here</a>.'
+                'text' => 'You have received <span style="color: #E835B0;">30 Points</span> for registering into 24/7 Empowerment\'s Non-Profit Social Platform.'
             ], 30);
+
+
+            // ✅ Redirect to login page
+            wp_redirect(home_url('/signin')); // your login page URL
+            exit; // ← important
         } else {
             set_transient('custom_user_message', [
                 'type' => 'danger',
@@ -151,7 +167,7 @@ function handle_custom_user_login()
             $safe_error_msg = wp_kses($raw_error_msg, $allowed_tags);
 
             $safe_error_msg = preg_replace_callback(
-                '#<a href="[^"]+">Lost your password\?</a>#i',
+                '#<a href="[^"]+">Lost your password?</a>#i',
                 function () {
                     $url = esc_url(home_url('/lost-password'));
                     return '<a href="' . $url . '" class="alert-link">Lost your password?</a>';
