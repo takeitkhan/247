@@ -16,7 +16,6 @@ require_once plugin_dir_path(__FILE__) . 'includes/functions-actions.php';
 require_once plugin_dir_path(__FILE__) . 'includes/functions-points.php';
 require_once plugin_dir_path(__FILE__) . 'includes/class-gamification-admin.php';
 require_once plugin_dir_path(__FILE__) . 'includes/class-gamification-user.php';
-require_once plugin_dir_path(__FILE__) . 'includes/class-notifications.php';
 
 
 class MM_Gamification

@@ -47,71 +47,28 @@ if ($user) {
     $profile = null;
 }
 
-$dob   = get_user_meta($current_user->ID, 'dob', true);
-$phone = get_user_meta($current_user->ID, 'phone', true);
-$referrer = get_user_meta($current_user->ID, 'referrer', true);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     if (!isset($_POST['frontend_profile_update_nonce']) || !wp_verify_nonce($_POST['frontend_profile_update_nonce'], 'frontend_profile_update')) {
         echo '<div class="alert alert-danger">Security check failed.</div>';
     } else {
-        $user_id = $current_user->ID;
+        $result = handle_frontend_profile_update($current_user->ID, $_POST);
 
-        wp_update_user([
-            'ID'         => $user_id,
-            'first_name' => sanitize_text_field($_POST['first_name']),
-            'last_name'  => sanitize_text_field($_POST['last_name']),
-            'user_email' => sanitize_email($_POST['email']),
-        ]);
-
-        update_user_meta($user_id, 'dob', sanitize_text_field($_POST['dob']));
-        update_user_meta($user_id, 'phone', sanitize_text_field($_POST['phone']));
-        update_user_meta($user_id, 'about_me', sanitize_textarea_field($_POST['about_me']));
-        update_user_meta($user_id, 'about_me_short', sanitize_text_field($_POST['about_me_short']));
-        // update_user_meta($user_id, 'location', sanitize_text_field($_POST['location']));
-        if (!empty($_POST['latitude']) && !empty($_POST['longitude'])) {
-            update_user_meta($user_id, 'latitude', sanitize_text_field($_POST['latitude']));
-            update_user_meta($user_id, 'longitude', sanitize_text_field($_POST['longitude']));
+        // Trigger points modal only
+        if (!empty($result['notifications'])) {
+            echo '<script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var notifications = ' . json_encode($result['notifications']) . ';
+                notifications.forEach(function(notif) {
+                    openPointsModal(notif);
+                });
+            });
+            </script>';
         }
-
-        if (!empty($_POST['place_display_name'])) {
-            update_user_meta($user_id, 'place_display_name', sanitize_text_field($_POST['place_display_name']));
-        }
-
-        if (!empty($_POST['place_address'])) {
-            update_user_meta($user_id, 'place_address', sanitize_text_field($_POST['place_address']));
-        }
-
-        update_user_meta($user_id, 'user_categories', array_map('intval', $_POST['user_categories'] ?? []));
-
-        update_user_meta($user_id, 'show_email', isset($_POST['show_email']) ? '1' : '0');
-        update_user_meta($user_id, 'show_phone', isset($_POST['show_phone']) ? '1' : '0');
-        update_user_meta($user_id, 'show_dob', isset($_POST['show_dob']) ? '1' : '0');
-        update_user_meta($user_id, 'show_full_address', isset($_POST['show_full_address']) ? '1' : '0');
-
-
-        echo '
-        <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            Toastify({
-            text: "Profile updated successfully.",
-            duration: 4000,
-            gravity: "bottom", // `top` or `bottom`
-            position: "left", // `left`, `center` or `right`
-            backgroundColor: "#28a745",
-            close: true,
-            stopOnFocus: true,
-            }).showToast();
-        });
-        </script>
-        ';
-
-
-        $current_user = wp_get_current_user();
-        $dob   = get_user_meta($current_user->ID, 'dob', true);
-        $phone = get_user_meta($current_user->ID, 'phone', true);
     }
 }
+
+
 
 ?>
 
@@ -119,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     <div class="row">
         <!-- Sidebar -->
         <div class="col-lg-3">
-            <?php get_template_part('template-custom/auth/common-parts/editprofilemenu', null, ['profile' => $profile]); ?>            
+            <?php get_template_part('template-custom/auth/common-parts/editprofilemenu', null, ['profile' => $profile]); ?>
             <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
         </div>
         <div class="mb-0 rounded-end-0 col-lg-6">
@@ -151,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                                     value="<?php echo esc_attr($current_user->user_email); ?>" placeholder="Enter your email" required>
                                 <div class="mt-2 form-check">
                                     <input type="checkbox" class="form-check-input" id="show_email" name="show_email" value="1"
-                                        <?php checked(get_user_meta($current_user->ID, 'show_email', true), '1'); ?>>
+                                        <?php checked(get_user_meta($current_user->ID, 'show_email', true), true); ?>>
                                     <label class="form-check-label" for="show_email">Show Email on profile</label>
                                 </div>
                             </div>
@@ -159,24 +116,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                             <div class="col-12 col-md-6">
                                 <label class="form-label">Phone number:</label>
                                 <input type="text" name="phone" class="form-control input"
-                                    value="<?php echo esc_attr($phone); ?>" placeholder="Enter your phone number" required>
+                                    value="<?php echo esc_attr($current_user->phone); ?>" placeholder="Enter your phone number" required>
                                 <div class="mt-2 form-check">
                                     <input type="checkbox" class="form-check-input" id="show_phone" name="show_phone" value="1"
-                                        <?php checked(get_user_meta($current_user->ID, 'show_phone', true), '1'); ?>>
+                                        <?php checked(get_user_meta($current_user->ID, 'show_phone', true), true); ?>>
                                     <label class="form-check-label" for="show_phone">Show phone number on profile</label>
                                 </div>
                             </div>
 
+                            <!-- DOB -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label">Date of birth:</label>
-                                <input type="date" name="dob" class="form-control input"
-                                    value="<?php echo esc_attr($dob); ?>">
+                                <label class="form-label">Date of Birth:</label>
+                                <input type="date" name="dob" class="form-control input" 
+                                    value="<?php echo esc_attr(get_user_meta($current_user->ID, 'dob', true)); ?>">
                             </div>
 
                             <div class="col-12 col-md-6">
                                 <label class="form-label">About me (one liner):</label>
                                 <input type="text" name="about_me_short" class="form-control input"
-                                    value="<?php echo esc_attr(get_user_meta($current_user->ID, 'about_me_short', true)); ?>" placeholder="About me" required>
+                                    value="<?php echo esc_attr(get_user_meta($current_user->ID, 'about_me_short', true)); ?>" 
+                                        placeholder="About me" required>
                             </div>
 
                             <div class="col-12">
@@ -206,16 +165,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                                     value="<?php echo esc_attr(get_user_meta($current_user->ID, 'longitude', true)); ?>" placeholder="Enter longitude">
                             </div>
 
-                            <div class="col-12">
+                            <!-- Location -->
+                            <div class="col-12 col-md-6">
                                 <label class="form-label">Location Name:</label>
-                                <input type="text" name="place_display_name" id="place_display_name" class="form-control input"
-                                    value="<?php echo esc_attr(get_user_meta($current_user->ID, 'place_display_name', true)); ?>" placeholder="Enter your location name">
+                                <input type="text" name="place_display_name" class="form-control input"
+                                    value="<?php echo esc_attr(get_user_meta($current_user->ID, 'place_display_name', true)); ?>">
                             </div>
 
                             <div class="col-12">
                                 <label class="form-label">Full Address:</label>
-                                <input type="text" name="place_address" id="place_address" class="form-control input"
-                                    value="<?php echo esc_attr(get_user_meta($current_user->ID, 'place_address', true)); ?>" placeholder="Enter your full address information">
+                                <input type="text" name="location" id="location" class="form-control input"
+                                    value="<?php echo esc_attr(get_user_meta($current_user->ID, 'location', true)); ?>" placeholder="Enter your full address information">
                                 <div class="mt-2 form-check">
                                     <input class="form-check-input" type="checkbox" id="show_full_address" name="show_full_address" value="1"
                                         <?php checked(get_user_meta($current_user->ID, 'show_full_address', true), '1'); ?>>
@@ -223,11 +183,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                                 </div>
                             </div>
 
+                            
                             <div class="col-12">
                                 <label class="form-label">Referrer:</label>
-                                <input type="text" class="form-control input"
-                                    value="<?php echo esc_attr($referrer); ?>" disabled>
-                            </div>
+                                <input type="text" class="form-control input" value="<?php echo esc_attr($referrer ?? 'No Referrer'); ?>" disabled>
+                            </div>                            
+
 
                             <div class="col-12">
                                 <label class="form-label">Choose Focus Categories:</label>
@@ -269,4 +230,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         </div>
     </div>
 </div>
+<script>
+    jQuery(document).ready(function($) {
+        $('#frontend-profile-form').on('submit', function(e) {
+            e.preventDefault();
+
+            var formData = $(this).serializeArray();
+            formData.push({
+                name: 'nonce',
+                value: $('input[name="frontend_profile_update_nonce"]').val()
+            });
+
+            $.ajax({
+                url: '<?php echo admin_url("admin-ajax.php"); ?>',
+                method: 'POST',
+                data: $.param(formData) + '&action=frontend_profile_update',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message || 'Profile updated'); // simple fallback
+                        if (response.data.notifications && response.data.notifications.length) {
+                            response.data.notifications.forEach(function(notif) {
+                                openPointsModal(notif); // call your existing modal function
+                            });
+                        }
+                    } else {
+                        alert(response.data.message || 'Error occurred');
+                    }
+                },
+                error: function() {
+                    alert('AJAX error');
+                }
+            });
+        });
+    });
+</script>
+
 <?php get_footer_based_on_login(); ?>

@@ -177,7 +177,7 @@ function handle_custom_user_login()
 
             // Save transient for displaying on signin page
             set_transient('custom_user_message', [
-                'type' => 'error',
+                'type' => 'danger',
                 'text' => $safe_error_msg
             ], 30);
 
@@ -188,6 +188,102 @@ function handle_custom_user_login()
     }
 }
 add_action('init', 'handle_custom_user_login');
+
+// Register AJAX action for logged-in users
+add_action('wp_ajax_frontend_profile_update', 'ajax_frontend_profile_update');
+
+function ajax_frontend_profile_update() {
+    // Security check
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'frontend_profile_update')) {
+        wp_send_json_error(['message' => 'Security check failed']);
+    }
+
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'You must be logged in']);
+    }
+
+    $user_id = get_current_user_id();
+    $post_data = $_POST;
+
+    // Use the previously defined handler function
+    $result = handle_frontend_profile_update($user_id, $post_data);
+
+    if (!empty($result['error'])) {
+        wp_send_json_error(['message' => $result['error']]);
+    }
+
+    wp_send_json_success([
+        'notifications' => $result['notifications'],
+        'message' => 'Profile updated successfully'
+    ]);
+}
+
+
+/**
+ * Handle frontend profile update, award points for birthday/location once, and return notification data.
+ */
+function handle_frontend_profile_update($user_id, $post_data) {
+    if (!function_exists('mm_award_points_and_notify')) return ['error' => 'Gamification function missing'];
+
+    $notification_data = [];
+
+    // Map form field to gamification action
+    $fields = [
+        'dob' => 'birthday_update',
+        'place_display_name' => 'location_update',
+    ];
+
+    foreach ($fields as $meta_key => $action_key) {
+        $old_value = get_user_meta($user_id, $meta_key, true);
+        $new_value = sanitize_text_field($post_data[$meta_key] ?? '');
+
+        if (!empty($new_value) && $new_value !== $old_value) {
+            // Award points once
+            $earned_key = $action_key . '_earned_once';
+            $already_earned = get_user_meta($user_id, $earned_key, true);
+
+            if (!$already_earned) {
+                $notif = mm_award_points_and_notify($user_id, $action_key);
+                if ($notif) $notification_data[] = $notif;
+                update_user_meta($user_id, $earned_key, 1);
+            }
+
+            update_user_meta($user_id, $meta_key, $new_value);
+        }
+    }
+
+    // Basic fields
+    wp_update_user([
+        'ID'         => $user_id,
+        'first_name' => sanitize_text_field($post_data['first_name'] ?? ''),
+        'last_name'  => sanitize_text_field($post_data['last_name'] ?? ''),
+        'user_email' => sanitize_email($post_data['email'] ?? ''),
+    ]);
+
+    // Other meta fields
+    $meta_fields = ['phone','about_me','about_me_short','latitude','longitude','place_address'];
+    foreach ($meta_fields as $meta_key) {
+        if (isset($post_data[$meta_key])) {
+            update_user_meta($user_id, $meta_key, sanitize_text_field($post_data[$meta_key]));
+        }
+    }
+
+    // Checkbox fields
+    $checkbox_fields = ['show_email','show_phone','show_dob','show_full_address'];
+    foreach ($checkbox_fields as $meta_key) {
+        update_user_meta($user_id, $meta_key, isset($post_data[$meta_key]) ? '1' : '0');
+    }
+
+    // Categories
+    if (!empty($post_data['user_categories']) && is_array($post_data['user_categories'])) {
+        update_user_meta($user_id, 'user_categories', array_map('intval', $post_data['user_categories']));
+    }
+
+    return [
+        'success' => true,
+        'notifications' => $notification_data,
+    ];
+}
 
 // Handle profile photo upload
 add_action('wp_ajax_upload_profile_photo', function () {

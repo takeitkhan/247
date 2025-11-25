@@ -18,7 +18,7 @@ class MM_Gamification_User
         // WordPress hooks
         add_action('user_register', [$this, 'handle_user_register']);
         add_action('wp_login', [$this, 'handle_first_login'], 10, 2);
-        add_action('wp_login', [$this, 'handle_daily_login'], 10, 2);
+        add_action('wp_login', [$this, 'handle_daily_login'], 11, 2); // run after first login
 
         // AJAX hooks for uploads
         add_action('wp_ajax_upload_profile_photo', [$this, 'handle_upload_photo']);
@@ -45,17 +45,21 @@ class MM_Gamification_User
         }
     }
 
-
     public function handle_first_login($user_login, $user)
     {
         if (!get_user_meta($user->ID, 'first_login_done', true)) {
-            // Use the centralized function.
+
             if (function_exists('mm_award_points_and_notify')) {
                 mm_award_points_and_notify($user->ID, 'first_login');
             }
+
             update_user_meta($user->ID, 'first_login_done', 1);
+
+            // Save today's date as last_daily_login so daily login does NOT trigger today
+            update_user_meta($user->ID, 'last_daily_login', date('Y-m-d'));
         }
     }
+
 
     public function handle_daily_login($user_login, $user)
     {
@@ -63,18 +67,22 @@ class MM_Gamification_User
         $today = date('Y-m-d');
 
         if ($last_daily_login !== $today) {
+
             if (function_exists('mm_award_points_and_notify')) {
                 mm_award_points_and_notify($user->ID, 'daily_login');
             }
+
             update_user_meta($user->ID, 'last_daily_login', $today);
         }
     }
+
 
     /**
      * Handles awarding points when a user publishes a post of a specific type.
      * It differentiates between the first post and subsequent posts.
      */
-    public function handle_new_post_publish($new_status, $old_status, $post) {
+    public function handle_new_post_publish($new_status, $old_status, $post)
+    {
         // Only trigger on publishing a new post
         if ('publish' !== $new_status || 'publish' === $old_status) {
             return;
@@ -110,26 +118,47 @@ class MM_Gamification_User
     /**
      * Handles awarding points when a user updates specific profile fields.
      */
-    public function handle_profile_field_update($user_id, $old_user_data) {
+    public function handle_profile_field_update($user_id, $old_user_data)
+    {
         if (!function_exists('mm_award_points_and_notify')) {
             return;
         }
 
-        // Check for Birthday update
-        $old_birthday = isset($old_user_data->birthday) ? $old_user_data->birthday : get_user_meta($user_id, 'birthday', true);
-        $new_birthday = isset($_POST['birthday']) ? sanitize_text_field($_POST['birthday']) : '';
-        if (!empty($new_birthday) && $new_birthday !== $old_birthday) {
-            mm_award_points_and_notify($user_id, 'birthday_update');
-        }
+        // Fields to track
+        $fields = [
+            'birthday' => 'birthday_update',
+            'location' => 'location_update',
+        ];
 
-        // Check for Location update
-        $old_location = isset($old_user_data->location) ? $old_user_data->location : get_user_meta($user_id, 'location', true);
-        $new_location = isset($_POST['location']) ? sanitize_text_field($_POST['location']) : '';
-        if (!empty($new_location) && $new_location !== $old_location) {
-            mm_award_points_and_notify($user_id, 'location_update');
+        foreach ($fields as $meta_key => $action_key) {
+
+            // Get old value from user meta
+            $old_value = get_user_meta($user_id, $meta_key, true);
+
+            // Get new submitted value
+            $new_value = isset($_POST[$meta_key]) ? sanitize_text_field($_POST[$meta_key]) : '';
+
+            // Skip if empty or unchanged
+            if (empty($new_value) || $new_value === $old_value) {
+                continue;
+            }
+
+            // Check if user has already earned points for this field
+            $earned_key = $action_key . '_earned_once';
+            $already_earned = get_user_meta($user_id, $earned_key, true);
+
+            if (!$already_earned) {
+                // Award points
+                mm_award_points_and_notify($user_id, $action_key);
+
+                // Mark as earned once
+                update_user_meta($user_id, $earned_key, 1);
+            }
+
+            // Update user meta with new value
+            update_user_meta($user_id, $meta_key, $new_value);
         }
     }
-
 
 
     // Handle profile or cover photo upload
@@ -163,10 +192,26 @@ class MM_Gamification_User
         update_user_meta($user_id, $meta_name, esc_url($uploaded['url']));
 
         $notification_data = null;
-        // Trigger gamification and notification only if changed
-        if ($uploaded['url'] !== $old_value && function_exists('mm_award_points_and_notify')) {
-            // Use the centralized function.
+
+        // ---- WEEKLY LIMIT LOGIC ----
+        $weekly_meta_key = $action_key . '_last_points_at'; // e.g., "profile_picture_update_last_points_at"
+        $last_award_date = get_user_meta($user_id, $weekly_meta_key, true);
+        $today = date('Y-m-d');
+
+        $can_earn = true;
+        if ($last_award_date) {
+            $days_since_last = (strtotime($today) - strtotime($last_award_date)) / 86400;
+            if ($days_since_last < 7) {
+                $can_earn = false;
+            }
+        }
+
+        // Award points only if the photo changed AND weekly limit passes
+        if ($uploaded['url'] !== $old_value && $can_earn && function_exists('mm_award_points_and_notify')) {
             $notification_data = mm_award_points_and_notify($user_id, $action_key);
+
+            // Update last awarded date
+            update_user_meta($user_id, $weekly_meta_key, $today);
         }
 
         wp_send_json_success([
@@ -175,10 +220,12 @@ class MM_Gamification_User
         ]);
     }
 
+
     /**
      * Generic AJAX handler for awarding points for frontend actions.
      */
-    public function handle_frontend_action() {
+    public function handle_frontend_action()
+    {
         if (!is_user_logged_in()) {
             wp_send_json_error(['message' => 'You must be logged in to perform this action.'], 403);
         }
@@ -261,14 +308,15 @@ class MM_Gamification_User
  * Renders the gamification points modal in the footer.
  * This modal is hidden by default and shown via JavaScript.
  */
-function mm_gamification_render_points_modal() {
+function mm_gamification_render_points_modal()
+{
     // Only show for logged-in users
     if (!is_user_logged_in()) {
         return;
     }
 
     ob_start();
-    ?>
+?>
     <!-- Gamification Points Modal -->
     <div class="modal fade" id="gamificationPointsModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -303,7 +351,7 @@ function mm_gamification_render_points_modal() {
             </div>
         </div>
     </div>
-    <?php
+<?php
     echo ob_get_clean();
 }
 add_action('wp_footer', 'mm_gamification_render_points_modal');
@@ -315,11 +363,12 @@ add_action('wp_footer', 'mm_gamification_render_points_modal');
  * Enqueues the modal script and localizes data if a notification exists.
  * This function is hooked into both front-end and admin script hooks.
  */
-function mm_gamification_enqueue_modal_scripts() {
+function mm_gamification_enqueue_modal_scripts()
+{
     wp_enqueue_script(
         'modal-plugin-js',
         plugin_dir_url(__FILE__) . '../assets/js/modal.js',
-        ['jquery'], 
+        ['jquery'],
         '1.0',
         true
     );
@@ -353,7 +402,8 @@ add_action('admin_enqueue_scripts', 'mm_gamification_enqueue_modal_scripts');
 /* ----------------------------------------------------------
    Modal Generator Function
 ---------------------------------------------------------- */
-function rp_render_modal($id, $content, $options = []) {
+function rp_render_modal($id, $content, $options = [])
+{
 
     $defaults = [
         'centered' => true,
@@ -374,13 +424,14 @@ function rp_render_modal($id, $content, $options = []) {
         </div>
     </div>
 
-    <?php return ob_get_clean();
+<?php return ob_get_clean();
 }
 
 /* ----------------------------------------------------------
    Shortcode: [rp_modal id="example"] ...html... [/rp_modal]
 ---------------------------------------------------------- */
-function rp_modal_shortcode($atts, $content = null) {
+function rp_modal_shortcode($atts, $content = null)
+{
     $atts = shortcode_atts([
         'id' => 'modal-default',
     ], $atts);

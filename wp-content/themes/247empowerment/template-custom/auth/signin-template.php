@@ -34,25 +34,33 @@ $old_input = $message['old_input'] ?? [];
 
                     <?php
                     if ($message = get_transient('custom_user_message')) {
-                        $type = $message['type']; // 'success' or 'danger'
+                        $type = $message['type']; // success or danger                        
                         $text = $message['text'];
 
-                        // Allowed HTML tags for safety
                         $allowed_tags = [
                             'span' => ['style' => []],
                             'strong' => [],
                             'em' => [],
                             'a' => ['href' => [], 'class' => []],
                         ];
+
                         echo '<div class="alert" style="background-color: #E8EEFB;">';
-                        echo '<p style="color: #E835B0; font-size: 20px;">Thank You for Registering!</p>';
-                        echo '<p style="color: #555555; font-size: 20px; margin-top: 10px;">' . wp_kses($text, $allowed_tags) . '</p>';
+
+                        // Show correct title
+                        if ($type === 'success') {
+                            echo '<p style="color: #E835B0; font-size: 20px;">Thank You for Registering!</p>';
+                            echo '<p style="color: #555555; font-size: 20px;">' . wp_kses($text, $allowed_tags) . '</p>';
+                        } elseif ($type === 'danger') {                         
+                            echo '<p style="color: #F00000; font-size: 20px; ">' . wp_kses($text, $allowed_tags) . '</p>';
+                        }
+
+                        
                         echo '</div>';
 
-                        // Delete transient after showing
                         delete_transient('custom_user_message');
                     }
                     ?>
+
 
                     <h2 class="mb-3 title">Welcome Back</h2>
                     <p class="mb-4">Log in to continue your empowerment journey.</p>

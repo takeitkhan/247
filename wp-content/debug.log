@@ -122,3 +122,36 @@
 [21-Nov-2025 14:20:01 UTC] Automatic updates complete.
 [22-Nov-2025 07:23:49 UTC] Automatic updates starting...
 [22-Nov-2025 07:23:52 UTC] Automatic updates complete.
+[25-Nov-2025 14:58:16 UTC] Automatic updates starting...
+[25-Nov-2025 14:58:23 UTC] Automatic updates complete.
+[25-Nov-2025 20:58:42 UTC] PHP Parse error:  syntax error, unexpected token "echo" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\signin-template.php on line 58
+[25-Nov-2025 20:59:36 UTC] PHP Warning:  Undefined variable $text in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\signin-template.php on line 38
+[25-Nov-2025 21:24:28 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[25-Nov-2025 21:24:34 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[25-Nov-2025 21:24:40 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[25-Nov-2025 21:24:46 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[25-Nov-2025 21:52:35 UTC] PHP Warning:  Undefined variable $phone in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 137
+[25-Nov-2025 21:52:35 UTC] PHP Warning:  Undefined variable $dob in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 148
+[25-Nov-2025 21:52:35 UTC] PHP Warning:  Undefined variable $referrer in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 204
+[25-Nov-2025 21:52:53 UTC] PHP Warning:  Undefined variable $phone in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 137
+[25-Nov-2025 21:52:53 UTC] PHP Warning:  Undefined variable $dob in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 148
+[25-Nov-2025 21:52:53 UTC] PHP Warning:  Undefined variable $referrer in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 204
+[25-Nov-2025 21:53:32 UTC] PHP Warning:  Undefined variable $phone in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 137
+[25-Nov-2025 21:53:32 UTC] PHP Warning:  Undefined variable $dob in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 148
+[25-Nov-2025 21:53:32 UTC] PHP Warning:  Undefined variable $referrer in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 204
+[25-Nov-2025 21:55:20 UTC] PHP Warning:  Undefined variable $phone in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 119
+[25-Nov-2025 21:55:20 UTC] PHP Warning:  Undefined variable $dob in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 130
+[25-Nov-2025 21:55:20 UTC] PHP Warning:  Undefined variable $referrer in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 186
+[25-Nov-2025 21:55:34 UTC] PHP Warning:  Undefined variable $phone in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 119
+[25-Nov-2025 21:55:34 UTC] PHP Warning:  Undefined variable $dob in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 130
+[25-Nov-2025 21:55:34 UTC] PHP Warning:  Undefined variable $referrer in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 186
+[25-Nov-2025 21:58:04 UTC] PHP Warning:  Undefined variable $phone in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 119
+[25-Nov-2025 21:58:04 UTC] PHP Warning:  Undefined variable $dob in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 130
+[25-Nov-2025 21:58:04 UTC] PHP Warning:  Undefined variable $referrer in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 186
+[25-Nov-2025 21:58:13 UTC] PHP Warning:  Undefined variable $phone in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 119
+[25-Nov-2025 21:58:13 UTC] PHP Warning:  Undefined variable $dob in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 130
+[25-Nov-2025 21:58:13 UTC] PHP Warning:  Undefined variable $referrer in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 186
+[25-Nov-2025 22:04:10 UTC] PHP Warning:  Undefined variable $phone in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 119
+[25-Nov-2025 22:04:10 UTC] PHP Warning:  Undefined variable $referrer in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 187
+[25-Nov-2025 22:05:15 UTC] PHP Warning:  Undefined variable $phone in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 119
+[25-Nov-2025 22:05:51 UTC] PHP Warning:  Undefined variable $phone in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 119

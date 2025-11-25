@@ -50,11 +50,11 @@ if ($current_user) {
 
                 <li class="list-unstyled">
                     <a class="dropdown-item" href="<?php echo esc_url($profile_url); ?>">
-                        <div class="d-flex align-items-center img44 gap10">
+                        <div class="position-relative img44">
                             <img src="<?php echo esc_url($profile_photo_url); ?>"
                                 class="rounded-circle w-100 h-100 object-fit-cover"
                                 alt="<?php echo esc_attr($full_name); ?>">
-                            <span class="fs18 fw-medium"><?php echo esc_html($full_name); ?></span>
+                            <span class="fs20 fw-large"><?php echo ' &nbsp; ' . esc_html($full_name); ?></span>
                         </div>
                     </a>
                 </li>
