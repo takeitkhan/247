@@ -159,16 +159,16 @@ if (is_front_page()) {
             </div>
 
             <!-- Main Navigation -->
-            <ul class="d-lg-flex gap-4 nav d-none">
+            <ul class="d-lg-flex nav d-none">
                 <?php
-                wp_nav_menu([
-                    'theme_location' => 'primary',
-                    'container'      => false,
-                    'items_wrap'     => '%3$s', // Remove extra <ul>
-                    'depth'          => 2,
-                    'fallback_cb'    => false,
-                    'walker'         => new MM_Walker_Nav_Menu(),
-                ]);
+                    wp_nav_menu([
+                        'theme_location' => 'primary',
+                        'container'      => false,
+                        'items_wrap'     => '%3$s',
+                        'depth'          => 2,
+                        'fallback_cb'    => false,
+                        'walker'         => new MM_Walker_Nav_Menu(),
+                    ]);
                 ?>
             </ul>
 

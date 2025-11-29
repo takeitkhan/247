@@ -1,10 +1,10 @@
-
 <?php
 
 /**
- * Template Name: Support Teams
- * Custom Support Teams Page Template
+ * Template Name: FAQ, Support, Video Page
+ * Custom FAQ, Support, Video Page Template
  */
+$custom_page = $GLOBALS['current_support_page'] ?? '';
 get_header_based_on_login();
 
 // Get current logged-in user ID (used as a fallback if no slug is provided)
@@ -52,22 +52,19 @@ if ($user) {
             <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
         </div>
         <div class="mb-4 col-lg-6">
-            <div class="bg-white custom-box-shadow mb-3 p-3 custom-border-radius">                
-                <h2 class='mb-4 text-start title'>Support Teams</h2>
+            <div class="bg-white custom-box-shadow mb-3 p-3 custom-border-radius">
+                <h2 class='mb-4 text-start title'><?php the_title(); ?></h2>
                 <p class='mb-4 text-start'>Together we grow stronger — find your team and start your journey.</p>
-                
                 <?php
-                // Replace 123 with the actual Page ID where FAQ content is stored
-                $faq_page_id = 18;
-                $faq_page = get_post($faq_page_id);
-
-                if ($faq_page) {
-                    //echo '<h2 class="mb-4 text-center">' . esc_html(get_the_title($faq_page)) . '</h2>';
-                    echo '<div class="faq-text">' . apply_filters('the_content', $faq_page->post_content) . '</div>';
-                } else {
-                    echo '<p class="text-danger">FAQ content not found. Please set the correct page ID.</p>';
-                }
-                ?>
+                if (have_posts()) :
+                    while (have_posts()) : the_post(); ?>
+                        <div class="content">
+                            <?php the_content(); ?>
+                        </div>
+                    <?php endwhile;
+                else : ?>
+                    <p>No content found.</p>
+                <?php endif; ?>
             </div>
         </div>
         <div class="rounded-start-0 col-lg-3">

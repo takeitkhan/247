@@ -3,11 +3,7 @@
 /**
  * Template Name: Custom Blog Page
  */
-if (is_user_logged_in()) {
-    get_header('portal');
-} else {
-    get_header('main');
-}
+get_header_based_on_login();
 ?>
 
 <div class="p-4 container">
@@ -97,10 +93,4 @@ if (is_user_logged_in()) {
     </div>
 </div>
 
-<?php
-if (is_user_logged_in()) {
-    get_footer('portal'); // loads footer-custom.php
-} else {
-    get_footer('main'); // loads footer-main.php
-}
-?>
+<?php get_footer_based_on_login(); ?>

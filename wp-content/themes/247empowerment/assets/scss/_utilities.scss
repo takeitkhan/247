@@ -15,8 +15,6 @@
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 20px;
-  border-radius: 10px;
-  // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .custom-padding-top {
@@ -28,6 +26,23 @@
   width: 44px !important;
   height: 44px !important;
 }
+
+.img80 {
+  width: 80px !important;
+  height: 80px !important;
+
+  @media (max-width: 767.98px) {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  .active-icon {
+    top: 65px;
+    right: 7px;
+  }
+}
+
+
 
 .gap12 {
   gap: 12px;
@@ -77,28 +92,11 @@
 }
 
 .img240 {
-  flex: 0 0 240px;
-  width: 240px;
+  min-width: 240px;
   height: 220px;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #f5f5f5;
-}
 
-.img240 img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.content-col {
-  flex: 1;
-}
-
-@media (max-width: 767px) {
-  .img240 {
-    width: 100%;
-    height: 220px;
+  img {
+    border-radius: 6px;
   }
 }
 
@@ -236,6 +234,10 @@
   margin-right: 12px;
 }
 
+.mt20 {
+  margin-top: 20px;
+}
+
 .portal-title {
   font-size: clamp(20px, 4vw, 24px) !important;
   font-weight: bold !important;
@@ -249,23 +251,13 @@
   color: $gray_black !important;
 }
 
-.fs10 {
-  font-size: 10px;
-}
-
-.fs12 {
-  font-size: 12px;
-}
-
 .fs14 {
   font-size: 14px;
 }
 
-.fs16 {
-  font-size: clamp(16px, 4vw, 16px) !important;
-  color: $gray_black;
-  font-weight: bold;
-  line-height: 1.6;
+.modal-width {
+  max-width: 800px !important;
+  width: 100% !important;
 }
 
 .fs18 {
@@ -282,27 +274,6 @@
   color: $gray_black;
 }
 
-.fs24 {
-  font-size: clamp(18px, 4vw, 24px);
-  font-weight: medium;
-  line-height: 1.6;
-  color: $gray_black;
-}
-
-.fs32 {
-  background: $primary-color;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: clamp(24px, 2.5vw, 32px);
-  font-weight: bold;
-}
-
-.modal-width {
-  max-width: 800px !important;
-  width: 100% !important;
-}
-
 .pb-4 {
   padding-bottom: 1.25rem !important;
 }
@@ -314,6 +285,22 @@
   -webkit-text-fill-color: transparent;
   font-size: clamp(18px, 2.5vw, 24px);
   font-weight: bold;
+}
+
+.fs32 {
+  background: $primary-color;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: clamp(24px, 2.5vw, 32px);
+  font-weight: bold;
+}
+
+.fs24 {
+  font-size: clamp(18px, 4vw, 24px);
+  font-weight: medium;
+  line-height: 1.6;
+  color: $gray_black;
 }
 
 // remove bootstrap default class
@@ -354,15 +341,4 @@
   border-right: 0em solid transparent;
   border-bottom: 0;
   border-left: 0em solid transparent;
-}
-
-.notif-bubble {
-  background: red;
-  color: #fff;
-  font-size: 10px;
-  border-radius: 50%;
-  padding: 4px 10px;
-  position: absolute;
-  top: -8px;
-  right: -8px;
 }

@@ -48,8 +48,11 @@ acf_add_local_field_group([
 
 class MM_Walker_Nav_Menu extends Walker_Nav_Menu
 {
+    private function relative_url($url) {
+        $path = wp_make_link_relative($url);
+        return untrailingslashit($path) ?: '/';
+    }
 
-    // Start level (sub-menu)
     function start_lvl(&$output, $depth = 0, $args = null)
     {
         $indent = str_repeat("\t", $depth);
@@ -57,54 +60,128 @@ class MM_Walker_Nav_Menu extends Walker_Nav_Menu
         $output .= "\n$indent<ul class=\"dropdown-menu$submenu_class\">\n";
     }
 
-    // Start element
     function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
     {
         $classes = empty($item->classes) ? [] : (array) $item->classes;
-        $classes = array_filter($classes); // remove empty
+        $classes = array_filter($classes);
 
         $has_children = in_array('menu-item-has-children', $classes);
 
-        // Classes for <li>
+        // Current URL
+        $current_url = home_url(add_query_arg([], $GLOBALS['wp']->request));
+        $menu_path = $this->relative_url($item->url);
+        $current_path = $this->relative_url($current_url);
+
+        // Check if this menu item is active
+        $is_active = ($menu_path === $current_path) || in_array('current-menu-item', $classes);
+
+        // --- Check if any child is active for parent highlight ---
+        if ($has_children && isset($args->walker) && $args->walker instanceof Walker_Nav_Menu) {
+            $child_active = false;
+            foreach ($item->classes as $c) {
+                if (strpos($c, 'current-menu-ancestor') !== false) {
+                    $child_active = true;
+                    break;
+                }
+            }
+            if ($child_active) {
+                $is_active = true;
+            }
+        }
+
+        // --- Classes for <li> ---
         $li_classes = ['nav-item'];
-        if ($has_children && $depth === 0) {
-            $li_classes[] = 'dropdown';
-        } elseif ($depth > 0 && $has_children) {
-            $li_classes[] = 'dropdown-submenu';
-        }
+        if ($has_children && $depth === 0) $li_classes[] = 'dropdown';
+        if ($depth > 0 && $has_children) $li_classes[] = 'dropdown-submenu';
+        if ($is_active) $li_classes[] = 'active-menu';
 
-        // Classes for <a>
+        // --- Classes for <a> ---
         $link_classes = ['nav-link'];
-        if ($depth === 0 && $has_children) {
-            $link_classes[] = 'dropdown-toggle';
-        } elseif ($depth > 0) {
-            $link_classes = ['dropdown-item'];
-        }
+        if ($depth === 0 && $has_children) $link_classes[] = 'dropdown-toggle';
+        if ($depth > 0) $link_classes = ['dropdown-item'];
 
-        // Attributes for <a>
         $attrs = '';
-        if ($has_children && $depth === 0) {
-            $attrs .= ' data-bs-toggle="dropdown" aria-expanded="false"';
-        }
+        if ($has_children && $depth === 0) $attrs .= ' data-bs-toggle="dropdown" aria-expanded="false"';
 
+        // Output
         $output .= '<li class="' . esc_attr(implode(' ', $li_classes)) . '">';
         $output .= '<a href="' . esc_url($item->url) . '" class="' . esc_attr(implode(' ', $link_classes)) . '"' . $attrs . '>';
         $output .= esc_html($item->title);
         $output .= '</a>';
     }
 
-    // End element
     function end_el(&$output, $item, $depth = 0, $args = null)
     {
         $output .= "</li>\n";
     }
 
-    // End level
     function end_lvl(&$output, $depth = 0, $args = null)
     {
         $output .= "</ul>\n";
     }
 }
+
+
+
+// class MM_Walker_Nav_Menu extends Walker_Nav_Menu
+// {
+
+//     // Start level (sub-menu)
+//     function start_lvl(&$output, $depth = 0, $args = null)
+//     {
+//         $indent = str_repeat("\t", $depth);
+//         $submenu_class = ($depth > 0) ? ' dropdown-submenu' : '';
+//         $output .= "\n$indent<ul class=\"dropdown-menu$submenu_class\">\n";
+//     }
+
+//     // Start element
+//     function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
+//     {
+//         $classes = empty($item->classes) ? [] : (array) $item->classes;
+//         $classes = array_filter($classes); // remove empty
+
+//         $has_children = in_array('menu-item-has-children', $classes);
+
+//         // Classes for <li>
+//         $li_classes = ['nav-item'];
+//         if ($has_children && $depth === 0) {
+//             $li_classes[] = 'dropdown';
+//         } elseif ($depth > 0 && $has_children) {
+//             $li_classes[] = 'dropdown-submenu';
+//         }
+
+//         // Classes for <a>
+//         $link_classes = ['nav-link'];
+//         if ($depth === 0 && $has_children) {
+//             $link_classes[] = 'dropdown-toggle';
+//         } elseif ($depth > 0) {
+//             $link_classes = ['dropdown-item'];
+//         }
+
+//         // Attributes for <a>
+//         $attrs = '';
+//         if ($has_children && $depth === 0) {
+//             $attrs .= ' data-bs-toggle="dropdown" aria-expanded="false"';
+//         }
+
+//         $output .= '<li class="' . esc_attr(implode(' ', $li_classes)) . '">';
+//         $output .= '<a href="' . esc_url($item->url) . '" class="' . esc_attr(implode(' ', $link_classes)) . '"' . $attrs . '>';
+//         $output .= esc_html($item->title);
+//         $output .= '</a>';
+//     }
+
+//     // End element
+//     function end_el(&$output, $item, $depth = 0, $args = null)
+//     {
+//         $output .= "</li>\n";
+//     }
+
+//     // End level
+//     function end_lvl(&$output, $depth = 0, $args = null)
+//     {
+//         $output .= "</ul>\n";
+//     }
+// }
 
 
 
@@ -177,25 +254,36 @@ class MM_Auth_Walker_Nav_Menu extends Walker_Nav_Menu
     }
 }
 
+function mm_relative_url($url) {
+    $path = parse_url($url, PHP_URL_PATH) ?? '';
+    $path = trim($path, '/');
+
+    return '/' . $path;
+}
+
 class Image_Icon_Walker_Nav_Menu extends Walker_Nav_Menu
 {
     function start_el(&$output, $item, $depth = 0, $args = [], $id = 0)
     {
-        // Get ACF fields
         $icon_url   = get_field('menu_icon_image', $item);
         $icon_class = get_field('menu_icon_class', $item) ?: 'img24';
 
-        // Replace $username placeholder with logged-in username
         $current_user = wp_get_current_user();
-        $username = $current_user->user_nicename ?: 'guest'; // fallback if not logged in
+        $username = $current_user->user_nicename ?: 'guest';
         $url = str_replace('$username', $username, $item->url);
 
-        // Active class
+        // Create comparable paths
         $current_url = home_url(add_query_arg([], $GLOBALS['wp']->request));
-        $active_class = (untrailingslashit($url) === untrailingslashit($current_url)) ? 'active-menu' : '';
 
-        $output .= '<li class="nav-item">';
-        $output .= '<a href="' . esc_url($url) . '" class="d-flex align-items-baseline gap-2 nav-link ' . esc_attr($active_class) . '">';
+        $menu_path    = mm_relative_url($url);
+        $current_path = mm_relative_url($current_url);
+
+        // Check active
+        $active_class = ($menu_path === $current_path) ? 'active-menu' : '';
+
+        // Output
+        $output .= '<li class="nav-item ' . esc_attr($active_class) . '">';
+        $output .= '<a href="' . esc_url($url) . '" class="d-flex align-items-baseline gap-2 nav-link">';
 
         if ($icon_url) {
             $output .= '<div class="' . esc_attr($icon_class) . '">';

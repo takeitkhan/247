@@ -155,3 +155,127 @@
 [25-Nov-2025 22:04:10 UTC] PHP Warning:  Undefined variable $referrer in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 187
 [25-Nov-2025 22:05:15 UTC] PHP Warning:  Undefined variable $phone in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 119
 [25-Nov-2025 22:05:51 UTC] PHP Warning:  Undefined variable $phone in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 119
+[26-Nov-2025 15:00:31 UTC] Automatic updates starting...
+[26-Nov-2025 15:00:34 UTC] Automatic updates complete.
+[27-Nov-2025 02:15:20 UTC] Automatic updates starting...
+[27-Nov-2025 02:15:23 UTC] Automatic updates complete.
+[27-Nov-2025 03:20:47 UTC] PHP Fatal error:  Uncaught TypeError: in_array(): Argument #2 ($haystack) must be of type array, string given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php:194
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php(194): in_array('current-menu-it...', '')
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-walker.php(150): Image_Icon_Walker_Nav_Menu->start_el('', Object(WP_Post), 0, Array, 0)
+#2 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-walker.php(252): Walker->display_element(Object(WP_Post), Array, 0, 0, Array, '')
+#3 D:\oldwindows\laragon\www\pet\wp-includes\post-template.php(1578): Walker->walk(Array, 0, Array, 0)
+#4 D:\oldwindows\laragon\www\pet\wp-includes\post-template.php(1361): walk_page_tree(Array, 0, 0, Array)
+#5 D:\oldwindows\laragon\www\pet\wp-includes\post-template.php(1493): wp_list_pages(Array)
+#6 D:\oldwindows\laragon\www\pet\wp-includes\nav-menu-template.php(169): wp_page_menu(Array)
+#7 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\header-portal.php(194): wp_nav_menu(Object(stdClass))
+#8 D:\oldwindows\laragon\www\pet\wp-includes\template.php(810): require_once('D:\\oldwindows\\l...')
+#9 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', true, Array)
+#10 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(48): locate_template(Array, true, true, Array)
+#11 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\functions.php(65): get_header('portal')
+#12 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\store-template.php(6): get_header_based_on_login()
+#13 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
+#14 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#15 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#16 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 194
+[27-Nov-2025 03:20:52 UTC] PHP Fatal error:  Uncaught TypeError: in_array(): Argument #2 ($haystack) must be of type array, string given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php:194
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php(194): in_array('current-menu-it...', '')
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-walker.php(150): Image_Icon_Walker_Nav_Menu->start_el('', Object(WP_Post), 0, Array, 279)
+#2 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-walker.php(252): Walker->display_element(Object(WP_Post), Array, 0, 0, Array, '')
+#3 D:\oldwindows\laragon\www\pet\wp-includes\post-template.php(1578): Walker->walk(Array, 0, Array, 279)
+#4 D:\oldwindows\laragon\www\pet\wp-includes\post-template.php(1361): walk_page_tree(Array, 0, 279, Array)
+#5 D:\oldwindows\laragon\www\pet\wp-includes\post-template.php(1493): wp_list_pages(Array)
+#6 D:\oldwindows\laragon\www\pet\wp-includes\nav-menu-template.php(169): wp_page_menu(Array)
+#7 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\header-portal.php(194): wp_nav_menu(Object(stdClass))
+#8 D:\oldwindows\laragon\www\pet\wp-includes\template.php(810): require_once('D:\\oldwindows\\l...')
+#9 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', true, Array)
+#10 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(48): locate_template(Array, true, true, Array)
+#11 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\functions.php(65): get_header('portal')
+#12 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php(6): get_header_based_on_login()
+#13 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\page-login-router.php(7): include('D:\\oldwindows\\l...')
+#14 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
+#15 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#16 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#17 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 194
+[27-Nov-2025 03:37:53 UTC] PHP Fatal error:  Uncaught TypeError: in_array(): Argument #2 ($haystack) must be of type array, string given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php:194
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php(194): in_array('current-menu-it...', '')
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-walker.php(150): Image_Icon_Walker_Nav_Menu->start_el('', Object(WP_Post), 0, Array, 0)
+#2 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-walker.php(252): Walker->display_element(Object(WP_Post), Array, 0, 0, Array, '')
+#3 D:\oldwindows\laragon\www\pet\wp-includes\post-template.php(1578): Walker->walk(Array, 0, Array, 0)
+#4 D:\oldwindows\laragon\www\pet\wp-includes\post-template.php(1361): walk_page_tree(Array, 0, 0, Array)
+#5 D:\oldwindows\laragon\www\pet\wp-includes\post-template.php(1493): wp_list_pages(Array)
+#6 D:\oldwindows\laragon\www\pet\wp-includes\nav-menu-template.php(169): wp_page_menu(Array)
+#7 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\header-portal.php(194): wp_nav_menu(Object(stdClass))
+#8 D:\oldwindows\laragon\www\pet\wp-includes\template.php(810): require_once('D:\\oldwindows\\l...')
+#9 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', true, Array)
+#10 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(48): locate_template(Array, true, true, Array)
+#11 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\functions.php(65): get_header('portal')
+#12 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\event-template.php(6): get_header_based_on_login()
+#13 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
+#14 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#15 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#16 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 194
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:39:59 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 181
+[27-Nov-2025 03:57:21 UTC] PHP Fatal error:  Cannot redeclare mm_relative_url() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php:49) in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 158
+[27-Nov-2025 03:57:22 UTC] PHP Fatal error:  Cannot redeclare mm_relative_url() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php:49) in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\walker-menu.php on line 158
+[28-Nov-2025 10:50:55 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[28-Nov-2025 10:50:59 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[28-Nov-2025 10:51:12 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[28-Nov-2025 10:51:16 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[28-Nov-2025 10:53:28 UTC] Automatic updates starting...
+[28-Nov-2025 10:53:31 UTC] Automatic updates complete.
+[28-Nov-2025 12:50:56 UTC] Automatic updates starting...
+[28-Nov-2025 12:50:56 UTC] Automatic updates complete.
+[29-Nov-2025 10:52:54 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1988
+[29-Nov-2025 12:44:55 UTC] Automatic updates starting...
+[29-Nov-2025 12:44:59 UTC] Automatic updates complete.
+[29-Nov-2025 12:50:51 UTC] Automatic updates starting...
+[29-Nov-2025 12:50:51 UTC] Automatic updates complete.
+[29-Nov-2025 13:30:13 UTC] PHP Warning:  Undefined variable $youtube_playlist_url in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\page-video.php on line 19
+[29-Nov-2025 13:30:13 UTC] PHP Deprecated:  ltrim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 4486
+[29-Nov-2025 13:30:13 UTC] PHP Warning:  Undefined variable $embed_playlist_url in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\page-video.php on line 20
+[29-Nov-2025 13:30:13 UTC] PHP Deprecated:  ltrim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 4486
+[29-Nov-2025 13:33:06 UTC] PHP Warning:  Undefined variable $youtube_playlist_url in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\page-video.php on line 19
+[29-Nov-2025 13:33:06 UTC] PHP Deprecated:  ltrim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 4486
+[29-Nov-2025 13:33:06 UTC] PHP Warning:  Undefined variable $embed_playlist_url in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\page-video.php on line 20
+[29-Nov-2025 13:33:06 UTC] PHP Deprecated:  ltrim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 4486
+[29-Nov-2025 13:33:26 UTC] PHP Warning:  Undefined variable $youtube_playlist_url in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\page-video.php on line 19
+[29-Nov-2025 13:33:26 UTC] PHP Deprecated:  ltrim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 4486
+[29-Nov-2025 13:33:26 UTC] PHP Warning:  Undefined variable $embed_playlist_url in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\page-video.php on line 20
+[29-Nov-2025 13:33:26 UTC] PHP Deprecated:  ltrim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\formatting.php on line 4486

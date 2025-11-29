@@ -660,21 +660,44 @@ function add_custom_query_var($vars)
 }
 add_filter('query_vars', 'add_custom_query_var');
 
-function load_custom_template()
-{
+// function load_custom_template()
+// {
+//     $custom_page = get_query_var('custom_page');
+//     if ($custom_page == 'support-teams') {
+//         include get_template_directory() . '/template-custom/auth/support-teams.php';
+//         //exit;
+//     } elseif ($custom_page == 'faqs') {
+//         include get_template_directory() . '/template-custom/auth/support-faqs.php';
+//        //exit;
+//     } elseif ($custom_page == 'video-library') {
+//         include get_template_directory() . '/template-custom/auth/support-video-library.php';
+//         //exit;
+//     }
+// }
+// add_action('template_redirect', 'load_custom_template');
+
+function load_custom_template() {
     $custom_page = get_query_var('custom_page');
-    if ($custom_page == 'support-teams') {
-        include get_template_directory() . '/template-custom/auth/support-teams.php';
-        exit;
-    } elseif ($custom_page == 'faqs') {
-        include get_template_directory() . '/template-custom/auth/support-faqs.php';
-        exit;
-    } elseif ($custom_page == 'video-library') {
-        include get_template_directory() . '/template-custom/auth/support-video-library.php';
-        exit;
+
+    $support_pages = [
+        'support-teams',
+        'faqs',
+        'video-library'
+    ];
+
+    if (in_array($custom_page, $support_pages)) {
+        // Load the common template
+        include get_template_directory() . '/template-custom/support-pages.php';
+        
+        // Optionally pass the custom page type inside the template
+        $GLOBALS['current_support_page'] = $custom_page;
+        
+        // Stop further template_redirect handling but keep WP loop
+        return;
     }
 }
 add_action('template_redirect', 'load_custom_template');
+
 
 
 add_action('admin_init', function () {
@@ -786,5 +809,6 @@ require_once get_template_directory() . '/more_functions/profile.php';
 require_once get_template_directory() . '/more_functions/store.php';
 require_once get_template_directory() . '/more_functions/event.php';
 require_once get_template_directory() . '/more_functions/blog.php';
+require_once get_template_directory() . '/more_functions/video.php';
 require_once get_template_directory() . '/more_functions/issues.php';
 require_once get_template_directory() . '/more_functions/paypalsettings.php';

@@ -49,20 +49,44 @@ function register_my_menus()
 }
 add_action('after_setup_theme', 'register_my_menus');
 
-class MM_Walker_Nav_Menu extends Walker_Nav_Menu
-{
-    function start_el(&$output, $item, $depth = 0, $args = [], $id = 0)
-    {
-        $classes = 'hover:text-white transition-colors';
-        $output .= sprintf(
-            '<a href="%s" class="%s">%s</a>',
-            esc_url($item->url),
-            $classes,
-            esc_html($item->title)
-        );
-    }
-}
 
+// function mm_relative_url($url) {
+//     return '/' . trim(parse_url($url, PHP_URL_PATH) ?? '', '/');
+// }
+// class MM_Walker_Nav_Menu extends Walker_Nav_Menu
+// {
+//     function start_el(&$output, $item, $depth = 0, $args = [], $id = 0)
+//     {
+//         echo '<pre>';
+//         var_dump('Samrat');
+//         echo '</pre';
+//         $li_classes = ['nav-item'];
+//         $link_classes = 'hover:text-white transition-colors';
+
+//         // Current full URL
+//         $current_url = home_url(add_query_arg([], $GLOBALS['wp']->request));
+
+//         // Make both URLs relative
+//         $menu_url = wp_make_link_relative($item->url);
+//         $current_relative = wp_make_link_relative($current_url);
+
+//         // Remove trailing slashes
+//         $menu_url = untrailingslashit($menu_url) ?: '/';
+//         $current_relative = untrailingslashit($current_relative) ?: '/';
+//         // Compare URLs for active
+//         if ($menu_url === $current_relative) {
+//             $li_classes[] = 'active-menu';
+//         }
+
+//         // Output
+//         $li_class_attr = esc_attr(implode(' ', $li_classes));
+//         $output .= '<li class="' . $li_class_attr . '">';
+//         $output .= '<a href="' . esc_url($item->url) . '" class="' . esc_attr($link_classes) . '">';
+//         $output .= esc_html($item->title);
+//         $output .= '</a>';
+//         $output .= '</li>';
+//     }
+// }
 Kirki::add_config('my_config', array(
     'capability'  => 'edit_theme_options',
     'option_type' => 'theme_mod',

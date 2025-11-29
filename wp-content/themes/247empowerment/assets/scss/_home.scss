@@ -89,12 +89,13 @@
         object-fit: contain;
     }
 
-    &:hover {
+    &:hover,
+    &.active-menu {  // ✅ Active behaves like hover
         background: $primary-color; // your gradient variable
-        color: $white;
+        // color: $white;
 
         a {            
-            color: $white !important;
+            // color: $white !important;
         }
 
         .icon-img {
@@ -105,13 +106,23 @@
 
 .menu-portal-menu-container {
     .nav-item {
+
+        // Hover color
         &:hover {
-            a {            
+            a {
                 color: $primary-color !important;
+            }
+        }
+
+        // ACTIVE (same as hover)
+        &.active-menu {
+            a {
+                color: $primary-color !important;   // 🔥 Active link color
             }
         }
     }
 }
+
 
 .u-title {
 

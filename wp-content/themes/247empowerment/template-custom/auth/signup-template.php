@@ -9,8 +9,6 @@ defined('ABSPATH') || exit;
 
 get_header_based_on_login();
 
-?>
-<?php
 $message = get_transient('custom_user_message');
 $old_input = $message['old_input'] ?? [];
 ?>

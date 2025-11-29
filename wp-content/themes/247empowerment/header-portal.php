@@ -173,7 +173,7 @@
               <?php
                 wp_nav_menu([
                     'theme_location' => 'portalmenu',
-                    'menu_class'     => 'd-lg-flex gap-4 nav d-none',
+                    'menu_class'     => 'd-lg-flex gap-0 nav d-none',
                     'walker'         => new Image_Icon_Walker_Nav_Menu(),
                 ]);
                 ?>
