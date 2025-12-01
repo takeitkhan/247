@@ -290,3 +290,52 @@ Stack trace:
 [01-Dec-2025 13:51:08 UTC]   Automatic plugin updates starting...
 [01-Dec-2025 13:51:08 UTC]   Automatic plugin updates complete.
 [01-Dec-2025 13:51:09 UTC] Automatic updates complete.
+[01-Dec-2025 16:24:52 UTC] PHP Fatal error:  Uncaught Error: Class "MM_Walker_Nav_Menu" not found in D:\oldwindows\laragon\www\pet\wp-content\themes\mm\template-main\footer.php:144
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\mm\footer.php(5): include()
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(810): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', true, Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(92): locate_template(Array, true, true, Array)
+#4 D:\oldwindows\laragon\www\pet\wp-content\themes\mm\page-welcome.php(29): get_footer()
+#5 D:\oldwindows\laragon\www\pet\wp-content\themes\mm\page-login-router.php(9): include('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#8 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#9 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\mm\template-main\footer.php on line 144
+[01-Dec-2025 16:25:05 UTC] PHP Fatal error:  Uncaught Error: Class "MM_Walker_Nav_Menu" not found in D:\oldwindows\laragon\www\pet\wp-content\themes\mm\template-main\footer.php:144
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\mm\footer.php(5): include()
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(810): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', true, Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(92): locate_template(Array, true, true, Array)
+#4 D:\oldwindows\laragon\www\pet\wp-content\themes\mm\page.php(30): get_footer()
+#5 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#8 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\mm\template-main\footer.php on line 144
+[01-Dec-2025 16:25:10 UTC] PHP Fatal error:  Uncaught Error: Class "MM_Walker_Nav_Menu" not found in D:\oldwindows\laragon\www\pet\wp-content\themes\mm\template-main\footer.php:144
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\mm\footer.php(5): include()
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(810): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', true, Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(92): locate_template(Array, true, true, Array)
+#4 D:\oldwindows\laragon\www\pet\wp-content\themes\mm\page.php(30): get_footer()
+#5 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#8 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\mm\template-main\footer.php on line 144
+[01-Dec-2025 16:25:12 UTC] PHP Fatal error:  Uncaught Error: Class "MM_Walker_Nav_Menu" not found in D:\oldwindows\laragon\www\pet\wp-content\themes\mm\template-main\footer.php:144
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\mm\footer.php(5): include()
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(810): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-includes\template.php(745): load_template('D:\\oldwindows\\l...', true, Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(92): locate_template(Array, true, true, Array)
+#4 D:\oldwindows\laragon\www\pet\wp-content\themes\mm\page.php(30): get_footer()
+#5 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(106): include('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#8 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\mm\template-main\footer.php on line 144

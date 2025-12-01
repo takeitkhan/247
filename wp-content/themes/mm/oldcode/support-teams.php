@@ -55,71 +55,19 @@ if ($user) {
             <div class="bg-white custom-box-shadow mb-3 p-3 custom-border-radius">                
                 <h2 class='mb-4 text-start title'>Support Teams</h2>
                 <p class='mb-4 text-start'>Together we grow stronger — find your team and start your journey.</p>
-                    <ul class="nav nav-tabs fs-6" id="homeTab" role="tablist">
-                        <?php
-                        // Query to get the tabs
-                        $tabs_query = new WP_Query(array(
-                            'post_type' => 'tab',
-                            'posts_per_page' => -1,
-                            'orderby' => 'menu_order',
-                            'order' => 'ASC'
-                        ));
+                
+                <?php
+                // Replace 123 with the actual Page ID where FAQ content is stored
+                $faq_page_id = 18;
+                $faq_page = get_post($faq_page_id);
 
-                        if ($tabs_query->have_posts()) :
-                            $active_class = 'active'; // To add the active class to the first tab
-                            while ($tabs_query->have_posts()) : $tabs_query->the_post();
-                                // Get the custom fields
-                                $tab_title = get_the_title();
-                        ?>
-                                <li class="nav-item" role="presentation">
-                                    <button class="custom-tab-button <?php echo $active_class; ?>" id="<?php echo sanitize_title($tab_title); ?>-tab" data-bs-toggle="tab" data-bs-target="#<?php echo sanitize_title($tab_title); ?>" type="button" role="tab" aria-controls="<?php echo sanitize_title($tab_title); ?>" aria-selected="true"><?php echo esc_html($tab_title); ?></button>
-                                </li>
-                        <?php
-                                $active_class = ''; // After the first tab, no need to add "active"
-                            endwhile;
-                        endif;
-                        ?>
-                    </ul>
-
-                    <div class="p-3 text-left tab-content transparent-bg" id="homeTabContent">
-                        <?php
-                        // Reset the loop to fetch the content for each tab
-                        if ($tabs_query->have_posts()) :
-                            $active_class = 'show active'; // To add the active class to the first tab content
-                            while ($tabs_query->have_posts()) : $tabs_query->the_post();
-                                // Get the custom fields
-                                $tab_title = get_the_title();
-                                $tab_content = get_the_content(); // Get the raw content
-
-                                // Allow specific tags like <p>, <br>, etc.
-                                $allowed_tags = array(
-                                    'p' => array(),
-                                    'br' => array(),
-                                    'strong' => array(),
-                                    'em' => array(),
-                                    'ul' => array(),
-                                    'ol' => array(),
-                                    'li' => array(),
-                                    'blockquote' => array(),
-                                    'a' => array(
-                                        'href' => array(),
-                                        'title' => array(),
-                                        'target' => array(),
-                                        'rel' => array(),
-                                        'class' => array()
-                                    ),
-                                );
-                                $tab_content = wp_kses($tab_content, $allowed_tags);
-                        ?>
-                                <div class="tab-pane fade <?php echo $active_class; ?>" id="<?php echo sanitize_title($tab_title); ?>" role="tabpanel" aria-labelledby="<?php echo sanitize_title($tab_title); ?>-tab">
-                                    <div><?php echo wp_kses_post($tab_content); ?></div>
-                                </div>
-                        <?php
-                                $active_class = ''; // After the first tab content, no need to add "show active"
-                            endwhile;
-                        endif;
-                        ?>
-                    </div>
+                if ($faq_page) {
+                    //echo '<h2 class="mb-4 text-center">' . esc_html(get_the_title($faq_page)) . '</h2>';
+                    echo '<div class="faq-text">' . apply_filters('the_content', $faq_page->post_content) . '</div>';
+                } else {
+                    echo '<p class="text-danger">FAQ content not found. Please set the correct page ID.</p>';
+                }
+                ?>
             </div>
         </div>
         <div class="rounded-start-0 col-lg-3">
