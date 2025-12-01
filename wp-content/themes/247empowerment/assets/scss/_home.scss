@@ -103,6 +103,27 @@
         }
     }
 }
+.me-n3 {
+    margin-right: -1rem; /* overlap images slightly */
+}
+.menu-edit-profile-menu {
+    .nav-item {
+
+        // Hover color
+        &:hover {
+            a {
+                color: $white !important;
+            }
+        }
+
+        // ACTIVE (same as hover)
+        &.active-menu {
+            a {
+                color: $white !important;   // 🔥 Active link color
+            }
+        }
+    }
+}
 
 .menu-portal-menu-container {
     .nav-item {

@@ -20,11 +20,11 @@
                     <?php
                     // Social media platforms and icon filenames
                     $social_platforms = [
-                        'facebook'  => 'fb.png',
-                        'twitter'   => 'twitter.png',
-                        'instagram' => 'instagram.png',
-                        'linkedin'  => 'linkedin.png',
-                        'youtube'   => 'youtube.png'
+                        'facebook'  => 'face.svg',
+                        'twitter'   => 'x.svg',
+                        'instagram' => 'inst.svg',
+                        'linkedin'  => 'linked.svg',
+                        'youtube'   => 'yt.svg'
                     ];
 
                     // Loop through each platform and show only those with URLs set in the Customizer
@@ -50,7 +50,6 @@
                     endforeach;
                     ?>
                 </ul>
-
             </div>
 
             <!-- Footer Menu -->

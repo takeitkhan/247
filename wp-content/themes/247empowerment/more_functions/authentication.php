@@ -470,7 +470,7 @@ add_action('template_redirect', function () {
 
     // Pages to redirect logged-in users away from
     $redirect_to_dashboard = ['signin', 'signup'];
-    $redirect_to_home = ['video-library', 'faqs'];
+    $redirect_to_home = ['xvideo-library', 'xfaqs'];
 
     $current_slug = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 

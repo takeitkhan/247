@@ -645,20 +645,20 @@ function give_referral_commission($buyer_id, $course_price, $course_id)
 }
 
 
-function custom_support_faq_video_routes()
-{
-    add_rewrite_rule('^support-teams/?$', 'index.php?custom_page=support-teams', 'top');
-    add_rewrite_rule('^faqs/?$', 'index.php?custom_page=faqs', 'top');
-    add_rewrite_rule('^video-library/?$', 'index.php?custom_page=video-library', 'top');
-}
-add_action('init', 'custom_support_faq_video_routes');
+// function custom_support_faq_video_routes()
+// {
+//     add_rewrite_rule('^support-teams/?$', 'index.php?custom_page=support-teams', 'top');
+//     add_rewrite_rule('^faqs/?$', 'index.php?custom_page=faqs', 'top');
+//     add_rewrite_rule('^video-library/?$', 'index.php?custom_page=video-library', 'top');
+// }
+// add_action('init', 'custom_support_faq_video_routes');
 
-function add_custom_query_var($vars)
-{
-    $vars[] = 'custom_page';
-    return $vars;
-}
-add_filter('query_vars', 'add_custom_query_var');
+// function add_custom_query_var($vars)
+// {
+//     $vars[] = 'custom_page';
+//     return $vars;
+// }
+// add_filter('query_vars', 'add_custom_query_var');
 
 // function load_custom_template()
 // {
@@ -676,27 +676,27 @@ add_filter('query_vars', 'add_custom_query_var');
 // }
 // add_action('template_redirect', 'load_custom_template');
 
-function load_custom_template() {
-    $custom_page = get_query_var('custom_page');
+// function load_custom_template() {
+//     $custom_page = get_query_var('custom_page');
 
-    $support_pages = [
-        'support-teams',
-        'faqs',
-        'video-library'
-    ];
+//     $support_pages = [
+//         'support-teams',
+//         'faqs',
+//         'video-library'
+//     ];
 
-    if (in_array($custom_page, $support_pages)) {
-        // Load the common template
-        include get_template_directory() . '/template-custom/support-pages.php';
+//     if (in_array($custom_page, $support_pages)) {
+//         // Load the common template
+//         include get_template_directory() . '/template-custom/support-pages.php';
         
-        // Optionally pass the custom page type inside the template
-        $GLOBALS['current_support_page'] = $custom_page;
+//         // Optionally pass the custom page type inside the template
+//         $GLOBALS['current_support_page'] = $custom_page;
         
-        // Stop further template_redirect handling but keep WP loop
-        return;
-    }
-}
-add_action('template_redirect', 'load_custom_template');
+//         // Stop further template_redirect handling but keep WP loop
+//         return;
+//     }
+// }
+// add_action('template_redirect', 'load_custom_template');
 
 
 

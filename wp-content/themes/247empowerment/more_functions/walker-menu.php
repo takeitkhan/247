@@ -10,6 +10,8 @@ function register_my_menus()
         'authentication' => __('Authentication Menu', 'mm'),
         'profilemenu' => __('Profile Menu', 'mm'),
         'editprofilemenu' => __('Edit Profile Menu', 'mm'),
+        'portalmegamenu' => __('Portal Mega Menu', 'mm'),
+        'megarightmenu' => __('Mega Right Menu', 'mm'),
     ]);
 }
 add_action('after_setup_theme', 'register_my_menus');
@@ -120,69 +122,6 @@ class MM_Walker_Nav_Menu extends Walker_Nav_Menu
         $output .= "</ul>\n";
     }
 }
-
-
-
-// class MM_Walker_Nav_Menu extends Walker_Nav_Menu
-// {
-
-//     // Start level (sub-menu)
-//     function start_lvl(&$output, $depth = 0, $args = null)
-//     {
-//         $indent = str_repeat("\t", $depth);
-//         $submenu_class = ($depth > 0) ? ' dropdown-submenu' : '';
-//         $output .= "\n$indent<ul class=\"dropdown-menu$submenu_class\">\n";
-//     }
-
-//     // Start element
-//     function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
-//     {
-//         $classes = empty($item->classes) ? [] : (array) $item->classes;
-//         $classes = array_filter($classes); // remove empty
-
-//         $has_children = in_array('menu-item-has-children', $classes);
-
-//         // Classes for <li>
-//         $li_classes = ['nav-item'];
-//         if ($has_children && $depth === 0) {
-//             $li_classes[] = 'dropdown';
-//         } elseif ($depth > 0 && $has_children) {
-//             $li_classes[] = 'dropdown-submenu';
-//         }
-
-//         // Classes for <a>
-//         $link_classes = ['nav-link'];
-//         if ($depth === 0 && $has_children) {
-//             $link_classes[] = 'dropdown-toggle';
-//         } elseif ($depth > 0) {
-//             $link_classes = ['dropdown-item'];
-//         }
-
-//         // Attributes for <a>
-//         $attrs = '';
-//         if ($has_children && $depth === 0) {
-//             $attrs .= ' data-bs-toggle="dropdown" aria-expanded="false"';
-//         }
-
-//         $output .= '<li class="' . esc_attr(implode(' ', $li_classes)) . '">';
-//         $output .= '<a href="' . esc_url($item->url) . '" class="' . esc_attr(implode(' ', $link_classes)) . '"' . $attrs . '>';
-//         $output .= esc_html($item->title);
-//         $output .= '</a>';
-//     }
-
-//     // End element
-//     function end_el(&$output, $item, $depth = 0, $args = null)
-//     {
-//         $output .= "</li>\n";
-//     }
-
-//     // End level
-//     function end_lvl(&$output, $depth = 0, $args = null)
-//     {
-//         $output .= "</ul>\n";
-//     }
-// }
-
 
 
 class MM_Footer_Walker_Nav_Menu extends Walker_Nav_Menu
@@ -311,16 +250,29 @@ class Profile_Menu_Walker extends Walker_Nav_Menu
 
     function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
     {
-        // Correct ACF call
+        // 🔥 Detect active item
+        $active_class = '';
+        if (
+            in_array('current-menu-item', $item->classes) ||
+            in_array('current_page_item', $item->classes) ||
+            in_array('current-menu-ancestor', $item->classes) ||
+            in_array('current_page_ancestor', $item->classes) ||
+            in_array('current-menu-parent', $item->classes)
+        ) {
+            $active_class = ' active-menu';
+        }
+
+        // ACF icon fields
         $icon_url   = get_field('menu_icon_image', $item);
         $icon_class = get_field('menu_icon_class', $item) ?: 'img24';
 
-        // Optional fallback
         if (!$icon_url) {
             $icon_url = get_template_directory_uri() . '/images/default-icon.png';
         }
 
-        $output .= '<li class="d-flex align-items-center nav-item gap10">';
+        // Output LI with active class
+        $output .= '<li class="d-flex align-items-center nav-item gap10' . $active_class . '">';
+
         $output .= '<img src="' . esc_url($icon_url) . '" alt="' . esc_attr($item->title) . '" class="icon-img ' . esc_attr($icon_class) . '">';
         $output .= '<a href="' . esc_url($item->url) . '" class="p-0 text">' . esc_html($item->title) . '</a>';
     }
@@ -331,16 +283,119 @@ class Profile_Menu_Walker extends Walker_Nav_Menu
     }
 }
 
+
 class Edit_Profile_Walker extends Walker_Nav_Menu
 {
     function start_el(&$output, $item, $depth = 0, $args = array(), $id = 0)
     {
-        $icon = get_field('menu_icon_image', $item); // ACF icon field (optional)
-        $output .= '<li class="d-flex align-items-center nav-item gap10">';
+        // Check if this menu item is active
+        $active_class = '';
+        if (in_array('current-menu-item', $item->classes) ||
+            in_array('current_page_item', $item->classes) ||
+            in_array('current-menu-ancestor', $item->classes) ||
+            in_array('current_page_ancestor', $item->classes)) {
+            $active_class = ' active-menu';
+        }
+
+        $icon = get_field('menu_icon_image', $item); // ACF icon image
+
+        $output .= '<li class="d-flex align-items-center nav-item gap10' . $active_class . '">';
+
         if ($icon) {
             $output .= '<img src="' . esc_url($icon) . '" alt="' . esc_attr($item->title) . '" class="icon-img">';
         }
+
         $output .= '<a href="' . esc_url($item->url) . '" class="p-0 text">' . esc_html($item->title) . '</a>';
         $output .= '</li>';
+    }
+}
+
+
+class Portal_Mega_FB_Style_Walker extends Walker_Nav_Menu {
+
+    function start_lvl(&$output, $depth = 0, $args = null) {
+        $output .= '<ul class="ps-0 list-unstyled mega-subitems">';
+    }
+
+    function end_lvl(&$output, $depth = 0, $args = null) {
+        $output .= '</ul>';
+    }
+
+    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
+    {
+        // Unified icon system
+        // $icon_url   = get_field('menu_icon_image', $item);
+        // $icon_class = get_field('menu_icon_class', $item) ?: 'img24';        
+
+        // Text fields
+        $title = esc_html($item->title);
+        $desc  = esc_html($item->description);
+        $url   = esc_url($item->url);
+
+        // ---- 0: Section Title ----
+        if ($depth === 0) {
+            $output .= "<h6 class='mb-2 mega-section-title'>{$title}</h6>";
+            return;
+        }
+
+        // ---- 1+: Sub Item with icon ----
+        $output .= "<li class='d-flex align-items-start gap-3 mega-item'>";
+        
+        // <div class='mega-icon'></div>";
+        // {$icon_class}
+        // Icon only if exists
+        // if ($icon_url) {
+        //     $output .= "<img src='" . esc_url($icon_url) . "' class='w-100 h-100 object-fit-contain' alt=''>";
+        // }
+
+        $output .= "
+            <a href='{$url}' class='d-flex flex-column mega-link'>
+                <span class='mega-title'>{$title}</span>
+                <small class='text-muted mega-desc'>{$desc}</small>
+            </a>
+        </li>";
+    }
+
+    function end_el(&$output, $item, $depth = 0, $args = null) {
+        // no closing tag needed
+    }
+}
+
+class Mega_Right_Walker extends Walker_Nav_Menu {
+
+    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
+        // Get custom fields for the menu item
+        $icon_url   = get_field('menu_icon_image', 'menu_item_' . $item->ID);
+        $icon_class = get_field('menu_icon_class', 'menu_item_' . $item->ID) ?: '';
+
+        // Replace $username in URL with current user nicename
+        $current_user = wp_get_current_user();
+        $username = $current_user->user_nicename ?: 'guest';
+        $url = str_replace('$username', $username, $item->url);
+
+        // Start menu item
+        $output .= '<li>';
+        $output .= '<a href="' . esc_url($url) . '">';
+
+        // Output icon or image
+        if ($icon_url) {
+            $output .= '<div class="' . esc_attr($icon_class ?: 'img24') . '">';
+            $output .= '<img class="w-100 h-100 object-fit-contain" src="' . esc_url($icon_url) . '" alt="">';
+            $output .= '</div>';
+        } elseif ($icon_class) {
+            $output .= '<i class="icon ' . esc_attr($icon_class) . '"></i> ';
+        }
+
+        // Menu title
+        $output .= esc_html($item->title);
+        $output .= '</a></li>';
+    }
+
+    function start_lvl(&$output, $depth = 0, $args = null) {
+        $output .= '<ul class="list-unstyled mega-create-list">';
+    }
+
+    function end_lvl(&$output, $depth = 0, $args = null) {
+        $output .= '</ul>';
     }
 }
