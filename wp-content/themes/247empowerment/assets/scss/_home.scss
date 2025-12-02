@@ -207,3 +207,10 @@
     font-size: 14px;
     width: auto;
 }
+
+@media (max-width: 576px) {
+    .page-header-overlay .page-title {
+        font-size: 1.5rem;
+        padding: 0 15px;
+    }
+}
