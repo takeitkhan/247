@@ -86,44 +86,23 @@ get_header_based_on_login();
         </div>
     </div>
 
-
-    <!-- PLAYLISTS SECTION -->
+    <!-- ALL VIDEOS SECTION -->
     <div class="mt-5">
-        <h4 class="fs24 fw-bold">Playlists</h4>
+        <h4 class="fs24 fw-bold">All Videos</h4>
         <div class="mt-4 row g-4">
             <?php
-            $playlists = get_terms([
-                'taxonomy'   => 'video_playlist',
-                'hide_empty' => true,
+            $all_videos = new WP_Query([
+                'post_type'      => 'video',
+                'posts_per_page' => -1,
+                'orderby'        => 'date',
+                'order'          => 'DESC'
             ]);
 
-            foreach ($playlists as $playlist) :
-
-                // Get first video in this playlist for thumbnail and playlist URL
-                $video_in_list = new WP_Query([
-                    'post_type'      => 'video',
-                    'tax_query'      => [[
-                        'taxonomy' => 'video_playlist',
-                        'field'    => 'term_id',
-                        'terms'    => $playlist->term_id,
-                    ]],
-                    'posts_per_page' => 1,
-                ]);
-
-                $thumb_video_embed = '';
-                $thumb_image = '';
-                $youtube_playlist_url = '';
-                $total_videos = 0;
-
-                if ($video_in_list->have_posts()) :
-                    while ($video_in_list->have_posts()) : $video_in_list->the_post();
-                        $youtube_playlist_url = get_post_meta(get_the_ID(), '_playlist_url', true);
-                        $thumb_video_embed = mm_extract_youtube_embed($youtube_playlist_url);
-                        $thumb_image = get_the_post_thumbnail_url(get_the_ID(), 'medium');
-                        $total_videos = get_post_meta(get_the_ID(), '_playlist_total_videos', true);
-                    endwhile;
-                endif;
-                wp_reset_postdata();
+            while ($all_videos->have_posts()) : $all_videos->the_post();
+                $youtube_playlist_url = get_post_meta(get_the_ID(), '_playlist_url', true);
+                $embed_url            = mm_extract_youtube_embed($youtube_playlist_url);
+                $thumb                = get_the_post_thumbnail_url(get_the_ID(), 'medium');
+                $total_videos         = get_post_meta(get_the_ID(), '_playlist_total_videos', true);
             ?>
                 <div class="col-md-6 col-sm-6">
                     <div class="yt-playlist">
@@ -132,21 +111,24 @@ get_header_based_on_login();
                                 <div class="t-wrapper1"></div>
                                 <div class="t-wrapper2"></div>
 
-                                <?php if ($thumb_image) : ?>
-                                    <img src="<?php echo esc_url($thumb_image); ?>" width="100%" height="100%">
+                                <?php if ($thumb) : ?>
+                                    <img src="<?php echo esc_url($thumb); ?>" width="100%" height="100%">
                                 <?php else : ?>
-                                    <iframe width="100%" height="100%" src="<?php echo esc_url($thumb_video_embed); ?>" frameborder="0" allowfullscreen></iframe>
+                                    <iframe width="100%" height="100%" src="<?php echo esc_url($embed_url); ?>" frameborder="0" allowfullscreen></iframe>
                                 <?php endif; ?>
 
-                                <span class="video-count"><?php echo esc_html($total_videos); ?> videos</span>
+                                <?php if ($total_videos) : ?>
+                                    <span class="video-count"><?php echo esc_html($total_videos); ?> videos</span>
+                                <?php endif; ?>
                             </div>
-                            <h5 class="mt-2"><?php echo esc_html($playlist->name); ?></h5>
+                            <h5 class="mt-2"><?php the_title(); ?></h5>
                         </a>
                     </div>
                 </div>
-            <?php endforeach; ?>
+            <?php endwhile; wp_reset_postdata(); ?>
         </div>
     </div>
+
 
 </div>
 

@@ -8,6 +8,19 @@
   height: 93px;
   padding: 24px 20px;
 
+  span.notif-bubble {
+    position: absolute;
+    top: -15px;
+    background: red;
+    border-radius: 50%;
+    width: 25px;
+    font-size: 10px;
+    height: 25px;
+    color: #FFFFFF;
+    padding: 5px 10px 10px 8px;
+    font-weight: bold;
+  }
+
   .notification-png {
     width: 24px;
     height: 24px;
@@ -40,7 +53,8 @@
   .nav-item {
     color: $black;
     font-weight: 500;
-    padding: 0px 20px;
+    padding: 0px 5px;
+    margin: 0 15px;
     border-bottom: 2px solid transparent; // ✅ reserve space for the border
 
     &:hover,
@@ -254,6 +268,10 @@
     ul.mega-section-list {
       margin: 0 !important;
       padding-left: 0 !important;
+
+      ul.mega-subitems {
+        margin-bottom: 20px;
+      }
     }
 
     .mega-search {
@@ -274,7 +292,7 @@
     }
 
     .mega-item {
-      padding: 10px 0px;
+      padding: 5px 0px;
       border-radius: 8px;
       cursor: pointer;
       align-items: center !important;
@@ -312,7 +330,7 @@
 
   // RIGHT PANEL
   .mega-right {
-    width: 275px;
+    width: 350px;
     background: #f7f8fa;
     padding: 18px;
     border-radius: 14px;

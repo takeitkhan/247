@@ -31,7 +31,7 @@
 
             <!-- RIGHT PANEL -->
             <div class="mega-right">
-                <h5 class="mb-3 fw-semibold">Main Navigations</h5>
+                <h5 class="mb-3">Main Navigations</h5>
                 <?php
                 wp_nav_menu([
                     'theme_location' => 'megarightmenu', // Use theme location, not menu name

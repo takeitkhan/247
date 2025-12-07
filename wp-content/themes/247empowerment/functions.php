@@ -810,5 +810,7 @@ require_once get_template_directory() . '/more_functions/store.php';
 require_once get_template_directory() . '/more_functions/event.php';
 require_once get_template_directory() . '/more_functions/blog.php';
 require_once get_template_directory() . '/more_functions/video.php';
+require_once get_template_directory() . '/more_functions/jobs.php';
+require_once get_template_directory() . '/more_functions/agreement.php';
 require_once get_template_directory() . '/more_functions/issues.php';
 require_once get_template_directory() . '/more_functions/paypalsettings.php';
