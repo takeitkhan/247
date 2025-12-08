@@ -20,7 +20,9 @@ $old_input = $message['old_input'] ?? [];
                 <div class="text-white text-center empowerment-header"></div>
 
                 <div class="row g-md-4">
-                    <!-- Login Section -->
+                    <div class="py-5 col-lg-3">
+                        &nbsp;
+                    </div>
                     <div class="py-5 col-lg-6">
                         <div class="d-flex align-items-center justify-content-between mb-4">
                             <div class="d-flex align-items-center gap-2">
@@ -28,10 +30,10 @@ $old_input = $message['old_input'] ?? [];
                                 <span class="gradient-text">24/7 Empowerment</span>
                             </div>
 
-                            <button class="d-flex align-items-center gap-2 go-back" onclick="window.history.back();">
+                            <!-- <button class="d-flex align-items-center gap-2 go-back" onclick="window.history.back();">
                                 <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/back.png" alt="Back">
                                 <span>Go back</span>
-                            </button>
+                            </button> -->
                         </div>
 
                         <h2 class="mb-3 title">Join the Empowerment Movement</h2>
@@ -70,6 +72,7 @@ $old_input = $message['old_input'] ?? [];
                                 <input type="text" class="input" id="username" name="username"
                                     placeholder="Enter your username"
                                     value="<?php echo esc_attr($old_input['username'] ?? ''); ?>" required>
+                                <!-- <small class="text-amber-200 text-muted">* Username must be lowercase and can contain only letters, numbers, and underscores (a–z, 0–9, _).</small> -->
                             </div>
 
                             <div class="mb-3">
@@ -114,8 +117,12 @@ $old_input = $message['old_input'] ?? [];
                             </div>
                         </form>
                     </div>
+                    <div class="py-5 col-lg-3">
+                        &nbsp;
+                    </div>
 
                     <!-- Right Info Section -->
+                    <?php /**
                     <div class="col-lg-6">
                         <div class="position-relative d-flex flex-column align-items-center justify-content-start px-5 px-md-5 border-singup overflow-hidden text-center">
                             <img class="ellipse-size" src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/Ellipse.png" alt="">
@@ -170,9 +177,65 @@ $old_input = $message['old_input'] ?? [];
                             </div>
                         </div>
                     </div>
+                     */ ?>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<style>
+    input.is-invalid {
+        border-color: #ff4d4f;
+    }
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const usernameInput = document.getElementById("username");
+        const form = usernameInput.closest("form");
+
+        const ruleText = "* Username must be lowercase and can contain only letters, numbers, and underscores (a–z, 0–9, _).";
+
+        // Create error message element
+        const errorEl = document.createElement("small");
+        errorEl.style.color = "#ff4d4f";
+        errorEl.style.display = "none";
+        errorEl.style.paddingTop = "4px";
+        errorEl.style.paddingBottom = "4px";
+        errorEl.textContent = ruleText;
+        usernameInput.insertAdjacentElement("afterend", errorEl);
+
+        function validateUsername() {
+            const value = usernameInput.value.trim();
+            const regex = /^[a-z0-9_]+$/;
+
+            if (value === "") {
+                errorEl.style.display = "none";
+                usernameInput.classList.remove("is-invalid");
+                return true;
+            }
+
+            if (!regex.test(value)) {
+                errorEl.style.display = "block";
+                usernameInput.classList.add("is-invalid");
+                return false;
+            }
+
+            errorEl.style.display = "none";
+            usernameInput.classList.remove("is-invalid");
+            return true;
+        }
+
+        // Validate while typing
+        usernameInput.addEventListener("input", validateUsername);
+
+        // Validate before form submit
+        form.addEventListener("submit", function(e) {
+            if (!validateUsername()) {
+                e.preventDefault();
+                usernameInput.focus();
+            }
+        });
+    });
+</script>
+
 <?php get_footer_based_on_login(); ?>

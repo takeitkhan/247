@@ -18,17 +18,21 @@ $old_input = $message['old_input'] ?? [];
         <div class="col-12">
             <div class="row g-md-4">
                 <!-- Login Section -->
+                <div class="py-5 col-lg-3">
+                    &nbsp;
+                </div>
                 <div class="py-5 col-lg-6">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="d-flex justify-center align-items-center mb-4 text-center">
                         <div class="d-flex align-items-center gap-2">
                             <img class="logo" src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/logo.png" alt="<?php bloginfo('name'); ?>">
                             <span class="gradient-text"><?php echo get_bloginfo('name'); ?></span>
+                            
                         </div>
-
-                        <button class="d-flex align-items-center gap-2 go-back" onclick="window.history.back();">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/back.png" alt="Back">
-                            <span>Go back</span>
-                        </button>
+                            <!-- <button class="d-flex align-items-center gap-2 go-back" onclick="window.history.back();">
+                                <img src="<?php //echo get_template_directory_uri(); ?>/assets/img/nd/back.png" alt="Back">
+                                <span>Go back</span>
+                            </button>                             -->
+                        
                     </div>
 
 
@@ -100,8 +104,13 @@ $old_input = $message['old_input'] ?? [];
                     </form>
 
                 </div>
+                <div class="py-5 col-lg-3">
+                    &nbsp;
+                </div>
 
                 <!-- Right Info Section -->
+
+                <?php /**
                 <div class="col-lg-6">
                     <div class="position-relative d-flex flex-column align-items-center justify-content-start px-5 px-md-5 border-singup overflow-hidden text-center">
                         <img class="ellipse-size" src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/Ellipse.png" alt="">
@@ -136,6 +145,8 @@ $old_input = $message['old_input'] ?? [];
                         <?php endforeach; ?>
                     </div>
                 </div>
+
+                **/?>
             </div>
         </div>
     </div>

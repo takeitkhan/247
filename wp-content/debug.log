@@ -853,3 +853,9 @@ Stack trace:
 [07-Dec-2025 04:54:46 UTC] PHP Warning:  Undefined variable $declare_confidentiality in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\download-participation-agreement-pdf.php on line 271
 [07-Dec-2025 04:54:46 UTC] PHP Warning:  Undefined variable $declare_no_guarantees in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\download-participation-agreement-pdf.php on line 276
 [07-Dec-2025 04:54:46 UTC] PHP Warning:  Undefined variable $declare_emotional_stable in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\download-participation-agreement-pdf.php on line 281
+[08-Dec-2025 09:51:52 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[08-Dec-2025 09:51:57 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[08-Dec-2025 09:52:04 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[08-Dec-2025 09:52:08 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[08-Dec-2025 14:32:37 UTC] Automatic updates starting...
+[08-Dec-2025 14:32:40 UTC] Automatic updates complete.
