@@ -52,7 +52,7 @@
                     <div>
                         <a href="search.php" class="d-flex align-items-center gap-3 pb-3 text-reset">
                             <div class="position-relative img44">
-                                <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/nd/'); ?>profile.png" class="rounded-circle w-100 h-100 object-fit-cover" alt="Profile">
+                                <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/loggedin_images/'); ?>banner.jpg" class="rounded-circle w-100 h-100 object-fit-cover" alt="Profile">
                                 <img class="position-absolute active-icon" src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/nd/'); ?>active_icon.png" alt="">
                             </div>
 
@@ -65,7 +65,7 @@
                         <div class="d-flex align-items-center gap-3 pb-3">
 
                             <div class="position-relative img44">
-                                <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/nd/'); ?>profile.png" class="rounded-circle w-100 h-100 object-fit-cover" alt="Profile">
+                                <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/loggedin_images/'); ?>banner.jpg" class="rounded-circle w-100 h-100 object-fit-cover" alt="Profile">
                                 <img class="position-absolute active-icon" src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/nd/'); ?>active_icon.png" alt="">
                             </div>
 

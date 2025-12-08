@@ -38,7 +38,7 @@ if ($search) {
 $max_display_users = 15;
 $referred_users_count = count($referrals);
 // Note: get_template_directory_uri() must be defined in your environment
-$default_profile_img = get_template_directory_uri() . '/assets/img/loggedin_images/profile_default.png';
+$default_profile_img = get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg';
 ?>
 
 <div class="bg-white upcoming-events custom-card">

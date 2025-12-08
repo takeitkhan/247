@@ -41,7 +41,7 @@ $notifications_to_show = array_slice($all_notifications, 0, $limit);
                 <?php foreach ($notifications_to_show as $notif) :
                     $is_unread = empty($notif['read']);
                     $created_time = human_time_diff(strtotime($notif['created_at']), current_time('timestamp')) . ' ago';
-                    $user_img = get_template_directory_uri() . '/assets/img/nd/profile.png';
+                    $user_img = get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg';
                 ?>
                     <div class="d-flex align-items-center gap-3 pb-3 <?= $is_unread ? 'unread' : ''; ?>">
                         <div class="d-flex align-items-center gap10">

@@ -35,7 +35,7 @@ if ($current_user) {
         data-bs-auto-close="outside"
         aria-expanded="false">
         <div class="position-relative img44">
-            <img src="<?php echo esc_url($current_user ? $profile_photo_url : get_template_directory_uri() . '/assets/img/nd/profile.png'); ?>"
+            <img src="<?php echo esc_url($current_user ? $profile_photo_url : get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg'); ?>"
                 class="rounded-circle w-100 h-100 object-fit-cover"
                 alt="Profile">
             <img class="position-absolute active-icon"

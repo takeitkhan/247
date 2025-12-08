@@ -3,7 +3,7 @@ $profile = isset($args['profile']) ? $args['profile'] : [];
 $user = isset($args['user']) ? $args['user'] : null;
 
 // Fetch profile photo (or default)
-$profile_photo = get_user_meta($user->ID, 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/loggedin_images/profile_default.png';
+$profile_photo = get_user_meta($user->ID, 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg';
 
 // Fetch display data
 $full_name = trim(($profile['first_name'] ?? '') . ' ' . ($profile['last_name'] ?? '')) ?: $user->display_name;
