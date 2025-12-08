@@ -28,7 +28,7 @@ $notifications_to_show = array_slice($all_notifications, 0, $limit);
         <?php endif; ?>
     </button>
 
-    <div class="shadow border-0 rounded-3 dropdown-menu notification-width dropdown-menu-end custom-card">
+    <div class="shadow-sm border-0 rounded-3 dropdown-menu notification-width dropdown-menu-end custom-card">
         <ul class="p-0">
             <div class="d-flex align-items-center justify-content-between pb-4">
                 <p class="mb-0 text-black fw-bold">Notifications</p>

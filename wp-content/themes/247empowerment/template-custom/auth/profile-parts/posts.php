@@ -38,7 +38,7 @@ if ($user_posts->have_posts()):
             <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-3">
                     <div class="position-relative img44">
-                        <img src="<?php echo esc_url(get_user_meta($user_id, 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/nd/profile.png'); ?>" class="rounded-circle w-100 h-100 object-fit-cover" alt="Profile">
+                        <img src="<?php echo esc_url(get_user_meta($user_id, 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg'); ?>" class="rounded-circle w-100 h-100 object-fit-cover" alt="Profile">
                         <img class="position-absolute active-icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/active_icon.png" alt="">
                     </div>
                     <div class="d-flex flex-column post-user">
@@ -89,7 +89,7 @@ if ($user_posts->have_posts()):
             <!-- <div class="d-flex align-items-center gap-3 pt-3">
                 <div>
                     <div class="position-relative img44">
-                        <img src="<?php echo esc_url(get_user_meta(get_current_user_id(), 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/nd/profile.png'); ?>" class="rounded-circle w-100 h-100 object-fit-cover" alt="Profile">
+                        <img src="<?php echo esc_url(get_user_meta(get_current_user_id(), 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg'); ?>" class="rounded-circle w-100 h-100 object-fit-cover" alt="Profile">
                         <img class="position-absolute active-icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/active_icon.png" alt="">
                     </div>
                 </div>

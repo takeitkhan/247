@@ -10,7 +10,7 @@
             alt="">
     </button>
 
-    <div class="shadow p-4 border-0 rounded-3 dropdown-menu mega-menu dropdown-menu-end">
+    <div class="shadow-sm p-4 border-0 rounded-3 dropdown-menu mega-menu dropdown-menu-end">
         <h5>Quick Links</h5>
         <div class="d-flex gap-4 mega-menu-inner">
 

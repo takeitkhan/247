@@ -106,31 +106,60 @@ class UserProfileData
         return get_user_meta($this->user->ID, 'referrer', true);
     }
 
-    // Get users referred by this user
+
+
     public function getReferredUsers()
     {
-        if (!$this->user) {
-            return [];
+        if (!$this->user) return [];
+
+        $partners = get_user_meta($this->user->ID, 'referral_partners', true);
+
+        if (!is_array($partners)) return [];
+
+        $users = [];
+
+        foreach ($partners as $id) {
+            $u = get_user_by('id', $id);
+            if ($u) $users[] = $u;
         }
 
-        $referrer_id = $this->user->ID;
-        $referrer_login = $this->user->user_login;
+        usort($users, function ($a, $b) {
+            return strcasecmp($a->display_name, $b->display_name);
+        });
 
-        $args = [
-            'meta_query' => [
-                [
-                    'key'     => 'referrer',
-                    'value'   => [$referrer_id, $referrer_login],
-                    'compare' => 'IN'
-                ]
-            ],
-            'orderby' => 'registered',
-            'order'   => 'DESC',
-            'number' => 7, // Optional limit
-        ];
-
-        return get_users($args);
+        return $users;
     }
+
+
+
+    // OLD NON MUTUAL PARTNERSHIP
+
+    // Get users referred by this user
+    // public function getReferredUsers()
+    // {
+    //     if (!$this->user) {
+    //         return [];
+    //     }
+
+    //     $referrer_id = $this->user->ID;
+    //     $referrer_login = $this->user->user_login;
+
+    //     $args = [
+    //         'meta_query' => [
+    //             [
+    //                 'key'     => 'referrer',
+    //                 'value'   => [$referrer_id, $referrer_login],
+    //                 'compare' => 'IN'
+    //             ]
+    //         ],
+    //         'orderby' => 'registered',
+    //         'order'   => 'DESC',
+    //         'number' => 7, // Optional limit
+    //     ];
+
+    //     return get_users($args);
+    // }
+
 
     public static function getReferredUsersBy($referrer_user)
     {
@@ -142,9 +171,39 @@ class UserProfileData
             return [];
         }
 
-        $referrer_id = $referrer_user->ID;
+        $referrer_id    = $referrer_user->ID;
         $referrer_login = $referrer_user->user_login;
 
+        /*
+    |--------------------------------------------------------------------------
+    | ⭐ NEW: FETCH reverse referral list stored in user_meta
+    |--------------------------------------------------------------------------
+    */
+        $reverse_list = get_user_meta($referrer_id, 'referral_partners', true);
+
+        if (!is_array($reverse_list)) {
+            $reverse_list = [];
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | ⭐ Convert each ID into a WP_User object
+    |--------------------------------------------------------------------------
+    */
+        $users = [];
+        foreach ($reverse_list as $id) {
+            $u = get_user_by('id', $id);
+            if ($u) {
+                $users[] = $u;
+            }
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | ⭐ OPTIONAL FALLBACK:
+    | Still include users who stored the "referrer" meta (old system)
+    |--------------------------------------------------------------------------
+    */
         $args = [
             'meta_query' => [
                 [
@@ -158,7 +217,20 @@ class UserProfileData
             'number'  => 7,
         ];
 
-        $users = get_users($args);
+        $legacy_users = get_users($args);
+
+        // Merge old + reverse results
+        foreach ($legacy_users as $lu) {
+            if (!in_array($lu->ID, $reverse_list)) {
+                $users[] = $lu;
+            }
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | Now process users with your existing enrichment logic
+    |--------------------------------------------------------------------------
+    */
 
         $enriched_users = [];
 
@@ -167,7 +239,6 @@ class UserProfileData
 
             $user_categories = get_user_meta($user_id, 'user_categories', true) ?: [];
 
-            // ✅ Dynamically get category names
             $user_category_names = [];
             if (!empty($user_categories) && is_array($user_categories)) {
                 foreach ($user_categories as $cat_id) {
@@ -180,7 +251,7 @@ class UserProfileData
                 }
             }
 
-            $zoom_access_token = get_user_meta($user_id, 'zoom_access_token', true);
+            $zoom_access_token  = get_user_meta($user_id, 'zoom_access_token', true);
             $zoom_refresh_token = get_user_meta($user_id, 'zoom_refresh_token', true);
 
             $enriched_users[] = [
@@ -200,7 +271,7 @@ class UserProfileData
                 'longitude' => get_user_meta($user_id, 'longitude', true),
                 'place_display_name' => get_user_meta($user_id, 'place_display_name', true),
                 'user_categories' => $user_categories,
-                'user_category_names' => $user_category_names, // ✅ Now dynamically fetched
+                'user_category_names' => $user_category_names,
                 'bio' => get_user_meta($user_id, 'description', true),
                 'profile_photo' => get_user_meta($user_id, 'profile_photo', true),
                 'cover_photo' => get_user_meta($user_id, 'profile_cover_photo', true),
@@ -208,12 +279,97 @@ class UserProfileData
                 'social_links' => get_user_meta($user_id, 'social_links', true),
                 'zoom_access_token' => $zoom_access_token,
                 'zoom_refresh_token' => $zoom_refresh_token,
-                'zoom_connected' => !empty($zoom_access_token) ? true : false,
+                'zoom_connected' => !empty($zoom_access_token),
             ];
         }
 
         return $enriched_users;
     }
+
+
+    // OLD CODE BEFORE REVERSE REFFER LOGIC
+    // public static function getReferredUsersBy($referrer_user)
+    // {
+    //     if (!$referrer_user instanceof WP_User) {
+    //         $referrer_user = get_user_by('id', (int)$referrer_user);
+    //     }
+
+    //     if (!$referrer_user) {
+    //         return [];
+    //     }
+
+    //     $referrer_id = $referrer_user->ID;
+    //     $referrer_login = $referrer_user->user_login;
+
+    //     $args = [
+    //         'meta_query' => [
+    //             [
+    //                 'key'     => 'referrer',
+    //                 'value'   => [$referrer_id, $referrer_login],
+    //                 'compare' => 'IN'
+    //             ]
+    //         ],
+    //         'orderby' => 'registered',
+    //         'order'   => 'DESC',
+    //         'number'  => 7,
+    //     ];
+
+    //     $users = get_users($args);
+
+    //     $enriched_users = [];
+
+    //     foreach ($users as $user) {
+    //         $user_id = $user->ID;
+
+    //         $user_categories = get_user_meta($user_id, 'user_categories', true) ?: [];
+
+    //         // ✅ Dynamically get category names
+    //         $user_category_names = [];
+    //         if (!empty($user_categories) && is_array($user_categories)) {
+    //             foreach ($user_categories as $cat_id) {
+    //                 if (is_numeric($cat_id)) {
+    //                     $term = get_term((int)$cat_id, 'category');
+    //                     if ($term && !is_wp_error($term)) {
+    //                         $user_category_names[] = $term->name;
+    //                     }
+    //                 }
+    //             }
+    //         }
+
+    //         $zoom_access_token = get_user_meta($user_id, 'zoom_access_token', true);
+    //         $zoom_refresh_token = get_user_meta($user_id, 'zoom_refresh_token', true);
+
+    //         $enriched_users[] = [
+    //             'id' => $user_id,
+    //             'username' => $user->user_login,
+    //             'email' => $user->user_email,
+    //             'referrer' => get_user_meta($user_id, 'referrer', true),
+    //             'display_name' => $user->display_name,
+    //             'first_name' => get_user_meta($user_id, 'first_name', true),
+    //             'last_name' => get_user_meta($user_id, 'last_name', true),
+    //             'dob' => get_user_meta($user_id, 'dob', true),
+    //             'phone' => get_user_meta($user_id, 'phone', true),
+    //             'about_me' => get_user_meta($user_id, 'about_me', true),
+    //             'about_me_short' => get_user_meta($user_id, 'about_me_short', true),
+    //             'location' => get_user_meta($user_id, 'place_address', true),
+    //             'latitude' => get_user_meta($user_id, 'latitude', true),
+    //             'longitude' => get_user_meta($user_id, 'longitude', true),
+    //             'place_display_name' => get_user_meta($user_id, 'place_display_name', true),
+    //             'user_categories' => $user_categories,
+    //             'user_category_names' => $user_category_names, // ✅ Now dynamically fetched
+    //             'bio' => get_user_meta($user_id, 'description', true),
+    //             'profile_photo' => get_user_meta($user_id, 'profile_photo', true),
+    //             'cover_photo' => get_user_meta($user_id, 'profile_cover_photo', true),
+    //             'roles' => $user->roles,
+    //             'social_links' => get_user_meta($user_id, 'social_links', true),
+    //             'zoom_access_token' => $zoom_access_token,
+    //             'zoom_refresh_token' => $zoom_refresh_token,
+    //             'zoom_connected' => !empty($zoom_access_token) ? true : false,
+    //         ];
+    //     }
+
+    //     return $enriched_users;
+    // }
 
 
     function render_referred_users($referredUsers, $user_login, $maxVisible = 3)

@@ -44,7 +44,7 @@ if ($current_user) {
         </div>
     </button>
 
-    <div class="shadow border-0 rounded-3 dropdown-menu profile-width dropdown-menu-end custom-card">
+    <div class="shadow-sm border-0 rounded-3 dropdown-menu profile-width dropdown-menu-end custom-card">
         <ul class="p-0">
             <?php if (is_user_logged_in() && $current_user) : ?>
 

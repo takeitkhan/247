@@ -13,7 +13,7 @@ if (empty($full_name)) {
 }
 
 // 2. Determine Profile Photo URL
-$default_profile_img = get_template_directory_uri() . '/assets/img/nd/profile.png';
+$default_profile_img = get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg';
 $profile_photo_url = !empty($profile['profile_photo']) ? $profile['profile_photo'] : $default_profile_img;
 
 // 3. Determine Location Text (Using 'location' from your provided array dump)

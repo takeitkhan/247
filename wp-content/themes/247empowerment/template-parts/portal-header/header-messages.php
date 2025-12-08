@@ -15,7 +15,7 @@
     </button>
 
 
-    <div class="shadow border-0 rounded-3 dropdown-menu dropdown-message-box dropdown-menu-end custom-card">
+    <div class="shadow-sm border-0 rounded-3 dropdown-menu dropdown-message-box dropdown-menu-end custom-card">
         <div class="d-flex align-items-center justify-content-between pb-4">
             <h6 class="mb-0 text-black fs24 fw-bold">Messages</h6>
         </div>

@@ -40,7 +40,7 @@ if (!empty($profile['user_category_names'])) {
     $page_url = "{$site_url}/{$display_name}";
     $page_title = $profile['first_name'] . ' ' . $profile['last_name'];
     $page_description = $profile['about_me_short'] ?: 'Welcome to my profile.';
-    $page_image = $profile['profile_photo'] ?: get_template_directory_uri() . '/assets/img/default-profile.png';
+    $page_image = $profile['profile_photo'] ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg';
     ?>
 
     <!-- Canonical Link -->
