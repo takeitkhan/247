@@ -3,7 +3,10 @@
 /**
  * Template Name: Single Event Template
  */
-
+if (!is_user_logged_in()) {
+    wp_redirect(home_url('/signin'));
+    exit;
+}
 $current_user = wp_get_current_user();
 $current_user_id = get_current_user_id();
 

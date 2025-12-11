@@ -76,8 +76,8 @@ $old_input = $message['old_input'] ?? [];
                             </div>
 
                             <div class="mb-3">
-                                <label for="dob" class="form-label fw-normal">Date of Birth <span>*</span></label>
-                                <input type="date" class="input" id="dob" name="dob"
+                                <label for="dob" class="form-label fw-normal">Date of Birth <span>*</span></label>                                
+                                <input type="text" class="input" id="dob" name="dob"
                                     value="<?php echo esc_attr($old_input['dob'] ?? ''); ?>" required>
                             </div>
 
@@ -189,6 +189,17 @@ $old_input = $message['old_input'] ?? [];
     }
 </style>
 <script>
+    jQuery(document).ready(function($) {
+        flatpickr("#dob", {
+            dateFormat: "Y-m-d",
+            maxDate: "today",
+            altInput: true,
+            altFormat: "F j, Y",
+            yearRange: [1900, new Date().getFullYear()],
+            defaultDate: "1990-01-01",
+        });
+    });
+
     document.addEventListener("DOMContentLoaded", function() {
         const usernameInput = document.getElementById("username");
         const form = usernameInput.closest("form");

@@ -5,7 +5,7 @@
  */
 
 if (!is_user_logged_in()) {
-    wp_redirect(site_url('/login/'));
+    wp_redirect(home_url('/signin'));
     exit;
 }
 

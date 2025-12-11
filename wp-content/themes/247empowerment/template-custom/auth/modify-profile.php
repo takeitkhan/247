@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                             <!-- DOB -->
                             <div class="col-12 col-md-6">
                                 <label class="form-label">Date of Birth:</label>
-                                <input type="date" name="dob" class="form-control input" 
+                                <input type="text" name="dob" id="dob" class="form-control input" 
                                     value="<?php echo esc_attr(get_user_meta($current_user->ID, 'dob', true)); ?>">
                             </div>
 
@@ -232,6 +232,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 </div>
 <script>
     jQuery(document).ready(function($) {
+        flatpickr("#dob", {
+            dateFormat: "Y-m-d",
+            maxDate: "today",
+            altInput: true,
+            altFormat: "F j, Y",
+            yearRange: [1900, new Date().getFullYear()],
+            defaultDate: "1990-01-01",
+        });
+
         $('#frontend-profile-form').on('submit', function(e) {
             e.preventDefault();
 

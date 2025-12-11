@@ -6,7 +6,8 @@ use Mpdf\Mpdf;
 require_once get_template_directory() . '/vendor/autoload.php';
 
 if (!is_user_logged_in()) {
-    wp_die("You must be logged in to download the agreement.");
+    wp_redirect(home_url('/signin'));
+    exit;
 }
 
 $current_user_id = get_current_user_id();

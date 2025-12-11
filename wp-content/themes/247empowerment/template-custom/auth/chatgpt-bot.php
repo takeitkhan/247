@@ -3,17 +3,11 @@
 /**
  * Template Name: ChatGPT Bot
  */
-
-get_header_based_on_login();
-
-// Only allow logged-in users
 if (!is_user_logged_in()) {
-    echo "<p>You must be logged in to access the Basic AI.</p>";
-    
-    get_header_based_on_login();
-
+    wp_redirect(home_url('/signin'));
     exit;
 }
+get_header_based_on_login();
 ?>
 <main>
     <div class="main-container" style="padding-top: 80px;">

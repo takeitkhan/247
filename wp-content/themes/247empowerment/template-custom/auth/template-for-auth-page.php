@@ -4,6 +4,10 @@
  * Template Name: Marketing, Collaboration, Reputation, and AI Page
  * Custom Collaboration Page Template
  */
+if (!is_user_logged_in()) {
+    wp_redirect(home_url('/signin'));
+    exit;
+}
 get_header_based_on_login();
 
 // Get current logged-in user ID (used as a fallback if no slug is provided)

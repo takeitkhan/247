@@ -1,13 +1,6 @@
 <?php
 
 /**
- * ============================================
- *  VIDEO LIBRARY – CORRECTED FOR YOUTUBE PLAYLISTS
- * ============================================
- */
-
-
-/**
  * --------------------------------------------
  * Register Video Custom Post Type (Playlist)
  * --------------------------------------------
@@ -167,6 +160,7 @@ function mm_render_video_details_metabox($post)
     $playlist_url   = get_post_meta($post->ID, '_playlist_url', true);
     $is_featured    = get_post_meta($post->ID, '_video_featured', true);
     $total_videos   = get_post_meta($post->ID, '_playlist_total_videos', true); // NEW FIELD
+    $top_featured = get_post_meta($post->ID, '_video_top_featured', true);
 ?>
     <p><strong>YouTube Playlist URL</strong></p>
     <input type="text" name="mm_playlist_url" style="width:100%;"
@@ -178,6 +172,12 @@ function mm_render_video_details_metabox($post)
             <input type="checkbox" name="mm_video_featured" value="1"
                 <?php checked($is_featured, 1); ?>>
             Feature this Playlist
+        </label>
+    </p>
+    <p>
+        <label>
+            <input type="checkbox" name="video_top_featured" value="1" <?php checked($top_featured, 1); ?> />
+            <strong>Mark as Top Featured Playlist</strong>
         </label>
     </p>
 

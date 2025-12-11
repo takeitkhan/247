@@ -4,6 +4,11 @@
  * Template Name: FAQ, Support, Video Page
  * Custom FAQ, Support, Video Page Template
  */
+
+if (!is_user_logged_in()) {
+    wp_redirect(home_url('/signin'));
+    exit;
+}
 $custom_page = $GLOBALS['current_support_page'] ?? '';
 get_header_based_on_login();
 

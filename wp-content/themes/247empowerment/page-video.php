@@ -17,28 +17,29 @@ get_header_based_on_login();
     <!-- MAIN FEATURED PLAYLIST -->
     <div class="video-responsive-fixed-height mb-5">
         <?php
-        // Get first featured playlist
-        $featured_playlist_query = new WP_Query([
+        $top_featured_query = new WP_Query([
             'post_type'      => 'video',
-            'meta_key'       => '_video_featured',
+            'meta_key'       => '_video_top_featured',
             'meta_value'     => 1,
             'posts_per_page' => 1,
         ]);
+        ?>
 
-        if ($featured_playlist_query->have_posts()) :
-            $featured_playlist_query->the_post();
+
+        <?php if ($top_featured_query->have_posts()) : ?>
+            <?php
+            $top_featured_query->the_post();
             $playlist_url = get_post_meta(get_the_ID(), '_playlist_url', true);
-            $embed_playlist_url = mm_extract_youtube_embed($playlist_url);
-            $total_videos = get_post_meta(get_the_ID(), '_playlist_total_videos', true);
-        ?>
-            <iframe width="100%" height="100%" src="<?php echo esc_url($embed_playlist_url); ?>" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe>
-            <p class="mt-2 text-center"><?php echo esc_html($total_videos) . ' videos'; ?></p>
-        <?php
-            wp_reset_postdata();
-        endif;
-        ?>
+            $embed_url    = mm_extract_youtube_embed($playlist_url);
+            ?>
+
+            <iframe width="100%" height="100%" src="<?php echo esc_url($embed_url); ?>"
+                frameborder="0" allowfullscreen></iframe>
+
+            <p class="mt-2 text-center">Top Featured</p>
+
+        <?php endif;
+        wp_reset_postdata(); ?>
     </div>
 
     <!-- FEATURED THIS WEEK -->
@@ -125,7 +126,8 @@ get_header_based_on_login();
                         </a>
                     </div>
                 </div>
-            <?php endwhile; wp_reset_postdata(); ?>
+            <?php endwhile;
+            wp_reset_postdata(); ?>
         </div>
     </div>
 

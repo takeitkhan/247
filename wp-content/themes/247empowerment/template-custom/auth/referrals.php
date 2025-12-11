@@ -1,4 +1,8 @@
 <?php
+if (!is_user_logged_in()) {
+    wp_redirect(home_url('/signin'));
+    exit;
+}
 get_header_based_on_login();
 $referral_user_slug = get_query_var('referral_user');
 $current_user_id    = get_current_user_id();

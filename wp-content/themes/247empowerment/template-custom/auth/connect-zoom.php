@@ -1,7 +1,7 @@
 <?php
 /* Template Name: Connect Zoom */
 if (!is_user_logged_in()) {
-    wp_redirect(wp_login_url());
+    wp_redirect(home_url('/signin'));
     exit;
 }
 get_header_based_on_login();

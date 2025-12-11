@@ -3,7 +3,10 @@
 /**
  * Template Name: Single Store Course Template
  */
-
+if (!is_user_logged_in()) {
+    wp_redirect(home_url('/signin'));
+    exit;
+}
 $store_user = get_query_var('store_user');
 $course_slug = get_query_var('course_slug');
 $is_shareable = get_query_var('shareable'); // '1' if shareable URL

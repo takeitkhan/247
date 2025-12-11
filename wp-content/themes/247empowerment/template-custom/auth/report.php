@@ -4,9 +4,10 @@
  * Template Name: Report Template
  * Custom Report Template
  */
-?>
-<?php
-
+if (!is_user_logged_in()) {
+    wp_redirect(home_url('/signin'));
+    exit;
+}
 /* ------------------ FORM PROCESSING SECTION ------------------ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_report'])) {
     $name         = sanitize_text_field($_POST['name']);

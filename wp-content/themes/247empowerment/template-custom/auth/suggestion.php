@@ -4,8 +4,12 @@
  * Template Name: Suggestion Template
  * Custom Suggestion Template
  */
-?>
-<?php
+
+if (!is_user_logged_in()) {
+    wp_redirect(home_url('/signin'));
+    exit;
+}
+
 if (isset($_POST['submit_suggestion'])) {
     $name         = sanitize_text_field($_POST['name']);
     $email        = sanitize_email($_POST['email']);
