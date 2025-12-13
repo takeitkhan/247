@@ -862,3 +862,50 @@ Stack trace:
 [11-Dec-2025 17:29:24 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
 [11-Dec-2025 17:30:10 UTC] Automatic updates starting...
 [11-Dec-2025 17:30:13 UTC] Automatic updates complete.
+[12-Dec-2025 08:04:49 UTC] PHP Warning:  Attempt to read property "is_sales_person" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 14
+[12-Dec-2025 08:13:14 UTC] PHP Warning:  Undefined variable $profile in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-parts\portal-header\header-profile-dropdown.php on line 58
+[12-Dec-2025 08:13:14 UTC] PHP Warning:  Trying to access array offset on value of type null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-parts\portal-header\header-profile-dropdown.php on line 58
+[12-Dec-2025 08:14:25 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-parts\portal-header\header-profile-dropdown.php on line 6
+[12-Dec-2025 08:14:25 UTC] PHP Warning:  Undefined variable $user_slug in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-parts\portal-header\header-profile-dropdown.php on line 10
+[12-Dec-2025 08:14:25 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-parts\portal-header\header-profile-dropdown.php on line 10
+[12-Dec-2025 08:14:25 UTC] PHP Warning:  Attempt to read property "user_login" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-parts\portal-header\header-profile-dropdown.php on line 10
+[12-Dec-2025 08:15:03 UTC] PHP Warning:  Undefined variable $user_slug in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-parts\portal-header\header-profile-dropdown.php on line 7
+[12-Dec-2025 08:15:03 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-parts\portal-header\header-profile-dropdown.php on line 7
+[12-Dec-2025 08:15:03 UTC] PHP Warning:  Attempt to read property "user_login" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-parts\portal-header\header-profile-dropdown.php on line 7
+[12-Dec-2025 08:16:24 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-parts\portal-header\header-profile-dropdown.php on line 9
+[12-Dec-2025 08:16:24 UTC] PHP Warning:  Attempt to read property "user_login" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-parts\portal-header\header-profile-dropdown.php on line 9
+[12-Dec-2025 08:16:43 UTC] PHP Warning:  Undefined variable $user in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-parts\portal-header\header-profile-dropdown.php on line 11
+[12-Dec-2025 08:16:43 UTC] PHP Warning:  Attempt to read property "user_login" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-parts\portal-header\header-profile-dropdown.php on line 11
+[12-Dec-2025 08:32:34 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 6
+[12-Dec-2025 08:32:34 UTC] PHP Warning:  Attempt to read property "display_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 9
+[12-Dec-2025 08:32:34 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 10
+[12-Dec-2025 08:32:34 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 11
+[12-Dec-2025 08:32:34 UTC] PHP Warning:  Undefined array key "is_sales_person" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 53
+[12-Dec-2025 08:33:58 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 6
+[12-Dec-2025 08:33:58 UTC] PHP Warning:  Attempt to read property "display_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 9
+[12-Dec-2025 08:33:58 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 10
+[12-Dec-2025 08:33:58 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 11
+[12-Dec-2025 08:33:58 UTC] PHP Warning:  Undefined array key "is_sales_person" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 53
+[12-Dec-2025 08:34:14 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 6
+[12-Dec-2025 08:34:14 UTC] PHP Warning:  Attempt to read property "display_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 9
+[12-Dec-2025 08:34:14 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 10
+[12-Dec-2025 08:34:14 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 11
+[12-Dec-2025 08:34:14 UTC] PHP Warning:  Undefined array key "is_sales_person" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 53
+[12-Dec-2025 08:34:55 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 6
+[12-Dec-2025 08:34:55 UTC] PHP Warning:  Attempt to read property "display_name" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 9
+[12-Dec-2025 08:34:55 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 10
+[12-Dec-2025 08:34:55 UTC] PHP Warning:  Attempt to read property "ID" on null in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 11
+[12-Dec-2025 08:34:55 UTC] PHP Warning:  Undefined array key "is_sales_person" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 53
+[12-Dec-2025 08:42:23 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-additional-info.php on line 67
+[12-Dec-2025 08:42:23 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-additional-info.php on line 71
+[12-Dec-2025 08:42:23 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-additional-info.php on line 87
+[13-Dec-2025 07:25:51 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[13-Dec-2025 07:25:56 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[13-Dec-2025 07:26:00 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[13-Dec-2025 07:26:07 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[13-Dec-2025 07:26:11 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[13-Dec-2025 07:26:14 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[13-Dec-2025 07:27:18 UTC] Automatic updates starting...
+[13-Dec-2025 07:27:22 UTC] Automatic updates complete.
+[13-Dec-2025 13:49:32 UTC] Automatic updates starting...
+[13-Dec-2025 13:49:36 UTC] Automatic updates complete.

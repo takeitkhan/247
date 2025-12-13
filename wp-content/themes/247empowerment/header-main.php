@@ -159,8 +159,9 @@ if (is_front_page()) {
             </div>
 
             <!-- Main Navigation -->
-            <ul class="d-lg-flex nav d-none">
-                <?php
+            <nav class="navbar navbar-expand-lg">
+                <ul class="d-lg-flex navbar-nav d-none">
+                    <?php
                     wp_nav_menu([
                         'theme_location' => 'primary',
                         'container'      => false,
@@ -169,8 +170,10 @@ if (is_front_page()) {
                         'fallback_cb'    => false,
                         'walker'         => new MM_Walker_Nav_Menu(),
                     ]);
-                ?>
-            </ul>
+                    ?>
+                </ul>
+            </nav>
+
 
             <!-- Right Side (Auth Buttons + Mobile Toggle) -->
             <div class="d-flex align-items-center gap-1 gap-md-3">

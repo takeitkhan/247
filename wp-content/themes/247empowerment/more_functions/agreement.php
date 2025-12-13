@@ -17,7 +17,24 @@ function save_sales_agreement_data()
         update_user_meta($user_id, 'agreement_printed_name', sanitize_text_field($_POST['printed_name']));
         update_user_meta($user_id, 'agreement_signature', sanitize_text_field($_POST['signature']));
 
-        // Redirect to PDF download page after submission
+        // -----------------------------------------
+        // 👉 Mark user as Sales Person
+        // -----------------------------------------
+        update_user_meta($user_id, 'is_sales_person', 1);
+
+        // -----------------------------------------
+        // 👉 Add a notification for user
+        // -----------------------------------------
+        Notifications::getInstance()->addNotification(
+            $user_id,
+            'success',
+            'Your sales agreement has been submitted successfully!',
+            ['action' => 'sales_agreement_submitted']
+        );
+
+        // -----------------------------------------
+        // 👉 Redirect to PDF download page
+        // -----------------------------------------
         wp_redirect(site_url('/download-sales-agreement-pdf/'));
         exit;
     }

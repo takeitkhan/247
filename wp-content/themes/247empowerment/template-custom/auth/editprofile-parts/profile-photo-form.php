@@ -21,38 +21,48 @@ $profession = get_user_meta($user->ID, 'about_me_short', true);
         </div>
 
         <?php if (is_user_logged_in()) : ?>
-            <!-- Upload photo -->
-            <div>
-                <form method="post" enctype="multipart/form-data" id="profile-photo-form">
-                    <input type="file" id="profile-photo-input" name="profile_photo" class="d-none" accept="image/*">
-                    <label for="profile-photo-input">Change photo</label>
-                    <input type="hidden" name="action" value="update_profile_photo">
-                    <?php wp_nonce_field('update_profile_photo_nonce', 'profile_photo_nonce'); ?>
-                </form>
+            <!-- Upload Photo -->
+            <form method="post" enctype="multipart/form-data" id="profile-photo-form">
+                <input type="file" id="profile-photo-input" name="profile_photo" class="d-none" accept="image/*">
+                <button type="button" id="trigger-upload-btn" class="d-inline-flex align-items-center gap-2 btn custom-btn">
+                    <i class="fa fa-camera"></i>
+                    <span>Change Photo</span>
+                </button>
 
-            </div>
 
-            <!-- Delete photo -->
-            <div class="d-flex align-items-center mt-2 pb-3">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/delete.png" alt="" class="img-fluid img20">
+                <input type="hidden" name="action" value="update_profile_photo">
+                <?php wp_nonce_field('update_profile_photo_nonce', 'profile_photo_nonce'); ?>
+            </form>
+
+            <!-- Delete Photo -->
+            <div class="d-flex align-items-center mt-2">
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/delete.png"
+                    alt="" class="me-1 img-fluid img20">
                 <button type="button" id="delete-photo-btn"
-                    class="bg-transparent m-0 border-0 w-auto text-blue-color custom-btn-size">
+                    class="bg-transparent border-0 text-blue-color custom-btn-size">
                     Delete photo
                 </button>
             </div>
         <?php endif; ?>
 
+
         <!-- Profile Info -->
         <div>
-            <div class="d-flex flex-column align-items-center gap12">
+            <div class="d-flex flex-column align-items-center gap6">
                 <span class="fs20"><?php echo esc_html($full_name); ?></span>
 
                 <?php if ($location): ?>
-                    <p class="text-color-neutral fs14"><?php echo esc_html($location); ?></p>
+                    <span class="text-color-neutral fs14"><?php echo esc_html($location); ?></span>
+                <?php endif; ?>
+                <?php if ($profile['is_sales_person'] == 1): ?>
+                    <span class="border rounded-pill bg-outline-primary badge"
+                        style="border-color: #05489C !important; color: #05489C !important;">
+                        Sales Person
+                    </span>
                 <?php endif; ?>
 
                 <?php if ($profession): ?>
-                    <p class="text-color-neutral fs14"><?php echo esc_html($profession); ?></p>
+                    <span class="text-color-neutral fs14"><?php echo esc_html($profession); ?></span>
                 <?php endif; ?>
             </div>
         </div>
@@ -118,8 +128,8 @@ $profession = get_user_meta($user->ID, 'about_me_short', true);
             .then(res => res.json())
             .then(response => {
                 if (response.success) {
-                    const previewElement = document.querySelector(previewSelector);
-                    if (previewElement) previewElement.src = response.data.url;
+                    location.reload();
+                    return;
                 } else {
                     alert('Upload failed: ' + (response.data.message || 'Unknown error'));
                 }
@@ -140,5 +150,19 @@ $profession = get_user_meta($user->ID, 'about_me_short', true);
                 handlePhotoUpload(file, 'upload_profile_photo', 'profile_photo', '.img-p');
             });
         }
+    });
+
+    document.getElementById('trigger-upload-btn').addEventListener('click', function() {
+        document.getElementById('profile-photo-input').click();
+    });
+
+    // Auto-submit the form when a file is selected
+    document.getElementById('profile-photo-input').addEventListener('change', function() {
+        document.getElementById('profile-photo-form').submit();
+
+        // Reload after short delay
+        setTimeout(() => {
+            location.reload();
+        }, 800);
     });
 </script>

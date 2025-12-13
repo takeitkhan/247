@@ -25,6 +25,16 @@ if ($current_user) {
     // Determine profile link slug (using user_login or user_nicename for custom URL structure)
     $user_slug = $current_user->user_login;
     $profile_url = home_url('/' . $user_slug);
+
+    $profile_data_instance = new UserProfileData($current_user);
+
+    // Option B: If UserProfileData only takes the slug (Sticking closer to your original code)
+    // Use the slug if present, otherwise use the current user's login.
+    $target_identifier = $user_slug ? $user_slug : $user->user_login;
+    $profile_data_instance = new UserProfileData($target_identifier);
+
+    // Get the profile array
+    $profile = $profile_data_instance->getProfile();
 }
 ?>
 
@@ -50,13 +60,34 @@ if ($current_user) {
 
                 <li class="list-unstyled">
                     <a class="dropdown-item" href="<?php echo esc_url($profile_url); ?>">
-                        <div class="position-relative img44">
-                            <img src="<?php echo esc_url($profile_photo_url); ?>"
-                                class="rounded-circle w-100 h-100 object-fit-cover"
-                                alt="<?php echo esc_attr($full_name); ?>">
-                            <span class="fs20 fw-large"><?php echo ' &nbsp; ' . esc_html($full_name); ?></span>
+                        <div class="d-flex align-items-center">
+
+                            <!-- Profile Image -->
+                            <div class="position-relative me-2 img44">
+                                <img src="<?php echo esc_url($profile_photo_url); ?>"
+                                    class="rounded-circle w-100 h-100 object-fit-cover"
+                                    alt="<?php echo esc_attr($full_name); ?>">
+                            </div>
+
+                            <!-- Name + Sales Person indicator -->
+                            <div class="d-flex flex-column">
+                                <!-- Name -->
+                                <span class="fs20 fw-large">
+                                    <?php echo esc_html($full_name); ?>
+                                </span>
+
+                                <!-- Sales Person (Under Name) -->
+                                <?php if (!empty($profile['is_sales_person'])): ?>
+                                    <span class="mt-1 rounded-pill badge fw-small"
+                                        style="border: 1px solid #05489C; color: #05489C; background-color: transparent;">
+                                        Sales Person
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+
                         </div>
                     </a>
+
                 </li>
 
                 <li class="py-2 pt-0 border-underline list-unstyled">

@@ -43,7 +43,7 @@ $notifications_to_show = array_slice($all_notifications, 0, $limit);
                     $created_time = human_time_diff(strtotime($notif['created_at']), current_time('timestamp')) . ' ago';
                     $user_img = get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg';
                 ?>
-                    <div class="d-flex align-items-center gap-3 pb-3 <?= $is_unread ? 'unread' : ''; ?>">
+                    <div class="d-flex align-items-center border-bottom border-2 border-light gap-3 py-2 <?= $is_unread ? 'unread' : ''; ?>">
                         <div class="d-flex align-items-center gap10">
                             <?php if ($is_unread) : ?>
                                 <img src="<?= esc_url(get_template_directory_uri() . '/assets/img/nd/circle-notification.png'); ?>" alt="">
@@ -55,9 +55,9 @@ $notifications_to_show = array_slice($all_notifications, 0, $limit);
                                 <img class="position-absolute active-icon" src="<?= esc_url(get_template_directory_uri() . '/assets/img/nd/active_icon.png'); ?>" alt="Active">
                             </div>
                         </div>
-                        <div class="d-flex flex-column gap-2 post-user">
-                            <span class="p_name"><?= esc_html($notif['message']); ?></span>
-                            <p class="mb-0 text-blue-color fs14"><?= esc_html($created_time); ?></p>
+                        <div class="d-flex flex-column post-user">
+                            <span class="p_name fs16"><?= esc_html($notif['message']); ?></span>
+                            <span class="mb-0 text-blue-color fs14"><?= esc_html($created_time); ?></span>
                         </div>
                     </div>
                 <?php endforeach; ?>

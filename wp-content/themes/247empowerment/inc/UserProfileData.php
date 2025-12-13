@@ -86,7 +86,14 @@ class UserProfileData
             'social_links' => $social_links, // ✅ NEW: array of platform, label, url
             'referred_users' => $this->getReferredUsers(), // ✅ Added referred users
             'referred_users_count' => count($this->getReferredUsers()), // Count
-            'referred_users_html' => $this->render_referred_users($this->getReferredUsers(), $this->user->user_login, 3), // Rendered HTML
+            'referred_users_html' => $this->render_referred_users($this->getReferredUsers(), $this->user->user_login, 3), // Rendered HTML            
+
+            // NEW SECTION
+            'is_sales_person' => (bool)get_user_meta($this->user->ID, 'is_sales_person', true),
+            'sales_agreement' => $this->getSalesAgreementInfo(),
+            'keywords' => $this->getUserKeywords(),
+            'hashtags' => $this->getUserHashtags(),
+
         ];
     }
 
@@ -417,6 +424,79 @@ class UserProfileData
 
         return ob_get_clean();
     }
+
+    /**
+     * Summary of getSalesAgreementInfo
+     * @return array{effective_date: mixed, is_submitted: bool, printed_name: mixed, signature: mixed, signature_date: mixed|null}
+     */
+    public function getSalesAgreementInfo()
+    {
+        if (!$this->user) return null;
+
+        $user_id = $this->user->ID;
+
+        $effective_date = get_user_meta($user_id, 'agreement_effective_date', true);
+        $signature_date = get_user_meta($user_id, 'agreement_signature_date', true);
+        $printed_name   = get_user_meta($user_id, 'agreement_printed_name', true);
+        $signature      = get_user_meta($user_id, 'agreement_signature', true);
+
+        $is_submitted = !empty($effective_date) && !empty($signature_date);
+
+        // 🔥 Automatically mark user as sales person
+        if ($is_submitted) {
+            update_user_meta($user_id, 'is_sales_person', 1);
+        }
+
+        return [
+            'effective_date' => $effective_date,
+            'signature_date' => $signature_date,
+            'printed_name'   => $printed_name,
+            'signature'      => $signature,
+            'is_submitted'   => $is_submitted
+        ];
+    }
+
+
+    private function getUserKeywords()
+    {
+        $raw = get_user_meta($this->user->ID, 'user_keywords', true);
+
+        if (empty($raw)) {
+            return [
+                'raw' => '',
+                'list' => []
+            ];
+        }
+
+        $list = array_filter(array_map('trim', explode(',', $raw)));
+
+        return [
+            'raw' => $raw,
+            'list' => $list
+        ];
+    }
+
+    private function getUserHashtags()
+    {
+        $raw = get_user_meta($this->user->ID, 'user_hashtags', true);
+
+        if (empty($raw)) {
+            return [
+                'raw' => '',
+                'list' => []
+            ];
+        }
+
+        $list = array_filter(array_map('trim', explode(',', $raw)));
+
+        return [
+            'raw' => $raw,
+            'list' => $list
+        ];
+    }
+
+
+
 
     public function toJSON()
     {

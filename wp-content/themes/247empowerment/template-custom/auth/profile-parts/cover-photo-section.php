@@ -40,6 +40,12 @@ $profileUrl = esc_url($profile['profile_url']);
             <div class="d-flex flex-column align-items-center align-items-lg-start mt-3 post-user">
                 <span class="profile-title">
                     <?php echo esc_html($profile['first_name'] . ' ' . $profile['last_name']); ?>
+                    <?php if ($profile['is_sales_person'] == 1): ?>
+                        <span class="border rounded-pill bg-outline-primary badge"
+                            style="border-color: #05489C !important; color: #05489C !important;">
+                            Sales Person
+                        </span>
+                    <?php endif; ?>
                 </span>
 
                 <?php

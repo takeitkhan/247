@@ -191,21 +191,45 @@ function mm_render_video_details_metabox($post)
 
 function mm_save_video_details_metabox($post_id)
 {
+    // Safety checks
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (!current_user_can('edit_post', $post_id)) return;
+    if (get_post_type($post_id) !== 'video') return;
+
     // Playlist URL
     if (isset($_POST['mm_playlist_url'])) {
-        update_post_meta($post_id, '_playlist_url', esc_url_raw($_POST['mm_playlist_url']));
+        update_post_meta(
+            $post_id,
+            '_playlist_url',
+            esc_url_raw($_POST['mm_playlist_url'])
+        );
     }
 
     // Featured checkbox
-    $featured = isset($_POST['mm_video_featured']) ? 1 : 0;
-    update_post_meta($post_id, '_video_featured', $featured);
+    update_post_meta(
+        $post_id,
+        '_video_featured',
+        isset($_POST['mm_video_featured']) ? '1' : '0'
+    );
+
+    // ✅ TOP FEATURED checkbox (THIS WAS MISSING)
+    update_post_meta(
+        $post_id,
+        '_video_top_featured',
+        isset($_POST['video_top_featured']) ? '1' : '0'
+    );
 
     // Total videos
     if (isset($_POST['mm_playlist_total_videos'])) {
-        update_post_meta($post_id, '_playlist_total_videos', intval($_POST['mm_playlist_total_videos']));
+        update_post_meta(
+            $post_id,
+            '_playlist_total_videos',
+            intval($_POST['mm_playlist_total_videos'])
+        );
     }
 }
 add_action('save_post', 'mm_save_video_details_metabox');
+
 
 
 function mm_extract_youtube_embed($url)
