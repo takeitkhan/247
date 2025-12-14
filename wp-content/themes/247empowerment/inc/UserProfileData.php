@@ -100,6 +100,9 @@ class UserProfileData
             'keywords' => $this->getUserKeywords(),
             'hashtags' => $this->getUserHashtags(),
 
+            // ✅ Shareable public profile URL
+            'shareable_link' => home_url('/' . $this->user->user_login . '/'),
+            'shareable_nice_link' => home_url('/' . $this->user->user_nicename . '/')
         ];
     }
 

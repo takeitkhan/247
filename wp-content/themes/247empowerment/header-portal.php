@@ -179,7 +179,7 @@
 
 
               <div class="d-flex align-items-center gap-1 gap-md-3">
-                  <?php //get_template_part('template-parts/portal-header/header', 'search'); ?>
+                  <?php get_template_part('template-parts/portal-header/header', 'search'); ?>
                   <?php //get_template_part('template-parts/portal-header/header', 'messages'); ?>
                   <?php get_template_part('template-parts/portal-header/header', 'quick-links'); ?>
                   <?php get_template_part('template-parts/portal-header/header', 'notifications'); ?>

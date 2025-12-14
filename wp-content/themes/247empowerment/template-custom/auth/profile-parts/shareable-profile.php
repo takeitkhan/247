@@ -1,20 +1,39 @@
 <?php
+/* -------------------------------------------------
+ * Resolve user & profile
+ * ------------------------------------------------- */
+
 $user_slug = get_query_var('user_profile');
-$user = get_user_by('slug', $user_slug);
+$user      = get_user_by('slug', $user_slug);
+
+if (!$user) {
+    wp_die('User not found');
+}
+
 $profile = (new UserProfileData($user_slug))->getProfile();
 
-echo '<pre>';
-var_dump($profile); // Debugging output
-echo '</pre>';
+/* -------------------------------------------------
+ * Basic profile fields
+ * ------------------------------------------------- */
+$profile_img = esc_url(
+    get_user_meta($user->ID, 'profile_photo', true)
+        ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg'
+);
 
-$profile_img = esc_url(get_user_meta($user->ID, 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg');
-$full_name = esc_html($profile['first_name'] . ' ' . $profile['last_name']);
-$digital_card_about = esc_html($profile['digital_card_about'] ?? 'No short bio available.');
-$place_display_name = esc_html($profile['place_display_name'] ?? 'Location not available');
+$full_name = esc_html(trim(
+    ($profile['first_name'] ?? '') . ' ' . ($profile['last_name'] ?? '')
+));
+
+$designation = esc_html($profile['designation'] ?? 'No designation provided.');
+$digital_card_about = esc_html($profile['digital_card_about'] ?? 'No bio provided.');
+$place_display_name = esc_html($profile['place_display_name'] ?? 'Location not available.');
+
 $keywords = $profile['keywords']['list'] ?? [];
 $hashtags = $profile['hashtags']['list'] ?? [];
-$industry = '';
 
+/* -------------------------------------------------
+ * Industry
+ * ------------------------------------------------- */
 if (!empty($profile['user_category_names'])) {
     $industry = is_array($profile['user_category_names'])
         ? implode(', ', array_map('esc_html', $profile['user_category_names']))
@@ -22,7 +41,79 @@ if (!empty($profile['user_category_names'])) {
 } else {
     $industry = 'Not specified';
 }
+
+/* -------------------------------------------------
+ * SEO NORMALIZATION (✅ correct placement)
+ * ------------------------------------------------- */
+
+// Page URL
+$page_url = home_url('/' . sanitize_title($profile['display_name'] ?? $user_slug));
+
+// Title
+$page_title = $full_name ?: get_bloginfo('name');
+
+// Description priority
+$base_description = trim(
+    $profile['digital_card_about']
+        ?? $profile['about_me_short']
+        ?? ''
+);
+
+if (!$base_description) {
+    $base_description = 'View my professional profile.';
+}
+
+// Trim for SEO (≈160 chars)
+$page_description = wp_trim_words($base_description, 28, '');
+
+// Build keyword list
+$keyword_list = [];
+
+// Keywords
+if (is_array($keywords)) {
+    $keyword_list = array_merge($keyword_list, $keywords);
+}
+
+// Hashtags → plain keywords
+if (is_array($hashtags)) {
+    foreach ($hashtags as $tag) {
+        $tag = ltrim($tag, '#');
+        if ($tag) {
+            $keyword_list[] = $tag;
+        }
+    }
+}
+
+// Add industry & designation
+if ($industry && $industry !== 'Not specified') {
+    $keyword_list[] = $industry;
+}
+if ($designation && $designation !== 'No designation provided.') {
+    $keyword_list[] = $designation;
+}
+
+// Cleanup
+$keyword_list  = array_unique(array_filter(array_map('sanitize_text_field', $keyword_list)));
+$meta_keywords = implode(', ', $keyword_list);
+
+use Endroid\QrCode\Builder\Builder;
+
+require_once get_template_directory() . '/vendor/autoload.php';
+
+$shareable_link = $profile['shareable_link'] ?? '';
+$qrDataUri = null;
+
+if ($shareable_link) {
+    $result = Builder::create()
+        ->data($shareable_link)
+        ->size(300)
+        ->margin(10)
+        ->build();
+
+    $qrDataUri = $result->getDataUri();
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -40,22 +131,28 @@ if (!empty($profile['user_category_names'])) {
 
     // Construct values for meta tags
     $page_url = "{$site_url}/{$display_name}";
+    $page_description = $profile['digital_card_about'] ?: 'Welcome to my profile.';
     $page_title = $profile['first_name'] . ' ' . $profile['last_name'];
-    $page_description = $profile['about_me_short'] ?: 'Welcome to my profile.';
     $page_image = $profile['profile_photo'] ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg';
     ?>
 
-    <!-- Canonical Link -->
+    <!-- Canonical -->
     <link rel="canonical" href="<?php echo esc_url($page_url); ?>" />
 
-    <!-- Open Graph meta tags -->
+    <!-- SEO Meta -->
+    <meta name="description" content="<?php echo esc_attr($page_description); ?>" />
+    <?php if (!empty($meta_keywords)) : ?>
+        <meta name="keywords" content="<?php echo esc_attr($meta_keywords); ?>" />
+    <?php endif; ?>
+
+    <!-- Open Graph -->
     <meta property="og:title" content="<?php echo esc_attr($page_title); ?>" />
     <meta property="og:description" content="<?php echo esc_attr($page_description); ?>" />
     <meta property="og:image" content="<?php echo esc_url($page_image); ?>" />
     <meta property="og:type" content="profile" />
     <meta property="og:url" content="<?php echo esc_url($page_url); ?>" />
 
-    <!-- Twitter meta tags -->
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="<?php echo esc_attr($page_title); ?>" />
     <meta name="twitter:description" content="<?php echo esc_attr($page_description); ?>" />
@@ -66,19 +163,41 @@ if (!empty($profile['user_category_names'])) {
 <body>
     <div class="py-5 container">
         <div class="justify-content-center row">
-            <div class="col-md-5 col-lg-4">
+            <div class="col-md-7 col-lg-6">
 
                 <div class="shadow border-0 rounded-4 overflow-hidden card">
 
                     <!-- QR Section -->
-                    <div class="py-4 text-center">
-                        <img src="qr-code.png" alt="QR Code" class="img-fluid" style="max-width:180px;">
-                    </div>
+                    <?php if (!empty($qrDataUri)) : ?>
+                        <div class="py-4 text-center">
+                            <a href="<?= esc_attr($qrDataUri); ?>" download="profile-qr.png">
+                                <img
+                                    src="<?= esc_attr($qrDataUri); ?>"
+                                    alt="Profile QR Code"
+                                    class="img-fluid"
+                                    style="max-width:180px;">
+                            </a>
+                            <!-- <div class="mt-2 text-muted fs14">Scan to view profile</div> -->
+                        </div>
+                    <?php endif; ?>
+
 
                     <!-- Brand Bar -->
-                    <div class="py-4 text-white text-center fw-semibold" style="background-color: #05489C;">
-                        24/7 Empowerment
+                    <div
+                        class="position-relative px-4 py-5 text-white text-center fw-semibold fs-2"
+                        style="background: linear-gradient(90deg, rgba(5,72,156,1) 0%, rgba(102,38,203,1) 44%, rgba(208,0,255,1) 100%);">
+                        <!-- Centered text -->
+                        <span>24/7 Empowerment</span>
+
+                        <!-- Right-aligned logo -->
+                        <img
+                            src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/nd/white_logo_247.svg'); ?>"
+                            alt="24/7 Empowerment"
+                            class="top-50 position-absolute me-4 translate-middle-y end-0"
+                            style="height: 150px;">
                     </div>
+
+
 
                     <!-- Profile -->
                     <div class="px-4 card-body">
@@ -153,6 +272,18 @@ if (!empty($profile['user_category_names'])) {
             </div>
         </div>
     </div>
+    <style>
+        .px-4.card-body {
+            z-index: 999;
+        }
+
+        @media (max-width: 576px) {
+            .position-relative img {
+                height: 32px !important;
+                margin-right: 12px;
+            }
+        }
+    </style>
 </body>
 
 </html>

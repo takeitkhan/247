@@ -97,8 +97,55 @@ $events = get_posts([
 </div>
 
 <script>
-    document.getElementById('toggleSearchBox').addEventListener('click', function() {
-        const box = document.getElementById('searchBox');
-        box.style.display = (box.style.display === 'none' || box.style.display === '') ? 'block' : 'none';
-    });
+    (function() {
+
+        const toggleBtn = document.getElementById('toggleSearchBox');
+        const searchBox = document.getElementById('searchBox');
+        const input = document.getElementById('searchInput');
+
+        if (!toggleBtn || !searchBox || !input) return;
+
+        /* Toggle search box */
+        toggleBtn.addEventListener('click', function() {
+            const isOpen = searchBox.style.display === 'block';
+            searchBox.style.display = isOpen ? 'none' : 'block';
+
+            if (!isOpen) {
+                setTimeout(() => input.focus(), 100);
+            }
+        });
+
+        /* Elastic-style search redirect */
+        let debounceTimer = null;
+
+        input.addEventListener('keyup', function(e) {
+
+            const query = this.value.trim();
+
+            // Enter key → immediate redirect
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                redirect(query);
+                return;
+            }
+
+            // Elastic debounce (redirect after typing pause)
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                if (query.length >= 2) {
+                    redirect(query);
+                }
+            }, 600);
+        });
+
+        function redirect(query) {
+            if (!query) return;
+
+            const url = new URL("<?php echo esc_url($referrals_url); ?>");
+            url.searchParams.set('search', query);
+
+            window.location.href = url.toString();
+        }
+
+    })();
 </script>

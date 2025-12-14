@@ -979,3 +979,27 @@ Stack trace:
 [14-Dec-2025 16:13:04 UTC] PHP Warning:  Undefined array key "" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 181
 [14-Dec-2025 16:13:04 UTC] PHP Warning:  Undefined array key "" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 181
 [14-Dec-2025 16:13:04 UTC] PHP Warning:  Undefined array key "" in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 181
+[14-Dec-2025 18:52:50 UTC] PHP Fatal error:  Uncaught Error: Class "Endroid\QrCode\Builder\Builder" not found in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\shareable-profile.php:103
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php(8): include()
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(125): include('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#4 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\shareable-profile.php on line 103
+[14-Dec-2025 18:55:35 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Endroid\QrCode\Builder\Builder::create() in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\shareable-profile.php:107
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php(8): include()
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(125): include('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#4 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\shareable-profile.php on line 107
+[14-Dec-2025 19:13:19 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Endroid\QrCode\Builder\Builder::create() in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\shareable-profile.php:107
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php(8): include()
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(125): include('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#4 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\shareable-profile.php on line 107
