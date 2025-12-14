@@ -12,10 +12,10 @@ $profile = isset($args['profile']) ? $args['profile'] : [];
         </p>
     </div>
     <ul class="d-flex flex-column gap-2 nav">        
-        <?php if (!empty($profile['place_display_name'])) : ?>
+        <?php if (!empty($profile['location'])) : ?>
             <li class="d-flex align-items-center gap-2">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/location_p.png" class="icon-img" alt="Play display name">
-                <a href="#" class="p-0 p-link"><?php echo esc_html($profile['place_display_name']); ?></a>
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/location_p.png" class="icon-img" alt="Location">
+                <a href="#" class="p-0 p-link"><?php echo esc_html($profile['location']); ?></a>
             </li>
         <?php endif; ?>
 

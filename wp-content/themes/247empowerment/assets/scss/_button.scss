@@ -12,8 +12,9 @@
   padding: clamp(8px, 1.2vw, 10px) clamp(10px, 1.5vw, 12px);
   transition: all 0.1s ease;
 
-  &:focus {
+  &:focus, &:hover {
     box-shadow: 0 0 0 2px $white, 0 0 0 5px $primary-color;
+    color: $white;
   }
 }
 

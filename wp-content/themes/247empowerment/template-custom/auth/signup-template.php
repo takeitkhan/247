@@ -195,8 +195,7 @@ $old_input = $message['old_input'] ?? [];
             maxDate: "today",
             altInput: true,
             altFormat: "F j, Y",
-            yearRange: [1900, new Date().getFullYear()],
-            defaultDate: "1990-01-01",
+            yearRange: [1940, new Date().getFullYear()],            
         });
     });
 

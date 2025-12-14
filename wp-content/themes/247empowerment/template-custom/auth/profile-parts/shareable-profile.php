@@ -3,14 +3,16 @@ $user_slug = get_query_var('user_profile');
 $user = get_user_by('slug', $user_slug);
 $profile = (new UserProfileData($user_slug))->getProfile();
 
-// echo '<pre>';
-// var_dump($profile); // Debugging output
-// echo '</pre>';
+echo '<pre>';
+var_dump($profile); // Debugging output
+echo '</pre>';
 
 $profile_img = esc_url(get_user_meta($user->ID, 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg');
 $full_name = esc_html($profile['first_name'] . ' ' . $profile['last_name']);
-$short_bio = esc_html($profile['about_me_short'] ?? 'No short bio available.');
-$location = esc_html($profile['location'] ?? 'Unknown location');
+$digital_card_about = esc_html($profile['digital_card_about'] ?? 'No short bio available.');
+$place_display_name = esc_html($profile['place_display_name'] ?? 'Location not available');
+$keywords = $profile['keywords']['list'] ?? [];
+$hashtags = $profile['hashtags']['list'] ?? [];
 $industry = '';
 
 if (!empty($profile['user_category_names'])) {
@@ -61,126 +63,96 @@ if (!empty($profile['user_category_names'])) {
     <?php wp_head(); ?>
 </head>
 
-<body <?php body_class(); ?>>
+<body>
+    <div class="py-5 container">
+        <div class="justify-content-center row">
+            <div class="col-md-5 col-lg-4">
 
-    <div class="profile-img-wrapper">
-        <img src="<?php echo $profile_img; ?>" alt="Profile Photo" />
+                <div class="shadow border-0 rounded-4 overflow-hidden card">
+
+                    <!-- QR Section -->
+                    <div class="py-4 text-center">
+                        <img src="qr-code.png" alt="QR Code" class="img-fluid" style="max-width:180px;">
+                    </div>
+
+                    <!-- Brand Bar -->
+                    <div class="py-4 text-white text-center fw-semibold" style="background-color: #05489C;">
+                        24/7 Empowerment
+                    </div>
+
+                    <!-- Profile -->
+                    <div class="px-4 card-body">
+                        <img src="<?php echo $profile_img; ?>"
+                            class="shadow border border-3 border-white rounded-circle"
+                            width="90" height="90"
+                            style="margin-top:-55px; object-fit:cover;"
+                            alt="Profile Photo" />
+
+                        <h5 class="mt-3 mb-1 fw-bold">
+                            <?php echo $full_name; ?>
+                        </h5>
+
+                        <?php if ($designation): ?>
+                            <p class="mb-2 text-primary designation">
+                                <?php echo esc_html($designation); ?>
+                            </p>
+                        <?php endif; ?>
+
+                        <?php if (!empty($digital_card_about) && $digital_card_about !== 'No short bio available.'): ?>
+                            <p class="mb-3 text-muted">
+                                <?php echo $digital_card_about; ?>
+                            </p>
+                        <?php endif; ?>
+
+                        <?php if (!empty($keywords)) : ?>
+                            <div class="d-flex flex-wrap gap-2 mb-3 text-muted keyword-list">
+                                <?php foreach ($keywords as $keyword) : ?>
+                                    <span class="keyword-item">
+                                        <?= esc_html($keyword); ?>
+                                    </span>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+                        <!-- Tags -->
+                        <?php if (!empty($hashtags)) : ?>
+                            <div class="d-flex flex-wrap gap-2 mb-3 text-muted">
+                                <?php foreach ($hashtags as $hashtag) : ?>
+                                    <span class="bg-light border border-light text-black badge">
+                                        <?= esc_html($hashtag); ?>
+                                    </span>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+
+
+                        <!-- Location -->
+                        <?php if (!empty($place_display_name) && $place_display_name !== 'Unknown location'): ?>
+                            <p class="mb-4 text-muted small">
+                                <i class="bi bi-geo-alt"></i>
+                                <?php echo $place_display_name; ?>
+                            </p>
+                        <?php endif; ?>
+
+                        <!-- Actions -->
+                        <?php
+                        $user_slug = get_query_var('user_profile');
+                        $ref = urlencode($user_slug);
+
+                        $signup_url = home_url("/signup?ref={$ref}");
+                        $signin_url = home_url("/signin?ref={$ref}");
+                        ?>
+
+                        <div class="d-flex align-items-center justify-content-end gap-3">
+                            <a href="<?php echo esc_url($signup_url); ?>" class="">Sign Up</a>
+                            <a href="<?php echo esc_url($signin_url); ?>" class="custom-btn">Sign In</a>
+                        </div>
+                        <?php wp_footer(); ?>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
-
-    <h1><?php echo $full_name; ?></h1>
-
-    <?php if (!empty($short_bio) && $short_bio !== 'No short bio available.'): ?>
-        <div class="info-item"><strong>Bio:</strong> <?php echo $short_bio; ?></div>
-    <?php endif; ?>
-
-    <?php if (!empty($location) && $location !== 'Unknown location'): ?>
-        <div class="info-item"><strong>Location:</strong> <?php echo $location; ?></div>
-    <?php endif; ?>
-
-    <?php if (!empty($industry) && $industry !== 'Not specified'): ?>
-        <div class="info-item"><strong>Industry:</strong> <?php echo $industry; ?></div>
-    <?php endif; ?>
-
-    <p><em>You must be logged in to view full profile details.</em></p>
-
-    <?php
-    $user_slug = get_query_var('user_profile');
-    $ref = urlencode($user_slug);
-
-    $signup_url = home_url("/signup?ref={$ref}");
-    $signin_url = home_url("/signin?ref={$ref}");
-    ?>
-    <div class="btn-wrapper">
-        <a class="btn btn-secondary" href="<?php echo esc_url($signin_url); ?>">Sign In</a>
-        <a class="btn btn-primary" href="<?php echo esc_url($signup_url); ?>">Sign Up</a>        
-    </div>
-
-    <?php wp_footer(); ?>
-
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f9fafb;
-            color: #222;
-            max-width: 720px;
-            margin: 40px auto;
-            padding: 30px;
-            box-shadow: 0 6px 20px rgb(0 0 0 / 0.1);
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .profile-img-wrapper {
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 1rem;
-            border-radius: 50%;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .profile-img-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        h1 {
-            font-weight: 700;
-            font-size: 2rem;
-            color: #0a3d62;
-            margin-bottom: 0.2em;
-        }
-
-        .info-item {
-            margin-bottom: 1rem;
-            color: #444;
-        }
-
-        .info-item strong {
-            color: #0984e3;
-        }
-
-        .btn {
-            display: inline-block;
-            margin: 10px;
-            padding: 0.6rem 1.5rem;
-            border-radius: 30px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-primary {
-            background-color: #0984e3;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #065a9e;
-        }
-
-        .btn-secondary {
-            background-color: #55efc4;
-            color: #0a3d62;
-        }
-
-        .btn-secondary:hover {
-            background-color: #32b28b;
-        }
-
-        @media (max-width: 480px) {
-            body {
-                margin: 20px 10px;
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 1.6rem;
-            }
-        }
-    </style>
 </body>
 
 </html>

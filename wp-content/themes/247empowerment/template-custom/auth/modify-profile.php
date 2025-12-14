@@ -1,13 +1,33 @@
 <?php
 /* Template Name: Modify Profile */
-get_header_based_on_login();
-
 if (!is_user_logged_in()) {
     wp_redirect(wp_login_url());
     exit;
 }
 
 $current_user = wp_get_current_user();
+
+/**
+ * ✅ HANDLE POST FIRST — NO OUTPUT ABOVE THIS
+ */
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
+    if (
+        !isset($_POST['frontend_profile_update_nonce']) ||
+        !wp_verify_nonce($_POST['frontend_profile_update_nonce'], 'frontend_profile_update')
+    ) {
+        wp_die('Security check failed');
+    }
+
+    handle_frontend_profile_update(get_current_user_id(), $_POST);
+
+    // ✅ Redirect safely
+    wp_safe_redirect(add_query_arg('updated', '1', wp_get_referer() ?: get_permalink()));
+    exit;
+}
+/**
+ * ✅ NOW SAFE TO OUTPUT HTML
+ */
+get_header_based_on_login();
 
 // Get current logged-in user ID (used as a fallback if no slug is provided)
 $current_user_id = get_current_user_id();
@@ -48,26 +68,8 @@ if ($user) {
 }
 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
-    if (!isset($_POST['frontend_profile_update_nonce']) || !wp_verify_nonce($_POST['frontend_profile_update_nonce'], 'frontend_profile_update')) {
-        echo '<div class="alert alert-danger">Security check failed.</div>';
-    } else {
-        $result = handle_frontend_profile_update($current_user->ID, $_POST);
-
-        // Trigger points modal only
-        if (!empty($result['notifications'])) {
-            echo '<script>
-            document.addEventListener("DOMContentLoaded", function() {
-                var notifications = ' . json_encode($result['notifications']) . ';
-                notifications.forEach(function(notif) {
-                    openPointsModal(notif);
-                });
-            });
-            </script>';
-        }
-    }
-}
-
+$profile = $profile ?: [];
+$val = fn($key, $default = '') => esc_attr($profile[$key] ?? $default);
 
 
 ?>
@@ -87,28 +89,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                     </div>
 
                     <div>
-                        <form method="post" class="row g-3">
+                        <form method="post" id="frontend-profile-form" class="row g-3">
                             <?php wp_nonce_field('frontend_profile_update', 'frontend_profile_update_nonce'); ?>
 
                             <div class="col-12 col-md-6">
                                 <label class="form-label">First Name:</label>
                                 <input type="text" name="first_name" class="form-control input"
-                                    value="<?php echo esc_attr($current_user->first_name); ?>" placeholder="Enter your first name" required>
+                                    value="<?= $val('first_name'); ?>" placeholder="Enter your first name" required>
                             </div>
 
                             <div class="col-12 col-md-6">
                                 <label class="form-label">Last Name:</label>
                                 <input type="text" name="last_name" class="form-control input"
-                                    value="<?php echo esc_attr($current_user->last_name); ?>" placeholder="Enter your last name" required>
+                                    value="<?= $val('last_name'); ?>" placeholder="Enter your last name" required>
                             </div>
 
                             <div class="col-12 col-md-6">
                                 <label class="form-label">Email:</label>
                                 <input type="email" name="email" class="form-control input"
-                                    value="<?php echo esc_attr($current_user->user_email); ?>" placeholder="Enter your email" required>
+                                    value="<?= $val('email'); ?>" placeholder="Enter your email" required>
                                 <div class="mt-2 form-check">
                                     <input type="checkbox" class="form-check-input" id="show_email" name="show_email" value="1"
-                                        <?php checked(get_user_meta($current_user->ID, 'show_email', true), true); ?>>
+                                        <?php checked($profile['show_email'] ?? false); ?>>
                                     <label class="form-check-label" for="show_email">Show Email on profile</label>
                                 </div>
                             </div>
@@ -116,25 +118,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                             <div class="col-12 col-md-6">
                                 <label class="form-label">Phone number:</label>
                                 <input type="text" name="phone" class="form-control input"
-                                    value="<?php echo esc_attr($current_user->phone); ?>" placeholder="Enter your phone number" required>
+                                    value="<?= $val('phone'); ?>" placeholder="Enter your phone number" required>
                                 <div class="mt-2 form-check">
                                     <input type="checkbox" class="form-check-input" id="show_phone" name="show_phone" value="1"
-                                        <?php checked(get_user_meta($current_user->ID, 'show_phone', true), true); ?>>
+                                        <?php checked($profile['show_phone'] ?? false); ?>>
                                     <label class="form-check-label" for="show_phone">Show phone number on profile</label>
                                 </div>
                             </div>
 
                             <!-- DOB -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label">Date of Birth:</label>
+                                <label class="form-label">Date of Birth:</label>                                
                                 <input type="text" name="dob" id="dob" class="form-control input" 
-                                    value="<?php echo esc_attr(get_user_meta($current_user->ID, 'dob', true)); ?>">
+                                    value="<?= $val('dob'); ?>">
                             </div>
 
                             <div class="col-12 col-md-6">
                                 <label class="form-label">About me (one liner):</label>
                                 <input type="text" name="about_me_short" class="form-control input"
-                                    value="<?php echo esc_attr(get_user_meta($current_user->ID, 'about_me_short', true)); ?>" 
+                                    value="<?= $val('about_me_short'); ?>" 
                                         placeholder="About me" required>
                             </div>
 
@@ -142,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                                 <label class="form-label">About me (full description):</label>
                                 <div class="position-relative">
                                     <textarea name="about_me" class="form-control input" rows="5"
-                                        placeholder="What's on your mind?"><?php echo esc_textarea(get_user_meta($current_user->ID, 'about_me', true)); ?></textarea>
+                                        placeholder="What's on your mind?"><?= esc_textarea($profile['about_me'] ?? ''); ?></textarea>
                                     <img class="modal-emoji" src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/imogi.png" alt="">
                                 </div>
                             </div>
@@ -152,7 +154,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                             </div>
 
                             <div id="map" style="height: 300px; border-radius: 10px;"></div> -->
-
+                            <?php
+                            /** 
                             <div class="col-12">
                                 <label class="form-label">Latitude:</label>
                                 <input type="text" name="latitude" id="latitude" class="form-control input"
@@ -166,22 +169,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                             </div>
 
                             <!-- Location -->
-                            <div class="col-12 col-md-6">
-                                <label class="form-label">Location Name:</label>
-                                <input type="text" name="place_display_name" class="form-control input"
-                                    value="<?php echo esc_attr(get_user_meta($current_user->ID, 'place_display_name', true)); ?>">
-                            </div>
-
                             <div class="col-12">
                                 <label class="form-label">Full Address:</label>
                                 <input type="text" name="location" id="location" class="form-control input"
                                     value="<?php echo esc_attr(get_user_meta($current_user->ID, 'location', true)); ?>" placeholder="Enter your full address information">
                                 <div class="mt-2 form-check">
                                     <input class="form-check-input" type="checkbox" id="show_full_address" name="show_full_address" value="1"
-                                        <?php checked(get_user_meta($current_user->ID, 'show_full_address', true), '1'); ?>>
+                                        <?php checked($profile['show_full_address'] ?? false); ?>>
                                     <label class="form-check-label" for="show_full_address">Show full address on profile</label>
                                 </div>
                             </div>
+                            **/
+                            ?>
+
+                            <div class="col-12 col-md-12">
+                                <label class="form-label">Location Name:</label>
+                                <input type="text" name="place_display_name" class="form-control input"
+                                    value="<?php echo esc_attr(get_user_meta($current_user->ID, 'place_display_name', true)); ?>">
+                            </div>
+
+                            
 
                             
                             <div class="col-12">
@@ -237,40 +244,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
             maxDate: "today",
             altInput: true,
             altFormat: "F j, Y",
-            yearRange: [1900, new Date().getFullYear()],
-            defaultDate: "1990-01-01",
-        });
-
-        $('#frontend-profile-form').on('submit', function(e) {
-            e.preventDefault();
-
-            var formData = $(this).serializeArray();
-            formData.push({
-                name: 'nonce',
-                value: $('input[name="frontend_profile_update_nonce"]').val()
-            });
-
-            $.ajax({
-                url: '<?php echo admin_url("admin-ajax.php"); ?>',
-                method: 'POST',
-                data: $.param(formData) + '&action=frontend_profile_update',
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        alert(response.message || 'Profile updated'); // simple fallback
-                        if (response.data.notifications && response.data.notifications.length) {
-                            response.data.notifications.forEach(function(notif) {
-                                openPointsModal(notif); // call your existing modal function
-                            });
-                        }
-                    } else {
-                        alert(response.data.message || 'Error occurred');
-                    }
-                },
-                error: function() {
-                    alert('AJAX error');
-                }
-            });
+            yearRange: [1940, new Date().getFullYear()]
         });
     });
 </script>

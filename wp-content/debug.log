@@ -909,3 +909,57 @@ Stack trace:
 [13-Dec-2025 07:27:22 UTC] Automatic updates complete.
 [13-Dec-2025 13:49:32 UTC] Automatic updates starting...
 [13-Dec-2025 13:49:36 UTC] Automatic updates complete.
+[13-Dec-2025 16:26:28 UTC] PHP Fatal error:  Uncaught TypeError: explode(): Argument #2 ($string) must be of type string, array given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\profile-card.php:41
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\profile-card.php(41): explode(',', Array)
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(816): require('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-includes\template.php(749): load_template('D:\\oldwindows\\l...', false, Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(206): locate_template(Array, true, false, Array)
+#4 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php(24): get_template_part('template-custom...', '', Array)
+#5 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(125): include('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#8 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\profile-card.php on line 41
+[13-Dec-2025 16:26:38 UTC] PHP Fatal error:  Uncaught TypeError: explode(): Argument #2 ($string) must be of type string, array given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\profile-card.php:41
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\profile-card.php(41): explode(',', Array)
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(816): require('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-includes\template.php(749): load_template('D:\\oldwindows\\l...', false, Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(206): locate_template(Array, true, false, Array)
+#4 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php(24): get_template_part('template-custom...', '', Array)
+#5 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(125): include('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#8 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\profile-card.php on line 41
+[13-Dec-2025 16:26:45 UTC] PHP Fatal error:  Uncaught TypeError: explode(): Argument #2 ($string) must be of type string, array given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\profile-card.php:41
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\profile-card.php(41): explode(',', Array)
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(816): require('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-includes\template.php(749): load_template('D:\\oldwindows\\l...', false, Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(206): locate_template(Array, true, false, Array)
+#4 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php(24): get_template_part('template-custom...', '', Array)
+#5 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(125): include('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#8 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\profile-card.php on line 41
+[13-Dec-2025 16:26:50 UTC] PHP Fatal error:  Uncaught TypeError: explode(): Argument #2 ($string) must be of type string, array given in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\profile-card.php:41
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\profile-card.php(41): explode(',', Array)
+#1 D:\oldwindows\laragon\www\pet\wp-includes\template.php(816): require('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-includes\template.php(749): load_template('D:\\oldwindows\\l...', false, Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(206): locate_template(Array, true, false, Array)
+#4 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\user-profile.php(24): get_template_part('template-custom...', '', Array)
+#5 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(125): include('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#8 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\profile-card.php on line 41
+[14-Dec-2025 04:43:35 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[14-Dec-2025 04:43:40 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[14-Dec-2025 06:47:02 UTC] PHP Warning:  Undefined variable $location in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\editprofile-parts\profile-photo-form.php on line 55
+[14-Dec-2025 07:14:53 UTC] PHP Warning:  Undefined variable $designation in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\shareable-profile.php on line 95
+[14-Dec-2025 14:45:25 UTC] Automatic updates starting...
+[14-Dec-2025 14:45:28 UTC] Automatic updates complete.

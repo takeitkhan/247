@@ -50,7 +50,8 @@ if ($user) {
 }
 
 // Fetch existing meta
-$about_short = get_user_meta($current_user_id, 'about_me_short', true);
+$designation = get_user_meta($current_user_id, 'designation', true);
+$about_short = get_user_meta($current_user_id, 'digital_card_about', true);
 $keywords = get_user_meta($current_user_id, 'user_keywords', true);
 $hashtags = get_user_meta($current_user_id, 'user_hashtags', true);
 
@@ -61,10 +62,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_additional_detai
         echo '<div class="alert alert-danger">Security check failed.</div>';
     } else {
 
+        // 0) Designation
+        $designation = sanitize_text_field($_POST['designation'] ?? '');
+        update_user_meta($current_user_id, 'designation', $designation);
+
         // 1) About me short (MAX 150 chars)
         $about_short = sanitize_text_field($_POST['about_me_short']);
-        $about_short = substr($about_short, 0, 150);
-        update_user_meta($current_user_id, 'about_me_short', $about_short);
+        $about_short = mb_substr($about_short, 0, 150); // safer for UTF-8
+        update_user_meta($current_user_id, 'digital_card_about', $about_short);
 
         // 2) Keywords (comma separated)
         $keywords = sanitize_text_field($_POST['user_keywords']);
@@ -86,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_additional_detai
 
         update_user_meta($current_user_id, 'user_hashtags', implode(', ', $clean_hashtags));
 
-        echo '<div class="mt-3 alert alert-success">Additional profile details updated successfully.</div>';
+        //echo '<div class="mt-3 alert alert-success">Additional profile details updated successfully.</div>';
     }
 }
 
@@ -111,9 +116,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_additional_detai
                 <form method="post" class="row g-3">
                     <?php wp_nonce_field('additional_details_action', 'additional_details_nonce'); ?>
 
+                    <!-- Designation -->
+                    <div class="col-12">
+                        <label class="form-label">Title</label>
+                        <input type="text"
+                            name="designation"
+                            class="form-control input"
+                            value="<?php echo esc_attr($designation); ?>"
+                            placeholder="e.g. Founder & CEO"
+                            maxlength="60"
+                            required>
+                    </div>
                     <!-- About Me Short (150 Max) -->
                     <div class="col-12">
-                        <label class="form-label">About Me (Max 150 characters):</label>
+                        <label class="form-label">About Me (Max 150 characters)</label>
                         <textarea name="about_me_short" id="about_me_short"
                             maxlength="150"
                             required
@@ -126,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_additional_detai
 
                     <!-- Keywords -->
                     <div class="col-12">
-                        <label class="form-label">Keywords (comma separated):</label>
+                        <label class="form-label">Keywords (comma separated)</label>
 
                         <div id="keyword-tags" class="d-flex flex-wrap gap-2 form-control" style="min-height:44px; padding:6px;">
                             <!-- Render existing keywords -->
