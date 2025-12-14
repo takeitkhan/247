@@ -156,7 +156,7 @@ $referred_users_count = count($referrals);
                     $count = 0;
                     foreach ($referrals as $profile) :
                         if ($count >= 8) break;
-
+                        
                         $photo = $profile['profile_photo']
                             ?: 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($profile['email']))) . '?s=150&d=mm';
                     ?>
@@ -172,10 +172,16 @@ $referred_users_count = count($referrals);
                                     <a href="<?= esc_url($profile['profile_url']); ?>" class="fw-bold">
                                         <?= esc_html($profile['first_name'] . ' ' . $profile['last_name']); ?>
                                     </a>
+                                    <?php if ($profile['about_me_short']) { ?>
+                                        <span class="px-2">
+                                            <i class="far fa-bookmark"></i>
+                                            <?= esc_html($profile['about_me_short']); ?>
+                                        </span>
+                                    <?php } ?>
 
                                     <?php if (!empty($profile['user_category_names'])) : ?>
                                         <div class="fs14">
-                                            <?= esc_html(implode(', ', $profile['user_category_names'])); ?>
+                                            <i class="fas fa-briefcase"></i> <?= esc_html(implode(', ', $profile['user_category_names'])); ?>
                                         </div>
                                     <?php endif; ?>
                                 </div>
@@ -203,7 +209,7 @@ $referred_users_count = count($referrals);
 
                 <?php if ($referred_users_count > 8): ?>
                     <div class="mt-4 text-center">
-                        <button id="load-more-referrals" class="btn btn-primary">Load More</button>
+                        <button id="load-more-referrals" class="custom-btn">Load More</button>
                     </div>
                 <?php endif; ?>
             </div>
@@ -251,11 +257,11 @@ $referred_users_count = count($referrals);
         const sort = document.getElementById('sort-select')?.value || 'recent';
         const search = document.getElementById('search-input')?.value || '';
 
-        fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=load_more_referrals'
-                + '&user=<?php echo $user->ID; ?>'
-                + '&offset=' + offset
-                + '&sort=' + sort
-                + '&search=' + encodeURIComponent(search)
+        fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=load_more_referrals' +
+                '&user=<?php echo $user->ID; ?>' +
+                '&offset=' + offset +
+                '&sort=' + sort +
+                '&search=' + encodeURIComponent(search)
             )
             .then(res => res.json())
             .then(res => {

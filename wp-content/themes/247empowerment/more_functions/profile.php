@@ -301,17 +301,17 @@ function load_more_referrals_callback()
     $user_id = isset($_GET['user']) ? intval($_GET['user']) : 0;
     $offset  = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
     $limit   = 8;
-    
+
     $search = isset($_GET['search']) ? sanitize_text_field($_GET['search']) : '';
 
-    
+
     if ($search) {
         $profiles = array_filter($profiles, function ($p) use ($search) {
             return str_contains(
                 strtolower(
                     $p['first_name'] . ' ' .
-                    $p['last_name'] . ' ' .
-                    $p['username']
+                        $p['last_name'] . ' ' .
+                        $p['username']
                 ),
                 strtolower($search)
             );
@@ -390,56 +390,44 @@ function load_more_referrals_callback()
             ?: 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($profile['email']))) . '?s=150&d=mm';
 ?>
         <div class="d-flex flex-column flex-lg-row justify-content-between py-3">
-            <div>
-                <div class="d-flex align-items-center gap-3 pb-3">
-                    <div class="img60">
-                        <img src="<?= esc_url($photo); ?>"
-                            class="w-100 h-100 object-fit-cover"
-                            alt="<?= esc_attr($profile['first_name'] . ' ' . $profile['last_name']); ?>">
-                    </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="img60">
+                    <img src="<?= esc_url($photo); ?>"
+                        class="w-100 h-100 object-fit-cover"
+                        alt="<?= esc_attr($profile['first_name']); ?>">
+                </div>
 
-                    <div class="d-flex flex-column gap-1 post-user">
-                        <div class="d-flex flex-wrap gap-1 gap-sm-4">
-                            <span class="text-black p_name fw-bold">
-                                <a href="<?= esc_url($profile['profile_url']); ?>">
-                                    <?= esc_html($profile['first_name'] . ' ' . $profile['last_name']); ?>
-                                </a>
-                            </span>
+                <div class="post-user">
+                    <a href="<?= esc_url($profile['profile_url']); ?>" class="fw-bold">
+                        <?= esc_html($profile['first_name'] . ' ' . $profile['last_name']); ?>
+                    </a>
+                    <?php if ($profile['about_me_short']) { ?>
+                        <span class="px-2">
+                            <i class="far fa-bookmark"></i>
+                            <?= esc_html($profile['about_me_short']); ?>
+                        </span>
+                    <?php } ?>
+
+                    <?php if (!empty($profile['user_category_names'])) : ?>
+                        <div class="fs14">
+                            <i class="fas fa-briefcase"></i> <?= esc_html(implode(', ', $profile['user_category_names'])); ?>
                         </div>
-
-                        <?php if (!empty($profile['user_category_names'])) : ?>
-                            <div class="d-flex align-items-center gap-1 mt-1 n-text a">
-                                <div class="img24">
-                                    <img class="w-100 h-100 object-fit-contain"
-                                        src="<?= esc_url(get_template_directory_uri() . '/assets/img/nd/market_bag.png'); ?>"
-                                        alt="">
-                                </div>
-                                <p><?= esc_html(implode(', ', $profile['user_category_names'])); ?></p>
-                            </div>
-                        <?php endif; ?>
-                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
 
-            <div class="d-flex align-items-center gap-2">
-                <div class="dropdown">
-                    <button class="d-flex align-items-center justify-content-center rounded-circle h-bg btn"
-                        type="button"
-                        data-bs-toggle="dropdown"
-                        data-bs-offset="0,8">
-                        <i class="bi bi-three-dots-vertical fs-5"></i>
-                    </button>
-
-                    <ul class="shadow-sm p-2 dropdown-menu dropdown-menu-end custom-modal">
-                        <li>
-                            <button class="d-flex align-items-center gap-2 border-0 w-100 btn remove-partner-btn"
-                                data-user-id="<?= esc_attr($profile['id']); ?>">
-                                <i class="bi bi-trash fs-5"></i>
-                                <span>Remove Partner</span>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+            <div class="dropdown">
+                <button class="btn" data-bs-toggle="dropdown">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <button class="dropdown-item remove-partner-btn"
+                            data-user-id="<?= esc_attr($profile['id']); ?>">
+                            Remove Partner
+                        </button>
+                    </li>
+                </ul>
             </div>
         </div>
     <?php
@@ -493,3 +481,45 @@ add_action('wp_ajax_delete_profile_photo', function () {
 
     wp_send_json_success('Profile photo deleted');
 });
+
+
+add_filter('get_avatar', 'mm_custom_user_avatar', 10, 5);
+
+
+// Default Gravatar to Profile Photo in Dashboard > Users
+function mm_custom_user_avatar($avatar, $id_or_email, $size, $default, $alt)
+{
+    $user = false;
+
+    // Resolve user
+    if (is_numeric($id_or_email)) {
+        $user = get_user_by('id', (int) $id_or_email);
+    } elseif (is_object($id_or_email)) {
+        if (!empty($id_or_email->user_id)) {
+            $user = get_user_by('id', (int) $id_or_email->user_id);
+        }
+    } elseif (is_string($id_or_email)) {
+        $user = get_user_by('email', $id_or_email);
+    }
+
+    if (!$user) {
+        return $avatar;
+    }
+
+    // Get custom profile photo
+    $custom_avatar = get_user_meta($user->ID, 'profile_photo', true);
+
+    if (!$custom_avatar) {
+        return $avatar; // fallback to Gravatar
+    }
+
+    // Return custom avatar HTML
+    return sprintf(
+        '<img src="%s" alt="%s" width="%d" height="%d" class="custom-avatar avatar avatar-%d photo" />',
+        esc_url($custom_avatar),
+        esc_attr($alt),
+        (int) $size,
+        (int) $size,
+        (int) $size
+    );
+}
