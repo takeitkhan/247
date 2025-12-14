@@ -3,73 +3,92 @@ if (!is_user_logged_in()) {
     wp_redirect(home_url('/signin'));
     exit;
 }
+
 get_header_based_on_login();
+
+/* -------------------------------------------------
+ * Resolve target user
+ * ------------------------------------------------- */
 $referral_user_slug = get_query_var('referral_user');
 $current_user_id    = get_current_user_id();
-$current_user       = wp_get_current_user();
 
-// Determine target user
-if ($referral_user_slug) {
-    // Try to get user by slug from URL
-    $user = get_user_by('slug', $referral_user_slug);
-} else {
-    // Fall back to logged-in user
-    $user = get_user_by('ID', $current_user_id);
-}
+$user = $referral_user_slug
+    ? get_user_by('slug', $referral_user_slug)
+    : get_user_by('id', $current_user_id);
 
-// Check if user exists
-if ($user) {
-    // Initialize UserProfileData based on what the class accepts
-    // ✅ Option A: If constructor accepts WP_User object
-    $profileData = new UserProfileData($user);
-
-    // ✅ Option B (fallback): If constructor only accepts slug or username
-    // $profileData = new UserProfileData($user->user_login);
-
-    // Get profile data
-    $profile = $profileData->getProfile();
-} else {
-    // Handle invalid user (e.g., show error message or redirect)
-    $profile = null;
-    echo '<div class="py-5 container"><h2>User not found.</h2></div>';
+if (!$user) {
+    echo '<div class="py-5 container"><h2>User not found</h2></div>';
     get_footer_based_on_login();
     return;
 }
 
+/* -------------------------------------------------
+ * Params
+ * ------------------------------------------------- */
+$search = isset($_GET['search']) ? sanitize_text_field($_GET['search']) : '';
+$sort   = isset($_GET['sort']) ? sanitize_text_field($_GET['sort']) : 'recent';
 
-if (!$user) {
-    echo '<div class="py-5 container"><h2>User not found.</h2></div>';
-    get_header_based_on_login();
-    return;
+/* -------------------------------------------------
+ * Fetch + normalize referrals
+ * ------------------------------------------------- */
+$raw_referrals = UserProfileData::getReferredUsersBy($user);
+$referrals = [];
+
+foreach ($raw_referrals as $ref) {
+    $ref_id = is_array($ref)
+        ? ($ref['id'] ?? 0)
+        : ($ref->ID ?? 0);
+
+    if (!$ref_id) continue;
+
+    $profile = (new UserProfileData($ref_id))->getProfile();
+    if ($profile) {
+        $referrals[] = $profile;
+    }
 }
 
-$profileData = new UserProfileData($user);
-$referrals = $profileData::getReferredUsersBy($user);
-$total_referrals = count_users()['total_users'];
-$search = isset($_GET['search']) ? sanitize_text_field($_GET['search']) : '';
-
+/* -------------------------------------------------
+ * Search filter
+ * ------------------------------------------------- */
 if ($search) {
-    $search_terms = array_filter(explode(' ', strtolower($search)));
+    $terms = array_filter(explode(' ', strtolower($search)));
 
-    $referrals = array_filter($referrals, function ($user) use ($search_terms) {
-        $first_name = strtolower(get_user_meta($user->ID, 'first_name', true));
-        $last_name = strtolower(get_user_meta($user->ID, 'last_name', true));
-        $display_name = strtolower($user->display_name);
-        $user_login = strtolower($user->user_login);
+    $referrals = array_filter($referrals, function ($p) use ($terms) {
+        $haystack = strtolower(
+            $p['first_name'] . ' ' .
+                $p['last_name'] . ' ' .
+                $p['username'] . ' ' .
+                ($p['about_me_short'] ?? '')
+        );
 
-        $haystack = "{$first_name} {$last_name} {$display_name} {$user_login}";
-
-        foreach ($search_terms as $term) {
-            if (!str_contains($haystack, $term)) {
+        foreach ($terms as $t) {
+            if (!str_contains($haystack, $t)) {
                 return false;
             }
         }
-
         return true;
     });
 
-    $referrals = array_values($referrals); // Re-index
+    $referrals = array_values($referrals);
 }
+
+/* -------------------------------------------------
+ * Sorting
+ * ------------------------------------------------- */
+usort($referrals, function ($a, $b) use ($sort) {
+
+    switch ($sort) {
+        case 'name_asc':
+            return strcasecmp($a['first_name'] . $a['last_name'], $b['first_name'] . $b['last_name']);
+
+        case 'name_desc':
+            return strcasecmp($b['first_name'] . $b['last_name'], $a['first_name'] . $a['last_name']);
+
+        case 'recent':
+        default:
+            return $b['id'] <=> $a['id']; // newest first
+    }
+});
 
 $referred_users_count = count($referrals);
 ?>
@@ -81,7 +100,6 @@ $referred_users_count = count($referrals);
             <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
         </div>
         <div class="col-lg-6">
-
             <div class="bg-white referral_partner custom-card">
                 <div class="w-100">
                     <div class="upcoming-events">
@@ -107,11 +125,16 @@ $referred_users_count = count($referrals);
                                 <div class="d-flex align-items-center gap-0">
                                     <img class="" src="<?= get_template_directory_uri(); ?>/assets/img/nd/filter.png" alt="">
                                     <div class="">
-                                        <select class="custom-select">
-                                            <option>Recently joined</option>
-                                            <option>Name (A-Z)</option>
-                                            <option>Name (Z-A)</option>
-                                            <option>Most Active</option>
+                                        <select class="custom-select" id="sort-select" name="sort">
+                                            <option value="recent" <?= $sort === 'recent' ? 'selected' : '' ?>>
+                                                Recently joined
+                                            </option>
+                                            <option value="name_asc" <?= $sort === 'name_asc' ? 'selected' : '' ?>>
+                                                Name (A-Z)
+                                            </option>
+                                            <option value="name_desc" <?= $sort === 'name_desc' ? 'selected' : '' ?>>
+                                                Name (Z-A)
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
@@ -131,90 +154,60 @@ $referred_users_count = count($referrals);
                 <div class="flex flex-column gap-3" id="referrals-grid">
                     <?php
                     $count = 0;
-                    foreach ($referrals as $ref_user) {
-
-                        $ref_user = is_array($ref_user) ? (object) $ref_user : $ref_user;
+                    foreach ($referrals as $profile) :
                         if ($count >= 8) break;
 
-                        $ref_id = isset($ref_user->ID) ? $ref_user->ID : 0;
-                        $ref_email = isset($ref_user->user_email) ? trim($ref_user->user_email) : '';
-                        $ref_login = isset($ref_user->user_login) ? $ref_user->user_login : '';
-                        $ref_username = isset($ref_user->username) ? $ref_user->username : '';
-                        $photo = get_user_meta($ref_id, 'profile_photo', true);
-                        $photo = $photo ?: 'https://www.gravatar.com/avatar/' . md5(strtolower($ref_email)) . '?s=150&d=mm';
-                        $profile_url = site_url('/' . $ref_username);
-
+                        $photo = $profile['profile_photo']
+                            ?: 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($profile['email']))) . '?s=150&d=mm';
                     ?>
+                        <div class="d-flex flex-column flex-lg-row justify-content-between py-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="img60">
+                                    <img src="<?= esc_url($photo); ?>"
+                                        class="w-100 h-100 object-fit-cover"
+                                        alt="<?= esc_attr($profile['first_name']); ?>">
+                                </div>
 
-                        <div class="d-flex flex-column flex-lg-row justify-content-between py-3" data-index="<?php echo $count; ?>">
-                            <div>
-                                <div class="d-flex align-items-center gap-3 pb-3">
-                                    <div class="img60">
-                                        <img src="<?php echo esc_url($photo); ?>" class="w-100 h-100 object-fit-contain" alt="<?php echo esc_html($ref_user->first_name . ' ' . $ref_user->last_name); ?>">
-                                    </div>
-                                    <div class="d-flex flex-column gap-1 post-user">
-                                        <div class="d-flex flex-wrap gap-1 gap-sm-4">
-                                            <span class="text-black p_name fw-bold">
-                                                <a href="<?php echo esc_url($profile_url); ?>">
-                                                    <?php echo esc_html($ref_user->first_name . ' ' . $ref_user->last_name); ?>
-                                                </a>
-                                            </span>
-                                            <!-- <div class="d-flex align-items-center gap-2 text-blue-color fs14">
-                                                <div class="img16">
-                                                    <img class="w-100 h-100 object-fit-contain" src="<?= get_template_directory_uri(); ?>/assets/img/nd/location.png" alt="">
-                                                </div> New York, NY
-                                            </div> -->
+                                <div class="post-user">
+                                    <a href="<?= esc_url($profile['profile_url']); ?>" class="fw-bold">
+                                        <?= esc_html($profile['first_name'] . ' ' . $profile['last_name']); ?>
+                                    </a>
+
+                                    <?php if (!empty($profile['user_category_names'])) : ?>
+                                        <div class="fs14">
+                                            <?= esc_html(implode(', ', $profile['user_category_names'])); ?>
                                         </div>
-                                        <?php is_array($ref_user->user_category_names) && !empty($ref_user->user_category_names) ? $has_categories = true : $has_categories = false; ?>
-                                        <?php if ($has_categories) : ?>
-                                            <div class="d-flex align-items-center gap-1 mt-1 n-text a">
-                                                <div class="img24">
-                                                    <img class="w-100 h-100 object-fit-contain" src="<?= get_template_directory_uri(); ?>/assets/img/nd/market_bag.png" alt="">
-                                                </div>
-                                                <p class="">
-                                                    <?php echo implode(', ', $ref_user->user_category_names); ?>
-                                                </p>
-                                            </div>
-                                        <?php endif; ?>
-                                    </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center gap-2">
-                                <!-- <button class="custom-btn-outline-none">Message</button> -->
 
-                                <div class="d-flex align-items-center justify-content-end my-3">
-                                    <div class="dropdown">
-                                        <button
-                                            class="d-flex align-items-center justify-content-center rounded-circle h-bg btn"
-                                            type="button"
-                                            data-bs-toggle="dropdown"
-                                            data-bs-offset="0,8"
-                                            aria-expanded="false">
-                                            <i class="bi bi-three-dots-vertical fs-5"></i>
+                            <div class="dropdown">
+                                <button class="btn" data-bs-toggle="dropdown">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <button class="dropdown-item remove-partner-btn"
+                                            data-user-id="<?= esc_attr($profile['id']); ?>">
+                                            Remove Partner
                                         </button>
-                                        <ul class="shadow-sm p-2 dropdown-menu dropdown-menu-end custom-modal">
-                                            <li>
-                                                <button
-                                                    class="d-flex align-items-center gap-2 border-0 w-100 btn remove-partner-btn">
-                                                    <i class="bi bi-trash fs-5"></i>
-                                                    <span>Remove Partner</span>
-                                                </button>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
-                    <?php $count++;
-                    } ?>
+                    <?php
+                        $count++;
+                    endforeach;
+                    ?>
                 </div>
-                <?php if ($count >= 4): ?>
+
+                <?php if ($referred_users_count > 8): ?>
                     <div class="mt-4 text-center">
                         <button id="load-more-referrals" class="btn btn-primary">Load More</button>
                     </div>
                 <?php endif; ?>
-
             </div>
+
 
         </div>
 
@@ -242,46 +235,57 @@ $referred_users_count = count($referrals);
 </div>
 
 <script>
-    document.getElementById('search-input')?.addEventListener('keypress', function(e) {
+    document.getElementById('sort-select')?.addEventListener('change', function() {
+        const params = new URLSearchParams(window.location.search);
+        params.set('sort', this.value);
+        params.delete('offset'); // reset pagination
+        window.location.search = params.toString();
+    });
+
+
+    let offset = 8;
+    document.getElementById('load-more-referrals')?.addEventListener('click', function() {
+        const btn = this;
+        btn.disabled = true;
+
+        const sort = document.getElementById('sort-select')?.value || 'recent';
+        const search = document.getElementById('search-input')?.value || '';
+
+        fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=load_more_referrals'
+                + '&user=<?php echo $user->ID; ?>'
+                + '&offset=' + offset
+                + '&sort=' + sort
+                + '&search=' + encodeURIComponent(search)
+            )
+            .then(res => res.json())
+            .then(res => {
+                if (res.success && res.data) {
+                    document.getElementById('referrals-grid').insertAdjacentHTML('beforeend', res.data);
+                    offset += 8;
+                    btn.disabled = false;
+                } else {
+                    btn.textContent = 'No more referrals';
+                }
+            });
+    });
+    document.getElementById('search-input')?.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
-            const searchValue = this.value.trim();
-            const grid = document.getElementById('referrals-grid');
 
-            fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=load_more_referrals&user=<?php echo esc_attr($user->ID); ?>&search=' + encodeURIComponent(searchValue))
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        grid.innerHTML = data.data;
-                    } else {
-                        grid.innerHTML = '<p>No results found</p>';
-                    }
-                });
+            const params = new URLSearchParams(window.location.search);
+            const value = this.value.trim();
+
+            if (value) {
+                params.set('search', value);
+            } else {
+                params.delete('search');
+            }
+
+            params.delete('offset'); // reset pagination
+            window.location.search = params.toString();
         }
     });
-    document.addEventListener('DOMContentLoaded', function() {
-        const button = document.getElementById('load-more-referrals');
-        let offset = 4;
-        button?.addEventListener('click', function() {
-            button.disabled = true;
-            button.textContent = 'Loading...';
-
-            fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=load_more_referrals&user=<?php echo esc_attr($user->ID); ?>&offset=' + offset)
-                .then(response => response.json()) // parse JSON
-                .then(data => {
-                    if (data.success && data.data) {
-                        document.getElementById('referrals-grid').insertAdjacentHTML('beforeend', data.data);
-                        offset += 40;
-                        button.disabled = false;
-                        button.textContent = 'Load More';
-                    } else {
-                        // No more data or error
-                        button.disabled = true;
-                        button.textContent = 'No more referrals';
-                    }
-                });
-        });
-    });
 </script>
+
 
 <?php get_footer_based_on_login(); ?>

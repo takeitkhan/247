@@ -963,3 +963,11 @@ Stack trace:
 [14-Dec-2025 07:14:53 UTC] PHP Warning:  Undefined variable $designation in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\profile-parts\shareable-profile.php on line 95
 [14-Dec-2025 14:45:25 UTC] Automatic updates starting...
 [14-Dec-2025 14:45:28 UTC] Automatic updates complete.
+[14-Dec-2025 15:02:10 UTC] PHP Warning:  Attempt to read property "ID" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 139
+[14-Dec-2025 15:02:10 UTC] PHP Warning:  Attempt to read property "ID" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 139
+[14-Dec-2025 15:02:10 UTC] PHP Warning:  Attempt to read property "ID" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 139
+[14-Dec-2025 15:02:10 UTC] PHP Warning:  Attempt to read property "ID" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 139
+[14-Dec-2025 15:02:10 UTC] PHP Warning:  Attempt to read property "ID" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 139
+[14-Dec-2025 15:02:10 UTC] PHP Warning:  Attempt to read property "ID" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 139
+[14-Dec-2025 15:02:10 UTC] PHP Warning:  Attempt to read property "ID" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 139
+[14-Dec-2025 15:02:10 UTC] PHP Warning:  Attempt to read property "ID" on array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\referrals.php on line 139

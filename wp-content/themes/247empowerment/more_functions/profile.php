@@ -299,8 +299,26 @@ add_action('template_redirect', function () {
 function load_more_referrals_callback()
 {
     $user_id = isset($_GET['user']) ? intval($_GET['user']) : 0;
-    $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
-    $limit = 40;
+    $offset  = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+    $limit   = 8;
+    
+    $search = isset($_GET['search']) ? sanitize_text_field($_GET['search']) : '';
+
+    
+    if ($search) {
+        $profiles = array_filter($profiles, function ($p) use ($search) {
+            return str_contains(
+                strtolower(
+                    $p['first_name'] . ' ' .
+                    $p['last_name'] . ' ' .
+                    $p['username']
+                ),
+                strtolower($search)
+            );
+        });
+
+        $profiles = array_values($profiles);
+    }
 
     if (!$user_id) {
         wp_send_json_error('Invalid user ID');
@@ -311,75 +329,123 @@ function load_more_referrals_callback()
         wp_send_json_error('User not found');
     }
 
-    $profileData = new UserProfileData($user);
-    $referrals = $profileData::getReferredUsersBy($user);
+    /* -------------------------------------------------
+     * Fetch referrals (raw)
+     * ------------------------------------------------- */
+    $raw_referrals = UserProfileData::getReferredUsersBy($user);
 
-    $slice = array_slice($referrals, $offset, $limit);
+    /* -------------------------------------------------
+     * Normalize → profile arrays
+     * ------------------------------------------------- */
+    $profiles = [];
 
-    if (empty($slice)) {
-        wp_send_json_success(''); // No more data
+    foreach ($raw_referrals as $ref) {
+
+        $ref_id = is_array($ref)
+            ? ($ref['id'] ?? 0)
+            : ($ref->ID ?? 0);
+
+        if (!$ref_id) {
+            continue;
+        }
+
+        $profile = (new UserProfileData($ref_id))->getProfile();
+        if ($profile) {
+            $profiles[] = $profile;
+        }
     }
 
-    $html = '';
+    $sort = isset($_GET['sort']) ? sanitize_text_field($_GET['sort']) : 'recent';
 
-    foreach ($slice as $ref_user) {
-        $ref_user = is_array($ref_user) ? (object) $ref_user : $ref_user;
+    usort($profiles, function ($a, $b) use ($sort) {
+        switch ($sort) {
+            case 'name_asc':
+                return strcasecmp($a['first_name'] . $a['last_name'], $b['first_name'] . $b['last_name']);
+            case 'name_desc':
+                return strcasecmp($b['first_name'] . $b['last_name'], $a['first_name'] . $a['last_name']);
+            case 'recent':
+            default:
+                return $b['id'] <=> $a['id'];
+        }
+    });
 
-        $ref_id = isset($ref_user->id) ? $ref_user->id : 0;
-        $ref_email = isset($ref_user->email) ? trim($ref_user->email) : '';
-        $ref_login = isset($ref_user->username) ? $ref_user->username : '';
-        $ref_display = isset($ref_user->display_name) ? $ref_user->display_name : ($ref_user->first_name ?? '') . ' ' . ($ref_user->last_name ?? '');        
 
-        $photo = get_user_meta($ref_id, 'profile_photo', true);
-        $photo = $photo ?: 'https://www.gravatar.com/avatar/' . md5(strtolower($ref_email)) . '?s=150&d=mm';
-        $profile_url = site_url('/' . $ref_login);
-        
-        is_array($ref_user->user_category_names) && !empty($ref_user->user_category_names) ? $has_categories = true : $has_categories = false;
+    /* -------------------------------------------------
+     * Slice (pagination)
+     * ------------------------------------------------- */
+    $slice = array_slice($profiles, $offset, $limit);
 
-        $html .= '
-        <div class="d-flex flex-column flex-lg-row justify-content-between py-3" data-index="' . intval($offset) . '">
+    if (empty($slice)) {
+        wp_send_json_success('');
+    }
+
+    /* -------------------------------------------------
+     * Render HTML
+     * ------------------------------------------------- */
+    ob_start();
+
+    foreach ($slice as $profile) {
+
+        $photo = $profile['profile_photo']
+            ?: 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($profile['email']))) . '?s=150&d=mm';
+?>
+        <div class="d-flex flex-column flex-lg-row justify-content-between py-3">
             <div>
                 <div class="d-flex align-items-center gap-3 pb-3">
                     <div class="img60">
-                        <img src="' . esc_url($photo) . '" class="w-100 h-100 object-fit-contain" alt="' . esc_attr($ref_display) . '">
+                        <img src="<?= esc_url($photo); ?>"
+                            class="w-100 h-100 object-fit-cover"
+                            alt="<?= esc_attr($profile['first_name'] . ' ' . $profile['last_name']); ?>">
                     </div>
+
                     <div class="d-flex flex-column gap-1 post-user">
                         <div class="d-flex flex-wrap gap-1 gap-sm-4">
-                            <span class="text-black p_name fw-bold">                            
-                                <a href="' . esc_url($profile_url) . '">' .  esc_html($ref_user->first_name . ' ' . $ref_user->last_name) . '</a>
+                            <span class="text-black p_name fw-bold">
+                                <a href="<?= esc_url($profile['profile_url']); ?>">
+                                    <?= esc_html($profile['first_name'] . ' ' . $profile['last_name']); ?>
+                                </a>
                             </span>
                         </div>
-                        <div class="d-flex align-items-center gap-1 mt-1 n-text a">
-                            <div class="img24">
-                                <img class="w-100 h-100 object-fit-contain" src="' . esc_url(get_template_directory_uri() . '/assets/img/nd/market_bag.png') . '" alt="">
+
+                        <?php if (!empty($profile['user_category_names'])) : ?>
+                            <div class="d-flex align-items-center gap-1 mt-1 n-text a">
+                                <div class="img24">
+                                    <img class="w-100 h-100 object-fit-contain"
+                                        src="<?= esc_url(get_template_directory_uri() . '/assets/img/nd/market_bag.png'); ?>"
+                                        alt="">
+                                </div>
+                                <p><?= esc_html(implode(', ', $profile['user_category_names'])); ?></p>
                             </div>
-                            <p>'. implode(', ', $ref_user->user_category_names) .'</p>
-                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
+
             <div class="d-flex align-items-center gap-2">
-                <div class="d-flex align-items-center justify-content-end my-3">
-                    <div class="dropdown">
-                        <button class="d-flex align-items-center justify-content-center rounded-circle h-bg btn" type="button" data-bs-toggle="dropdown" data-bs-offset="0,8" aria-expanded="false">
-                            <i class="bi bi-three-dots-vertical fs-5"></i>
-                        </button>
-                        <ul class="shadow-sm p-2 dropdown-menu dropdown-menu-end custom-modal">
-                            <li>
-                                <button class="d-flex align-items-center gap-2 border-0 w-100 btn remove-partner-btn">
-                                    <i class="bi bi-trash fs-5"></i>
-                                    <span>Remove Partner</span>
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="dropdown">
+                    <button class="d-flex align-items-center justify-content-center rounded-circle h-bg btn"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        data-bs-offset="0,8">
+                        <i class="bi bi-three-dots-vertical fs-5"></i>
+                    </button>
+
+                    <ul class="shadow-sm p-2 dropdown-menu dropdown-menu-end custom-modal">
+                        <li>
+                            <button class="d-flex align-items-center gap-2 border-0 w-100 btn remove-partner-btn"
+                                data-user-id="<?= esc_attr($profile['id']); ?>">
+                                <i class="bi bi-trash fs-5"></i>
+                                <span>Remove Partner</span>
+                            </button>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>';
-        $offset++;
+        </div>
+    <?php
     }
 
-    wp_send_json_success($html);
+    wp_send_json_success(ob_get_clean());
 }
 
 add_action('wp_ajax_load_more_referrals', 'load_more_referrals_callback');
@@ -390,7 +456,7 @@ add_action('wp_ajax_nopriv_load_more_referrals', 'load_more_referrals_callback')
 function show_referred_by_field($user)
 {
     $referred_by = get_user_meta($user->ID, 'referrer', true);
-?>
+    ?>
     <h3>Referral Info</h3>
     <table class="form-table">
         <tr>

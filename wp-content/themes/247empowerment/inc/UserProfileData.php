@@ -9,7 +9,11 @@ class UserProfileData
     {
         if ($user instanceof WP_User) {
             $this->user = $user;
+        } elseif (is_numeric($user)) {
+            // ✅ NEW: support user ID
+            $this->user = get_user_by('id', (int) $user);
         } elseif (is_string($user)) {
+            // username / slug
             $this->user = get_user_by('slug', $user);
         } elseif (is_user_logged_in()) {
             $this->user = wp_get_current_user();
