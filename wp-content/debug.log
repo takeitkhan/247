@@ -1013,3 +1013,19 @@ Stack trace:
 [19-Dec-2025 10:35:56 UTC] PHP Parse error:  Unclosed '{' on line 114 in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-gamification\includes\functions-actions.php on line 137
 [19-Dec-2025 15:29:06 UTC] Automatic updates starting...
 [19-Dec-2025 15:29:09 UTC] Automatic updates complete.
+[19-Dec-2025 15:51:48 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
+[19-Dec-2025 15:51:59 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
+[19-Dec-2025 15:56:35 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
+[19-Dec-2025 16:01:10 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
+[19-Dec-2025 16:01:20 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
+[19-Dec-2025 16:03:59 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
+[19-Dec-2025 16:04:20 UTC] PHP Fatal error:  Uncaught Error: Cannot use object of type Closure as array in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php:139
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(125): include()
+#1 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#3 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\modify-profile.php on line 139
+[19-Dec-2025 16:05:41 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
+[19-Dec-2025 16:10:28 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
+[19-Dec-2025 16:13:21 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532

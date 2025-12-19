@@ -91,23 +91,25 @@ class UserProfileData
             }
         }
 
-
-
         return [
             'id' => $this->user->ID,
             'username' => $this->user->user_login,
             'email' => $this->user->user_email,
+            'show_email' => get_user_meta($this->user->ID, 'show_email', true),
             'referrer' => $this->getReferrer(), // ✅ Added here
             'display_name' => $this->user->display_name,
             'first_name' => get_user_meta($this->user->ID, 'first_name', true),
             'last_name' => get_user_meta($this->user->ID, 'last_name', true),
             'dob' => get_user_meta($this->user->ID, 'dob', true),
+            'show_dob' => get_user_meta($this->user->ID, 'show_dob', true),
             'phone' => get_user_meta($this->user->ID, 'phone', true),
+            'show_phone' => get_user_meta($this->user->ID, 'show_phone', true),
             'designation' => get_user_meta($this->user->ID, 'designation', true),
             'about_me' => get_user_meta($this->user->ID, 'about_me', true),
             'about_me_short' => get_user_meta($this->user->ID, 'about_me_short', true),
             'digital_card_about' => get_user_meta($this->user->ID, 'digital_card_about', true),
             'location' => get_user_meta($this->user->ID, 'place_address', true),
+            'show_full_address' => get_user_meta($this->user->ID, 'show_full_address', true),
             'latitude' => get_user_meta($this->user->ID, 'latitude', true),
             'longitude' => get_user_meta($this->user->ID, 'longitude', true),
             'place_display_name' => get_user_meta($this->user->ID, 'place_display_name', true),

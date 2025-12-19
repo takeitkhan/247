@@ -240,7 +240,12 @@ function handle_frontend_profile_update($user_id, $post_data)
 
     foreach ($fields as $meta_key => $action_key) {
         $old_value = get_user_meta($user_id, $meta_key, true);
-        $new_value = sanitize_text_field($post_data[$meta_key] ?? '');
+        if ($meta_key === 'dob') {
+            $new_value = preg_replace('/[^0-9\-]/', '', $post_data[$meta_key] ?? '');
+        } else {
+            $new_value = sanitize_text_field($post_data[$meta_key] ?? '');
+        }
+
 
         if (!empty($new_value) && $new_value !== $old_value) {
             // Award points once

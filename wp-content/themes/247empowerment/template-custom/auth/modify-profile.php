@@ -71,7 +71,9 @@ if ($user) {
 $profile = $profile ?: [];
 $val = fn($key, $default = '') => esc_attr($profile[$key] ?? $default);
 
-
+// echo '<pre>';
+// var_dump($profile);
+// echo '</pre>';
 ?>
 
 <div class="container profile-page pt20">
@@ -131,6 +133,18 @@ $val = fn($key, $default = '') => esc_attr($profile[$key] ?? $default);
                                 <label class="form-label">Date of Birth:</label>
                                 <input type="text" name="dob" id="dob" class="form-control input"
                                     value="<?= $val('dob'); ?>">
+
+                                <div class="mt-2 form-check">
+                                    <input type="checkbox"
+                                        class="form-check-input"
+                                        id="show_dob"
+                                        name="show_dob"
+                                        value="1"
+                                        <?php checked($val('show_dob') ?? false); ?>>
+                                    <label class="form-check-label" for="show_dob">
+                                        Show date of birth on profile
+                                    </label>
+                                </div>
                             </div>
 
                             <div class="col-12 col-md-6">
@@ -144,8 +158,7 @@ $val = fn($key, $default = '') => esc_attr($profile[$key] ?? $default);
                                 <label class="form-label">About me (full description):</label>
                                 <div class="position-relative">
                                     <textarea name="about_me" class="form-control input" rows="5"
-                                        placeholder="What's on your mind?"><?= esc_textarea($profile['about_me'] ?? ''); ?></textarea>
-                                    <img class="modal-emoji" src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/imogi.png" alt="">
+                                        placeholder="Write about you elaborately!"><?= esc_textarea($profile['about_me'] ?? ''); ?></textarea>
                                 </div>
                             </div>
 
@@ -186,6 +199,11 @@ $val = fn($key, $default = '') => esc_attr($profile[$key] ?? $default);
                                 <label class="form-label">Location Name:</label>
                                 <input type="text" name="place_display_name" class="form-control input"
                                     value="<?php echo esc_attr(get_user_meta($current_user->ID, 'place_display_name', true)); ?>">
+                                <div class="mt-2 form-check">
+                                    <input class="form-check-input" type="checkbox" id="show_full_address" name="show_full_address" value="1"
+                                        <?php checked($profile['show_full_address'] ?? false); ?>>
+                                    <label class="form-check-label" for="show_full_address">Show full address on profile</label>
+                                </div>
                             </div>
 
                             <div class="col-12">

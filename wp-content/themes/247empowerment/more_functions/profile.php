@@ -48,9 +48,6 @@ function handle_cover_photo_upload()
     }
 }
 
-
-
-
 add_action('wp_ajax_upload_profile_photo', 'handle_profile_photo_upload');
 function handle_profile_photo_upload()
 {
@@ -79,7 +76,6 @@ function handle_profile_photo_upload()
         wp_send_json_error(['message' => $error]);
     }
 }
-
 
 function enqueue_post_create_script()
 {
@@ -117,8 +113,6 @@ function enqueue_profile_map_script()
     }
 }
 add_action('wp_enqueue_scripts', 'enqueue_profile_map_script');
-
-
 
 add_action('wp_ajax_create_post', 'handle_create_post');
 function handle_create_post()
@@ -165,7 +159,6 @@ function handle_create_post()
         'privacy' => $post_privacy
     ));
 }
-
 
 // Add inside your theme's functions.php or a loaded plugin
 add_action('admin_post_delete_custom_post', 'handle_delete_custom_post');
