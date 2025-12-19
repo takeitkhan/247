@@ -1,4 +1,11 @@
 <?php
+
+add_action('init', function () {
+    if (!session_id()) {
+        session_start();
+    }
+});
+
 function mm_theme_setup()
 {
     add_theme_support('title-tag');
@@ -644,62 +651,6 @@ function give_referral_commission($buyer_id, $course_price, $course_id)
     update_option('referral_commission_global_log', $global_logs);
 }
 
-
-// function custom_support_faq_video_routes()
-// {
-//     add_rewrite_rule('^support-teams/?$', 'index.php?custom_page=support-teams', 'top');
-//     add_rewrite_rule('^faqs/?$', 'index.php?custom_page=faqs', 'top');
-//     add_rewrite_rule('^video-library/?$', 'index.php?custom_page=video-library', 'top');
-// }
-// add_action('init', 'custom_support_faq_video_routes');
-
-// function add_custom_query_var($vars)
-// {
-//     $vars[] = 'custom_page';
-//     return $vars;
-// }
-// add_filter('query_vars', 'add_custom_query_var');
-
-// function load_custom_template()
-// {
-//     $custom_page = get_query_var('custom_page');
-//     if ($custom_page == 'support-teams') {
-//         include get_template_directory() . '/template-custom/auth/support-teams.php';
-//         //exit;
-//     } elseif ($custom_page == 'faqs') {
-//         include get_template_directory() . '/template-custom/auth/support-faqs.php';
-//        //exit;
-//     } elseif ($custom_page == 'video-library') {
-//         include get_template_directory() . '/template-custom/auth/support-video-library.php';
-//         //exit;
-//     }
-// }
-// add_action('template_redirect', 'load_custom_template');
-
-// function load_custom_template() {
-//     $custom_page = get_query_var('custom_page');
-
-//     $support_pages = [
-//         'support-teams',
-//         'faqs',
-//         'video-library'
-//     ];
-
-//     if (in_array($custom_page, $support_pages)) {
-//         // Load the common template
-//         include get_template_directory() . '/template-custom/support-pages.php';
-        
-//         // Optionally pass the custom page type inside the template
-//         $GLOBALS['current_support_page'] = $custom_page;
-        
-//         // Stop further template_redirect handling but keep WP loop
-//         return;
-//     }
-// }
-// add_action('template_redirect', 'load_custom_template');
-
-
-
 add_action('admin_init', function () {
     register_setting('general', 'default_referrer_username', [
         'type' => 'string',
@@ -721,17 +672,25 @@ add_action('admin_init', function () {
 // Notifications Enqueue
 function enqueue_notifications_assets()
 {
+    if (!is_user_logged_in()) {
+        return;
+    }
+
     wp_enqueue_script(
         'notifications',
         get_template_directory_uri() . '/assets/js/notifications.js',
         ['jquery'],
-        null,
+        filemtime(get_template_directory() . '/assets/js/notifications.js'),
         true
     );
 
     wp_localize_script('notifications', 'notificationsData', [
-        'ajaxurl' => admin_url('admin-ajax.php'),
-        'nonce'   => wp_create_nonce('notifications_nonce')
+        'ajaxurl'    => admin_url('admin-ajax.php'),
+        'nonce'      => wp_create_nonce('notifications_nonce'),
+        'circleIcon' => esc_url(get_template_directory_uri() . '/assets/img/nd/circle-notification.png'),
+        'userImg'    => esc_url(get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg'),
+        'activeIcon' => esc_url(get_template_directory_uri() . '/assets/img/nd/active_icon.png'),
+        'sound'      => esc_url(get_template_directory_uri() . '/assets/sounds/coin.mp3'),
     ]);
 }
 add_action('wp_enqueue_scripts', 'enqueue_notifications_assets');
@@ -764,16 +723,6 @@ add_action('wp_ajax_mark_notification_read', function () {
     wp_send_json_success($result);
 });
 
-// Mark all as read
-add_action('wp_ajax_mark_all_notifications_read', function () {
-    check_ajax_referer('notifications_nonce', 'security');
-    $user_id = get_current_user_id();
-
-    $result = Notifications::getInstance()->markAllAsRead($user_id);
-
-    wp_send_json_success($result);
-});
-
 // Clear all notifications
 add_action('wp_ajax_clear_all_notifications', function () {
     check_ajax_referer('notifications_nonce', 'security');
@@ -783,14 +732,6 @@ add_action('wp_ajax_clear_all_notifications', function () {
 
     wp_send_json_success($result);
 });
-
-add_action('wp_ajax_mark_all_notifications_read', function () {
-    check_ajax_referer('notifications_nonce', 'security');
-    $user_id = get_current_user_id();
-    Notifications::getInstance()->markAllAsRead($user_id);
-    wp_send_json_success();
-});
-
 
 // Notifications Enqueue end
 

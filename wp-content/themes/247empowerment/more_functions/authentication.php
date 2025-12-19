@@ -3,133 +3,13 @@
 // Custom User Registration
 // -----------------------------
 
-function enqueue_flatpickr() {
+function enqueue_flatpickr()
+{
     wp_enqueue_style('flatpickr-css', 'https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css');
     wp_enqueue_script('flatpickr-js', 'https://cdn.jsdelivr.net/npm/flatpickr', array('jquery'), null, true);
 }
 add_action('wp_enqueue_scripts', 'enqueue_flatpickr');
 
-// add_action('init', function () {
-//     if (
-//         isset($_POST['user_signup']) &&
-//         check_admin_referer('custom_user_registration', 'custom_user_registration_nonce')
-//     ) {
-//         $username   = sanitize_user($_POST['username']);
-//         $email      = sanitize_email($_POST['email']);
-//         $password   = $_POST['password'];
-//         $first_name = sanitize_text_field($_POST['first_name']);
-//         $last_name  = sanitize_text_field($_POST['last_name']);
-//         $dob        = sanitize_text_field($_POST['dob']);
-
-//         // ❌ Reject invalid username
-//         if ($username !== $_POST['username']) {
-//             set_transient('custom_user_message', [
-//                 'type' => 'danger',
-//                 'text' => 'Username cannot contain special characters.',
-//                 'old_input' => $_POST
-//             ], 30);
-//             return;
-//         }
-
-//         // Reject uppercase characters
-//         if (preg_match('/[A-Z]/', $_POST['username'])) {
-//             set_transient('custom_user_message', [
-//                 'type' => 'danger',
-//                 'text' => 'Username must be lowercase only.',
-//                 'old_input' => $_POST
-//             ], 30);
-//             return;
-//         }
-
-//         // Reject username containing any special characters
-//         if (!preg_match('/^[a-z0-9_]+$/', $username)) {
-//             set_transient('custom_user_message', [
-//                 'type' => 'danger',
-//                 'text' => 'Username can only contain letters and numbers.',
-//                 'old_input' => $_POST
-//             ], 30);
-//             return;
-//         }
-
-//         if (empty($_POST['consent']) || $_POST['consent'] !== 'yes') {
-//             set_transient('custom_user_message', [
-//                 'type' => 'danger',
-//                 'text' => 'You must agree to the consent checkbox.',
-//                 'old_input' => $_POST
-//             ], 30);
-//             return;
-//         }
-
-
-//         if (is_email($_POST['username'])) {
-//             set_transient('custom_user_message', [
-//                 'type' => 'danger',
-//                 'text' => 'You cannot use an email as username.',
-//                 'old_input' => $_POST
-//             ], 30);
-//             return;
-//         }
-
-//         if (username_exists($username) || email_exists($email)) {
-//             set_transient('custom_user_message', [
-//                 'type' => 'danger',
-//                 'text' => 'Username or Email already exists.',
-//                 'old_input' => $_POST
-//             ], 30);
-//             return;
-//         }
-
-//         // Create user
-//         $user_id = wp_create_user($username, $password, $email);
-
-//         if (!is_wp_error($user_id)) {
-//             wp_update_user([
-//                 'ID'         => $user_id,
-//                 'first_name' => $first_name,
-//                 'last_name'  => $last_name,
-//             ]);
-
-
-//             update_user_meta($user_id, 'dob', $dob);
-
-//             $referrer = !empty($_POST['referrer'])
-//                 ? sanitize_text_field($_POST['referrer'])
-//                 : sanitize_text_field(get_option('default_referrer_username'));
-//             update_user_meta($user_id, 'referrer', $referrer);
-
-//             update_user_meta($user_id, 'consent_transactional', 'yes');
-//             update_user_meta($user_id, 'consent_marketing', 'yes');
-
-//             // Notifications
-//             if (class_exists('Notifications')) {
-//                 $notifications = Notifications::getInstance();
-//                 $notifications->add_referrer_notification_for_user($user_id);
-//                 $notifications->add_referral_notification_to_referrer($user_id);
-//             }
-
-//             // ✅ Trigger the registered action
-//             if (function_exists('mm_trigger_action')) {
-//                 mm_trigger_action('user_register', $user_id);
-//             }
-
-//             // Set success message
-//             set_transient('custom_user_message', [
-//                 'type' => 'success',
-//                 'text' => 'You have received <span style="color: #E835B0;">30 Points</span> for registering into 24/7 Empowerment\'s Non-Profit Social Platform.'
-//             ], 30);
-
-
-//             // ✅ Redirect to login page
-//             wp_redirect(home_url('/signin')); // your login page URL
-//             exit; // ← important
-//         } else {
-//             set_transient('custom_user_message', [
-//                 'type' => 'danger',
-//                 'text' => $user_id->get_error_message()
-//             ], 30);
-//         }
-//     }
-// });
 
 add_action('init', function () {
     if (
@@ -237,7 +117,6 @@ add_action('init', function () {
 
             wp_redirect(home_url('/signin'));
             exit;
-
         } else {
             set_transient('custom_user_message', [
                 'type' => 'danger',
@@ -316,7 +195,8 @@ add_action('init', 'handle_custom_user_login');
 // Register AJAX action for logged-in users
 add_action('wp_ajax_frontend_profile_update', 'ajax_frontend_profile_update');
 
-function ajax_frontend_profile_update() {
+function ajax_frontend_profile_update()
+{
     // Security check
     if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'frontend_profile_update')) {
         wp_send_json_error(['message' => 'Security check failed']);
@@ -346,7 +226,8 @@ function ajax_frontend_profile_update() {
 /**
  * Handle frontend profile update, award points for birthday/location once, and return notification data.
  */
-function handle_frontend_profile_update($user_id, $post_data) {
+function handle_frontend_profile_update($user_id, $post_data)
+{
     if (!function_exists('mm_award_points_and_notify')) return ['error' => 'Gamification function missing'];
 
     $notification_data = [];
@@ -385,7 +266,7 @@ function handle_frontend_profile_update($user_id, $post_data) {
     ]);
 
     // Other meta fields
-    $meta_fields = ['phone','about_me','about_me_short','latitude','longitude','place_address'];
+    $meta_fields = ['phone', 'about_me', 'about_me_short', 'latitude', 'longitude', 'place_address'];
     foreach ($meta_fields as $meta_key) {
         if (isset($post_data[$meta_key])) {
             update_user_meta($user_id, $meta_key, sanitize_text_field($post_data[$meta_key]));
@@ -393,15 +274,44 @@ function handle_frontend_profile_update($user_id, $post_data) {
     }
 
     // Checkbox fields
-    $checkbox_fields = ['show_email','show_phone','show_dob','show_full_address'];
+    $checkbox_fields = ['show_email', 'show_phone', 'show_dob', 'show_full_address'];
     foreach ($checkbox_fields as $meta_key) {
         update_user_meta($user_id, $meta_key, isset($post_data[$meta_key]) ? '1' : '0');
     }
 
-    // Categories
-    if (!empty($post_data['user_categories']) && is_array($post_data['user_categories'])) {
-        update_user_meta($user_id, 'user_categories', array_map('intval', $post_data['user_categories']));
+    // Categories + Priorities (SYNCED)
+    if (isset($post_data['user_categories_priority']) && is_array($post_data['user_categories_priority'])) {
+
+        $clean_categories = [];
+        $clean_priorities = [];
+
+        foreach ($post_data['user_categories_priority'] as $term_id => $priority) {
+
+            $term_id  = (int) $term_id;
+            $priority = (int) $priority;
+
+            // Save ONLY if checkbox is checked
+            if (
+                $priority > 0 &&
+                isset($post_data['user_categories']) &&
+                in_array($term_id, $post_data['user_categories'])
+            ) {
+                $clean_categories[] = $term_id;
+                $clean_priorities[$term_id] = $priority;
+            }
+        }
+
+        // Prevent duplicate priorities (1st, 2nd, 3rd…)
+        if (count($clean_priorities) === count(array_unique($clean_priorities))) {
+            update_user_meta($user_id, 'user_categories', $clean_categories);
+            update_user_meta($user_id, 'user_categories_priority', $clean_priorities);
+        }
+    } else {
+        // If user deselects all
+        delete_user_meta($user_id, 'user_categories');
+        delete_user_meta($user_id, 'user_categories_priority');
     }
+
 
     return [
         'success' => true,
@@ -462,64 +372,6 @@ add_action('wp_ajax_delete_profile_photo', function () {
 
 
 
-// add_action('init', function () {
-//     // 🛑 GATES: Only execute this block if the specific hidden field is present.
-//     if (! isset($_POST['action']) || $_POST['action'] !== 'custom_user_login_form_submit') {
-//         return; // Exit early if it's not the intended login form submission
-//     }
-//     // Corrected condition to check for login action on event form submissions
-//     if (
-//         isset($_POST['action']) && $_POST['action'] === 'custom_user_login' &&
-//         check_admin_referer('custom_user_login', 'custom_user_login_nonce')
-//     ) {
-//         $creds = [
-//             'user_login'    => sanitize_user($_POST['username']),
-//             'user_password' => $_POST['password'],
-//             'remember'      => true
-//         ];
-
-//         $user = wp_signon($creds, false);
-
-//         if (!is_wp_error($user)) {
-//             // ✅ Check for first login
-//             if (function_exists('mm_trigger_action')) {
-//                 $last_login = get_user_meta($user->ID, 'last_login', true);
-//                 if (empty($last_login)) {
-//                     mm_trigger_action('first_login', $user->ID);
-//                 }
-//                 update_user_meta($user->ID, 'last_login', current_time('mysql'));
-//             }
-
-//             if (!is_wp_error($user)) {                
-//                 wp_redirect(home_url('/modify-profile'));
-//                 exit; // This exit will now only run for successful logins
-//             }
-//         } else {
-//             $raw_error_msg = $user->get_error_message();
-//             $allowed_tags = ['a' => ['href' => [], 'class' => []], 'strong' => [], 'em' => []];
-//             $safe_error_msg = wp_kses($raw_error_msg, $allowed_tags);
-
-//             $safe_error_msg = preg_replace_callback(
-//                 '#<a href="[^"]+">Lost your password\?</a>#i',
-//                 function () {
-//                     $url = esc_url(home_url('/lost-password'));
-//                     return '<a href="' . $url . '" class="alert-link">Lost your password?</a>';
-//                 },
-//                 $safe_error_msg
-//             );
-
-//             set_transient('custom_user_message', [
-//                 'type' => 'error',
-//                 'text' => $safe_error_msg
-//             ], 30);
-
-//             wp_redirect(home_url('/signin'));
-//             exit;
-//         }
-//     }
-// });
-
-
 add_action('init', function () {
     add_rewrite_tag('%user_profile%', '([^&]+)');
 
@@ -556,6 +408,8 @@ add_filter('query_vars', function ($vars) {
 // -----------------------------
 // Admin Area Restriction
 // -----------------------------
+
+
 add_action('admin_init', function () {
 
     // Exclude event form submissions
@@ -709,5 +563,4 @@ add_action('admin_init', function () {
     }
 
     update_option('referral_sync_done_mutual', true);
-
 });

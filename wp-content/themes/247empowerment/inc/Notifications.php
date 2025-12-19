@@ -253,4 +253,36 @@ class Notifications
         return true;
     }
 
+    function mm_render_notification_item($notif)
+    {
+        ob_start();
+
+        $created_time = human_time_diff(
+            strtotime($notif['created_at']),
+            current_time('timestamp')
+        ) . ' ago';
+
+        $user_img = get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg';
+?>
+        <div class="d-flex align-items-center gap-3 py-2 border-2 border-bottom border-light unread notification-item"
+            data-id="<?= esc_attr($notif['id']); ?>">
+
+            <div class="d-flex align-items-center gap10">
+                <img src="<?= esc_url(get_template_directory_uri() . '/assets/img/nd/circle-notification.png'); ?>" alt="">
+                <div class="position-relative img44">
+                    <img src="<?= esc_url($user_img); ?>" class="rounded-circle w-100 h-100 object-fit-cover">
+                    <img class="position-absolute active-icon"
+                        src="<?= esc_url(get_template_directory_uri() . '/assets/img/nd/active_icon.png'); ?>">
+                </div>
+            </div>
+
+            <div class="d-flex flex-column post-user">
+                <span class="p_name fs16"><?= esc_html($notif['message']); ?></span>
+                <span class="mb-0 text-blue-color fs14"><?= esc_html($created_time); ?></span>
+            </div>
+        </div>
+<?php
+
+        return ob_get_clean();
+    }
 }

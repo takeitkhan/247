@@ -523,3 +523,19 @@ function mm_custom_user_avatar($avatar, $id_or_email, $size, $default, $alt)
         (int) $size
     );
 }
+
+
+if (!empty($_POST['user_categories_priority'])) {
+    $clean = [];
+
+    foreach ($_POST['user_categories_priority'] as $term_id => $priority) {
+        if ($priority !== '') {
+            $clean[(int) $term_id] = (int) $priority;
+        }
+    }
+
+    // Ensure unique priorities (1st, 2nd, 3rd...)
+    if (count($clean) === count(array_unique($clean))) {
+        update_user_meta($user_id, 'user_categories_priority', $clean);
+    }
+}

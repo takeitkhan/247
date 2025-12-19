@@ -64,6 +64,35 @@ class UserProfileData
         $social_links = get_user_meta($this->user->ID, 'custom_social_links', true);
         $social_links = is_array($social_links) ? $social_links : [];
 
+        $user_categories_priority = get_user_meta(
+            $this->user->ID,
+            'user_categories_priority',
+            true
+        );
+        $user_categories_priority = is_array($user_categories_priority)
+            ? $user_categories_priority
+            : [];
+
+        $user_categories_with_priority = [];
+
+        if (!empty($user_categories) && is_array($user_categories)) {
+            foreach ($user_categories as $cat_id) {
+                if (!is_numeric($cat_id)) continue;
+
+                $term = get_term((int) $cat_id, 'category');
+                if (!$term || is_wp_error($term)) continue;
+
+                $user_categories_with_priority[] = [
+                    'term_id'  => (int) $cat_id,
+                    'name'     => $term->name,
+                    'slug'     => $term->slug,
+                    'priority' => $user_categories_priority[$cat_id] ?? null,
+                ];
+            }
+        }
+
+
+
         return [
             'id' => $this->user->ID,
             'username' => $this->user->user_login,
@@ -84,6 +113,7 @@ class UserProfileData
             'place_display_name' => get_user_meta($this->user->ID, 'place_display_name', true),
             'user_categories' => $user_categories,
             'user_category_names' => $user_category_names,
+            'user_categories_with_priority' => $user_categories_with_priority,
             'bio' => get_user_meta($this->user->ID, 'description', true),
             'profile_photo' => get_user_meta($this->user->ID, 'profile_photo', true),
             'cover_photo' => get_user_meta($this->user->ID, 'profile_cover_photo', true),
@@ -255,6 +285,15 @@ class UserProfileData
 
             $user_categories = get_user_meta($user_id, 'user_categories', true) ?: [];
 
+            $user_categories_priority = get_user_meta(
+                $user_id,
+                'user_categories_priority',
+                true
+            );
+            $user_categories_priority = is_array($user_categories_priority)
+                ? $user_categories_priority
+                : [];
+
             $user_category_names = [];
             if (!empty($user_categories) && is_array($user_categories)) {
                 foreach ($user_categories as $cat_id) {
@@ -269,6 +308,30 @@ class UserProfileData
 
             $zoom_access_token  = get_user_meta($user_id, 'zoom_access_token', true);
             $zoom_refresh_token = get_user_meta($user_id, 'zoom_refresh_token', true);
+
+            $user_category_names = [];
+            $user_categories_with_priority = [];
+
+            if (!empty($user_categories) && is_array($user_categories)) {
+                foreach ($user_categories as $cat_id) {
+                    if (!is_numeric($cat_id)) continue;
+
+                    $term = get_term((int) $cat_id, 'category');
+                    if (!$term || is_wp_error($term)) continue;
+
+                    // legacy
+                    $user_category_names[] = $term->name;
+
+                    // NEW
+                    $user_categories_with_priority[] = [
+                        'term_id'  => (int) $cat_id,
+                        'name'     => $term->name,
+                        'slug'     => $term->slug,
+                        'priority' => $user_categories_priority[$cat_id] ?? null,
+                    ];
+                }
+            }
+
 
             $enriched_users[] = [
                 'id' => $user_id,
@@ -286,7 +349,12 @@ class UserProfileData
                 'latitude' => get_user_meta($user_id, 'latitude', true),
                 'longitude' => get_user_meta($user_id, 'longitude', true),
                 'place_display_name' => get_user_meta($user_id, 'place_display_name', true),
+                // legacy (unchanged)
                 'user_categories' => $user_categories,
+                'user_category_names' => $user_category_names,
+
+                // ✅ NEW (priority-aware)
+                'user_categories_with_priority' => $user_categories_with_priority,
                 'user_category_names' => $user_category_names,
                 'bio' => get_user_meta($user_id, 'description', true),
                 'profile_photo' => get_user_meta($user_id, 'profile_photo', true),
@@ -301,91 +369,6 @@ class UserProfileData
 
         return $enriched_users;
     }
-
-
-    // OLD CODE BEFORE REVERSE REFFER LOGIC
-    // public static function getReferredUsersBy($referrer_user)
-    // {
-    //     if (!$referrer_user instanceof WP_User) {
-    //         $referrer_user = get_user_by('id', (int)$referrer_user);
-    //     }
-
-    //     if (!$referrer_user) {
-    //         return [];
-    //     }
-
-    //     $referrer_id = $referrer_user->ID;
-    //     $referrer_login = $referrer_user->user_login;
-
-    //     $args = [
-    //         'meta_query' => [
-    //             [
-    //                 'key'     => 'referrer',
-    //                 'value'   => [$referrer_id, $referrer_login],
-    //                 'compare' => 'IN'
-    //             ]
-    //         ],
-    //         'orderby' => 'registered',
-    //         'order'   => 'DESC',
-    //         'number'  => 7,
-    //     ];
-
-    //     $users = get_users($args);
-
-    //     $enriched_users = [];
-
-    //     foreach ($users as $user) {
-    //         $user_id = $user->ID;
-
-    //         $user_categories = get_user_meta($user_id, 'user_categories', true) ?: [];
-
-    //         // ✅ Dynamically get category names
-    //         $user_category_names = [];
-    //         if (!empty($user_categories) && is_array($user_categories)) {
-    //             foreach ($user_categories as $cat_id) {
-    //                 if (is_numeric($cat_id)) {
-    //                     $term = get_term((int)$cat_id, 'category');
-    //                     if ($term && !is_wp_error($term)) {
-    //                         $user_category_names[] = $term->name;
-    //                     }
-    //                 }
-    //             }
-    //         }
-
-    //         $zoom_access_token = get_user_meta($user_id, 'zoom_access_token', true);
-    //         $zoom_refresh_token = get_user_meta($user_id, 'zoom_refresh_token', true);
-
-    //         $enriched_users[] = [
-    //             'id' => $user_id,
-    //             'username' => $user->user_login,
-    //             'email' => $user->user_email,
-    //             'referrer' => get_user_meta($user_id, 'referrer', true),
-    //             'display_name' => $user->display_name,
-    //             'first_name' => get_user_meta($user_id, 'first_name', true),
-    //             'last_name' => get_user_meta($user_id, 'last_name', true),
-    //             'dob' => get_user_meta($user_id, 'dob', true),
-    //             'phone' => get_user_meta($user_id, 'phone', true),
-    //             'about_me' => get_user_meta($user_id, 'about_me', true),
-    //             'about_me_short' => get_user_meta($user_id, 'about_me_short', true),
-    //             'location' => get_user_meta($user_id, 'place_address', true),
-    //             'latitude' => get_user_meta($user_id, 'latitude', true),
-    //             'longitude' => get_user_meta($user_id, 'longitude', true),
-    //             'place_display_name' => get_user_meta($user_id, 'place_display_name', true),
-    //             'user_categories' => $user_categories,
-    //             'user_category_names' => $user_category_names, // ✅ Now dynamically fetched
-    //             'bio' => get_user_meta($user_id, 'description', true),
-    //             'profile_photo' => get_user_meta($user_id, 'profile_photo', true),
-    //             'cover_photo' => get_user_meta($user_id, 'profile_cover_photo', true),
-    //             'roles' => $user->roles,
-    //             'social_links' => get_user_meta($user_id, 'social_links', true),
-    //             'zoom_access_token' => $zoom_access_token,
-    //             'zoom_refresh_token' => $zoom_refresh_token,
-    //             'zoom_connected' => !empty($zoom_access_token) ? true : false,
-    //         ];
-    //     }
-
-    //     return $enriched_users;
-    // }
 
 
     function render_referred_users($referredUsers, $user_login, $maxVisible = 3)

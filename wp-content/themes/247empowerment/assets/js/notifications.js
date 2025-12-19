@@ -1,129 +1,236 @@
-jQuery(document).ready(function ($) {
-    const $badge = $("#notificationBadge");
-    const $container = $("#toastContainer");
+window.mmUnreadCount = parseInt(jQuery('#notif-unread-count').text() || 0, 10);
+window.mmPendingLoginSound = false; // ✅ REQUIRED
 
-    // Position toast container above the badge
+jQuery(document).ready(function ($) {
+    const $badge = $('#notificationDropdown > button');
+    const $container = $('#notificationList');
+
+    /* =========================================================
+     * UNIFIED GAMIFICATION ACTION DISPATCHER
+     * ======================================================= */
+
+    function triggerGamificationAction($el) {
+        const actionKey = $el.data('action-key');
+
+        if (!actionKey) return;
+
+        // Prevent double firing
+        if ($el.data('mm-fired')) return;
+        $el.data('mm-fired', true);
+
+        $.post(notificationsData.ajaxurl, {
+            action: 'mm_gamification_action',
+            action_key: actionKey,
+            security: notificationsData.nonce
+        }, function (response) {
+
+            if (response.success && response.data && response.data.notification) {
+                mmPushNotification(response.data.notification);
+            }
+
+        }).always(function () {
+            // Allow re-fire only if needed later
+            setTimeout(() => {
+                $el.removeData('mm-fired');
+            }, 1000);
+        });
+    }
+
+    // Click-based actions (buttons, links)
+    $(document).on('click', '.mm-action', function (e) {
+        e.preventDefault();
+        triggerGamificationAction($(this));
+    });
+
+    // Change-based actions (inputs, selects)
+    $(document).on('change', '.mm-action-input', function () {
+        triggerGamificationAction($(this));
+    });
+
+    /* =========================================================
+     * NOTIFICATION DROPDOWN UI
+     * ======================================================= */
+
     function positionContainer() {
+        if (!$badge.length || !$container.length) return;
+
         const offset = $badge.offset();
-        const height = $badge.outerHeight();
         $container.css({
-            top: offset.top - $container.outerHeight() - 10, // 10px above badge
+            top: offset.top - $container.outerHeight() - 10,
             left: offset.left
         });
     }
 
-    // Toggle on badge click
-    $badge.on("click", function () {
-        positionContainer();
-        $container.fadeToggle("fast");
+
+    $(window).on('resize', function () {
+        if ($container.is(':visible')) positionContainer();
     });
 
-    // Optional: reposition on window resize
-    $(window).on("resize", function () {
-        if ($container.is(":visible")) positionContainer();
-    });
+    /* =========================================================
+     * MARK SINGLE NOTIFICATION AS READ
+     * ======================================================= */
 
-    // Mark single notification as read
-    $(document).on("click", ".mark-read", function (e) {
+    $(document).on('click', '.mark-read', function (e) {
         e.preventDefault();
-        let notifId = $(this).data("id");
+
+        const notifId = $(this).data('id');
+        const $item = $(this).closest('[data-id]');
 
         $.post(notificationsData.ajaxurl, {
-            action: "mark_notification_read",
+            action: 'mark_notification_read',
             notification_id: notifId,
             security: notificationsData.nonce
         }, function (response) {
             if (response.success) {
-                $(`[data-id="${notifId}"]`).remove();
+                $item.remove();
             }
         });
     });
 
-    // Mark all read
-    $(document).on("click", ".mark-all-read", function (e) {
+    /* =========================================================
+     * MARK ALL AS READ
+     * ======================================================= */
+
+    $(document).on('click', '.mark-all-read', function (e) {
         e.preventDefault();
+
+        const $btn = $(this);
+        $btn.text('Marking...');
+
         $.post(notificationsData.ajaxurl, {
-            action: "mark_all_notifications_read",
+            action: 'mark_all_notifications_read',
+            security: notificationsData.nonce
+        }, function (response) {
+
+            if (response.success) {
+
+                // reset counter
+                window.mmUnreadCount = 0;
+
+                // remove badge
+                $('#notif-unread-count').remove();
+
+                // remove unread class
+                $('#notificationList .unread').removeClass('unread');
+
+                // remove button
+                $('.mark-all-read').remove();
+            }
+
+            $btn.text('All read');
+        }).fail(function () {
+            $btn.text('Mark all as read');
+        });
+    });
+
+
+    /* =========================================================
+     * CLEAR ALL NOTIFICATIONS
+     * ======================================================= */
+
+    $(document).on('click', '.clear-notifications', function (e) {
+        e.preventDefault();
+
+        $.post(notificationsData.ajaxurl, {
+            action: 'clear_all_notifications',
             security: notificationsData.nonce
         }, function (response) {
             if (response.success) {
-                $container.find(".card-body").html('<div class="p-3 text-muted text-center">No notifications found.</div>');
+                $container.html(
+                    '<div class="p-3 text-muted text-center">No notifications found.</div>'
+                );
+                $('.notif-bubble').remove();
             }
         });
     });
 
-    // Clear all
-    $(document).on("click", ".clear-notifications", function (e) {
-        e.preventDefault();
-        $.post(notificationsData.ajaxurl, {
-            action: "clear_all_notifications",
-            security: notificationsData.nonce
-        }, function (response) {
-            if (response.success) {
-                $container.find(".card-body").html('<div class="p-3 text-muted text-center">No notifications found.</div>');
-            }
-        });
-    });
 });
 
+/* =========================================================
+ * NOTIFICATION SOUND SETUP
+ * ======================================================= */
 
-// jQuery(document).ready(function($){
-//     $('.mark-all-read').on('click', function(e){
-//         e.preventDefault();
+let mmNotificationAudio = null;
+let mmAudioUnlocked = false;
 
-//         $.ajax({
-//             url: notificationsData.ajaxurl,
-//             type: 'POST',
-//             data: {
-//                 action: 'mark_all_notifications_read',
-//                 security: notificationsData.nonce
-//             },
-//             success: function(response){
-//                 if(response.success){
-//                     $('.notif-bubble').remove(); // remove bubble
-//                     $('.unread').removeClass('unread'); // remove unread highlight
-//                 }
-//             },
-//             error: function(xhr){
-//                 console.log('AJAX error', xhr);
-//             }
-//         });
-//     });
-// });
+// Unlock audio after first user interaction (required by browsers)
+jQuery(document).one('click keydown touchstart', function () {
+
+    if (!mmNotificationAudio) {
+        mmNotificationAudio = new Audio(notificationsData.sound);
+        mmNotificationAudio.volume = 0.5;
+    }
+
+    // 🔥 Play delayed login sound
+    if (window.mmPendingLoginSound) {
+        mmNotificationAudio.currentTime = 0;
+        mmNotificationAudio.play().catch(() => {});
+        window.mmPendingLoginSound = false;
+    }
+
+    mmAudioUnlocked = true;
+});
+
+/* =========================================================
+ * GLOBAL PUSH NOTIFICATION HANDLER
+ * ======================================================= */
+
+window.mmPushNotification = function (notification) {
+    if (!notification || !notification.message) return;
+
+     // Mark pending login sound
+    if (notification.play_sound_on_load) {
+        window.mmPendingLoginSound = true;
+    }
+
+    const $list = jQuery('#notificationList');
+    const $count = jQuery('#notif-unread-count');
+
+    // 🔊 Play notification sound
+    if (mmAudioUnlocked && mmNotificationAudio) {
+        mmNotificationAudio.currentTime = 0;
+        mmNotificationAudio.play().catch(() => { });
+    }
+
+    // ✅ Increment unread counter
+    window.mmUnreadCount++;
+
+    if ($count.length) {
+        $count.text(window.mmUnreadCount);
+    } else {
+        jQuery('.notification-png').after(
+            `<span class="notif-bubble" id="notif-unread-count">${window.mmUnreadCount}</span>`
+        );
+    }
+
+    // Build notification HTML
+    const html = `
+        <div class="d-flex align-items-center border-bottom border-2 border-light gap-3 py-2 unread">
+            <div class="d-flex align-items-center gap10">
+                <img src="${notificationsData.circleIcon}">
+                <div class="position-relative img44">
+                    <img src="${notificationsData.userImg}" class="rounded-circle w-100 h-100 object-fit-cover">
+                    <img class="position-absolute active-icon" src="${notificationsData.activeIcon}">
+                </div>
+            </div>
+            <div class="d-flex flex-column post-user">
+                <span class="p_name fs16">${notification.message}</span>
+                <span class="mb-0 text-blue-color fs14">just now</span>
+            </div>
+        </div>
+    `;
+
+    $list.find('.text-muted').remove();
+    $list.prepend(html);
+};
 
 
-jQuery(document).ready(function($) {
+jQuery(document).ready(function () {
 
-    // MARK ALL AS READ
-    $('.mark-all-read').on('click', function(e) {
-        e.preventDefault();
+    const $badge = jQuery('#notif-unread-count');
 
-        var $this = $(this);
-
-        $.ajax({
-            url: notificationsData.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'mark_all_notifications_read',
-                security: notificationsData.nonce,
-            },
-            beforeSend: function() {
-                $this.text('Marking...'); // Optional loading state
-            },
-            success: function(response) {
-                if(response.success) {
-                    // Remove unread bubble
-                    $('.notif-bubble').remove();
-                    // Update dropdown items: remove "unread" class
-                    $('.dropdown-menu .unread').removeClass('unread');
-                    // Reset the mark-all text
-                    $this.text('All read');
-                }
-            },
-            error: function() {
-                $this.text('Mark all as read'); // fallback
-            }
-        });
-    });
-
+    // If unread exists on load, assume login notification
+    if ($badge.length && window.mmUnreadCount > 0) {
+        window.mmPendingLoginSound = true;
+    }
 });

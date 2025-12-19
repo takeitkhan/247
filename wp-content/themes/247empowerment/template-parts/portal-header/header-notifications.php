@@ -15,7 +15,7 @@ $limit = 5;
 $notifications_to_show = array_slice($all_notifications, 0, $limit);
 ?>
 
-<div class="dropdown">
+<div class="dropdown" id="notificationDropdown">
     <button
         class="position-relative bg-supporting rounded-circle img44 btn-custom btn-focus"
         type="button"
@@ -24,12 +24,14 @@ $notifications_to_show = array_slice($all_notifications, 0, $limit);
         aria-expanded="false">
         <img class="object-fit-contain notification-png" src="<?= esc_url(get_template_directory_uri() . '/assets/img/nd/notification.png'); ?>" alt="">
         <?php if ($unread_count > 0) : ?>
-            <span class="notif-bubble"><?= esc_html($unread_count); ?></span>
+            <span class="notif-bubble" id="notif-unread-count">
+                <?= esc_html($unread_count); ?>
+            </span>
         <?php endif; ?>
     </button>
 
     <div class="shadow-sm border-0 rounded-3 dropdown-menu notification-width dropdown-menu-end custom-card">
-        <ul class="p-0">
+        <ul class="p-0" id="notificationList">
             <div class="d-flex align-items-center justify-content-between pb-4">
                 <p class="mb-0 text-black fw-bold">Notifications</p>
                 <?php if ($unread_count > 0) : ?>

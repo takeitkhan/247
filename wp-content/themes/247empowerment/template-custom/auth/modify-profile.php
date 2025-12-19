@@ -128,16 +128,16 @@ $val = fn($key, $default = '') => esc_attr($profile[$key] ?? $default);
 
                             <!-- DOB -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label">Date of Birth:</label>                                
-                                <input type="text" name="dob" id="dob" class="form-control input" 
+                                <label class="form-label">Date of Birth:</label>
+                                <input type="text" name="dob" id="dob" class="form-control input"
                                     value="<?= $val('dob'); ?>">
                             </div>
 
                             <div class="col-12 col-md-6">
                                 <label class="form-label">About me (one liner):</label>
                                 <input type="text" name="about_me_short" class="form-control input"
-                                    value="<?= $val('about_me_short'); ?>" 
-                                        placeholder="About me" required>
+                                    value="<?= $val('about_me_short'); ?>"
+                                    placeholder="About me" required>
                             </div>
 
                             <div class="col-12">
@@ -179,7 +179,7 @@ $val = fn($key, $default = '') => esc_attr($profile[$key] ?? $default);
                                     <label class="form-check-label" for="show_full_address">Show full address on profile</label>
                                 </div>
                             </div>
-                            **/
+                             **/
                             ?>
 
                             <div class="col-12 col-md-12">
@@ -188,37 +188,52 @@ $val = fn($key, $default = '') => esc_attr($profile[$key] ?? $default);
                                     value="<?php echo esc_attr(get_user_meta($current_user->ID, 'place_display_name', true)); ?>">
                             </div>
 
-                            
-
-                            
                             <div class="col-12">
                                 <label class="form-label">Referrer:</label>
                                 <input type="text" class="form-control input" value="<?php echo esc_attr($referrer ?? 'No Referrer'); ?>" disabled>
-                            </div>                            
+                            </div>
 
 
                             <div class="col-12">
-                                <label class="form-label">Choose Focus Categories:</label>
+                                <label class="form-label">Please priorities your interests:</label>
                                 <div class="row">
                                     <?php
-                                    $categories = get_categories(['hide_empty' => false]);
-                                    $selected_cats = get_user_meta($current_user->ID, 'user_categories', true);
-                                    $selected_cats = is_array($selected_cats) ? $selected_cats : [];
-
-                                    $half = ceil(count($categories) / 2);
-                                    $chunks = array_chunk($categories, $half);
-
-                                    foreach ($chunks as $chunk) {
-                                        echo '<div class="col-12 col-md-6">';
-                                        foreach ($chunk as $cat) {
-                                            echo '<div class="mb-2 form-check">';
-                                            echo '<input class="form-check-input" type="checkbox" name="user_categories[]" value="' . esc_attr($cat->term_id) . '" ' . checked(in_array($cat->term_id, $selected_cats), true, false) . '>';
-                                            echo '<label class="form-check-label">' . esc_html($cat->name) . '</label>';
-                                            echo '</div>';
-                                        }
-                                        echo '</div>';
-                                    }
+                                    $categories = get_categories([
+                                        'hide_empty' => false,
+                                        'slug__not_in' => ['uncategorized'],
+                                    ]);
+                                    $priorities = get_user_meta($current_user->ID, 'user_categories_priority', true);
+                                    $priorities = is_array($priorities) ? $priorities : [];
                                     ?>
+
+                                    <?php foreach ($categories as $cat) :
+                                        $priority = $priorities[$cat->term_id] ?? '';
+                                    ?>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                                name="user_categories[]"
+                                                value="<?= esc_attr($cat->term_id); ?>"
+                                                <?= checked(isset($priorities[$cat->term_id]), true, false); ?>>
+
+                                            <label class="flex-grow-1 form-check-label">
+                                                <?= esc_html($cat->name); ?>
+                                            </label>
+
+                                            <select
+                                                name="user_categories_priority[<?= esc_attr($cat->term_id); ?>]"
+                                                class="w-auto form-select-sm form-select">
+                                                <option value="">Priority</option>
+                                                <option value="1" <?= selected($priority, 1); ?>>1st</option>
+                                                <option value="2" <?= selected($priority, 2); ?>>2nd</option>
+                                                <option value="3" <?= selected($priority, 3); ?>>3rd</option>
+                                                <option value="4" <?= selected($priority, 4); ?>>4th</option>
+                                                <option value="5" <?= selected($priority, 5); ?>>5th</option>
+                                            </select>
+                                        </div>
+                                    <?php endforeach; ?>
+
                                 </div>
                             </div>
 
