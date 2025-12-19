@@ -1029,3 +1029,95 @@ Stack trace:
 [19-Dec-2025 16:05:41 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
 [19-Dec-2025 16:10:28 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
 [19-Dec-2025 16:13:21 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
+[19-Dec-2025 17:36:56 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
+[19-Dec-2025 17:38:16 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
+[19-Dec-2025 23:13:10 UTC] PHP Parse error:  syntax error, unexpected token ")", expecting variable in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\modal.php on line 46
+[19-Dec-2025 23:13:11 UTC] PHP Parse error:  syntax error, unexpected token ")", expecting variable in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\modal.php on line 46
+[19-Dec-2025 23:13:28 UTC] PHP Parse error:  syntax error, unexpected token ")", expecting variable in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\modal.php on line 41
+[19-Dec-2025 23:13:28 UTC] PHP Parse error:  syntax error, unexpected token ")", expecting variable in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\modal.php on line 41
+[19-Dec-2025 23:39:19 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mm_spg_get_steps() in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php:83
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(341): mm_spg_enqueue_assets('')
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#2 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\script-loader.php(2311): do_action('wp_enqueue_scri...')
+#4 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(341): wp_enqueue_scripts('')
+#5 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#6 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#7 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(3197): do_action('wp_head')
+#8 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\header-portal.php(150): wp_head()
+#9 D:\oldwindows\laragon\www\pet\wp-includes\template.php(814): require_once('D:\\oldwindows\\l...')
+#10 D:\oldwindows\laragon\www\pet\wp-includes\template.php(749): load_template('D:\\oldwindows\\l...', true, Array)
+#11 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(48): locate_template(Array, true, true, Array)
+#12 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\functions.php(72): get_header('portal')
+#13 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php(6): get_header_based_on_login()
+#14 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\page-login-router.php(7): include('D:\\oldwindows\\l...')
+#15 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(125): include('D:\\oldwindows\\l...')
+#16 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#17 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#18 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 83
+[19-Dec-2025 23:39:22 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mm_spg_get_steps() in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php:83
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(341): mm_spg_enqueue_assets('')
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#2 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\script-loader.php(2311): do_action('wp_enqueue_scri...')
+#4 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(341): wp_enqueue_scripts('')
+#5 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#6 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#7 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(3197): do_action('wp_head')
+#8 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\header-portal.php(150): wp_head()
+#9 D:\oldwindows\laragon\www\pet\wp-includes\template.php(814): require_once('D:\\oldwindows\\l...')
+#10 D:\oldwindows\laragon\www\pet\wp-includes\template.php(749): load_template('D:\\oldwindows\\l...', true, Array)
+#11 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(48): locate_template(Array, true, true, Array)
+#12 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\functions.php(72): get_header('portal')
+#13 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\index.php(1): get_header_based_on_login()
+#14 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(125): include('D:\\oldwindows\\l...')
+#15 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#16 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#17 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 83
+[19-Dec-2025 23:40:36 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mm_spg_get_steps() in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php:83
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(341): mm_spg_enqueue_assets('')
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#2 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\script-loader.php(2311): do_action('wp_enqueue_scri...')
+#4 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(341): wp_enqueue_scripts('')
+#5 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#6 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#7 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(3197): do_action('wp_head')
+#8 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\header-portal.php(150): wp_head()
+#9 D:\oldwindows\laragon\www\pet\wp-includes\template.php(814): require_once('D:\\oldwindows\\l...')
+#10 D:\oldwindows\laragon\www\pet\wp-includes\template.php(749): load_template('D:\\oldwindows\\l...', true, Array)
+#11 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(48): locate_template(Array, true, true, Array)
+#12 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\functions.php(72): get_header('portal')
+#13 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\template-custom\auth\home.php(6): get_header_based_on_login()
+#14 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\page-login-router.php(7): include('D:\\oldwindows\\l...')
+#15 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(125): include('D:\\oldwindows\\l...')
+#16 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#17 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#18 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 83
+[19-Dec-2025 23:40:38 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mm_spg_get_steps() in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php:83
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(341): mm_spg_enqueue_assets('')
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#2 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\script-loader.php(2311): do_action('wp_enqueue_scri...')
+#4 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(341): wp_enqueue_scripts('')
+#5 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#6 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#7 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(3197): do_action('wp_head')
+#8 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\header-portal.php(150): wp_head()
+#9 D:\oldwindows\laragon\www\pet\wp-includes\template.php(814): require_once('D:\\oldwindows\\l...')
+#10 D:\oldwindows\laragon\www\pet\wp-includes\template.php(749): load_template('D:\\oldwindows\\l...', true, Array)
+#11 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(48): locate_template(Array, true, true, Array)
+#12 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\functions.php(72): get_header('portal')
+#13 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\index.php(1): get_header_based_on_login()
+#14 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(125): include('D:\\oldwindows\\l...')
+#15 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#16 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#17 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 83

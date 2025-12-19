@@ -134,7 +134,10 @@ class UserProfileData
 
             // ✅ Shareable public profile URL
             'shareable_link' => home_url('/' . $this->user->user_login . '/'),
-            'shareable_nice_link' => home_url('/' . $this->user->user_nicename . '/')
+            'shareable_nice_link' => home_url('/' . $this->user->user_nicename . '/'),
+            'mm_spg_avatar' => get_user_meta($this->user->ID, 'mm_spg_avatar', true),
+            'mm_spg_step' => get_user_meta($this->user->ID, 'mm_spg_step', true),
+            'mm_spg_status' => get_user_meta($this->user->ID, 'mm_spg_status', true),
         ];
     }
 

@@ -140,7 +140,7 @@ $saved_links = get_user_meta($user_id, 'custom_social_links', true) ?: [];
             <div class="bg-white custom-box-shadow mb-3 p-3 custom-border-radius">
                 <div class="row">
                     <div class="col-12">
-                        <h5 class="mb-5">🔗 Manage Social/Business Links</h5>
+                        <h5 class="mb-5">Social Management</h5>
                     </div>
                 </div>
                 <form method="post">

@@ -9,22 +9,31 @@ if (!is_user_logged_in()) {
 }
 get_header_based_on_login();
 ?>
-<main>
-    <div class="main-container" style="padding-top: 80px;">
-        <div class="shadow mx-auto card">
-            <div class="bg-primary text-white text-center card-header">
-                <h5 class="mb-0">Basic AI</h5>
-            </div>
-            <div id="chat-box" class="overflow-auto card-body" style="height: 400px; background: #f8f9fa;"></div>
-            <div class="p-3 card-footer">
-                <div class="input-group">
-                    <input type="text" id="user-input" class="form-control" placeholder="Type your message..." />
-                    <button class="btn btn-primary" id="send-btn" type="button">Send</button>
+
+<div class="container profile-page pt20">
+    <div class="row">
+        <div class="order-3 order-lg-1 col-lg-3">
+            <?php get_template_part('template-custom/auth/common-parts/editprofilemenu', null, ['profile' => $profile]); ?>
+            <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
+        </div>
+        <div class="order-2 order-lg-2 mb-0 rounded-end-0 col-lg-9">
+            <div class="main-container">
+                <div class="mx-auto xshadow card">
+                    <div class="text-center card-header">
+                        <h5 class="mb-0">Basic Aritficial Intelligence</h5>
+                    </div>
+                    <div id="chat-box" class="overflow-auto card-body" style="height: 400px; background: #f8f9fa;"></div>
+                    <div class="p-3 card-footer">
+                        <div class="input-group">
+                            <input type="text" id="user-input" class="form-control" placeholder="Type your message..." />
+                            <button class="btn custom-btn" id="send-btn" type="button">Send</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</main>
+</div>
 <script>
     document.getElementById("send-btn").onclick = async () => {
         await sendMessage();

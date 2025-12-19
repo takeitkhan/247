@@ -11,6 +11,6 @@
         </div>
     </div>
     <div>
-        <button class="d-flex align-items-center justify-content-center gap-2 pt-3 w-100 more-option"><img src="./images/loading.png" alt=""> More</button>
+        <button class="d-flex align-items-center justify-content-center gap-2 pt-3 w-100 more-option"><img src="<?php echo get_template_directory_uri() . '/assets/img/nd/loading.png'?>" alt=""> More</button>
     </div>
 </div>

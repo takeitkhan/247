@@ -273,53 +273,174 @@ class MM_Gamification_User
 
         global $wpdb;
         $table = $wpdb->prefix . 'gamification_actions';
-
         $action = $wpdb->get_row(
-            $wpdb->prepare(
-                "SELECT notification_message FROM $table WHERE action_key = %s",
-                $activity
-            )
+            $wpdb->prepare("SELECT custom_message, notification_message FROM $table WHERE action_key = %s", $activity)
         );
 
-        $message = ($action && $action->notification_message)
-            ? str_replace('{points}', (int) $points, $action->notification_message)
-            : sprintf('You earned %d points', (int) $points);
+        // Use the specific notification message if available, otherwise generate a default.
+        if ($action && !empty($action->notification_message)) {
+            // Replace the {points} placeholder with the actual point value.
+            $message = str_replace('{points}', (int)$points, $action->notification_message);
+        } else {
+            $fallback_message = $action->custom_message ?? ucwords(str_replace('_', ' ', $activity));
+            $message = sprintf("You earned %d points for: %s", (int)$points, esc_html($fallback_message));
+        }
 
-        /**
-         * 🔊 Decide whether sound should play on page load
-         * Only login-based actions need delayed sound
-         */
-        $play_sound_on_load = in_array(
-            $activity,
-            ['first_login', 'daily_login'],
-            true
-        );
-
-        // 🔔 Save persistent notification
         $notifications = Notifications::getInstance();
         $notifications->addNotification(
             $user_id,
-            'success',
+            'success', // Or 'points_earned'
             $message,
             [
-                'points'              => (int) $points,
-                'activity'            => $activity,
-                'play_sound_on_load'  => $play_sound_on_load,
+                'points'   => $points,
+                'activity' => $activity
             ]
         );
+    }
+}
 
-        /**
-         * 🔥 OPTIONAL: store session-based push info
-         * Only useful if you later want server → JS hydration
-         */
-        if ($play_sound_on_load) {
-            $_SESSION["mm_push_notify_{$user_id}"] = [
-                'message' => $message,
-                'points'  => (int) $points,
+
+/* ----------------------------------------------------------
+   Gamification Modal
+---------------------------------------------------------- */
+
+/**
+ * Renders the gamification points modal in the footer.
+ * This modal is hidden by default and shown via JavaScript.
+ */
+function mm_gamification_render_points_modal()
+{
+    // Only show for logged-in users
+    if (!is_user_logged_in()) {
+        return;
+    }
+
+    ob_start();
+?>
+    <!-- Gamification Points Modal -->
+    <div class="modal fade" id="gamificationPointsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="bg-transparent border-0 modal-content">
+                <div class="p-4 container">
+                    <div class="d-flex align-items-center justify-content-center welcome-popup">
+                        <div class="shadow-lg rounded-4 overflow-hidden popup-inner">
+                            <div class="position-relative popup-image">
+                                <img class="w-100 h-100" src="<?php echo plugin_dir_url(__FILE__) . '../assets/images/vc_design.png'; ?>" alt="popup image">
+                                <button class="top-0 position-absolute m-3 btn popup-close end-0" data-bs-dismiss="modal">
+                                    <img src="<?php echo plugin_dir_url(__FILE__) . '../assets/images/close.png'; ?>" alt="close" class="img-fluid">
+                                </button>
+                                <div class="d-inline-block top-50 position-absolute text-center translate-middle welcome-text start-50">
+                                    <h2 id="gamification-modal-title" class="mb-2 fw-medium">Points Earned!</h2>
+                                </div>
+                                <img class="vcu-design" src="<?php echo plugin_dir_url(__FILE__) . '../assets/images/vcu.png'; ?>" alt="">
+                            </div>
+                            <div class="bg-white text-center popup-content">
+                                <p class="mb-4 popup-message" id="gamification-modal-message">
+                                    <!-- You've earned <span>5 points</span>! -->
+                                </p>
+                            </div>
+                            <div class="position-relative d-flex justify-content-center mb-4 popup-btn-container">
+                                <button class="z-1 px-5 py-2 custom-btn popup-button fw-semibold" data-bs-dismiss="modal">
+                                    Awesome!
+                                </button>
+                                <img class="bp-vector" src="<?php echo plugin_dir_url(__FILE__) . '../assets/images/vc.png'; ?>" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php
+    echo ob_get_clean();
+}
+add_action('wp_footer', 'mm_gamification_render_points_modal');
+
+/* ----------------------------------------------------------
+   Enqueue JS (Bootstrap modal opener)
+
+/**
+ * Enqueues the modal script and localizes data if a notification exists.
+ * This function is hooked into both front-end and admin script hooks.
+ */
+function mm_gamification_enqueue_modal_scripts()
+{
+    wp_enqueue_script(
+        'modal-plugin-js',
+        plugin_dir_url(__FILE__) . '../assets/js/modal.js',
+        ['jquery'],
+        '1.0',
+        true
+    );
+
+    // Check for a notification transient on page load for the current user.
+    if (is_user_logged_in()) {
+        $user_id = get_current_user_id();
+        $notification = $_SESSION["gamification_notify_{$user_id}"] ?? null;
+
+        if ($notification) {
+            // Prepare data for JavaScript and pass it.
+            $data = [
+                'title'   => $notification['title'],
+                'message' => $notification['message'],
+                'points'  => $notification['points'],
             ];
+            wp_localize_script('modal-plugin-js', 'gamificationNotification', $data);
+
+            // The session data has been used, so we can unset it.
+            unset($_SESSION["gamification_notify_{$user_id}"]);
         }
     }
 }
+
+// Enqueue for the front-end
+add_action('wp_enqueue_scripts', 'mm_gamification_enqueue_modal_scripts');
+
+// Enqueue for the admin area
+add_action('admin_enqueue_scripts', 'mm_gamification_enqueue_modal_scripts');
+
+/* ----------------------------------------------------------
+   Modal Generator Function
+---------------------------------------------------------- */
+function rp_render_modal($id, $content, $options = [])
+{
+
+    $defaults = [
+        'centered' => true,
+        'size' => '', // sm, lg, xl
+    ];
+    $opt = array_merge($defaults, $options);
+
+    $centered = $opt['centered'] ? 'modal-dialog-centered' : '';
+    $size     = $opt['size'] ? 'modal-' . $opt['size'] : '';
+
+    ob_start(); ?>
+
+    <div class="modal fade" id="<?php echo esc_attr($id); ?>" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog <?php echo $centered . ' ' . $size; ?>">
+            <div class="bg-transparent border-0 modal-content">
+                <?php echo $content; ?>
+            </div>
+        </div>
+    </div>
+
+<?php return ob_get_clean();
+}
+
+/* ----------------------------------------------------------
+   Shortcode: [rp_modal id="example"] ...html... [/rp_modal]
+---------------------------------------------------------- */
+function rp_modal_shortcode($atts, $content = null)
+{
+    $atts = shortcode_atts([
+        'id' => 'modal-default',
+    ], $atts);
+
+    return rp_render_modal($atts['id'], do_shortcode($content));
+}
+
+add_shortcode('rp_modal', 'rp_modal_shortcode');
+
 
 
 // Initialize

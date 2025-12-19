@@ -50,6 +50,11 @@ if ($user) {
             <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
         </div>
         <div class="mb-4 col-lg-6">
+            <?php
+                echo '<pre>';
+                print_r($profile);
+                echo '</pre>';
+            ?>
             <?php get_template_part('template-custom/auth/feed-parts/create-post', null, ['profile' => $profile]); ?>
             <?php get_template_part('template-custom/auth/feed-parts/feeds', null, ['profile' => $profile]); ?>
         </div>

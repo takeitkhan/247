@@ -27,6 +27,7 @@ $full_name = esc_html(trim(
 $designation = esc_html($profile['designation'] ?? 'No designation provided.');
 $digital_card_about = esc_html($profile['digital_card_about'] ?? 'No bio provided.');
 $place_display_name = esc_html($profile['place_display_name'] ?? 'Location not available.');
+$show_full_address = esc_html($profile['show_full_address'] ?? 0);
 
 $keywords = $profile['keywords']['list'] ?? [];
 $hashtags = $profile['hashtags']['list'] ?? [];
@@ -245,11 +246,13 @@ if ($shareable_link) {
 
 
                         <!-- Location -->
-                        <?php if (!empty($place_display_name) && $place_display_name !== 'Unknown location'): ?>
-                            <p class="mb-4 text-muted small">
-                                <i class="bi bi-geo-alt"></i>
-                                <?php echo $place_display_name; ?>
-                            </p>
+                        <?php if (!empty($show_full_address) && $show_full_address === '1') : ?>
+                            <?php if (!empty($place_display_name) && $place_display_name !== 'Unknown location'): ?>
+                                <p class="mb-4 text-muted small">
+                                    <i class="bi bi-geo-alt"></i>
+                                    <?php echo $place_display_name; ?>
+                                </p>
+                            <?php endif; ?>
                         <?php endif; ?>
 
                         <!-- Actions -->

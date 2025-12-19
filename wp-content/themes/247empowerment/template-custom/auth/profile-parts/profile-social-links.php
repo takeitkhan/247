@@ -4,11 +4,10 @@ $social_links = $profile['social_links'] ?? [];
 ?>
 <div class="profile-left bg-white custom-card">
     <div class="d-flex align-items-center justify-content-between pb-4 u-title">
-        <h5 class="portal-title">Social Links</h5>
+        <h5 class="portal-title">Social Managements</h5>
     </div>
     <?php if (!empty($social_links)): ?>
         <ul class="d-flex flex-column gap-2 nav">
-
             <?php
             $iconMap = [
                 'facebook' => 'facebook.svg',
@@ -54,6 +53,6 @@ $social_links = $profile['social_links'] ?? [];
             <?php endforeach; ?>
         </ul>
     <?php else: ?>
-        <p>No social links added yet.</p>
+        <p>No social management added yet.</p>
     <?php endif; ?>
 </div>

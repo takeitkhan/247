@@ -1,10 +1,4 @@
-<?php
-if (is_user_logged_in()) {
-    get_header('portal');
-} else {
-    get_header('main');
-}
-?>
+<?php get_header_based_on_login(); ?>
 
 <div class="p-4">
     <?php while (have_posts()):
@@ -22,10 +16,4 @@ if (is_user_logged_in()) {
 </div>
 
 
-<?php
-if (is_user_logged_in()) {
-    get_footer('portal'); // loads footer-custom.php
-} else {
-    get_footer('main'); // loads footer-main.php
-}
-?>
+<?php get_footer_based_on_login(); ?>

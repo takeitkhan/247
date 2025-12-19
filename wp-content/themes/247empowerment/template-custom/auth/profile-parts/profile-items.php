@@ -30,7 +30,7 @@
                 </li>
                 <li>
                     <a class="d-flex align-items-center dropdown-item" href="<?php echo esc_url(home_url('/modify-links')); ?>">
-                        <i class="me-2 bi bi-link-45deg"></i> Manage Links
+                        <i class="me-2 bi bi-link-45deg"></i> Social Managements
                     </a>
                 </li>
 
@@ -186,7 +186,7 @@
         </div>
 
         <div class="d-flex align-items-center justify-content-between mt-2 xz-0">
-            <h3 class="mb-0 fw-bold about-title">Personal Social Links</h3>
+            <h3 class="mb-0 fw-bold about-title">Social Managements</h3>
             <button class="d-flex align-items-center justify-content-center btn-outline-secondary btn btn-sm"
                 type="button"
                 data-bs-toggle="collapse"
@@ -251,7 +251,7 @@
                         <?php endforeach; ?>
                     </ul>
                 <?php else: ?>
-                    <p>No social links added yet.</p>
+                    <p>No social managements added yet.</p>
                 <?php endif; ?>
             </div>
         </div>
