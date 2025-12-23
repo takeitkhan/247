@@ -12,8 +12,9 @@ function mm_spg_get_state()
     $user_id = get_current_user_id();
 
     wp_send_json_success([
-        'status' => get_user_meta($user_id, 'mm_spg_status', true) ?: 'stopped',
-        'step'   => (int) get_user_meta($user_id, 'mm_spg_step', true),
+        'status'     => get_user_meta($user_id, 'mm_spg_status', true),
+        'step'       => (int) get_user_meta($user_id, 'mm_spg_step', true),
+        'wait_until' => (int) get_user_meta($user_id, 'mm_spg_waiting_until', true),
     ]);
 }
 add_action('wp_ajax_mm_spg_get_state', 'mm_spg_get_state');
@@ -38,6 +39,26 @@ function mm_spg_set_state()
     wp_send_json_success();
 }
 add_action('wp_ajax_mm_spg_set_state', 'mm_spg_set_state');
+
+/**
+ * Summary of mm_spg_set_wait
+ * @return void
+ */
+function mm_spg_set_wait() {
+    if (!is_user_logged_in()) {
+        wp_send_json_error();
+    }
+
+    $user_id = get_current_user_id();
+
+    update_user_meta($user_id, 'mm_spg_waiting_until', (int) $_POST['wait_until']);
+    update_user_meta($user_id, 'mm_spg_step', (int) $_POST['step']);
+    update_user_meta($user_id, 'mm_spg_status', 'waiting');
+
+    wp_send_json_success();
+}
+add_action('wp_ajax_mm_spg_set_wait', 'mm_spg_set_wait');
+
 
 
 /**

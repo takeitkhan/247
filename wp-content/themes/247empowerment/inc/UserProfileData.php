@@ -181,37 +181,7 @@ class UserProfileData
         return $users;
     }
 
-
-
     // OLD NON MUTUAL PARTNERSHIP
-
-    // Get users referred by this user
-    // public function getReferredUsers()
-    // {
-    //     if (!$this->user) {
-    //         return [];
-    //     }
-
-    //     $referrer_id = $this->user->ID;
-    //     $referrer_login = $this->user->user_login;
-
-    //     $args = [
-    //         'meta_query' => [
-    //             [
-    //                 'key'     => 'referrer',
-    //                 'value'   => [$referrer_id, $referrer_login],
-    //                 'compare' => 'IN'
-    //             ]
-    //         ],
-    //         'orderby' => 'registered',
-    //         'order'   => 'DESC',
-    //         'number' => 7, // Optional limit
-    //     ];
-
-    //     return get_users($args);
-    // }
-
-
     public static function getReferredUsersBy($referrer_user)
     {
         if (!$referrer_user instanceof WP_User) {

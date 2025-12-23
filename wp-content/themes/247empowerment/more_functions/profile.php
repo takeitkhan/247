@@ -519,16 +519,38 @@ function mm_custom_user_avatar($avatar, $id_or_email, $size, $default, $alt)
 
 
 if (!empty($_POST['user_categories_priority'])) {
+
+    $selected_categories = array_map(
+        'intval',
+        $_POST['user_categories'] ?? []
+    );
+
     $clean = [];
 
     foreach ($_POST['user_categories_priority'] as $term_id => $priority) {
-        if ($priority !== '') {
-            $clean[(int) $term_id] = (int) $priority;
+
+        $term_id  = (int) $term_id;
+        $priority = (int) $priority;
+
+        // Only allow priority if category is selected
+        if (
+            in_array($term_id, $selected_categories, true) &&
+            $priority >= 1 &&
+            $priority <= 5
+        ) {
+            $clean[$term_id] = $priority;
         }
     }
+    
+    $user_id = isset($_GET['user']) ? intval($_GET['user']) : 0;
 
     // Ensure unique priorities (1st, 2nd, 3rd...)
     if (count($clean) === count(array_unique($clean))) {
+
         update_user_meta($user_id, 'user_categories_priority', $clean);
+
+    } else {
+        // Optional: error flag for UI
+        update_user_meta($user_id, 'mm_spg_interest_error', 'duplicate_priority');
     }
 }

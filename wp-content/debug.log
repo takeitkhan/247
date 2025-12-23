@@ -1121,3 +1121,34 @@ Stack trace:
 #16 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
 #17 {main}
   thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 83
+[23-Dec-2025 03:13:00 UTC] Automatic updates starting...
+[23-Dec-2025 03:13:03 UTC] Automatic updates complete.
+[23-Dec-2025 06:05:43 UTC] PHP Warning:  require_once(D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg//inc/frontend/steps.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 92
+[23-Dec-2025 06:05:43 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg//inc/frontend/steps.php' (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php:92
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(560): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(109): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 92
+[23-Dec-2025 06:05:44 UTC] PHP Warning:  require_once(D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg//inc/frontend/steps.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 92
+[23-Dec-2025 06:05:44 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg//inc/frontend/steps.php' (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php:92
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(560): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(109): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 92
+[23-Dec-2025 06:26:06 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
+[23-Dec-2025 06:28:32 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
+[23-Dec-2025 06:28:38 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
+[23-Dec-2025 06:29:48 UTC] PHP Warning:  Undefined variable $current_user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 532
+[23-Dec-2025 06:30:54 UTC] PHP Warning:  Undefined variable $current_user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 548
+[23-Dec-2025 06:30:54 UTC] PHP Warning:  Undefined variable $current_user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 551
+[23-Dec-2025 06:31:11 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 548
+[23-Dec-2025 06:31:11 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 551
+[23-Dec-2025 06:31:45 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\more_functions\profile.php on line 548

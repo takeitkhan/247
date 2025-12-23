@@ -89,4 +89,5 @@ add_action('wp_enqueue_scripts', 'mm_spg_enqueue_assets');
 require_once(MM_SPG_PATH . '/inc/frontend/current-guide-state.php');
 require_once(MM_SPG_PATH . '/inc/frontend/modal.php');
 require_once(MM_SPG_PATH . '/inc/frontend/hardcoded-steps.php');
-
+require_once(MM_SPG_PATH . '/inc/frontend/shortcodes.php');
+require_once(MM_SPG_PATH . '/inc/frontend/shortcode-saver.php');
