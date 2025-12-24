@@ -315,7 +315,7 @@ add_shortcode('mm_spg_additional_profile_details', function () {
                 <input type="text" id="keywordInput" class="flex-grow-1 border-0">
             </div>
 
-            <input type="hidden" name="user_keywords" id="keywords-hidden">
+            <input type="hidden" name="user_keywords" class="mm-spg-keywords-hidden">
         </div>
 
         <!-- Hashtags -->
@@ -336,7 +336,7 @@ add_shortcode('mm_spg_additional_profile_details', function () {
                 <input type="text" id="hashtagInput" class="flex-grow-1 border-0">
             </div>
 
-            <input type="hidden" name="user_hashtags" id="hashtags-hidden">
+            <input type="hidden" name="user_hashtags" class="mm-spg-hashtags-hidden">
         </div>
 
 

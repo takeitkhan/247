@@ -382,7 +382,7 @@
                 $(this).clone().children().remove().end().text().trim()
             );
         });
-        $form.find('#keywords-hidden').val(keywords.join(', '));
+        $form.find('.mm-spg-keywords-hidden').val(keywords.join(', '));
 
         // Hashtags
         const hashtags = [];
@@ -391,7 +391,7 @@
                 $(this).clone().children().remove().end().text().trim()
             );
         });
-        $form.find('#hashtags-hidden').val(hashtags.join(', '));
+        $form.find('.mm-spg-hashtags-hidden').val(hashtags.join(', '));
 
         console.log('KEYWORDS:', $form.find('#keywords-hidden').val());
         console.log('HASHTAGS:', $form.find('#hashtags-hidden').val());
@@ -401,8 +401,8 @@
             nonce: $form.find('[name="mm_spg_additional_nonce"]').val(),
             designation: $form.find('[name="designation"]').val(),
             about_me_short: $form.find('[name="about_me_short"]').val(),
-            user_keywords: $form.find('#keywords-hidden').val(),
-            user_hashtags: $form.find('#hashtags-hidden').val()
+            user_keywords: $form.find('.mm-spg-keywords-hidden').val(),
+            user_hashtags: $form.find('.mm-spg-hashtags-hidden').val()
         }, function (res) {
             $form.find('.alert').remove();
 

@@ -1160,3 +1160,4 @@ Stack trace:
 [24-Dec-2025 08:15:40 UTC] PHP Warning:  Undefined array key "user_keywords" in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\shortcodes.php on line 359
 [24-Dec-2025 08:16:19 UTC] PHP Warning:  Undefined array key "user_keywords" in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\shortcodes.php on line 359
 [24-Dec-2025 08:19:23 UTC] PHP Warning:  Undefined array key "user_keywords" in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\shortcodes.php on line 359
+[24-Dec-2025 08:53:40 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
