@@ -11,13 +11,25 @@ function mm_spg_get_state()
 
     $user_id = get_current_user_id();
 
+    $status     = get_user_meta($user_id, 'mm_spg_status', true);
+    $step       = (int) get_user_meta($user_id, 'mm_spg_step', true);
+    $wait_until = (int) get_user_meta($user_id, 'mm_spg_waiting_until', true);
+
+    // Phase detection
+    $phase_2_done = (bool) get_user_meta($user_id, 'mm_spg_phase_2_completed', true);
+
+    // Determine active phase
+    $current_phase = $phase_2_done ? 3 : 2;
+
     wp_send_json_success([
-        'status'     => get_user_meta($user_id, 'mm_spg_status', true),
-        'step'       => (int) get_user_meta($user_id, 'mm_spg_step', true),
-        'wait_until' => (int) get_user_meta($user_id, 'mm_spg_waiting_until', true),
+        'status'        => $status,
+        'step'          => $step,
+        'wait_until'    => $wait_until,
+        'current_phase' => $current_phase,
     ]);
 }
 add_action('wp_ajax_mm_spg_get_state', 'mm_spg_get_state');
+
 
 
 /**
@@ -40,11 +52,49 @@ function mm_spg_set_state()
 }
 add_action('wp_ajax_mm_spg_set_state', 'mm_spg_set_state');
 
+
+/* ========================
+        SOCIAL MANAGEMENT
+    ========================= */
+add_action('wp_ajax_mm_spg_save_social_links', 'mm_spg_save_social_links');
+
+function mm_spg_save_social_links()
+{
+    if (!is_user_logged_in()) {
+        wp_send_json_error('Not logged in');
+    }
+
+    check_ajax_referer('mm_spg_links_save', 'nonce');
+
+    $user_id = get_current_user_id();
+
+    $links = $_POST['links'] ?? [];
+    $clean_links = [];
+
+    foreach ($links as $link) {
+        if (!empty($link['url'])) {
+            $clean_links[] = [
+                'platform' => sanitize_text_field($link['platform'] ?? ''),
+                'label'    => sanitize_text_field($link['label'] ?? ''),
+                'url'      => esc_url_raw($link['url']),
+            ];
+        }
+    }
+
+    update_user_meta($user_id, 'custom_social_links', $clean_links);
+
+    // Optional: mark step completed
+    update_user_meta($user_id, 'mm_spg_social_links_completed', 1);
+
+    wp_send_json_success('Social links updated successfully.');
+}
+
 /**
  * Summary of mm_spg_set_wait
  * @return void
  */
-function mm_spg_set_wait() {
+function mm_spg_set_wait()
+{
     if (!is_user_logged_in()) {
         wp_send_json_error();
     }
@@ -64,12 +114,11 @@ add_action('wp_ajax_mm_spg_set_wait', 'mm_spg_set_wait');
 /**
  * Get current user's selected avatar
  */
-function mm_spg_get_user_avatar() {
+function mm_spg_get_user_avatar()
+{
     if (!is_user_logged_in()) {
         return '';
     }
 
     return get_user_meta(get_current_user_id(), 'mm_spg_avatar', true);
 }
-
-

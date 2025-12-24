@@ -102,18 +102,17 @@
 
                 case 'video':
                     html += `
-                    <div class="mm-spg-video">
-                        <iframe src="${block.src}" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                `;
+                        <div class="mm-spg-video">
+                            <iframe src="${block.src}" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    `;
                     break;
 
                 case 'shortcode':
-                    const id = 'mm-spg-shortcode-' + Math.random().toString(36).substr(2, 9);
+                    const id = 'mm-spg-shortcode-' + Math.random().toString(36).substring(2);
 
-                    html += `<div class="mm-spg-shortcode" id="${id}">Loading...</div>`;
+                    html += `<div class="mm-spg-shortcode" id="${id}">Loading…</div>`;
 
-                    // AJAX render
                     $.post(MM_SPG.ajax_url, {
                         action: 'mm_spg_render_shortcode',
                         shortcode: block.shortcode
@@ -121,10 +120,9 @@
                         if (res.success) {
                             $('#' + id).html(res.data.html);
                         } else {
-                            $('#' + id).html('<p>Error loading form.</p>');
+                            $('#' + id).html('<div class="alert alert-danger">Failed to load form.</div>');
                         }
                     });
-
                     break;
 
                 case 'html':
@@ -135,6 +133,7 @@
 
         return html;
     }
+
 
 
 
@@ -241,6 +240,184 @@
         saveState('active');
         showModal();
     });
+
+
+    $(document).on('change', '.mm-spg-interest-form input[type=checkbox]', function () {
+        $(this).closest('.d-flex').find('select')
+            .prop('disabled', !this.checked);
+    }).trigger('change');
+
+    /* ========================
+        INTERESTS SAVE
+    ========================== */
+    $(document).on('submit', '.mm-spg-interest-form', function (e) {
+        e.preventDefault();
+
+        const $form = $(this);
+        const formData = $form.serialize();
+
+        $.post(MM_SPG.ajax_url, {
+            action: 'mm_spg_save_interests',
+            nonce: $form.find('[name="mm_spg_interest_nonce"]').val(),
+            ...Object.fromEntries(new URLSearchParams(formData))
+        }, function (res) {
+
+            $form.find('.alert').remove();
+
+            if (res.success) {
+                $form.prepend(
+                    '<div class="alert alert-success mb-2">' + res.data + '</div>'
+                );
+
+                // OPTIONAL: auto-advance guide
+                // currentStep++;
+                // saveState('active');
+                // renderStep();
+
+            } else {
+                $form.prepend(
+                    '<div class="alert alert-danger mb-2">' + res.data + '</div>'
+                );
+            }
+        });
+    });
+
+    /* =====================
+    SOCIAL MANAGEMENT
+    =================== */
+    // Add new social link row
+    $(document).on('click', '#mm-spg-add-social-link', function () {
+
+        const index = $('#social-links-group .social-link-row').length;
+
+        const row = `
+        <div class="align-items-center mb-2 row g-2 social-link-row">
+            <div class="col-md-3">
+                <select name="links[${index}][platform]" class="form-select">
+                    <option value="facebook">Facebook</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="linkedin">LinkedIn</option>
+                    <option value="twitter">Twitter / X</option>
+                    <option value="youtube">YouTube</option>
+                    <option value="website">Website</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <input type="text"
+                       name="links[${index}][label]"
+                       class="form-control"
+                       placeholder="Custom label">
+            </div>
+
+            <div class="col-md-4">
+                <input type="url"
+                       name="links[${index}][url]"
+                       class="form-control"
+                       placeholder="https://example.com">
+            </div>
+
+            <div class="col-md-2">
+                <button type="button"
+                        class="w-100 btn btn-danger remove-link">
+                    Remove
+                </button>
+            </div>
+        </div>
+    `;
+
+        $('#social-links-group').append(row);
+    });
+
+    // Remove social link row
+    $(document).on('click', '.remove-link', function () {
+        $(this).closest('.social-link-row').remove();
+    });
+
+
+    $(document).on('submit', '.mm-spg-social-links-form', function (e) {
+        e.preventDefault();
+
+        const $form = $(this);
+        const formData = $form.serialize();
+
+        $.post(MM_SPG.ajax_url, {
+            action: 'mm_spg_save_social_links',
+            nonce: $form.find('[name="mm_spg_links_nonce"]').val(),
+            ...Object.fromEntries(new URLSearchParams(formData))
+        }, function (res) {
+
+            $form.find('.alert').remove();
+
+            if (res.success) {
+                $form.prepend(
+                    '<div class="alert alert-success mb-2">' + res.data + '</div>'
+                );
+
+                // OPTIONAL: auto-advance guide
+                // currentStep++;
+                // saveState('active');
+                // renderStep();
+
+            } else {
+                $form.prepend(
+                    '<div class="alert alert-danger mb-2">' + res.data + '</div>'
+                );
+            }
+        });
+    });
+
+    /* =====================
+    ADDITIONAL PROFILE
+    =================== */
+    $(document).on('submit', '.mm-spg-additional-profile-form', function (e) {
+        e.preventDefault();
+
+        const $form = $(this);
+
+        // Keywords
+        const keywords = [];
+        $form.find('#keyword-tags .keyword-tag').each(function () {
+            keywords.push(
+                $(this).clone().children().remove().end().text().trim()
+            );
+        });
+        $form.find('#keywords-hidden').val(keywords.join(', '));
+
+        // Hashtags
+        const hashtags = [];
+        $form.find('#hashtag-tags .hashtag-tag').each(function () {
+            hashtags.push(
+                $(this).clone().children().remove().end().text().trim()
+            );
+        });
+        $form.find('#hashtags-hidden').val(hashtags.join(', '));
+
+        console.log('KEYWORDS:', $form.find('#keywords-hidden').val());
+        console.log('HASHTAGS:', $form.find('#hashtags-hidden').val());
+
+        $.post(MM_SPG.ajax_url, {
+            action: 'mm_spg_save_additional_profile',
+            nonce: $form.find('[name="mm_spg_additional_nonce"]').val(),
+            designation: $form.find('[name="designation"]').val(),
+            about_me_short: $form.find('[name="about_me_short"]').val(),
+            user_keywords: $form.find('#keywords-hidden').val(),
+            user_hashtags: $form.find('#hashtags-hidden').val()
+        }, function (res) {
+            $form.find('.alert').remove();
+
+            if (res.success) {
+                $form.prepend('<div class="alert alert-success mb-2">' + res.data + '</div>');
+            } else {
+                $form.prepend('<div class="alert alert-danger mb-2">' + res.data + '</div>');
+            }
+        });
+    });
+
+
+
+
+
 
     /* =========================
        INITIAL LOAD

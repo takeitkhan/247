@@ -27,7 +27,7 @@ function mm_spg_get_steps()
                 [
                     'type'    => 'text',
                     'content' => 'Choose and prioritize your interests so we can guide you on the most relevant path.',
-                ],
+                ],                
                 [
                     'type'      => 'shortcode',
                     'shortcode' => '[mm_spg_interest_form]',
@@ -61,9 +61,8 @@ function mm_spg_get_steps()
                     'content' => 'Your digital business card represents your personal or business brand — share it anywhere instantly.',
                 ],
                 [
-                    'type'          => 'redirect',
-                    'url'           => 'https://personalempowermentteams.me/digital-business-card/',
-                    'min_read_time' => 20, // seconds
+                    'type'      => 'shortcode',
+                    'shortcode' => '[mm_spg_additional_profile_details]',
                 ],
             ],
         ],
@@ -149,3 +148,48 @@ function mm_spg_get_steps()
         ],
     ];
 }
+
+function mm_spg_interest_paths() {
+    return [
+        'communication-business-marketing' => [
+            ['type' => 'video', 'src' => 'https://youtu.be/Lx5kkc5lMFc?...'],
+            ['type' => 'redirect', 'url' => 'https://personalempowermentteams.me/tools/'],
+            ['type' => 'redirect', 'url' => 'https://personalempowermentteams.me/artificial-intelligence/'],
+            ['type' => 'redirect', 'url' => 'https://personalempowermentteams.me/empowerment-teams/'],
+            ['type' => 'redirect', 'url' => 'https://personalempowermentteams.me/faqs/'],
+        ],
+
+        'diabetes-health-fitness' => [
+            ['type' => 'redirect', 'url' => 'https://personalempowermentteams.me/empowerment-teams/'],
+            ['type' => 'video', 'src' => 'https://youtu.be/IkdAV35bdfk?...'],
+            ['type' => 'redirect', 'url' => 'https://personalempowermentteams.me/faqs/'],
+        ],
+
+        // more paths...
+    ];
+}
+
+
+function mm_spg_build_phase_3_steps($interest_slug) {
+
+    $paths = mm_spg_interest_paths();
+    if (!isset($paths[$interest_slug])) {
+        return [];
+    }
+
+    $term = get_term_by('slug', $interest_slug, 'category');
+    $title = $term ? 'Your ' . $term->name . ' Path' : 'Your Personalized Path';
+
+    $steps = [];
+
+    foreach ($paths[$interest_slug] as $item) {
+        $steps[] = [
+            'phase'  => 3,
+            'title'  => $title,
+            'blocks' => [$item],
+        ];
+    }
+
+    return $steps;
+}
+
