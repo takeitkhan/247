@@ -149,10 +149,12 @@ function mm_spg_get_steps()
     ];
 }
 
-function mm_spg_interest_paths() {
+function mm_spg_interest_paths()
+{
     return [
+
         'communication-business-marketing' => [
-            ['type' => 'video', 'src' => 'https://youtu.be/Lx5kkc5lMFc?...'],
+            ['type' => 'video', 'src' => 'https://youtu.be/Lx5kkc5lMFc'],
             ['type' => 'redirect', 'url' => 'https://personalempowermentteams.me/tools/'],
             ['type' => 'redirect', 'url' => 'https://personalempowermentteams.me/artificial-intelligence/'],
             ['type' => 'redirect', 'url' => 'https://personalempowermentteams.me/empowerment-teams/'],
@@ -161,32 +163,31 @@ function mm_spg_interest_paths() {
 
         'diabetes-health-fitness' => [
             ['type' => 'redirect', 'url' => 'https://personalempowermentteams.me/empowerment-teams/'],
-            ['type' => 'video', 'src' => 'https://youtu.be/IkdAV35bdfk?...'],
+            ['type' => 'video', 'src' => 'https://youtu.be/IkdAV35bdfk'],
             ['type' => 'redirect', 'url' => 'https://personalempowermentteams.me/faqs/'],
         ],
-
-        // more paths...
     ];
 }
 
 
-function mm_spg_build_phase_3_steps($interest_slug) {
-
+function mm_spg_build_phase_3_steps($interest_slug)
+{
     $paths = mm_spg_interest_paths();
+
     if (!isset($paths[$interest_slug])) {
         return [];
     }
 
-    $term = get_term_by('slug', $interest_slug, 'category');
+    $term  = get_term_by('slug', $interest_slug, 'category');
     $title = $term ? 'Your ' . $term->name . ' Path' : 'Your Personalized Path';
 
     $steps = [];
 
-    foreach ($paths[$interest_slug] as $item) {
+    foreach ($paths[$interest_slug] as $block) {
         $steps[] = [
             'phase'  => 3,
             'title'  => $title,
-            'blocks' => [$item],
+            'blocks' => [$block],
         ];
     }
 

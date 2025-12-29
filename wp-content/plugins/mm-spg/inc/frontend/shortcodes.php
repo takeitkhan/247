@@ -8,10 +8,19 @@ function mm_spg_render_shortcode()
         wp_send_json_error('Not logged in');
     }
 
+    check_ajax_referer('mm_spg_state_nonce', 'nonce');
+
     $shortcode = sanitize_text_field($_POST['shortcode'] ?? '');
 
-    if (empty($shortcode)) {
-        wp_send_json_error('Empty shortcode');
+    // 🔒 SECURITY: Allowlist specific shortcodes only
+    $allowed_shortcodes = [
+        '[mm_spg_interest_form]',
+        '[mm_spg_social_links_form]',
+        '[mm_spg_additional_profile_details]',
+    ];
+
+    if (!in_array($shortcode, $allowed_shortcodes, true)) {
+        wp_send_json_error('Invalid or disallowed shortcode.');
     }
 
     ob_start();
@@ -75,7 +84,7 @@ add_shortcode('mm_spg_interest_form', function () {
     ob_start();
 ?>
 
-    <form method="post" class="mm-spg-interest-form">
+    <form method="post" class="mm-spg-interest-form" autocomplete="off">
         <?php wp_nonce_field('mm_spg_interest_save', 'mm_spg_interest_nonce'); ?>
 
         <label class="mb-3 form-label fw-bold">
@@ -195,7 +204,7 @@ add_shortcode('mm_spg_social_links_form', function () {
 
     ob_start();
 ?>
-    <form method="post" class="mm-spg-social-links-form">
+    <form method="post" class="mm-spg-social-links-form" autocomplete="off">
         <?php wp_nonce_field('mm_spg_links_save', 'mm_spg_links_nonce'); ?>
 
         <label class="mb-2 form-label">Social / Business Links</label>
@@ -266,7 +275,7 @@ add_shortcode('mm_spg_additional_profile_details', function () {
 
     ob_start();
 ?>
-    <form class="mm-spg-additional-profile-form" novalidate>
+    <form class="mm-spg-additional-profile-form" novalidate autocomplete="off">
 
         <?php wp_nonce_field('mm_spg_save_additional_profile', 'mm_spg_additional_nonce'); ?>
 

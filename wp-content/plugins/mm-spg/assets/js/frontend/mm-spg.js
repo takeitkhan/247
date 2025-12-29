@@ -1,7 +1,7 @@
+console.log('MM-SPG JS LOADED');
 (function ($) {
-    'use strict';
-
-    let steps = MM_SPG.steps || [];
+    'use strict';    
+    let steps = [];
     let currentStep = 0;
     let avatar = MM_SPG.avatar || '';
 
@@ -16,12 +16,15 @@
 
         if (status === 'active') {
             $('#mm-spg-launcher').addClass('mm-spg-hidden');
-        } else {
-            $('#mm-spg-launcher')
-                .removeClass('mm-spg-hidden')
-                .text(status === 'paused' ? 'Resume Guide' : 'Start Guide');
+            return;
         }
+
+        // paused or stopped
+        $('#mm-spg-launcher')
+            .removeClass('mm-spg-hidden')
+            .text(status === 'paused' ? 'Resume Guide' : 'Start Guide');
     }
+
 
     /* =========================
        RENDER STEP
@@ -115,6 +118,7 @@
 
                     $.post(MM_SPG.ajax_url, {
                         action: 'mm_spg_render_shortcode',
+                        nonce: MM_SPG.nonce,
                         shortcode: block.shortcode
                     }, function (res) {
                         if (res.success) {
@@ -156,6 +160,7 @@
     function saveState(status) {
         $.post(MM_SPG.ajax_url, {
             action: 'mm_spg_set_state',
+            nonce: MM_SPG.nonce,
             status: status,
             step: currentStep
         });
@@ -173,7 +178,8 @@
             $el.addClass('mm-spg-highlighted');
             $('body').addClass('mm-spg-highlighting');
         }
-    }
+    }   
+
 
     /* =========================
        EVENTS
@@ -185,6 +191,7 @@
 
         $.post(MM_SPG.ajax_url, {
             action: 'mm_spg_save_avatar',
+            nonce: MM_SPG.nonce,
             avatar: selected
         }, function (res) {
             if (res.success) {
@@ -209,6 +216,7 @@
 
                 $.post(MM_SPG.ajax_url, {
                     action: 'mm_spg_set_wait',
+                    nonce: MM_SPG.nonce,
                     step: currentStep + 1,
                     wait_until: waitUntil
                 });
@@ -236,10 +244,61 @@
     });
 
     // Launcher click
-    $(document).on('click', '#mm-spg-launcher', function () {
-        saveState('active');
-        showModal();
+    $(document).on('click', '#mm-spg-launcher, .mm-spg-start', function () {
+
+        $.post(MM_SPG.ajax_url, {
+            action: 'mm_spg_set_state',
+            nonce: MM_SPG.nonce,
+            status: 'active',
+            step: 0
+        }, function () {
+
+            // 🔥 ALWAYS reload steps AFTER state change
+            $.post(MM_SPG.ajax_url, {
+                action: 'mm_spg_get_steps'
+            }, function (res) {
+
+                if (!res.success) {
+                    console.error('Failed to load steps');
+                    return;
+                }
+
+                steps = res.data.steps;
+                currentStep = 0;
+
+                showModal();
+                renderStep();
+            });
+        });
     });
+
+    function loadGuideState() {
+        $.post(MM_SPG.ajax_url, {
+            action: 'mm_spg_get_state'
+        }, function (res) {
+
+            if (!res.success) return;
+
+            guideState = res.data;
+
+            if (guideState.status === 'active') {
+
+                // 🔥 load steps dynamically
+                $.post(MM_SPG.ajax_url, {
+                    action: 'mm_spg_get_steps'
+                }, function (res2) {
+
+                    if (!res2.success) return;
+
+                    steps = res2.data.steps;
+                    currentStep = guideState.step || 0;
+
+                    showModal();
+                    renderStep();
+                });
+            }
+        });
+    }
 
 
     $(document).on('change', '.mm-spg-interest-form input[type=checkbox]', function () {
