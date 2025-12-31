@@ -1,7 +1,7 @@
-console.log('MM-SPG JS LOADED');
 (function ($) {
-    'use strict';    
-    let steps = [];
+    'use strict';
+
+    let steps = MM_SPG.steps || [];
     let currentStep = 0;
     let avatar = MM_SPG.avatar || '';
 
@@ -16,15 +16,12 @@ console.log('MM-SPG JS LOADED');
 
         if (status === 'active') {
             $('#mm-spg-launcher').addClass('mm-spg-hidden');
-            return;
+        } else {
+            $('#mm-spg-launcher')
+                .removeClass('mm-spg-hidden')
+                .text(status === 'paused' ? 'Resume Guide' : 'Start Guide');
         }
-
-        // paused or stopped
-        $('#mm-spg-launcher')
-            .removeClass('mm-spg-hidden')
-            .text(status === 'paused' ? 'Resume Guide' : 'Start Guide');
     }
-
 
     /* =========================
        RENDER STEP
@@ -53,12 +50,25 @@ console.log('MM-SPG JS LOADED');
         let step = steps[currentStep];
 
         if (!step) {
+            // Phase 2 just ended → auto start Phase 3
+            if (steps[currentStep - 1]?.phase === 2) {
+
+                $.post(MM_SPG.ajax_url, {
+                    action: 'mm_spg_prepare_phase_3'
+                }, function () {
+                    window.location.reload();
+                });
+
+                return;
+            }
+
             hideModal();
             saveState('stopped');
             updateLauncher('stopped');
-            clearHighlight();
             return;
         }
+
+
 
         $('.mm-spg-title').text(step.title || '');
         if (step.blocks) {
@@ -89,6 +99,14 @@ console.log('MM-SPG JS LOADED');
         }
 
         $('.mm-spg-next').text(step.redirect ? 'Go' : 'Next');
+
+        /** Phase 3 */
+
+        if (step.phase === 3) {
+            $('.mm-spg-pause').hide();
+        } else {
+            $('.mm-spg-pause').show();
+        }
     }
 
 
@@ -118,7 +136,6 @@ console.log('MM-SPG JS LOADED');
 
                     $.post(MM_SPG.ajax_url, {
                         action: 'mm_spg_render_shortcode',
-                        nonce: MM_SPG.nonce,
                         shortcode: block.shortcode
                     }, function (res) {
                         if (res.success) {
@@ -160,7 +177,6 @@ console.log('MM-SPG JS LOADED');
     function saveState(status) {
         $.post(MM_SPG.ajax_url, {
             action: 'mm_spg_set_state',
-            nonce: MM_SPG.nonce,
             status: status,
             step: currentStep
         });
@@ -178,7 +194,21 @@ console.log('MM-SPG JS LOADED');
             $el.addClass('mm-spg-highlighted');
             $('body').addClass('mm-spg-highlighting');
         }
-    }   
+    }
+
+    function findPhaseStart(phase) {
+        return steps.findIndex(step => step.phase === phase);
+    }
+
+    function getPhaseStartIndex(phase) {
+        for (let i = 0; i < steps.length; i++) {
+            if (steps[i].phase === phase) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 
 
     /* =========================
@@ -191,7 +221,6 @@ console.log('MM-SPG JS LOADED');
 
         $.post(MM_SPG.ajax_url, {
             action: 'mm_spg_save_avatar',
-            nonce: MM_SPG.nonce,
             avatar: selected
         }, function (res) {
             if (res.success) {
@@ -208,32 +237,53 @@ console.log('MM-SPG JS LOADED');
         let step = steps[currentStep];
         clearHighlight();
 
-        if (step && step.redirect) {
-
-            // If step requires reading time
-            if (step.min_read_time) {
-                const waitUntil = Math.floor(Date.now() / 1000) + step.min_read_time;
-
-                $.post(MM_SPG.ajax_url, {
-                    action: 'mm_spg_set_wait',
-                    nonce: MM_SPG.nonce,
-                    step: currentStep + 1,
-                    wait_until: waitUntil
-                });
-            } else {
-                currentStep++;
+        /* =========================
+           PHASE 2 → PHASE 3 (AUTO, NO PAUSE)
+        ========================= */
+        if (
+            step.phase === 2 &&
+            MM_SPG.phase_3_start_index !== null &&
+            currentStep === MM_SPG.phase_3_start_index - 1
+        ) {
+            $.post(MM_SPG.ajax_url, {
+                action: 'mm_spg_complete_phase_2'
+            }, function () {
+                currentStep = MM_SPG.phase_3_start_index;
                 saveState('active');
-            }
+                renderStep();
+            });
+            return;
+        }
 
+        /* =========================
+           PHASE 3 COMPLETION
+        ========================= */
+        if (step.phase === 3 && currentStep >= steps.length - 1) {
+            saveState('stopped');
+            hideModal();
+            updateLauncher('stopped');
+            return;
+        }
+
+        /* =========================
+           REDIRECT
+        ========================= */
+        if (step.redirect) {
             window.location.href = step.redirect;
             return;
         }
 
-
+        /* =========================
+           NORMAL STEP
+        ========================= */
         currentStep++;
         saveState('active');
         renderStep();
     });
+
+
+
+
 
     // Pause / Close
     $(document).on('click', '.mm-spg-pause, .mm-spg-close', function () {
@@ -244,61 +294,19 @@ console.log('MM-SPG JS LOADED');
     });
 
     // Launcher click
-    $(document).on('click', '#mm-spg-launcher, .mm-spg-start', function () {
+    $(document).on('click', '#mm-spg-launcher', function () {
 
-        $.post(MM_SPG.ajax_url, {
-            action: 'mm_spg_set_state',
-            nonce: MM_SPG.nonce,
-            status: 'active',
-            step: 0
-        }, function () {
+        // If Phase 3 exists, always start Phase 3
+        if (MM_SPG.phase_3_start_index !== null) {
+            currentStep = MM_SPG.phase_3_start_index;
+        } else {
+            currentStep = 0; // Phase 2
+        }
 
-            // 🔥 ALWAYS reload steps AFTER state change
-            $.post(MM_SPG.ajax_url, {
-                action: 'mm_spg_get_steps'
-            }, function (res) {
-
-                if (!res.success) {
-                    console.error('Failed to load steps');
-                    return;
-                }
-
-                steps = res.data.steps;
-                currentStep = 0;
-
-                showModal();
-                renderStep();
-            });
-        });
+        saveState('active');
+        showModal();
     });
 
-    function loadGuideState() {
-        $.post(MM_SPG.ajax_url, {
-            action: 'mm_spg_get_state'
-        }, function (res) {
-
-            if (!res.success) return;
-
-            guideState = res.data;
-
-            if (guideState.status === 'active') {
-
-                // 🔥 load steps dynamically
-                $.post(MM_SPG.ajax_url, {
-                    action: 'mm_spg_get_steps'
-                }, function (res2) {
-
-                    if (!res2.success) return;
-
-                    steps = res2.data.steps;
-                    currentStep = guideState.step || 0;
-
-                    showModal();
-                    renderStep();
-                });
-            }
-        });
-    }
 
 
     $(document).on('change', '.mm-spg-interest-form input[type=checkbox]', function () {
@@ -441,7 +449,7 @@ console.log('MM-SPG JS LOADED');
                 $(this).clone().children().remove().end().text().trim()
             );
         });
-        $form.find('.mm-spg-keywords-hidden').val(keywords.join(', '));
+        $form.find('#keywords-hidden').val(keywords.join(', '));
 
         // Hashtags
         const hashtags = [];
@@ -450,7 +458,7 @@ console.log('MM-SPG JS LOADED');
                 $(this).clone().children().remove().end().text().trim()
             );
         });
-        $form.find('.mm-spg-hashtags-hidden').val(hashtags.join(', '));
+        $form.find('#hashtags-hidden').val(hashtags.join(', '));
 
         console.log('KEYWORDS:', $form.find('#keywords-hidden').val());
         console.log('HASHTAGS:', $form.find('#hashtags-hidden').val());
@@ -460,8 +468,8 @@ console.log('MM-SPG JS LOADED');
             nonce: $form.find('[name="mm_spg_additional_nonce"]').val(),
             designation: $form.find('[name="designation"]').val(),
             about_me_short: $form.find('[name="about_me_short"]').val(),
-            user_keywords: $form.find('.mm-spg-keywords-hidden').val(),
-            user_hashtags: $form.find('.mm-spg-hashtags-hidden').val()
+            user_keywords: $form.find('#keywords-hidden').val(),
+            user_hashtags: $form.find('#hashtags-hidden').val()
         }, function (res) {
             $form.find('.alert').remove();
 
@@ -482,7 +490,9 @@ console.log('MM-SPG JS LOADED');
        INITIAL LOAD
     ========================= */
     $(document).ready(function () {
-        $.post(MM_SPG.ajax_url, { action: 'mm_spg_get_state' }, function (res) {
+        $.post(MM_SPG.ajax_url, {
+            action: 'mm_spg_get_state'
+        }, function (res) {
             if (!res.success) return;
 
             currentStep = res.data.step || 0;

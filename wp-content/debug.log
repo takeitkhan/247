@@ -1165,3 +1165,80 @@ Stack trace:
 [28-Dec-2025 16:01:37 UTC] Automatic updates complete.
 [29-Dec-2025 03:38:33 UTC] Automatic updates starting...
 [29-Dec-2025 03:38:36 UTC] Automatic updates complete.
+[29-Dec-2025 11:32:54 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_wp_theme_files_patterns-ea29836a576169022959c834a1adfa2a' made by require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option
+[29-Dec-2025 11:32:54 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_timeout_wp_theme_files_patterns-ea29836a576169022959c834a1adfa2a' made by require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option
+[29-Dec-2025 13:25:40 UTC] Automatic updates starting...
+[29-Dec-2025 13:25:43 UTC] Automatic updates complete.
+[29-Dec-2025 17:47:33 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mm_spg_get_steps() in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php:69
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(341): mm_spg_enqueue_assets('')
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#2 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#3 D:\oldwindows\laragon\www\pet\wp-includes\script-loader.php(2311): do_action('wp_enqueue_scri...')
+#4 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(341): wp_enqueue_scripts('')
+#5 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#6 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#7 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(3197): do_action('wp_head')
+#8 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\header-portal.php(150): wp_head()
+#9 D:\oldwindows\laragon\www\pet\wp-includes\template.php(814): require_once('D:\\oldwindows\\l...')
+#10 D:\oldwindows\laragon\www\pet\wp-includes\template.php(749): load_template('D:\\oldwindows\\l...', true, Array)
+#11 D:\oldwindows\laragon\www\pet\wp-includes\general-template.php(48): locate_template(Array, true, true, Array)
+#12 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\functions.php(72): get_header('portal')
+#13 D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\index.php(1): get_header_based_on_login()
+#14 D:\oldwindows\laragon\www\pet\wp-includes\template-loader.php(125): include('D:\\oldwindows\\l...')
+#15 D:\oldwindows\laragon\www\pet\wp-blog-header.php(19): require_once('D:\\oldwindows\\l...')
+#16 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#17 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 69
+[29-Dec-2025 18:08:11 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_timeout_wp_theme_files_patterns-ea29836a576169022959c834a1adfa2a' made by require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option
+[31-Dec-2025 03:24:28 UTC] Automatic updates starting...
+[31-Dec-2025 03:24:31 UTC] Automatic updates complete.
+[31-Dec-2025 03:36:49 UTC] PHP Warning:  require_once(D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg/backend/admin-enqueue.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 141
+[31-Dec-2025 03:36:49 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg/backend/admin-enqueue.php' (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php:141
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(560): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(109): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-admin\admin-ajax.php(22): require_once('D:\\oldwindows\\l...')
+#4 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 141
+[31-Dec-2025 03:36:50 UTC] PHP Warning:  require_once(D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg/backend/admin-enqueue.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 141
+[31-Dec-2025 03:36:50 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg/backend/admin-enqueue.php' (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php:141
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(560): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(109): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-admin\admin.php(35): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\wp-admin\post-new.php(10): require_once('D:\\oldwindows\\l...')
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 141
+[31-Dec-2025 03:36:55 UTC] PHP Warning:  require_once(D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg/backend/admin-enqueue.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 141
+[31-Dec-2025 03:36:55 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg/backend/admin-enqueue.php' (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php:141
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(560): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(109): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 141
+[31-Dec-2025 03:36:57 UTC] PHP Warning:  require_once(D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg/backend/admin-enqueue.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 141
+[31-Dec-2025 03:36:57 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg/backend/admin-enqueue.php' (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php:141
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(560): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(109): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-admin\admin.php(35): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\wp-admin\post-new.php(10): require_once('D:\\oldwindows\\l...')
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 141
+[31-Dec-2025 03:36:58 UTC] PHP Warning:  require_once(D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg/backend/admin-enqueue.php): Failed to open stream: No such file or directory in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 141
+[31-Dec-2025 03:36:58 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg/backend/admin-enqueue.php' (include_path='D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/;D:\oldwindows\laragon\www\pet\wp-content\plugins\kirki/core;.;D:/oldwindows/laragon/etc/php/pear') in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php:141
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-settings.php(560): include_once()
+#1 D:\oldwindows\laragon\www\pet\wp-config.php(109): require_once('D:\\oldwindows\\l...')
+#2 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#3 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#5 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php on line 141

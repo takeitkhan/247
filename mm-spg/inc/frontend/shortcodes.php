@@ -8,10 +8,19 @@ function mm_spg_render_shortcode()
         wp_send_json_error('Not logged in');
     }
 
+    check_ajax_referer('mm_spg_state_nonce', 'nonce');
+
     $shortcode = sanitize_text_field($_POST['shortcode'] ?? '');
 
-    if (empty($shortcode)) {
-        wp_send_json_error('Empty shortcode');
+    // 🔒 SECURITY: Allowlist specific shortcodes only
+    $allowed_shortcodes = [
+        '[mm_spg_interest_form]',
+        '[mm_spg_social_links_form]',
+        '[mm_spg_additional_profile_details]',
+    ];
+
+    if (!in_array($shortcode, $allowed_shortcodes, true)) {
+        wp_send_json_error('Invalid or disallowed shortcode.');
     }
 
     ob_start();
@@ -75,7 +84,7 @@ add_shortcode('mm_spg_interest_form', function () {
     ob_start();
 ?>
 
-    <form method="post" class="mm-spg-interest-form">
+    <form method="post" class="mm-spg-interest-form" autocomplete="off">
         <?php wp_nonce_field('mm_spg_interest_save', 'mm_spg_interest_nonce'); ?>
 
         <label class="mb-3 form-label fw-bold">
@@ -158,6 +167,7 @@ function mm_spg_save_interests()
         }
     }
 
+    // Ensure unique priorities
     if (count($priorities) !== count(array_unique($priorities))) {
         wp_send_json_error('Duplicate priorities are not allowed.');
     }
@@ -165,17 +175,11 @@ function mm_spg_save_interests()
     update_user_meta($user_id, 'user_categories', $selected);
     update_user_meta($user_id, 'user_categories_priority', $priorities);
 
+    // Mark step completed (important for guide)
     update_user_meta($user_id, 'mm_spg_interest_completed', 1);
-
-    // 🔑 force Phase 3 rebuild
-    delete_user_meta($user_id, 'mm_spg_phase_3_started');
-    update_user_meta($user_id, 'mm_spg_phase_2_completed', 1);
-    update_user_meta($user_id, 'mm_spg_step', 0);
-    update_user_meta($user_id, 'mm_spg_status', 'active');
 
     wp_send_json_success('Interests saved successfully.');
 }
-
 
 
 add_shortcode('mm_spg_social_links_form', function () {
@@ -200,7 +204,7 @@ add_shortcode('mm_spg_social_links_form', function () {
 
     ob_start();
 ?>
-    <form method="post" class="mm-spg-social-links-form">
+    <form method="post" class="mm-spg-social-links-form" autocomplete="off">
         <?php wp_nonce_field('mm_spg_links_save', 'mm_spg_links_nonce'); ?>
 
         <label class="mb-2 form-label">Social / Business Links</label>
@@ -271,7 +275,7 @@ add_shortcode('mm_spg_additional_profile_details', function () {
 
     ob_start();
 ?>
-    <form class="mm-spg-additional-profile-form" novalidate>
+    <form class="mm-spg-additional-profile-form" novalidate autocomplete="off">
 
         <?php wp_nonce_field('mm_spg_save_additional_profile', 'mm_spg_additional_nonce'); ?>
 
@@ -320,7 +324,7 @@ add_shortcode('mm_spg_additional_profile_details', function () {
                 <input type="text" id="keywordInput" class="flex-grow-1 border-0">
             </div>
 
-            <input type="hidden" name="user_keywords" id="keywords-hidden">
+            <input type="hidden" name="user_keywords" class="mm-spg-keywords-hidden">
         </div>
 
         <!-- Hashtags -->
@@ -341,7 +345,7 @@ add_shortcode('mm_spg_additional_profile_details', function () {
                 <input type="text" id="hashtagInput" class="flex-grow-1 border-0">
             </div>
 
-            <input type="hidden" name="user_hashtags" id="hashtags-hidden">
+            <input type="hidden" name="user_hashtags" class="mm-spg-hashtags-hidden">
         </div>
 
 
@@ -364,24 +368,18 @@ add_action('wp_ajax_mm_spg_save_additional_profile', function () {
 
     $user_id = get_current_user_id();
 
-    update_user_meta(
-        $user_id,
-        'designation',
+    update_user_meta($user_id, 'designation',
         sanitize_text_field($_POST['designation'] ?? '')
     );
 
     $about = sanitize_text_field($_POST['about_me_short'] ?? '');
     update_user_meta($user_id, 'digital_card_about', mb_substr($about, 0, 150));
 
-    update_user_meta(
-        $user_id,
-        'user_keywords',
+    update_user_meta($user_id, 'user_keywords',
         sanitize_text_field($_POST['user_keywords'] ?? '')
     );
 
-    update_user_meta(
-        $user_id,
-        'user_hashtags',
+    update_user_meta($user_id, 'user_hashtags',
         sanitize_text_field($_POST['user_hashtags'] ?? '')
     );
 

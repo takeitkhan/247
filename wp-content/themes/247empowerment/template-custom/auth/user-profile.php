@@ -26,6 +26,23 @@ else:
                     <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
                 </div>
                 <div class="mb-4 col-lg-6">
+                    <?php
+                    $steps = mm_spg_get_steps();
+
+                    echo '<pre style="background:#111;color:#9f9;padding:10px;">';
+                    echo "mm_spg_get_steps() OUTPUT\n";
+                    print_r($steps);
+                    echo '</pre>';
+
+                    // $phase3 = mm_spg_build_phase_3_steps('communications-business-marketing');
+
+                    // echo '<pre style="background:#111;color:#0ff;padding:10px;">';
+                    // echo "PHASE 3 — communications-business-marketing\n";
+                    // print_r($phase3);
+                    // echo '</pre>';
+                    ?>
+
+
                     <?php get_template_part('template-custom/auth/profile-parts/create-post', null, ['profile' => $profile]); ?>
                     <?php get_template_part('template-custom/auth/profile-parts/posts', null, ['profile' => $profile]); ?>
                 </div>
@@ -93,23 +110,23 @@ else:
             formData.append('nonce', '<?php echo wp_create_nonce("update_profile_photo_nonce"); ?>');
 
             fetch(ajaxurl, {
-                method: 'POST',
-                body: formData,
-            })
-            .then(res => res.json())
-            .then(response => {
-                if (response.success) {
-                    const previewElement = document.querySelector(previewSelector);
-                    if (previewElement) {
-                        previewElement.src = response.data.url;
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(res => res.json())
+                .then(response => {
+                    if (response.success) {
+                        const previewElement = document.querySelector(previewSelector);
+                        if (previewElement) {
+                            previewElement.src = response.data.url;
+                        }
+                        // Show notification and modal from the AJAX response
+                        showGamificationNotification(response.data.notification);
+                    } else {
+                        alert('Upload failed: ' + (response.data.message || 'Unknown error'));
                     }
-                    // Show notification and modal from the AJAX response
-                    showGamificationNotification(response.data.notification);
-                } else {
-                    alert('Upload failed: ' + (response.data.message || 'Unknown error'));
-                }
-            })
-            .catch(err => console.error('Error:', err));
+                })
+                .catch(err => console.error('Error:', err));
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -149,5 +166,5 @@ else:
     </script>
 
     <?php get_footer_based_on_login(); ?>
-    
+
 <?php endif; ?>
