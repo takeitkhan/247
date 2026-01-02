@@ -22,7 +22,8 @@
     max-width: 550px;
     margin: 10vh auto;
     background: #fff;
-    border-radius: 20px;    
+    border-radius: 10px;
+    padding: 15px;
     z-index: 2;
 }
 
@@ -51,7 +52,6 @@
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
-    padding: 10px 30px;
 }
 
 .mm-spg-btn {
@@ -130,39 +130,35 @@ body.mm-spg-highlighting {
 
 /** NEW STYLES ADDED BELOW **/
 .welcome-header {
-    position: relative;
-    height: 150px;
-    background: linear-gradient(135deg, #f3d9ff 0%, #e2e7ff 100%);
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    overflow: hidden;
-    z-index: -1;
+  position: relative;
+  height: 160px;
+  background: linear-gradient(135deg, #f3d9ff 0%, #e2e7ff 100%);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  overflow: hidden;
 }
+
 .welcome-header h1 {
-    text-align: center;
-    padding: 40px 50px;
-    margin: 0;
-    font-size: 25px;
-    font-weight: 600;
+  text-align: center;
+  padding-top: 40px;
+  margin: 0;
+  font-size: 32px;
+  font-weight: 600;
 }
 
 /* Wave */
 .welcome-header::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -95px;
-    width: 100%;
-    height: 200px;
-    background: #fff;
-
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 200' preserveAspectRatio='none'%3E%3Cpath d='M0,35 C125,80 250,110 375,95 C450,85 500,70 625,80 C700,90 775,110 850,95 C900,85 950,65 1000,75 L1000,200 L0,200 Z'/%3E%3C/svg%3E")
-          no-repeat bottom / 100% 100%;
-
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 200' preserveAspectRatio='none'%3E%3Cpath d='M0,35 C125,80 250,110 375,95 C450,85 500,70 625,80 C700,90 775,110 850,95 C900,85 950,65 1000,75 L1000,200 L0,200 Z'/%3E%3C/svg%3E")
-          no-repeat bottom / 100% 100%;
+  content: "";
+  position: absolute;
+  left: -10%;
+  bottom: -60px;
+  width: 120%;
+  height: 120px;
+  background: white;
+  border-radius: 50%;
 }
-
-.mm-spg-body {
-    padding: 20px 30px;   
+.welcome-header {
+  height: 160px;
+  background: linear-gradient(135deg, #f3d9ff, #e2e7ff);
+  clip-path: ellipse(120% 80% at 50% 0%);
 }

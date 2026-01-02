@@ -1246,3 +1246,36 @@ Stack trace:
 [01-Jan-2026 06:51:02 UTC] Automatic updates complete.
 [01-Jan-2026 13:56:36 UTC] Automatic updates starting...
 [01-Jan-2026 13:56:39 UTC] Automatic updates complete.
+[02-Jan-2026 09:25:54 UTC] PHP Fatal error:  Cannot redeclare mm_spg_render_modal() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php:150) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\modal.php on line 6
+[02-Jan-2026 10:27:43 UTC] PHP Fatal error:  Uncaught TypeError: call_user_func_array(): Argument #1 ($callback) must be a valid callback, function "mm_spg_init" not found or invalid function name in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php:341
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#1 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#2 D:\oldwindows\laragon\www\pet\wp-settings.php(593): do_action('plugins_loaded')
+#3 D:\oldwindows\laragon\www\pet\wp-config.php(109): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#7 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php on line 341
+[02-Jan-2026 10:27:44 UTC] PHP Fatal error:  Uncaught TypeError: call_user_func_array(): Argument #1 ($callback) must be a valid callback, function "mm_spg_init" not found or invalid function name in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php:341
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#1 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#2 D:\oldwindows\laragon\www\pet\wp-settings.php(593): do_action('plugins_loaded')
+#3 D:\oldwindows\laragon\www\pet\wp-config.php(109): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#5 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#7 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php on line 341
+[02-Jan-2026 10:27:46 UTC] PHP Fatal error:  Uncaught TypeError: call_user_func_array(): Argument #1 ($callback) must be a valid callback, function "mm_spg_init" not found or invalid function name in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php:341
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#1 D:\oldwindows\laragon\www\pet\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#2 D:\oldwindows\laragon\www\pet\wp-settings.php(593): do_action('plugins_loaded')
+#3 D:\oldwindows\laragon\www\pet\wp-config.php(109): require_once('D:\\oldwindows\\l...')
+#4 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#5 D:\oldwindows\laragon\www\pet\wp-admin\admin-ajax.php(22): require_once('D:\\oldwindows\\l...')
+#6 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php on line 341

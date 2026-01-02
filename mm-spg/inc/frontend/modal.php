@@ -15,20 +15,22 @@ function mm_spg_render_modal()
         <div class="mm-spg-dialog">
             <button class="mm-spg-close" aria-label="Close guide">&times;</button>
 
+            <!-- Avatar goes here -->
+            <div class="mm-spg-avatar"></div>
 
             <!-- Title -->
-            <div class="welcome-header">
-                <h1 class="mm-spg-title"></h1>
+            <div class="welcome-header mm-spg-title">
+                <h1>Welcome!</h1>
             </div>
 
-            <div class="mm-spg-avatar"></div>
+
             <!-- Dynamic body -->
             <div class="mm-spg-body"></div>
 
             <!-- Actions -->
-            <div class="mm-spg-actions">                
-                <button class="mm-spg-btn mm-spg-pause">Pause</button>
+            <div class="mm-spg-actions">
                 <button class="mm-spg-btn mm-spg-next">Next</button>
+                <button class="mm-spg-btn mm-spg-pause">Pause</button>
             </div>
         </div>
     </div>

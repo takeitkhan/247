@@ -126,9 +126,8 @@ function mm_spg_get_user_avatar()
         return '';
     }
 
-    return get_user_meta(get_current_user_id(), 'mm_spg_avatar', true) ?: '';
+    return get_user_meta(get_current_user_id(), 'mm_spg_avatar', true);
 }
-
 
 add_action('wp_ajax_mm_spg_complete_phase_2', function () {
 

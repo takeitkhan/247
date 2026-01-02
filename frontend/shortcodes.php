@@ -136,7 +136,7 @@ function mm_spg_save_interests()
         wp_send_json_error('Not logged in');
     }
 
-    check_ajax_referer('mm_spg_interest_save', 'mm_spg_interest_nonce');
+    check_ajax_referer('mm_spg_interest_save', 'nonce');
 
     $user_id = get_current_user_id();
 
@@ -360,7 +360,7 @@ add_action('wp_ajax_mm_spg_save_additional_profile', function () {
         wp_send_json_error('Not logged in');
     }
 
-    check_ajax_referer('mm_spg_save_additional_profile', 'mm_spg_additional_nonce');
+    check_ajax_referer('mm_spg_save_additional_profile', 'nonce');
 
     $user_id = get_current_user_id();
 

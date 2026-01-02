@@ -54,8 +54,7 @@
             if (steps[currentStep - 1]?.phase === 2) {
 
                 $.post(MM_SPG.ajax_url, {
-                    action: 'mm_spg_prepare_phase_3',
-                    nonce: MM_SPG.nonce
+                    action: 'mm_spg_prepare_phase_3'
                 }, function () {
                     window.location.reload();
                 });
@@ -137,7 +136,6 @@
 
                     $.post(MM_SPG.ajax_url, {
                         action: 'mm_spg_render_shortcode',
-                        nonce: MM_SPG.nonce,
                         shortcode: block.shortcode
                     }, function (res) {
                         if (res.success) {
@@ -163,10 +161,6 @@
     /* =========================
        MODAL
     ========================= */
-    function openModal() {
-        $('#mm-spg-modal').removeClass('mm-spg-hidden');
-    }
-
     function showModal() {
         $('#mm-spg-modal').removeClass('mm-spg-hidden');
         updateLauncher('active');
@@ -183,7 +177,6 @@
     function saveState(status) {
         $.post(MM_SPG.ajax_url, {
             action: 'mm_spg_set_state',
-            nonce: MM_SPG.nonce,
             status: status,
             step: currentStep
         });
@@ -228,7 +221,6 @@
 
         $.post(MM_SPG.ajax_url, {
             action: 'mm_spg_save_avatar',
-            nonce: MM_SPG.nonce,
             avatar: selected
         }, function (res) {
             if (res.success) {
@@ -254,8 +246,7 @@
             currentStep === MM_SPG.phase_3_start_index - 1
         ) {
             $.post(MM_SPG.ajax_url, {
-                action: 'mm_spg_complete_phase_2',
-                nonce: MM_SPG.nonce
+                action: 'mm_spg_complete_phase_2'
             }, function () {
                 currentStep = MM_SPG.phase_3_start_index;
                 saveState('active');
@@ -305,18 +296,8 @@
     // Launcher click
     $(document).on('click', '#mm-spg-launcher', function () {
 
-        // ✅ Avatar must exist
-        if (!avatar) {
-            currentStep = 0;
-            showModal();
-            return;
-        }
-
-        // ✅ Only jump to Phase 3 if Phase 2 completed
-        if (
-            MM_SPG.phase_3_start_index !== null &&
-            MM_SPG.phase_3_start_index < steps.length
-        ) {
+        // If Phase 3 exists, always start Phase 3
+        if (MM_SPG.phase_3_start_index !== null) {
             currentStep = MM_SPG.phase_3_start_index;
         } else {
             currentStep = 0; // Phase 2
@@ -325,7 +306,6 @@
         saveState('active');
         showModal();
     });
-
 
 
 
@@ -511,8 +491,7 @@
     ========================= */
     $(document).ready(function () {
         $.post(MM_SPG.ajax_url, {
-            action: 'mm_spg_get_state',
-            nonce: MM_SPG.nonce
+            action: 'mm_spg_get_state'
         }, function (res) {
             if (!res.success) return;
 
