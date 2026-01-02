@@ -121,6 +121,13 @@
         }
     }
 
+    function nl2br(str) {
+        if (!str) return '';
+        return str
+            .replace(/\r\n/g, '\n')
+            .replace(/\n{2,}/g, '</p><p>')
+            .replace(/\n/g, '<br>');
+    }
 
     function renderBlocks(blocks) {
         let html = '';
@@ -130,15 +137,23 @@
             switch (block.type) {
 
                 case 'text':
-                    html += `<div class="mm-spg-text">${block.content}</div>`;
+                    html += `
+                    <div class="mm-spg-text">
+                        <p>${nl2br(block.content)}</p>
+                    </div>
+                `;
+                    break;
+
+                case 'html':
+                    html += `<div class="mm-spg-html">${block.content}</div>`;
                     break;
 
                 case 'video':
                     html += `
-                        <div class="mm-spg-video">
-                            <iframe src="${block.src}" frameborder="0" allowfullscreen></iframe>
-                        </div>
-                    `;
+                    <div class="mm-spg-video">
+                        <iframe src="${block.src}" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                `;
                     break;
 
                 case 'shortcode':
@@ -158,15 +173,12 @@
                         }
                     });
                     break;
-
-                case 'html':
-                    html += block.content;
-                    break;
             }
         });
 
         return html;
     }
+
 
 
 

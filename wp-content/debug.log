@@ -1365,3 +1365,4 @@ Stack trace:
 [02-Jan-2026 14:24:06 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php on line 127
 [02-Jan-2026 14:24:09 UTC] Automatic updates starting...
 [02-Jan-2026 14:24:13 UTC] Automatic updates complete.
+[02-Jan-2026 15:55:36 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_wp_theme_files_patterns-ea29836a576169022959c834a1adfa2a' made by require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option

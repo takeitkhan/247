@@ -16,7 +16,9 @@ function spg_step_blocks_cb($post)
 {
     $blocks = get_post_meta($post->ID, '_spg_blocks', true);
     $blocks = is_array($blocks) ? $blocks : [];
-    ?>
+    wp_nonce_field('spg_step_blocks_save', 'spg_step_blocks_nonce');
+
+?>
 
     <div id="spg-blocks">
         <?php foreach ($blocks as $i => $block): ?>
@@ -30,7 +32,7 @@ function spg_step_blocks_cb($post)
                     <div class="spg-field">
                         <label>Block Type</label>
                         <select name="spg_blocks[<?= $i ?>][type]">
-                            <?php foreach (['text','video','button','shortcode','redirect'] as $type): ?>
+                            <?php foreach (['text', 'video', 'button', 'shortcode', 'redirect'] as $type): ?>
                                 <option value="<?= $type ?>" <?= selected($block['type'] ?? '', $type); ?>>
                                     <?= ucfirst($type) ?>
                                 </option>
@@ -43,10 +45,32 @@ function spg_step_blocks_cb($post)
                         <input type="text" name="spg_blocks[<?= $i ?>][label]" value="<?= esc_attr($block['label'] ?? '') ?>">
                     </div>
 
-                    <div class="spg-field spg-full">
+                    <!-- <div class="spg-field spg-full">
                         <label>Text Content</label>
                         <textarea name="spg_blocks[<?= $i ?>][content]"><?= esc_textarea($block['content'] ?? '') ?></textarea>
+                    </div> -->
+
+                    <div class="spg-field spg-full">
+                        <label>Text Content</label>
+
+                        <?php
+                        $editor_id = 'spg_blocks_' . $i . '_content';
+
+                        wp_editor(
+                            $block['content'] ?? '',
+                            $editor_id,
+                            [
+                                'textarea_name' => "spg_blocks[$i][content]",
+                                'media_buttons' => false,
+                                'teeny'         => true,
+                                'textarea_rows' => 6,
+                                'editor_class'  => 'spg-wysiwyg',
+                                'quicktags'     => true,
+                            ]
+                        );
+                        ?>
                     </div>
+
 
                     <div class="spg-field">
                         <label>Video Source</label>
@@ -71,5 +95,5 @@ function spg_step_blocks_cb($post)
         + Add Block
     </button>
 
-    <?php
+<?php
 }

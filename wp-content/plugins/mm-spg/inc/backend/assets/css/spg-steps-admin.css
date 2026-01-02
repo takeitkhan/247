@@ -42,6 +42,11 @@
     grid-column: span 2;
 }
 
+.spg-wysiwyg iframe {
+    min-height: 120px;
+}
+
+
 .spg-remove {
     color: #b32d2e;
     cursor: pointer;
