@@ -10,9 +10,3 @@ add_action('init', function () {
         'supports' => ['title', 'page-attributes'],
     ]);
 });
-
-add_action('admin_enqueue_scripts', function ($hook) {
-    if ($hook !== 'post.php' && $hook !== 'post-new.php') return;
-
-    wp_enqueue_script('jquery-ui-sortable');
-});

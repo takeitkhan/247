@@ -18,8 +18,11 @@ function mm_spg_render_modal()
             <!-- Avatar goes here -->
             <div class="mm-spg-avatar"></div>
 
-            <!-- Title -->
-            <h3 class="mm-spg-title"></h3>
+            <!-- Title -->            
+            <div class="welcome-header mm-spg-title">
+                <h1>Welcome!</h1>
+            </div>
+
 
             <!-- Dynamic body -->
             <div class="mm-spg-body"></div>
@@ -32,7 +35,7 @@ function mm_spg_render_modal()
         </div>
     </div>
 
-    
+
     <button id="mm-spg-launcher" class="mm-spg-hidden mm-spg-launcher">
         Guide
     </button>

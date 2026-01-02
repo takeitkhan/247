@@ -12,9 +12,8 @@ function mm_spg_get_steps()
         'posts_per_page' => -1,
         'post_status'    => 'publish',
 
-        // 🔑 ordering
-        'orderby'        => 'menu_order ID',
-        'order'          => 'ASC',
+        // 🔥 enable custom ordering
+        'mm_spg_ordering' => true,
 
         'meta_query'     => [
             [
@@ -56,8 +55,10 @@ function mm_spg_build_phase_3_steps($interest_slug)
         'post_type'      => 'spg_step',
         'posts_per_page' => -1,
         'post_status'    => 'publish',
-        'orderby'        => 'menu_order',
-        'order'          => 'ASC',
+
+        // 🔥 enable same ordering
+        'mm_spg_ordering' => true,
+
         'meta_query'     => [
             [
                 'key'   => '_spg_phase',
@@ -88,3 +89,39 @@ function mm_spg_build_phase_3_steps($interest_slug)
 
     return $steps;
 }
+
+
+
+function mm_spg_apply_phase_interest_ordering($clauses, $query) {
+
+    // Only affect SPG queries
+    if (empty($query->get('mm_spg_ordering'))) {
+        return $clauses;
+    }
+
+    global $wpdb;
+
+    // Join phase meta
+    $clauses['join'] .= "
+        LEFT JOIN {$wpdb->postmeta} AS phase_meta
+            ON ({$wpdb->posts}.ID = phase_meta.post_id
+            AND phase_meta.meta_key = '_spg_phase')
+    ";
+
+    // Join interest meta
+    $clauses['join'] .= "
+        LEFT JOIN {$wpdb->postmeta} AS interest_meta
+            ON ({$wpdb->posts}.ID = interest_meta.post_id
+            AND interest_meta.meta_key = '_spg_interest')
+    ";
+
+    // Phase → Interest → menu_order
+    $clauses['orderby'] = "
+        CAST(phase_meta.meta_value AS UNSIGNED) ASC,
+        interest_meta.meta_value ASC,
+        {$wpdb->posts}.menu_order ASC
+    ";
+
+    return $clauses;
+}
+add_filter('posts_clauses', 'mm_spg_apply_phase_interest_ordering', 10, 2);

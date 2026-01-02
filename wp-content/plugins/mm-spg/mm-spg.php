@@ -95,14 +95,14 @@ function mm_spg_enqueue_assets()
 
     wp_enqueue_style(
         'mm-spg-css',
-        MM_SPG_URL . 'assets/css/frontend/mm-spg.css',
+        MM_SPG_URL . 'inc/frontend/assets/css/mm-spg.css',
         [],
         MM_SPG_VERSION
     );
 
     wp_enqueue_script(
         'mm-spg-js',
-        MM_SPG_URL . 'assets/js/frontend/mm-spg.js',
+        MM_SPG_URL . 'inc/frontend/assets/js/mm-spg.js',
         ['jquery'],
         MM_SPG_VERSION,
         true

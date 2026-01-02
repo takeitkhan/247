@@ -125,3 +125,40 @@ body.mm-spg-highlighting {
 .mm-spg-launcher:hover {
     background: #4338ca;
 }
+
+
+
+/** NEW STYLES ADDED BELOW **/
+.welcome-header {
+  position: relative;
+  height: 160px;
+  background: linear-gradient(135deg, #f3d9ff 0%, #e2e7ff 100%);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  overflow: hidden;
+}
+
+.welcome-header h1 {
+  text-align: center;
+  padding-top: 40px;
+  margin: 0;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+/* Wave */
+.welcome-header::after {
+  content: "";
+  position: absolute;
+  left: -10%;
+  bottom: -60px;
+  width: 120%;
+  height: 120px;
+  background: white;
+  border-radius: 50%;
+}
+.welcome-header {
+  height: 160px;
+  background: linear-gradient(135deg, #f3d9ff, #e2e7ff);
+  clip-path: ellipse(120% 80% at 50% 0%);
+}

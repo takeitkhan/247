@@ -106,3 +106,40 @@ add_action('manage_spg_step_posts_custom_column', function ($col, $post_id) {
         echo esc_html(get_post_meta($post_id, '_spg_interest', true));
     }
 }, 10, 2);
+
+add_filter('posts_clauses', function ($clauses, $query) {
+
+    if (!is_admin() || !$query->is_main_query()) {
+        return $clauses;
+    }
+
+    $screen = get_current_screen();
+    if (!$screen || $screen->post_type !== 'spg_step') {
+        return $clauses;
+    }
+
+    global $wpdb;
+
+    // Join phase meta
+    $clauses['join'] .= "
+        LEFT JOIN {$wpdb->postmeta} AS phase_meta
+            ON ({$wpdb->posts}.ID = phase_meta.post_id
+            AND phase_meta.meta_key = '_spg_phase')
+    ";
+
+    // Join interest meta
+    $clauses['join'] .= "
+        LEFT JOIN {$wpdb->postmeta} AS interest_meta
+            ON ({$wpdb->posts}.ID = interest_meta.post_id
+            AND interest_meta.meta_key = '_spg_interest')
+    ";
+
+    // Order by Phase → Interest → menu_order
+    $clauses['orderby'] = "
+        CAST(phase_meta.meta_value AS UNSIGNED) ASC,
+        interest_meta.meta_value ASC,
+        {$wpdb->posts}.menu_order ASC
+    ";
+
+    return $clauses;
+}, 10, 2);

@@ -27,19 +27,14 @@ else:
                 </div>
                 <div class="mb-4 col-lg-6">
                     <?php
-                    $steps = mm_spg_get_steps();
 
-                    echo '<pre style="background:#111;color:#9f9;padding:10px;">';
-                    echo "mm_spg_get_steps() OUTPUT\n";
-                    print_r($steps);
-                    echo '</pre>';
+                    // $steps = mm_spg_get_steps();
 
-                    // $phase3 = mm_spg_build_phase_3_steps('communications-business-marketing');
-
-                    // echo '<pre style="background:#111;color:#0ff;padding:10px;">';
-                    // echo "PHASE 3 — communications-business-marketing\n";
-                    // print_r($phase3);
+                    // echo '<pre style="background:#111;color:#9f9;padding:10px;">';
+                    // echo "mm_spg_get_steps() OUTPUT\n";
+                    // print_r($steps);
                     // echo '</pre>';
+
                     ?>
 
 

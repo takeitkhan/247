@@ -3,61 +3,66 @@ jQuery(function ($) {
     const $tbody = $('#the-list');
     if (!$tbody.length) return;
 
-    // Attach phase + interest as data attributes
+    // Assign group keys
     $tbody.find('tr').each(function () {
         const $row = $(this);
-        const phase = $row.find('.column-spg_phase').text()?.trim();
-        const interest = $row.find('.column-spg_interest').text()?.trim();
+        const phase = ($row.find('.column-spg_phase').text() || '').trim();
+        const interest = ($row.find('.column-spg_interest').text() || '').trim();
 
-        $row.attr('data-phase', phase || '');
-        $row.attr('data-interest', interest || '');
+        const groupKey = interest
+            ? `phase-${phase}__interest-${interest}`
+            : `phase-${phase}`;
+
+        $row.attr('data-sort-group', groupKey);
     });
 
-    let draggedPhase = null;
-    let draggedInterest = null;
+    let activeGroup = null;
+    let originalIndex = null;
 
     $tbody.sortable({
-        items: '> tr',
         axis: 'y',
         handle: '.spg-drag-handle',
         tolerance: 'pointer',
+        items: '> tr',
 
         start: function (e, ui) {
-            draggedPhase = ui.item.data('phase');
-            draggedInterest = ui.item.data('interest');
+            activeGroup = ui.item.data('sort-group');
+            originalIndex = ui.item.index();
         },
 
-        sort: function (e, ui) {
-            const $prev = ui.placeholder.prev();
-            const $next = ui.placeholder.next();
+        stop: function (e, ui) {
+            const $prev = ui.item.prev();
+            const $next = ui.item.next();
 
+            // ❌ Invalid move → revert
             if (
-                ($prev.length && $prev.data('phase') !== draggedPhase) ||
-                ($next.length && $next.data('phase') !== draggedPhase)
+                ($prev.length && $prev.data('sort-group') !== activeGroup) ||
+                ($next.length && $next.data('sort-group') !== activeGroup)
             ) {
-                ui.placeholder.hide();
-            } else if (
-                draggedPhase === '3' &&
-                (
-                    ($prev.length && $prev.data('interest') !== draggedInterest) ||
-                    ($next.length && $next.data('interest') !== draggedInterest)
-                )
-            ) {
-                ui.placeholder.hide();
-            } else {
-                ui.placeholder.show();
+                $tbody.sortable('cancel');
+                return;
             }
         },
 
         update: function () {
+
+            if (typeof ajaxurl === 'undefined') {
+                console.error('ajaxurl is undefined');
+                return;
+            }
+
+            if (!window.SPG_STEP_SORT || !SPG_STEP_SORT.nonce) {
+                console.error('SPG_STEP_SORT nonce missing');
+                return;
+            }
+
             const order = [];
 
             $tbody.find('tr').each(function (index) {
-                const id = $(this).attr('id');
-                if (!id) return;
+                if (!this.id) return;
 
                 order.push({
-                    id: id.replace('post-', ''),
+                    id: this.id.replace('post-', ''),
                     position: index
                 });
             });
@@ -66,6 +71,14 @@ jQuery(function ($) {
                 action: 'spg_save_step_order',
                 nonce: SPG_STEP_SORT.nonce,
                 order: order
+            })
+            .done(function (res) {
+                if (!res.success) {
+                    console.error('Save failed:', res);
+                }
+            })
+            .fail(function (xhr) {
+                console.error('AJAX error:', xhr.responseText);
             });
         }
     });
