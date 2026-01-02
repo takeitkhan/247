@@ -1279,3 +1279,89 @@ Stack trace:
 #5 D:\oldwindows\laragon\www\pet\wp-admin\admin-ajax.php(22): require_once('D:\\oldwindows\\l...')
 #6 {main}
   thrown in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-hook.php on line 341
+[02-Jan-2026 14:17:37 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_userdata() in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php:4890
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php(4841): WP_Query->generate_postdata(Object(WP_Post))
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php(3820): WP_Query->setup_postdata(Object(WP_Post))
+#2 D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php(30): WP_Query->the_post()
+#3 D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php(128): mm_spg_get_steps()
+#4 D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php(25): require_once('D:\\oldwindows\\l...')
+#5 D:\oldwindows\laragon\www\pet\wp-settings.php(560): include_once('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-config.php(109): require_once('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#8 D:\oldwindows\laragon\www\pet\wp-login.php(12): require('D:\\oldwindows\\l...')
+#9 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php on line 4890
+[02-Jan-2026 14:17:37 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_userdata() in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php:4890
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php(4841): WP_Query->generate_postdata(Object(WP_Post))
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php(3820): WP_Query->setup_postdata(Object(WP_Post))
+#2 D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php(30): WP_Query->the_post()
+#3 D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php(128): mm_spg_get_steps()
+#4 D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php(25): require_once('D:\\oldwindows\\l...')
+#5 D:\oldwindows\laragon\www\pet\wp-settings.php(560): include_once('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-config.php(109): require_once('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#8 D:\oldwindows\laragon\www\pet\wp-login.php(12): require('D:\\oldwindows\\l...')
+#9 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php on line 4890
+[02-Jan-2026 14:17:38 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_userdata() in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php:4890
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php(4841): WP_Query->generate_postdata(Object(WP_Post))
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php(3820): WP_Query->setup_postdata(Object(WP_Post))
+#2 D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php(30): WP_Query->the_post()
+#3 D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php(128): mm_spg_get_steps()
+#4 D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php(25): require_once('D:\\oldwindows\\l...')
+#5 D:\oldwindows\laragon\www\pet\wp-settings.php(560): include_once('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-config.php(109): require_once('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#8 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#9 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#10 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php on line 4890
+[02-Jan-2026 14:20:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_userdata() in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php:4890
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php(4841): WP_Query->generate_postdata(Object(WP_Post))
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php(3820): WP_Query->setup_postdata(Object(WP_Post))
+#2 D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php(35): WP_Query->the_post()
+#3 D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php(5): mm_spg_get_steps()
+#4 D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php(25): require_once('D:\\oldwindows\\l...')
+#5 D:\oldwindows\laragon\www\pet\wp-settings.php(560): include_once('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-config.php(109): require_once('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#8 D:\oldwindows\laragon\www\pet\wp-login.php(12): require('D:\\oldwindows\\l...')
+#9 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php on line 4890
+[02-Jan-2026 14:20:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_userdata() in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php:4890
+Stack trace:
+#0 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php(4841): WP_Query->generate_postdata(Object(WP_Post))
+#1 D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php(3820): WP_Query->setup_postdata(Object(WP_Post))
+#2 D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php(35): WP_Query->the_post()
+#3 D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php(5): mm_spg_get_steps()
+#4 D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\mm-spg.php(25): require_once('D:\\oldwindows\\l...')
+#5 D:\oldwindows\laragon\www\pet\wp-settings.php(560): include_once('D:\\oldwindows\\l...')
+#6 D:\oldwindows\laragon\www\pet\wp-config.php(109): require_once('D:\\oldwindows\\l...')
+#7 D:\oldwindows\laragon\www\pet\wp-load.php(50): require_once('D:\\oldwindows\\l...')
+#8 D:\oldwindows\laragon\www\pet\wp-blog-header.php(13): require_once('D:\\oldwindows\\l...')
+#9 D:\oldwindows\laragon\www\pet\index.php(17): require('D:\\oldwindows\\l...')
+#10 {main}
+  thrown in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-query.php on line 4890
+[02-Jan-2026 14:21:25 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php on line 134
+[02-Jan-2026 14:21:25 UTC] PHP Fatal error:  Cannot redeclare mm_spg_enqueue_assets() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php:8) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\bootstrap.php on line 30
+[02-Jan-2026 14:21:25 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php on line 134
+[02-Jan-2026 14:21:25 UTC] PHP Fatal error:  Cannot redeclare mm_spg_enqueue_assets() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php:8) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\bootstrap.php on line 30
+[02-Jan-2026 14:22:38 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php on line 134
+[02-Jan-2026 14:22:38 UTC] PHP Fatal error:  Cannot redeclare mm_spg_enqueue_assets() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php:8) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\bootstrap.php on line 31
+[02-Jan-2026 14:22:38 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php on line 134
+[02-Jan-2026 14:22:38 UTC] PHP Fatal error:  Cannot redeclare mm_spg_enqueue_assets() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php:8) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\bootstrap.php on line 31
+[02-Jan-2026 14:23:13 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php on line 134
+[02-Jan-2026 14:23:13 UTC] PHP Fatal error:  Cannot redeclare mm_spg_enqueue_assets() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php:8) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\bootstrap.php on line 31
+[02-Jan-2026 14:23:14 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php on line 134
+[02-Jan-2026 14:23:14 UTC] PHP Fatal error:  Cannot redeclare mm_spg_enqueue_assets() (previously declared in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php:8) in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\bootstrap.php on line 31
+[02-Jan-2026 14:23:47 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php on line 127
+[02-Jan-2026 14:24:01 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php on line 127
+[02-Jan-2026 14:24:02 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php on line 127
+[02-Jan-2026 14:24:05 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php on line 127
+[02-Jan-2026 14:24:06 UTC] PHP Warning:  Undefined variable $user_id in D:\oldwindows\laragon\www\pet\wp-content\plugins\mm-spg\inc\frontend\dynamic-steps.php on line 127
+[02-Jan-2026 14:24:09 UTC] Automatic updates starting...
+[02-Jan-2026 14:24:13 UTC] Automatic updates complete.

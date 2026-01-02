@@ -244,9 +244,6 @@ add_shortcode('mm_spg_additional_profile_details', function () {
     <form class="mm-spg-additional-profile-form" novalidate>
 
         <?php wp_nonce_field('mm_spg_save_additional_profile', 'mm_spg_additional_nonce'); ?>
-
-        <h5 class="mb-4">Additional Profile Details</h5>
-
         <!-- Designation -->
         <div class="mb-3">
             <label class="form-label">Title</label>

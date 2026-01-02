@@ -26,9 +26,9 @@ function mm_spg_render_modal()
             <div class="mm-spg-body"></div>
 
             <!-- Actions -->
-            <div class="mm-spg-actions">                
+            <div class="mm-spg-actions">
                 <button class="mm-spg-btn mm-spg-pause">Pause</button>
-                <button class="mm-spg-btn mm-spg-next">Next</button>
+                <button class="mm-spg-btn mm-spg-next custom-btn">Next</button>
             </div>
         </div>
     </div>

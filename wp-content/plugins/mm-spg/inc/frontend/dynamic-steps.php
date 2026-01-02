@@ -15,10 +15,11 @@ function mm_spg_get_steps()
         // 🔥 enable custom ordering
         'mm_spg_ordering' => true,
 
-        'meta_query'     => [
+        'meta_query' => [
             [
-                'key'     => '_spg_phase',
-                'compare' => 'EXISTS',
+                'key'   => '_spg_phase',
+                'value' => 2,
+                'type'  => 'NUMERIC',
             ],
         ],
     ]);
@@ -29,10 +30,9 @@ function mm_spg_get_steps()
         $query->the_post();
 
         $steps[] = [
-            'phase'    => (int) get_post_meta(get_the_ID(), '_spg_phase', true),
-            'title'    => get_the_title(),
-            'interest' => get_post_meta(get_the_ID(), '_spg_interest', true) ?: null,
-            'blocks'   => get_post_meta(get_the_ID(), '_spg_blocks', true) ?: [],
+            'phase'  => 2,
+            'title'  => get_the_title(),
+            'blocks' => get_post_meta(get_the_ID(), '_spg_blocks', true) ?: [],
         ];
     }
 
@@ -47,7 +47,7 @@ function mm_spg_get_steps()
  */
 function mm_spg_build_phase_3_steps($interest_slug)
 {
-    if (empty($interest_slug)) {
+    if (!$interest_slug) {
         return [];
     }
 
@@ -55,10 +55,7 @@ function mm_spg_build_phase_3_steps($interest_slug)
         'post_type'      => 'spg_step',
         'posts_per_page' => -1,
         'post_status'    => 'publish',
-
-        // 🔥 enable same ordering
-        'mm_spg_ordering' => true,
-
+        'mm_spg_ordering'=> true,
         'meta_query'     => [
             [
                 'key'   => '_spg_phase',
@@ -86,13 +83,14 @@ function mm_spg_build_phase_3_steps($interest_slug)
     }
 
     wp_reset_postdata();
-
     return $steps;
 }
 
 
 
-function mm_spg_apply_phase_interest_ordering($clauses, $query) {
+
+function mm_spg_apply_phase_interest_ordering($clauses, $query)
+{
 
     // Only affect SPG queries
     if (empty($query->get('mm_spg_ordering'))) {
@@ -124,4 +122,5 @@ function mm_spg_apply_phase_interest_ordering($clauses, $query) {
 
     return $clauses;
 }
+
 add_filter('posts_clauses', 'mm_spg_apply_phase_interest_ordering', 10, 2);

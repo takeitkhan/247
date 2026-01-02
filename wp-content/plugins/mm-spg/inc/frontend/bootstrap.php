@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Frontend bootstrap
  */
@@ -23,7 +24,6 @@ function mm_spg_save_avatar()
 }
 add_action('wp_ajax_mm_spg_save_avatar', 'mm_spg_save_avatar');
 
-
 /**
  * Enqueue frontend assets
  */
@@ -33,18 +33,17 @@ function mm_spg_enqueue_assets()
         return;
     }
 
-
     $user_id = get_current_user_id();
 
     /* =========================
-       BUILD STEPS FIRST
+       BUILD STEPS
     ========================= */
 
-    // Phase 2 steps
+    // Phase 2 steps ONLY
     $steps = mm_spg_get_steps();
     $phase_3_start_index = count($steps);
 
-    // Phase 3 steps (conditional)
+    // Inject Phase 3 ONLY after Phase 2 completion
     if (get_user_meta($user_id, 'mm_spg_phase_2_completed', true)) {
 
         $priorities = get_user_meta($user_id, 'user_categories_priority', true);
@@ -57,7 +56,8 @@ function mm_spg_enqueue_assets()
 
             if ($term && !is_wp_error($term)) {
                 $phase3 = mm_spg_build_phase_3_steps($term->slug);
-                if ($phase3) {
+
+                if (!empty($phase3)) {
                     $steps = array_merge($steps, $phase3);
                 }
             }
@@ -83,10 +83,6 @@ function mm_spg_enqueue_assets()
         true
     );
 
-    /* =========================
-       PASS DATA TO JS
-    ========================= */
-
     wp_localize_script(
         'mm-spg-js',
         'MM_SPG',
@@ -96,6 +92,10 @@ function mm_spg_enqueue_assets()
             'avatar'              => mm_spg_get_user_avatar(),
             'steps'               => array_values($steps),
             'phase_3_start_index' => $phase_3_start_index,
+
+            // ✅ AVATAR IMAGE URLS
+            'avatar_male_url'   => MM_SPG_URL . 'inc/frontend/assets/images/male_avatar.png',
+            'avatar_female_url' => MM_SPG_URL . 'inc/frontend/assets/images/female_avatar.png',
         ]
     );
 }

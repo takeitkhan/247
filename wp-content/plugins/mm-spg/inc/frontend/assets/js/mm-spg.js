@@ -31,12 +31,16 @@
         // -------- Phase 1: Avatar --------
         if (!avatar) {
             $('.mm-spg-title').text('Choose your avatar');
-            $('.mm-spg-body').html(`
-                <p>Please select an avatar to continue.</p>
+            $('.mm-spg-body').html(`                
                 <div class="mm-spg-avatar-choice">
-                    <div class="mm-spg-avatar-btn" data-avatar="male">👨</div>
-                    <div class="mm-spg-avatar-btn" data-avatar="female">👩</div>
+                    <div class="mm-spg-avatar-btn" data-avatar="male">
+                        <img src="${MM_SPG.avatar_male_url}" alt="Male Avatar">
+                    </div>
+                    <div class="mm-spg-avatar-btn" data-avatar="female">
+                        <img src="${MM_SPG.avatar_female_url}" alt="Female Avatar">
+                    </div>
                 </div>
+                <p class="text-center">Please select a Guide to Empower Your Journey.</p>
             `);
 
             $('.mm-spg-avatar').html('');
@@ -79,7 +83,14 @@
             $('.mm-spg-body').html(`<p>${step.message}</p>`);
         }
 
-        $('.mm-spg-avatar').html(avatar === 'male' ? '👨' : '👩');
+        $('.mm-spg-avatar').html(`
+                <img
+                    src="${avatar === 'male' ? MM_SPG.avatar_male_url : MM_SPG.avatar_female_url}"
+                    alt="${avatar === 'male' ? 'Male Avatar' : 'Female Avatar'}"
+                    class="mm-spg-selected-avatar"
+                >
+            `);
+
 
         $('.mm-spg-next').show();
         $('.mm-spg-pause').show();
@@ -241,17 +252,128 @@
     });
 
     // Next
+    // $(document).on('click', '.mm-spg-next', function () {
+    //     let step = steps[currentStep];
+    //     clearHighlight();
+
+    //     /* =========================
+    //        SAVE INTERESTS (IF PRESENT)
+    //     ========================= */
+    //     const $interestForm = $('.mm-spg-interest-form');
+    //     if ($interestForm.length) {
+    //         const formData = $interestForm.serialize();
+
+    //         $.post(MM_SPG.ajax_url, {
+    //             action: 'mm_spg_save_interests',
+    //             nonce: $interestForm.find('[name="mm_spg_interest_nonce"]').val(),
+    //             ...Object.fromEntries(new URLSearchParams(formData))
+    //         });
+    //     }
+
+    //     /* =========================
+    //        SAVE ADDITIONAL PROFILE (IF PRESENT)
+    //     ========================= */
+    //     const $profileForm = $('.mm-spg-additional-profile-form');
+    //     if ($profileForm.length) {
+
+    //         // ensure hidden fields are populated (keywords / hashtags)
+    //         const keywords = [];
+    //         $('#keyword-tags .keyword-tag').each(function () {
+    //             keywords.push(
+    //                 $(this).clone().children().remove().end().text().trim()
+    //             );
+    //         });
+    //         $('#keywords-hidden').val(keywords.join(', '));
+
+    //         const hashtags = [];
+    //         $('#hashtag-tags .hashtag-tag').each(function () {
+    //             hashtags.push(
+    //                 $(this).clone().children().remove().end().text().trim()
+    //             );
+    //         });
+    //         $('#hashtags-hidden').val(hashtags.join(', '));
+
+    //         const formData = $profileForm.serialize();
+
+    //         $.post(MM_SPG.ajax_url, {
+    //             action: 'mm_spg_save_additional_profile',
+    //             nonce: $profileForm.find('[name="mm_spg_additional_nonce"]').val(),
+    //             ...Object.fromEntries(new URLSearchParams(formData))
+    //         });
+    //     }
+
+    //     /* =========================
+    //     SAVE SOCIAL LINKS (IF PRESENT)
+    //     ========================= */
+    //     const $socialForm = $('.mm-spg-social-links-form');
+    //     if ($socialForm.length) {
+
+    //         const formData = $socialForm.serialize();
+
+    //         $.post(MM_SPG.ajax_url, {
+    //             action: 'mm_spg_save_social_links',
+    //             nonce: $socialForm.find('[name="mm_spg_links_nonce"]').val(),
+    //             ...Object.fromEntries(new URLSearchParams(formData))
+    //         });
+    //     }
+
+
+    //     /* =========================
+    //        PHASE 2 → PHASE 3
+    //     ========================= */
+    //     if (
+    //         step.phase === 2 &&
+    //         MM_SPG.phase_3_start_index !== null &&
+    //         currentStep === MM_SPG.phase_3_start_index - 1
+    //     ) {
+    //         $.post(MM_SPG.ajax_url, {
+    //             action: 'mm_spg_complete_phase_2',
+    //             nonce: MM_SPG.nonce
+    //         }, function () {
+    //             currentStep = MM_SPG.phase_3_start_index;
+    //             saveState('active');
+    //             renderStep();
+    //         });
+    //         return;
+    //     }
+
+    //     /* =========================
+    //        PHASE 3 COMPLETION
+    //     ========================= */
+    //     if (step.phase === 3 && currentStep >= steps.length - 1) {
+    //         saveState('stopped');
+    //         hideModal();
+    //         updateLauncher('stopped');
+    //         return;
+    //     }
+
+    //     /* =========================
+    //        REDIRECT
+    //     ========================= */
+    //     if (step.redirect) {
+    //         window.location.href = step.redirect;
+    //         return;
+    //     }
+
+    //     /* =========================
+    //        NORMAL STEP
+    //     ========================= */
+    //     currentStep++;
+    //     saveState('active');
+    //     renderStep();
+    // });
+
     $(document).on('click', '.mm-spg-next', function () {
         let step = steps[currentStep];
         clearHighlight();
 
         /* =========================
-           SAVE INTERESTS (IF PRESENT)
+           SAVE FORMS (NON-BLOCKING)
         ========================= */
+
         const $interestForm = $('.mm-spg-interest-form');
         if ($interestForm.length) {
             const formData = $interestForm.serialize();
-
             $.post(MM_SPG.ajax_url, {
                 action: 'mm_spg_save_interests',
                 nonce: $interestForm.find('[name="mm_spg_interest_nonce"]').val(),
@@ -259,31 +381,22 @@
             });
         }
 
-        /* =========================
-           SAVE ADDITIONAL PROFILE (IF PRESENT)
-        ========================= */
         const $profileForm = $('.mm-spg-additional-profile-form');
         if ($profileForm.length) {
 
-            // ensure hidden fields are populated (keywords / hashtags)
             const keywords = [];
             $('#keyword-tags .keyword-tag').each(function () {
-                keywords.push(
-                    $(this).clone().children().remove().end().text().trim()
-                );
+                keywords.push($(this).clone().children().remove().end().text().trim());
             });
             $('#keywords-hidden').val(keywords.join(', '));
 
             const hashtags = [];
             $('#hashtag-tags .hashtag-tag').each(function () {
-                hashtags.push(
-                    $(this).clone().children().remove().end().text().trim()
-                );
+                hashtags.push($(this).clone().children().remove().end().text().trim());
             });
             $('#hashtags-hidden').val(hashtags.join(', '));
 
             const formData = $profileForm.serialize();
-
             $.post(MM_SPG.ajax_url, {
                 action: 'mm_spg_save_additional_profile',
                 nonce: $profileForm.find('[name="mm_spg_additional_nonce"]').val(),
@@ -291,14 +404,9 @@
             });
         }
 
-        /* =========================
-        SAVE SOCIAL LINKS (IF PRESENT)
-        ========================= */
         const $socialForm = $('.mm-spg-social-links-form');
         if ($socialForm.length) {
-
             const formData = $socialForm.serialize();
-
             $.post(MM_SPG.ajax_url, {
                 action: 'mm_spg_save_social_links',
                 nonce: $socialForm.find('[name="mm_spg_links_nonce"]').val(),
@@ -306,20 +414,31 @@
             });
         }
 
+        /* =========================
+           🔒 HARD GUARD: PHASE 2 IS DONE
+        ========================= */
+        if (
+            step &&
+            step.phase === 2 &&
+            currentStep >= MM_SPG.phase_3_start_index
+        ) {
+            currentStep = MM_SPG.phase_3_start_index;
+            renderStep();
+            return;
+        }
 
         /* =========================
-           PHASE 2 → PHASE 3
+           PHASE 2 → PHASE 3 (ONE-WAY)
         ========================= */
         if (
             step.phase === 2 &&
-            MM_SPG.phase_3_start_index !== null &&
             currentStep === MM_SPG.phase_3_start_index - 1
         ) {
             $.post(MM_SPG.ajax_url, {
                 action: 'mm_spg_complete_phase_2',
                 nonce: MM_SPG.nonce
             }, function () {
-                currentStep = MM_SPG.phase_3_start_index;
+                currentStep = MM_SPG.phase_3_start_index; // 🔐 lock Phase 2
                 saveState('active');
                 renderStep();
             });
@@ -345,17 +464,12 @@
         }
 
         /* =========================
-           NORMAL STEP
+           NORMAL STEP ADVANCE
         ========================= */
         currentStep++;
         saveState('active');
         renderStep();
     });
-
-
-
-
-
 
 
     // Pause / Close
