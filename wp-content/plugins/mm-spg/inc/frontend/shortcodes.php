@@ -31,36 +31,6 @@ add_shortcode('mm_spg_interest_form', function () {
 
     $user_id = get_current_user_id();
 
-
-    /* =========================
-       HANDLE SUBMIT
-    ========================= */
-    if (
-        $_SERVER['REQUEST_METHOD'] === 'POST' &&
-        isset($_POST['mm_spg_interest_submit'])
-    ) {
-        check_admin_referer('mm_spg_interest_save', 'mm_spg_interest_nonce');
-
-        $selected = array_map('intval', $_POST['user_categories'] ?? []);
-        $priorities_raw = $_POST['user_categories_priority'] ?? [];
-
-        $priorities = [];
-
-        foreach ($priorities_raw as $term_id => $priority) {
-            $term_id = (int) $term_id;
-            $priority = (int) $priority;
-
-            if (in_array($term_id, $selected, true) && $priority >= 1 && $priority <= 5) {
-                $priorities[$term_id] = $priority;
-            }
-        }
-
-        update_user_meta($user_id, 'user_categories', $selected);
-        update_user_meta($user_id, 'user_categories_priority', $priorities);
-
-        echo '<div class="mb-3 alert alert-success">Interests saved successfully.</div>';
-    }
-
     /* =========================
        LOAD DATA
     ========================= */
@@ -75,7 +45,7 @@ add_shortcode('mm_spg_interest_form', function () {
     ob_start();
 ?>
 
-    <form method="post" class="mm-spg-interest-form">
+    <form class="mm-spg-interest-form" data-step="interests">
         <?php wp_nonce_field('mm_spg_interest_save', 'mm_spg_interest_nonce'); ?>
 
         <label class="mb-3 form-label fw-bold">
@@ -118,9 +88,9 @@ add_shortcode('mm_spg_interest_form', function () {
             <?php endforeach; ?>
         </div>
 
-        <button type="submit" name="mm_spg_interest_submit" class="mt-3 btn btn-primary">
+        <!-- <button type="submit" name="mm_spg_interest_submit" class="mt-3 btn btn-primary">
             Save Interests
-        </button>
+        </button> -->
     </form>
 
 
@@ -245,9 +215,9 @@ add_shortcode('mm_spg_social_links_form', function () {
         <div class="d-flex gap-3">
             <button type="button" class="mt-3 btn btn-secondary btn-sm" id="mm-spg-add-social-link">+ Add Link</button>
 
-            <button type="submit" name="mm_spg_links_submit" class="mt-3 btn btn-info btn-sm">
+            <!-- <button type="submit" name="mm_spg_links_submit" class="mt-3 btn btn-info btn-sm">
                 Update Links
-            </button>
+            </button> -->
         </div>
 
     </form>
@@ -343,12 +313,6 @@ add_shortcode('mm_spg_additional_profile_details', function () {
 
             <input type="hidden" name="user_hashtags" id="hashtags-hidden">
         </div>
-
-
-        <button type="submit" class="btn btn-primary">
-            Save Details
-        </button>
-
     </form>
 <?php
     return ob_get_clean();

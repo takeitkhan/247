@@ -246,7 +246,69 @@
         clearHighlight();
 
         /* =========================
-           PHASE 2 → PHASE 3 (AUTO, NO PAUSE)
+           SAVE INTERESTS (IF PRESENT)
+        ========================= */
+        const $interestForm = $('.mm-spg-interest-form');
+        if ($interestForm.length) {
+            const formData = $interestForm.serialize();
+
+            $.post(MM_SPG.ajax_url, {
+                action: 'mm_spg_save_interests',
+                nonce: $interestForm.find('[name="mm_spg_interest_nonce"]').val(),
+                ...Object.fromEntries(new URLSearchParams(formData))
+            });
+        }
+
+        /* =========================
+           SAVE ADDITIONAL PROFILE (IF PRESENT)
+        ========================= */
+        const $profileForm = $('.mm-spg-additional-profile-form');
+        if ($profileForm.length) {
+
+            // ensure hidden fields are populated (keywords / hashtags)
+            const keywords = [];
+            $('#keyword-tags .keyword-tag').each(function () {
+                keywords.push(
+                    $(this).clone().children().remove().end().text().trim()
+                );
+            });
+            $('#keywords-hidden').val(keywords.join(', '));
+
+            const hashtags = [];
+            $('#hashtag-tags .hashtag-tag').each(function () {
+                hashtags.push(
+                    $(this).clone().children().remove().end().text().trim()
+                );
+            });
+            $('#hashtags-hidden').val(hashtags.join(', '));
+
+            const formData = $profileForm.serialize();
+
+            $.post(MM_SPG.ajax_url, {
+                action: 'mm_spg_save_additional_profile',
+                nonce: $profileForm.find('[name="mm_spg_additional_nonce"]').val(),
+                ...Object.fromEntries(new URLSearchParams(formData))
+            });
+        }
+
+        /* =========================
+        SAVE SOCIAL LINKS (IF PRESENT)
+        ========================= */
+        const $socialForm = $('.mm-spg-social-links-form');
+        if ($socialForm.length) {
+
+            const formData = $socialForm.serialize();
+
+            $.post(MM_SPG.ajax_url, {
+                action: 'mm_spg_save_social_links',
+                nonce: $socialForm.find('[name="mm_spg_links_nonce"]').val(),
+                ...Object.fromEntries(new URLSearchParams(formData))
+            });
+        }
+
+
+        /* =========================
+           PHASE 2 → PHASE 3
         ========================= */
         if (
             step.phase === 2 &&
@@ -289,6 +351,8 @@
         saveState('active');
         renderStep();
     });
+
+
 
 
 
