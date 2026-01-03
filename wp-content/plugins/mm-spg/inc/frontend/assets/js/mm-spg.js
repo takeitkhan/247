@@ -741,4 +741,58 @@
     });
 
 
+    $(document).on('submit', '.mm-spg-interest-form', function (e) {
+        e.preventDefault();
+
+        const $form = $(this);
+        const $error = $form.find('.mm-spg-error');
+
+        $error.hide().text('');
+
+        const checked = $form.find('input[name="user_categories[]"]:checked');
+
+        // RULE 1: At least one checkbox
+        if (!checked.length) {
+            $error.text('Oops: Please prioritise your interest to proceed.')
+                .show();
+            return;
+        }
+
+        // RULE 2: At least one 1st priority
+        let hasFirstPriority = false;
+
+        checked.each(function () {
+            const termId = $(this).val();
+            const priority = $form.find(
+                `select[name="user_categories_priority[${termId}]"]`
+            ).val();
+
+            if (priority === '1') {
+                hasFirstPriority = true;
+            }
+        });
+
+        if (!hasFirstPriority) {
+            $error.text('Oops: Please prioritise your interest to proceed.')
+                .show();
+            return;
+        }
+
+        /* -------------------------
+           AJAX SUBMIT
+        -------------------------- */
+        $.post(MM_SPG.ajax_url, $form.serialize() + '&action=mm_spg_save_interests')
+            .done(function (res) {
+                if (!res.success) {
+                    $error.text('❌ ' + res.data).show();
+                } else {
+                    $error.hide();
+                    // continue guide flow here
+                }
+            });
+    });
+
+
+
+
 })(jQuery);

@@ -11,12 +11,82 @@ function enqueue_flatpickr()
 add_action('wp_enqueue_scripts', 'enqueue_flatpickr');
 
 
+
+function mm_get_reserved_usernames()
+{
+    return [
+        // WordPress core
+        'admin','administrator','editor','author','subscriber','contributor',
+
+        // Auth / system
+        'login','logout','signin','signup','register','password','reset','lost-password',
+
+        // Routing / URLs
+        'profile','profiles','user','users','account','accounts','dashboard','settings',
+
+        // WP internals
+        'wp','wp-admin','wp-login','wp-json','rest','api',
+
+        // Content
+        'page','post','category','tag','taxonomy','search','feed','rss',
+
+        // Common conflicts
+        'demo','sample','example','temp','temporary','null','void','root','home','index','main',
+        'site','blog','news','help','support','contact','about','terms','privacy','policy',
+        'adminpanel','superadmin','staff','team','moderator','moderators','system','security',
+        'billing','payment','payments','shop','store','cart','checkout','order','orders',
+        'invoice','invoices','graphql','status','stats','statistics','analytics',
+        'report','reports','suggestion','suggestions','gamification',
+        'notifications','notification','messages','message','chat','chats',
+        'forum','forums','community','communities','adminarea','members','member',
+        'superuser','superusers','rootadmin','testuser',
+    ];
+}
+
+
+function mm_is_reserved_username($username)
+{
+    $username = strtolower($username);
+
+    // Exact match
+    if (in_array($username, mm_get_reserved_usernames(), true)) {
+        return true;
+    }
+
+    // Prefix blocking (test*, admin*, api*, wp*, etc.)
+    $blocked_prefixes = [
+        'test','demo','sample','temp','wp','admin','api','rest',
+        'system','root','super','staff','team'
+    ];
+
+    foreach ($blocked_prefixes as $prefix) {
+        if (str_starts_with($username, $prefix)) {
+            return true;
+        }
+    }
+
+    // Numeric-only usernames (bad for routing/SEO)
+    if (ctype_digit($username)) {
+        return true;
+    }
+
+    return false;
+}
+
+add_filter('validate_username', function ($valid, $username) {
+    if (!$valid) {
+        return false;
+    }
+
+    return !mm_is_reserved_username($username);
+}, 10, 2);
+
+
 add_action('init', function () {
     if (
         isset($_POST['user_signup']) &&
         check_admin_referer('custom_user_registration', 'custom_user_registration_nonce')
     ) {
-        $username   = sanitize_user($_POST['username']);
         $email      = sanitize_email($_POST['email']);
         $password   = $_POST['password'];
         $first_name = sanitize_text_field($_POST['first_name']);
@@ -24,6 +94,30 @@ add_action('init', function () {
         $dob        = sanitize_text_field($_POST['dob']);
 
         // (all your validations unchanged...)
+
+        $username = sanitize_user($_POST['username'], true);
+
+        // Reserved / invalid username
+        if (mm_is_reserved_username($username)) {
+            set_transient('custom_user_message', [
+                'type' => 'danger',
+                'text' => 'This username is reserved. Please choose another one.'
+            ], 30);
+
+            wp_redirect(wp_get_referer());
+            exit;
+        }
+
+        // Already taken
+        if (username_exists($username)) {
+            set_transient('custom_user_message', [
+                'type' => 'danger',
+                'text' => 'This username is already taken.'
+            ], 30);
+
+            wp_redirect(wp_get_referer());
+            exit;
+        }
 
         // Create user
         $user_id = wp_create_user($username, $password, $email);
@@ -34,6 +128,7 @@ add_action('init', function () {
                 'ID'         => $user_id,
                 'first_name' => $first_name,
                 'last_name'  => $last_name,
+                'user_nicename' => sanitize_title($username),
             ]);
 
             update_user_meta($user_id, 'dob', $dob);
@@ -125,6 +220,26 @@ add_action('init', function () {
         }
     }
 });
+
+
+add_action('wp_ajax_nopriv_mm_validate_username', 'mm_validate_username_ajax');
+
+function mm_validate_username_ajax()
+{
+    check_ajax_referer('custom_user_registration', 'nonce');
+
+    $username = sanitize_user($_POST['username'], true);
+
+    if (mm_is_reserved_username($username)) {
+        wp_send_json_error('This username is reserved.');
+    }
+
+    if (username_exists($username)) {
+        wp_send_json_error('This username is already taken.');
+    }
+
+    wp_send_json_success('Username is available.');
+}
 
 
 // -----------------------------

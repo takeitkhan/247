@@ -52,6 +52,8 @@ add_shortcode('mm_spg_interest_form', function () {
             Please prioritize your interests:
         </label>
 
+        <div class="mb-2 text-danger mm-spg-error" style="display:none;"></div>
+
         <div class="row g-2">
             <?php foreach ($categories as $cat):
                 $priority = $saved_priorities[$cat->term_id] ?? '';
@@ -113,7 +115,15 @@ function mm_spg_save_interests()
     $selected = array_map('intval', $_POST['user_categories'] ?? []);
     $priorities_raw = $_POST['user_categories_priority'] ?? [];
 
+    /* -------------------------
+       RULE 1: At least one checkbox
+    -------------------------- */
+    if (empty($selected)) {
+        wp_send_json_error('Please select at least one interest.');
+    }
+
     $priorities = [];
+    $has_first_priority = false;
 
     foreach ($priorities_raw as $term_id => $priority) {
         $term_id  = (int) $term_id;
@@ -125,19 +135,36 @@ function mm_spg_save_interests()
             $priority <= 5
         ) {
             $priorities[$term_id] = $priority;
+
+            if ($priority === 1) {
+                $has_first_priority = true;
+            }
         }
     }
 
+    /* -------------------------
+       RULE 2: At least one 1st priority
+    -------------------------- */
+    if (!$has_first_priority) {
+        wp_send_json_error('Please assign at least one interest as 1st priority.');
+    }
+
+    /* -------------------------
+       RULE 3: No duplicate priorities
+    -------------------------- */
     if (count($priorities) !== count(array_unique($priorities))) {
         wp_send_json_error('Duplicate priorities are not allowed.');
     }
 
+    /* -------------------------
+       SAVE
+    -------------------------- */
     update_user_meta($user_id, 'user_categories', $selected);
     update_user_meta($user_id, 'user_categories_priority', $priorities);
 
     update_user_meta($user_id, 'mm_spg_interest_completed', 1);
 
-    // 🔑 force Phase 3 rebuild
+    // Phase flow
     delete_user_meta($user_id, 'mm_spg_phase_3_started');
     update_user_meta($user_id, 'mm_spg_phase_2_completed', 1);
     update_user_meta($user_id, 'mm_spg_step', 0);
@@ -173,7 +200,7 @@ add_shortcode('mm_spg_social_links_form', function () {
     <form method="post" class="mm-spg-social-links-form">
         <?php wp_nonce_field('mm_spg_links_save', 'mm_spg_links_nonce'); ?>
 
-        <label class="mb-2 form-label">Social / Business Links</label>
+        <label class="mb-2 form-label">Social Management</label>
 
         <div id="social-links-group">
             <?php foreach ($saved_links as $index => $item): ?>

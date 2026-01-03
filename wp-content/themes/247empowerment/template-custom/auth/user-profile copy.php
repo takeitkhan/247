@@ -1,9 +1,8 @@
 <?php
 
 /**
- * Template Name: User Profile Template
+ * Template Name: User Profile Template Modified
  */
-
 if (!is_user_logged_in()) :
     include __DIR__ . '/profile-parts/shareable-profile.php';
     return;

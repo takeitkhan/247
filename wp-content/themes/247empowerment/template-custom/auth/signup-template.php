@@ -46,7 +46,7 @@ $old_input = $message['old_input'] ?? [];
                             <?php delete_transient('custom_user_message'); ?>
                         <?php endif; ?>
 
-                        <form method="post">
+                        <form method="post" id="signupForm">
                             <?php wp_nonce_field('custom_user_registration', 'custom_user_registration_nonce'); ?>
 
                             <?php if (isset($_GET['ref'])): ?>
@@ -76,7 +76,7 @@ $old_input = $message['old_input'] ?? [];
                             </div>
 
                             <div class="mb-3">
-                                <label for="dob" class="form-label fw-normal">Date of Birth <span>*</span></label>                                
+                                <label for="dob" class="form-label fw-normal">Date of Birth <span>*</span></label>
                                 <input type="text" class="input" id="dob" name="dob"
                                     value="<?php echo esc_attr($old_input['dob'] ?? ''); ?>" required>
                             </div>
@@ -195,9 +195,10 @@ $old_input = $message['old_input'] ?? [];
             maxDate: "today",
             altInput: true,
             altFormat: "F j, Y",
-            yearRange: [1940, new Date().getFullYear()],            
+            yearRange: [1940, new Date().getFullYear()],
         });
     });
+
 
     document.addEventListener("DOMContentLoaded", function() {
         const usernameInput = document.getElementById("username");
@@ -205,47 +206,133 @@ $old_input = $message['old_input'] ?? [];
 
         const ruleText = "* Username must be lowercase and can contain only letters, numbers, and underscores (a–z, 0–9, _).";
 
-        // Create error message element
-        const errorEl = document.createElement("small");
-        errorEl.style.color = "#ff4d4f";
-        errorEl.style.display = "none";
-        errorEl.style.paddingTop = "4px";
-        errorEl.style.paddingBottom = "4px";
-        errorEl.textContent = ruleText;
-        usernameInput.insertAdjacentElement("afterend", errorEl);
+        // Rule message (your original)
+        const ruleEl = document.createElement("small");
+        ruleEl.style.color = "#ff4d4f";
+        ruleEl.style.display = "none";
+        ruleEl.textContent = ruleText;
+        usernameInput.after(ruleEl);
 
-        function validateUsername() {
+        // Availability message (new)
+        const availEl = document.createElement("small");
+        availEl.style.display = "block";
+        availEl.style.marginTop = "4px";
+        usernameInput.after(availEl);
+
+        function validateFormat() {
             const value = usernameInput.value.trim();
             const regex = /^[a-z0-9_]+$/;
 
             if (value === "") {
-                errorEl.style.display = "none";
-                usernameInput.classList.remove("is-invalid");
-                return true;
-            }
-
-            if (!regex.test(value)) {
-                errorEl.style.display = "block";
-                usernameInput.classList.add("is-invalid");
+                ruleEl.style.display = "none";
+                availEl.textContent = "";
                 return false;
             }
 
-            errorEl.style.display = "none";
-            usernameInput.classList.remove("is-invalid");
+            if (!regex.test(value)) {
+                ruleEl.style.display = "block";
+                availEl.textContent = "";
+                return false;
+            }
+
+            ruleEl.style.display = "none";
             return true;
         }
 
-        // Validate while typing
-        usernameInput.addEventListener("input", validateUsername);
+        let timer = null;
 
-        // Validate before form submit
+        usernameInput.addEventListener("input", function() {
+            clearTimeout(timer);
+
+            if (!validateFormat()) return;
+
+            const username = this.value.trim();
+            if (username.length < 3) {
+                availEl.textContent = "";
+                return;
+            }
+
+            timer = setTimeout(() => {
+                fetch("<?php echo admin_url('admin-ajax.php'); ?>", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: new URLSearchParams({
+                            action: "mm_validate_username",
+                            nonce: "<?php echo wp_create_nonce('custom_user_registration'); ?>",
+                            username: username
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data.success) {
+                            availEl.textContent = data.data;
+                            availEl.style.color = "#ff4d4f";
+                        } else {
+                            availEl.textContent = "Username is available ✓";
+                            availEl.style.color = "#16a34a";
+                        }
+                    });
+            }, 400);
+        });
+
         form.addEventListener("submit", function(e) {
-            if (!validateUsername()) {
+            if (!validateFormat()) {
                 e.preventDefault();
                 usernameInput.focus();
             }
         });
     });
+
+
+    // document.addEventListener("DOMContentLoaded", function() {
+    //     const usernameInput = document.getElementById("username");
+    //     const form = usernameInput.closest("form");
+
+    //     const ruleText = "* Username must be lowercase and can contain only letters, numbers, and underscores (a–z, 0–9, _).";
+
+    //     // Create error message element
+    //     const errorEl = document.createElement("small");
+    //     errorEl.style.color = "#ff4d4f";
+    //     errorEl.style.display = "none";
+    //     errorEl.style.paddingTop = "4px";
+    //     errorEl.style.paddingBottom = "4px";
+    //     errorEl.textContent = ruleText;
+    //     usernameInput.insertAdjacentElement("afterend", errorEl);
+
+    //     function validateUsername() {
+    //         const value = usernameInput.value.trim();
+    //         const regex = /^[a-z0-9_]+$/;
+
+    //         if (value === "") {
+    //             errorEl.style.display = "none";
+    //             usernameInput.classList.remove("is-invalid");
+    //             return true;
+    //         }
+
+    //         if (!regex.test(value)) {
+    //             errorEl.style.display = "block";
+    //             usernameInput.classList.add("is-invalid");
+    //             return false;
+    //         }
+
+    //         errorEl.style.display = "none";
+    //         usernameInput.classList.remove("is-invalid");
+    //         return true;
+    //     }
+
+    //     // Validate while typing
+    //     usernameInput.addEventListener("input", validateUsername);
+
+    //     // Validate before form submit
+    //     form.addEventListener("submit", function(e) {
+    //         if (!validateUsername()) {
+    //             e.preventDefault();
+    //             usernameInput.focus();
+    //         }
+    //     });
+    // });
 </script>
 
 <?php get_footer_based_on_login(); ?>

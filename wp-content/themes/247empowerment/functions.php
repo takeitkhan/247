@@ -13,7 +13,8 @@ function mm_theme_setup()
 }
 add_action('after_setup_theme', 'mm_theme_setup');
 
-function mm_enqueue_assets() {
+function mm_enqueue_assets()
+{
     // CSS
     wp_enqueue_style('glightbox-css', get_template_directory_uri() . '/assets/vendor/glightbox/css/glightbox.min.css', [], '3.2.0');
     wp_enqueue_style('aos-css', get_template_directory_uri() . '/assets/vendor/aos/aos.css', [], '2.3.4');
@@ -395,55 +396,102 @@ add_action('init', function () {
 // Register query var
 add_filter('query_vars', function ($vars) {
     $vars[] = 'custom_page';
+    $vars[] = 'user_profile';
     return $vars;
 });
 
+add_action('init', function () {
+    add_rewrite_rule(
+        '^profile/([^/]+)/?$',
+        'index.php?user_profile=$matches[1]',
+        'top'
+    );
+});
+
 add_filter('template_include', function ($template) {
+
     // Handle custom_page
     $custom_page = get_query_var('custom_page');
     if ($custom_page === 'report') {
-        return get_template_directory() . '/template-custom/auth/report.php';
+        return get_theme_file_path('template-custom/auth/report.php');
     }
     if ($custom_page === 'suggestion') {
-        return get_template_directory() . '/template-custom/auth/suggestion.php';
+        return get_theme_file_path('template-custom/auth/suggestion.php');
     }
 
-    // Handle user_profile
+    // Handle user profile
     $user_slug = get_query_var('user_profile');
+    if (!$user_slug) {
+        return $template;
+    }
 
-    if (!$user_slug) return $template;
+    // Let real pages/posts win
+    if (get_page_by_path($user_slug, OBJECT, ['page', 'post'])) {
+        return $template;
+    }
 
-    // Skip if it's an existing page or post
-    if (get_page_by_path($user_slug)) return $template;
-    if (get_posts(['name' => $user_slug, 'post_type' => 'any'])) return $template;
-
-    // Try to load user profile
+    // Resolve user
     $user = get_user_by('slug', $user_slug);
+    if (!$user) {
+        $user = get_user_by('login', $user_slug);
+    }
+
     if ($user) {
-        $custom_template = get_theme_file_path('template-custom/auth/user-profile.php');
-        if (file_exists($custom_template)) {
-            return $custom_template;
-        }
+        return get_theme_file_path('template-custom/auth/user-profile.php');
     }
 
     return $template;
 });
 
+// add_filter('template_include', function ($template) {
+//     // Handle custom_page
+//     $custom_page = get_query_var('custom_page');
+//     if ($custom_page === 'report') {
+//         return get_template_directory() . '/template-custom/auth/report.php';
+//     }
+//     if ($custom_page === 'suggestion') {
+//         return get_template_directory() . '/template-custom/auth/suggestion.php';
+//     }
+
+//     // Handle user_profile
+//     $user_slug = get_query_var('user_profile');
+
+//     if (!$user_slug) return $template;
+
+//     // Skip if slug belongs to an existing post or page (FAST)
+//     if (get_page_by_path($user_slug, OBJECT, ['page', 'post'])) {
+//         return $template;
+//     }
+
+//     if (get_posts(['name' => $user_slug, 'post_type' => 'any'])) return $template;
+
+//     // Try to load user profile
+//     $user_slug = get_query_var('user_profile');
+//     if (!$user_slug) {
+//         return $template;
+//     }
+
+//     // Let real content win (fast)
+//     if (!is_404()) {
+//         return $template;
+//     }
+
+//     // Try user lookup
+//     $user = get_user_by('slug', $user_slug);
+//     if (!$user) {
+//         $user = get_user_by('login', $user_slug);
+//     }
+
+//     if ($user) {
+//         return get_theme_file_path('template-custom/auth/user-profile.php');
+//     }
+
+//     return $template;
+// });
+
 
 
 add_filter('show_admin_bar', '__return_false');
-
-
-// add_action('init', function () {
-//     add_rewrite_tag('%custom_page%', '([^&]+)');
-//     add_rewrite_rule('^report/?$', 'index.php?custom_page=report', 'top');
-//     add_rewrite_rule('^suggestion/?$', 'index.php?custom_page=suggestion', 'top');
-// });
-
-// add_filter('query_vars', function ($vars) {
-//     $vars[] = 'custom_page';
-//     return $vars;
-// });
 
 add_action('wp_ajax_chatgpt_ajax_handler', 'chatgpt_ajax_handler');
 function chatgpt_ajax_handler()

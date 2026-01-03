@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
 /**
  * Plugin constants
  */
-define('MM_SPG_VERSION', '0.1.4');
+define('MM_SPG_VERSION', '0.1.6');
 define('MM_SPG_PATH', plugin_dir_path(__FILE__));
 define('MM_SPG_URL', plugin_dir_url(__FILE__));
 

@@ -262,3 +262,8 @@ body.mm-spg-highlighting {
     padding-left: 20px;
     margin-bottom: 1rem;
 }
+
+.mm-spg-error {
+    font-size: 14px;
+    font-weight: 500;
+}
