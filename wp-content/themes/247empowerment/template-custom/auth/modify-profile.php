@@ -196,7 +196,7 @@ $val = fn($key, $default = '') => esc_attr($profile[$key] ?? $default);
                             ?>
 
                             <div class="col-12 col-md-12">
-                                <label class="form-label">Location Name:</label>
+                                <label class="form-label">Address:</label>
                                 <input type="text" name="place_display_name" class="form-control input"
                                     value="<?php echo esc_attr(get_user_meta($current_user->ID, 'place_display_name', true)); ?>">
                                 <div class="mt-2 form-check">

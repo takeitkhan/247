@@ -264,9 +264,9 @@ if ($shareable_link) {
                         $signin_url = home_url("/signin?ref={$ref}");
                         ?>
 
-                        <div class="d-flex align-items-center justify-content-end gap-3">
-                            <a href="<?php echo esc_url($signup_url); ?>" class="">Sign Up</a>
-                            <a href="<?php echo esc_url($signin_url); ?>" class="custom-btn">Sign In</a>
+                        <div class="d-flex align-items-center justify-content-end gap-3">                            
+                            <a href="<?php echo esc_url($signin_url); ?>" >Sign In</a>
+                            <a href="<?php echo esc_url($signup_url); ?>" class="custom-btn">Sign Up</a>
                         </div>
                         <?php wp_footer(); ?>
                     </div>

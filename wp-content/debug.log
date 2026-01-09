@@ -1376,3 +1376,28 @@ Stack trace:
 [03-Jan-2026 05:22:06 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-user.php on line 218
 [03-Jan-2026 05:22:07 UTC] PHP Warning:  Undefined variable $username in D:\oldwindows\laragon\www\pet\wp-content\themes\247empowerment\functions.php on line 473
 [03-Jan-2026 05:22:07 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in D:\oldwindows\laragon\www\pet\wp-includes\class-wp-user.php on line 218
+[06-Jan-2026 03:47:18 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[06-Jan-2026 03:47:23 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[06-Jan-2026 03:49:09 UTC] Automatic updates starting...
+[06-Jan-2026 03:49:16 UTC] Automatic updates complete.
+[06-Jan-2026 13:41:02 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[06-Jan-2026 13:41:06 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[06-Jan-2026 13:42:36 UTC] Automatic updates starting...
+[06-Jan-2026 13:42:39 UTC] Automatic updates complete.
+[07-Jan-2026 14:38:21 UTC] Automatic updates starting...
+[07-Jan-2026 14:38:21 UTC] Automatic updates complete.
+[08-Jan-2026 07:10:53 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_wp_theme_files_patterns-ea29836a576169022959c834a1adfa2a' made by require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option
+[08-Jan-2026 07:11:02 UTC] Automatic updates starting...
+[08-Jan-2026 07:11:05 UTC] Automatic updates complete.
+[08-Jan-2026 07:17:56 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[08-Jan-2026 07:18:01 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[08-Jan-2026 07:18:01 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[08-Jan-2026 07:18:06 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[08-Jan-2026 07:18:13 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[08-Jan-2026 07:18:19 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[08-Jan-2026 07:18:20 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No connection could be made because the target machine actively refused it in D:\oldwindows\laragon\www\pet\wp-includes\class-wpdb.php on line 1994
+[09-Jan-2026 11:45:12 UTC] Automatic updates starting...
+[09-Jan-2026 11:45:15 UTC] Automatic updates complete.
+[09-Jan-2026 12:51:59 UTC] Automatic updates starting...
+[09-Jan-2026 12:51:59 UTC] Automatic updates complete.
+[09-Jan-2026 16:57:50 UTC] WordPress database error Deadlock found when trying to get lock; try restarting transaction for query DELETE FROM `pet_options` WHERE `option_name` = '_site_transient_timeout_wp_theme_files_patterns-ea29836a576169022959c834a1adfa2a' made by require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, _register_theme_block_patterns, WP_Theme->get_block_patterns, WP_Theme->get_pattern_cache, get_site_transient, delete_site_option, delete_network_option, delete_option

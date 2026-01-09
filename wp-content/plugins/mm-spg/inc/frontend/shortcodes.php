@@ -49,10 +49,10 @@ add_shortcode('mm_spg_interest_form', function () {
         <?php wp_nonce_field('mm_spg_interest_save', 'mm_spg_interest_nonce'); ?>
 
         <label class="mb-3 form-label fw-bold">
-            Please prioritize your interests:
+            Please Select your Primary Interest:
         </label>
 
-        <div class="mb-2 text-danger mm-spg-error" style="display:none;"></div>
+        <div class="mb-2 text-danger text-center mm-spg-error" style="display:none;"></div>
 
         <div class="row g-2">
             <?php foreach ($categories as $cat):
@@ -126,21 +126,21 @@ function mm_spg_save_interests()
     $has_first_priority = false;
 
     foreach ($priorities_raw as $term_id => $priority) {
-        $term_id  = (int) $term_id;
+        if (!in_array((int)$term_id, $selected, true)) {
+            continue;
+        }
+
         $priority = (int) $priority;
 
-        if (
-            in_array($term_id, $selected, true) &&
-            $priority >= 1 &&
-            $priority <= 5
-        ) {
-            $priorities[$term_id] = $priority;
+        if ($priority >= 1 && $priority <= 5) {
+            $priorities[(int)$term_id] = $priority;
 
             if ($priority === 1) {
                 $has_first_priority = true;
             }
         }
     }
+
 
     /* -------------------------
        RULE 2: At least one 1st priority
@@ -155,6 +155,11 @@ function mm_spg_save_interests()
     if (count($priorities) !== count(array_unique($priorities))) {
         wp_send_json_error('Duplicate priorities are not allowed.');
     }
+
+    if (count($priorities) !== count($selected)) {
+        wp_send_json_error('Each selected interest must have a priority.');
+    }
+
 
     /* -------------------------
        SAVE
@@ -265,6 +270,8 @@ add_shortcode('mm_spg_additional_profile_details', function () {
     $about_short  = get_user_meta($user_id, 'digital_card_about', true);
     $keywords     = get_user_meta($user_id, 'user_keywords', true);
     $hashtags     = get_user_meta($user_id, 'user_hashtags', true);
+    $place_display_name = get_user_meta($user_id, 'place_display_name', true);
+    $show_full_address  = get_user_meta($user_id, 'show_full_address', true);
 
     ob_start();
 ?>
@@ -293,6 +300,26 @@ add_shortcode('mm_spg_additional_profile_details', function () {
                 required><?= esc_textarea($about_short); ?></textarea>
             <div class="text-muted small">
                 <span id="charCount">0</span>/150
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Address</label>
+            <input type="text"
+                name="place_display_name"
+                class="form-control"
+                maxlength="120"
+                value="<?= esc_attr($place_display_name); ?>">
+
+            <div class="mt-2 form-check">
+                <input class="form-check-input"
+                    type="checkbox"
+                    id="show_full_address"
+                    name="show_full_address"
+                    value="1"
+                    <?= checked($show_full_address, '1', false); ?>>
+                <label class="form-check-label" for="show_full_address">
+                    Show full address on profile
+                </label>
             </div>
         </div>
 
@@ -348,32 +375,60 @@ add_action('wp_ajax_mm_spg_save_additional_profile', function () {
         wp_send_json_error('Not logged in');
     }
 
-    check_ajax_referer('mm_spg_save_additional_profile', 'mm_spg_additional_nonce');
+    check_ajax_referer(
+        'mm_spg_save_additional_profile',
+        'mm_spg_additional_nonce'
+    );
 
     $user_id = get_current_user_id();
 
+    // Title / Designation
     update_user_meta(
         $user_id,
         'designation',
         sanitize_text_field($_POST['designation'] ?? '')
     );
 
+    // About (max 150 chars)
     $about = sanitize_text_field($_POST['about_me_short'] ?? '');
-    update_user_meta($user_id, 'digital_card_about', mb_substr($about, 0, 150));
+    update_user_meta(
+        $user_id,
+        'digital_card_about',
+        mb_substr($about, 0, 150)
+    );
 
+    // Keywords (comma separated)
     update_user_meta(
         $user_id,
         'user_keywords',
         sanitize_text_field($_POST['user_keywords'] ?? '')
     );
 
+    // Hashtags (clean + normalize)
+    $hashtags_input = sanitize_text_field($_POST['user_hashtags'] ?? '');
+    $hashtags_array = array_filter(array_map('trim', explode(',', $hashtags_input)));
+
+    $clean_hashtags = [];
+    foreach ($hashtags_array as $tag) {
+        if ($tag !== '') {
+            if (mb_substr($tag, 0, 1) !== '#') {
+                $tag = '#' . $tag;
+            }
+            $clean_hashtags[] = $tag;
+        }
+    }
+
     update_user_meta(
         $user_id,
         'user_hashtags',
-        sanitize_text_field($_POST['user_hashtags'] ?? '')
+        implode(', ', $clean_hashtags)
     );
 
-    update_user_meta($user_id, 'mm_spg_additional_profile_completed', 1);
+    update_user_meta(
+        $user_id,
+        'mm_spg_additional_profile_completed',
+        1
+    );
 
     wp_send_json_success('Profile details saved successfully.');
 });

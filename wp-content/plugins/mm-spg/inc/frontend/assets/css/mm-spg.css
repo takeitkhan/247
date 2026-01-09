@@ -5,26 +5,30 @@
 }
 
 .mm-spg-modal {
-    position: fixed;
+     position: fixed;   /* 🔥 change from absolute */
     inset: 0;
     z-index: 9999;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .mm-spg-backdrop {
-    position: absolute;
+    position: fixed;   /* 🔥 ensure always fixed */
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
 }
 
 .mm-spg-dialog {
-    position: relative;
+    position: relative; /* dialog moves, backdrop doesn't */
     max-width: 720px;
     margin: 10vh auto;
     background: #fff;
-    border-radius: 20px;    
+    border-radius: 20px;
     z-index: 2;
+
+    transition: transform 0.25s ease-out;
+    will-change: transform;
 }
+
 
 .mm-spg-close {
     position: absolute;
@@ -142,6 +146,7 @@ body.mm-spg-highlighting {
     text-align: center;
     margin-bottom: 10px;
     font-size: 42px;
+    margin-top: -60px;
 }
 
 .mm-spg-avatar-choice {

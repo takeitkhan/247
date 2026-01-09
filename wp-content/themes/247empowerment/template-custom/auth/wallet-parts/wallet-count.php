@@ -16,7 +16,7 @@ $current_points = $args['current_points'] ?? 0;
             <div>
                 <div class="d-flex align-items-center gap-2">
                     <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/referral.svg" alt="">
-                    <span class="fs20 fw-bold">Referral Wallet</span>
+                    <span class="fs20 fw-bold">Wallet</span>
                 </div>
                 <p class="mt-2">Earned from invited users</p>
                 <div class="py-3">
@@ -43,7 +43,7 @@ $current_points = $args['current_points'] ?? 0;
                     <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/earn.svg" alt="">
                     <span class="fs20 fw-bold">Earned Points</span>
                 </div>
-                <p class="mt-2">Earned from invited users</p>
+                <p class="mt-2">100 Reward Points Equal $10 Redeemable in our Marketplace</p>
 
                 <div class="py-3">
                     <p class="d-flex align-items-center justify-content-between">

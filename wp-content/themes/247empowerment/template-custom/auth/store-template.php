@@ -98,7 +98,7 @@ if ($user) {
         </div>
 
         <!-- Main Feed -->
-        <div class="mb-4 col-lg-6">
+        <div class="mb-4 col-lg-9">
             <div class="custom-card post-search">
                 <div class="gap-3 mb-2 post-row">
                     <div class="d-flex pb-3 u-title">
@@ -228,6 +228,8 @@ if ($user) {
         </div>
 
         <!-- Upcoming Events -->
+        <?php
+        /**
         <div class="col-lg-3">
             <div class="bg-white upcoming-events custom-card">
                 <div class="d-flex pb-4 u-title">
@@ -295,6 +297,7 @@ if ($user) {
                 </div>
             </div>
         </div>
+        **/ ?>
 
     </div>
 </div>

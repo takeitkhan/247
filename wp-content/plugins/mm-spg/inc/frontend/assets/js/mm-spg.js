@@ -1,6 +1,28 @@
 (function ($) {
     'use strict';
 
+    /* =========================
+       DIALOG DRAG ON SCROLL
+    ========================= */
+    const $dialog = $('.mm-spg-dialog');
+    if (!$dialog.length) return;
+
+    let translateY = 0;
+
+    $(window).on('wheel', function (e) {
+        const deltaY = e.originalEvent.deltaY || 0;
+
+        // 🔁 invert wheel direction
+        translateY -= deltaY * 0.15;
+
+        translateY = Math.max(-120, Math.min(120, translateY));
+
+        $dialog.css('transform', 'translateY(' + translateY + 'px)');
+    });
+
+
+
+
     let steps = MM_SPG.steps || [];
     let currentStep = 0;
     let avatar = MM_SPG.avatar || '';
@@ -239,6 +261,53 @@
         return -1;
     }
 
+    function validateInterestForm() {
+        const $form = $('.mm-spg-interest-form');
+        if (!$form.length) return true;
+
+        const $error = $form.find('.mm-spg-error');
+        const $checked = $form.find('input[name="user_categories[]"]:checked');
+
+        $error.hide().text('');
+
+        // RULE 1: At least one checkbox
+        if (!$checked.length) {
+            $error.text('Oops: Please prioritise your interest to proceed.').show();
+            return false;
+        }
+
+        let hasFirstPriority = false;
+        let allHavePriority = true;
+
+        $checked.each(function () {
+            const termId = $(this).val();
+            const priority = $form.find(
+                `select[name="user_categories_priority[${termId}]"]`
+            ).val();
+
+            if (!priority) {
+                allHavePriority = false;
+                return false;
+            }
+
+            if (priority === '1') {
+                hasFirstPriority = true;
+            }
+        });
+
+        if (!allHavePriority) {
+            $error.text('Oops: Please assign a priority to each selected interest.').show();            
+            return false;
+        }
+
+        if (!hasFirstPriority) {
+            $error.text('Oops: Please mark at least one interest as 1st priority.').show();
+            return false;
+        }
+
+        return true;
+    }
+
 
 
     /* =========================
@@ -263,121 +332,15 @@
         });
     });
 
-    // Next
-    // $(document).on('click', '.mm-spg-next', function () {
-    //     let step = steps[currentStep];
-    //     clearHighlight();
-
-    //     /* =========================
-    //        SAVE INTERESTS (IF PRESENT)
-    //     ========================= */
-    //     const $interestForm = $('.mm-spg-interest-form');
-    //     if ($interestForm.length) {
-    //         const formData = $interestForm.serialize();
-
-    //         $.post(MM_SPG.ajax_url, {
-    //             action: 'mm_spg_save_interests',
-    //             nonce: $interestForm.find('[name="mm_spg_interest_nonce"]').val(),
-    //             ...Object.fromEntries(new URLSearchParams(formData))
-    //         });
-    //     }
-
-    //     /* =========================
-    //        SAVE ADDITIONAL PROFILE (IF PRESENT)
-    //     ========================= */
-    //     const $profileForm = $('.mm-spg-additional-profile-form');
-    //     if ($profileForm.length) {
-
-    //         // ensure hidden fields are populated (keywords / hashtags)
-    //         const keywords = [];
-    //         $('#keyword-tags .keyword-tag').each(function () {
-    //             keywords.push(
-    //                 $(this).clone().children().remove().end().text().trim()
-    //             );
-    //         });
-    //         $('#keywords-hidden').val(keywords.join(', '));
-
-    //         const hashtags = [];
-    //         $('#hashtag-tags .hashtag-tag').each(function () {
-    //             hashtags.push(
-    //                 $(this).clone().children().remove().end().text().trim()
-    //             );
-    //         });
-    //         $('#hashtags-hidden').val(hashtags.join(', '));
-
-    //         const formData = $profileForm.serialize();
-
-    //         $.post(MM_SPG.ajax_url, {
-    //             action: 'mm_spg_save_additional_profile',
-    //             nonce: $profileForm.find('[name="mm_spg_additional_nonce"]').val(),
-    //             ...Object.fromEntries(new URLSearchParams(formData))
-    //         });
-    //     }
-
-    //     /* =========================
-    //     SAVE SOCIAL LINKS (IF PRESENT)
-    //     ========================= */
-    //     const $socialForm = $('.mm-spg-social-links-form');
-    //     if ($socialForm.length) {
-
-    //         const formData = $socialForm.serialize();
-
-    //         $.post(MM_SPG.ajax_url, {
-    //             action: 'mm_spg_save_social_links',
-    //             nonce: $socialForm.find('[name="mm_spg_links_nonce"]').val(),
-    //             ...Object.fromEntries(new URLSearchParams(formData))
-    //         });
-    //     }
-
-
-    //     /* =========================
-    //        PHASE 2 → PHASE 3
-    //     ========================= */
-    //     if (
-    //         step.phase === 2 &&
-    //         MM_SPG.phase_3_start_index !== null &&
-    //         currentStep === MM_SPG.phase_3_start_index - 1
-    //     ) {
-    //         $.post(MM_SPG.ajax_url, {
-    //             action: 'mm_spg_complete_phase_2',
-    //             nonce: MM_SPG.nonce
-    //         }, function () {
-    //             currentStep = MM_SPG.phase_3_start_index;
-    //             saveState('active');
-    //             renderStep();
-    //         });
-    //         return;
-    //     }
-
-    //     /* =========================
-    //        PHASE 3 COMPLETION
-    //     ========================= */
-    //     if (step.phase === 3 && currentStep >= steps.length - 1) {
-    //         saveState('stopped');
-    //         hideModal();
-    //         updateLauncher('stopped');
-    //         return;
-    //     }
-
-    //     /* =========================
-    //        REDIRECT
-    //     ========================= */
-    //     if (step.redirect) {
-    //         window.location.href = step.redirect;
-    //         return;
-    //     }
-
-    //     /* =========================
-    //        NORMAL STEP
-    //     ========================= */
-    //     currentStep++;
-    //     saveState('active');
-    //     renderStep();
-    // });
-
     $(document).on('click', '.mm-spg-next', function () {
+
+        if (!validateInterestForm()) {
+            return;
+        }
         let step = steps[currentStep];
         clearHighlight();
+
+
 
         /* =========================
            SAVE FORMS (NON-BLOCKING)
@@ -411,7 +374,7 @@
             const formData = $profileForm.serialize();
             $.post(MM_SPG.ajax_url, {
                 action: 'mm_spg_save_additional_profile',
-                nonce: $profileForm.find('[name="mm_spg_additional_nonce"]').val(),
+                mm_spg_additional_nonce: $profileForm.find('[name="mm_spg_additional_nonce"]').val(),
                 ...Object.fromEntries(new URLSearchParams(formData))
             });
         }
@@ -529,6 +492,11 @@
     ========================== */
     $(document).on('submit', '.mm-spg-interest-form', function (e) {
         e.preventDefault();
+
+        // 🔹 STEP 2: আগের validation-এর জায়গায় এই এক লাইন
+        if (!validateInterestForm()) {
+            return;
+        }
 
         const $form = $(this);
         const formData = $form.serialize();
@@ -791,8 +759,4 @@
                 }
             });
     });
-
-
-
-
 })(jQuery);
