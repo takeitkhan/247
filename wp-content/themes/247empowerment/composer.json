@@ -1,0 +1,7 @@
+{
+    "require": {
+        "google/apiclient": "2.15",
+        "mpdf/mpdf": "^8.2",
+        "endroid/qr-code": "4.8"
+    }
+}
