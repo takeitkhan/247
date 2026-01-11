@@ -1,0 +1,8 @@
+Parse errors for /dom93972/.htaccess:
+- unsupported directive SetEnv no-gzip 1
+
+Skipped directives for /dom93972/.htaccess:
+- {RewriteRule {.* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]}}: unsuppored unsupported flag [E]
+- {RewriteRule {^index\.php$ - [L]}}: unsupported pattern and substitution
+- {RewriteRule {. /index.php [L]}}: unsupported combination of test string and flags in rewrite condition
+	RewriteCond %{REQUEST_FILENAME} !-f; RewriteCond %{REQUEST_FILENAME} !-d
