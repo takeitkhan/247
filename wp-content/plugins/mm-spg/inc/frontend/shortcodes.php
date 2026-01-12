@@ -380,6 +380,24 @@ add_action('wp_ajax_mm_spg_save_additional_profile', function () {
         'mm_spg_additional_nonce'
     );
 
+    $title = trim($_POST['designation'] ?? '');
+    $about = trim($_POST['about_me_short'] ?? '');
+    $address = trim($_POST['place_display_name'] ?? '');
+    $keywords = trim($_POST['user_keywords'] ?? '');
+    $hashtags = trim($_POST['user_hashtags'] ?? '');
+
+    if ($title === '') {
+        wp_send_json_error('Title is required.');
+    }
+
+    if ($about === '') {
+        wp_send_json_error('About section is required.');
+    }
+
+    if ($address === '' && $keywords === '' && $hashtags === '') {
+        wp_send_json_error('Please add at least one: Address, Keyword, or Hashtag.');
+    }
+
     $user_id = get_current_user_id();
 
     // Title / Designation

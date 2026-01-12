@@ -1,6 +1,12 @@
 (function ($) {
     'use strict';
 
+
+    if (res.data.completed) {
+        $('#mm-spg-launcher').addClass('mm-spg-hidden');
+        return; // 🔒 hard stop
+    }
+
     /* =========================
        DIALOG DRAG ON SCROLL
     ========================= */
@@ -19,8 +25,6 @@
 
         $dialog.css('transform', 'translateY(' + translateY + 'px)');
     });
-
-
 
 
     let steps = MM_SPG.steps || [];
@@ -136,11 +140,13 @@
 
         /** Phase 3 */
 
-        if (step.phase === 3) {
+        /* if (step.phase === 3) {
             $('.mm-spg-pause').hide();
         } else {
             $('.mm-spg-pause').show();
-        }
+        } */
+
+        $('.mm-spg-pause').show();
     }
 
     function nl2br(str) {
@@ -296,7 +302,7 @@
         });
 
         if (!allHavePriority) {
-            $error.text('Oops: Please assign a priority to each selected interest.').show();            
+            $error.text('Oops: Please assign a priority to each selected interest.').show();
             return false;
         }
 
@@ -307,6 +313,125 @@
 
         return true;
     }
+
+    function validateAdditionalProfileForm() {
+        const $form = $('.mm-spg-additional-profile-form');
+        if (!$form.length) return true;
+
+        let errorMsg = '';
+
+        const title = $form.find('[name="designation"]').val().trim();
+        const about = $form.find('[name="about_me_short"]').val().trim();
+        const address = $form.find('[name="place_display_name"]').val().trim();
+
+        // Collect keywords
+        const keywords = [];
+        $form.find('#keyword-tags .keyword-tag').each(function () {
+            keywords.push(
+                $(this).clone().children().remove().end().text().trim()
+            );
+        });
+
+        // Collect hashtags
+        const hashtags = [];
+        $form.find('#hashtag-tags .hashtag-tag').each(function () {
+            hashtags.push(
+                $(this).clone().children().remove().end().text().trim()
+            );
+        });
+
+        if (!title) {
+            errorMsg = 'Please enter your title.';
+        } else if (!about) {
+            errorMsg = 'Please write something about yourself.';
+        } else if (!address) {
+            errorMsg = 'Please enter your address.';
+        } else if (!keywords.length) {
+            errorMsg = 'Please add at least one keyword.';
+        } else if (!hashtags.length) {
+            errorMsg = 'Please add at least one hashtag.';
+        }
+
+        if (errorMsg) {
+            $form.find('.alert').remove();
+            $form.prepend(
+                '<div class="alert alert-danger mb-2">' + errorMsg + '</div>'
+            );
+            return false;
+        }
+
+        return true;
+    }
+
+
+    // 1️⃣ Comma → tag (keywords)
+    $(document).on('keydown', '#keywordInput', function (e) {
+        if (e.key === ',' || e.key === 'Enter') {
+            e.preventDefault();
+
+            const $input = $(this);
+            let value = $input.val().replace(',', '').trim();
+
+            if (!value) return;
+
+            const exists = $('#keyword-tags .keyword-tag').filter(function () {
+                return $(this).clone().children().remove().end().text().trim() === value;
+            }).length;
+
+            if (!exists) {
+                $('#keyword-tags').prepend(`
+                    <span class="bg-light border text-dark badge keyword-tag">
+                        ${value}
+                        <button type="button" class="btn-close remove-tag"></button>
+                    </span>
+                `);
+            }
+
+            $input.val('');
+        }
+    });
+
+    // 2️⃣ Comma → tag (hashtags)
+    $(document).on('keydown', '#hashtagInput', function (e) {
+        if (e.key === ',' || e.key === 'Enter') {
+            e.preventDefault();
+
+            const $input = $(this);
+            let value = $input.val().replace(',', '').trim();
+
+            if (!value) return;
+
+            if (!value.startsWith('#')) {
+                value = '#' + value;
+            }
+
+            const exists = $('#hashtag-tags .hashtag-tag').filter(function () {
+                return $(this).clone().children().remove().end().text().trim() === value;
+            }).length;
+
+            if (!exists) {
+                $('#hashtag-tags').prepend(`
+                    <span class="bg-light border text-dark badge hashtag-tag">
+                        ${value}
+                        <button type="button" class="btn-close remove-hashtag"></button>
+                    </span>
+                `);
+            }
+
+            $input.val('');
+        }
+    });
+
+    // Remove keyword tag
+    $(document).on('click', '.remove-tag', function () {
+        $(this).closest('.keyword-tag').remove();
+    });
+
+    // Remove hashtag tag
+    $(document).on('click', '.remove-hashtag', function () {
+        $(this).closest('.hashtag-tag').remove();
+    });
+
 
 
 
@@ -334,7 +459,12 @@
 
     $(document).on('click', '.mm-spg-next', function () {
 
+        // Interests Form validation
         if (!validateInterestForm()) {
+            return;
+        }
+        // 🔒 Additional Profile validation (THIS WAS MISSING)
+        if (!validateAdditionalProfileForm()) {
             return;
         }
         let step = steps[currentStep];
@@ -423,12 +553,26 @@
         /* =========================
            PHASE 3 COMPLETION
         ========================= */
-        if (step.phase === 3 && currentStep >= steps.length - 1) {
+        /* if (step.phase === 3 && currentStep >= steps.length - 1) {
             saveState('stopped');
             hideModal();
             updateLauncher('stopped');
             return;
+        } */
+
+        if (step.phase === 3 && currentStep >= steps.length - 1) {
+
+            $.post(MM_SPG.ajax_url, {
+                action: 'mm_spg_complete_phase_3',
+                nonce: MM_SPG.nonce
+            }, function () {
+                hideModal();
+                $('#mm-spg-launcher').addClass('mm-spg-hidden');
+            });
+
+            return;
         }
+
 
         /* =========================
            REDIRECT
@@ -457,6 +601,10 @@
 
     // Launcher click
     $(document).on('click', '#mm-spg-launcher', function () {
+
+        if (MM_SPG.completed) {
+            return; // 🔒 guide finished
+        }
 
         // ✅ Avatar must exist
         if (!avatar) {
@@ -536,40 +684,40 @@
         const index = $('#social-links-group .social-link-row').length;
 
         const row = `
-        <div class="align-items-center mb-2 row g-2 social-link-row">
-            <div class="col-md-3">
-                <select name="links[${index}][platform]" class="form-select">
-                    <option value="facebook">Facebook</option>
-                    <option value="instagram">Instagram</option>
-                    <option value="linkedin">LinkedIn</option>
-                    <option value="twitter">Twitter / X</option>
-                    <option value="youtube">YouTube</option>
-                    <option value="website">Website</option>
-                </select>
-            </div>
+            <div class="align-items-center mb-2 row g-2 social-link-row">
+                <div class="col-md-3">
+                    <select name="links[${index}][platform]" class="form-select">
+                        <option value="facebook">Facebook</option>
+                        <option value="instagram">Instagram</option>
+                        <option value="linkedin">Linked In</option>
+                        <option value="twitter">Twitter / X</option>
+                        <option value="youtube">YouTube</option>
+                        <option value="website">Website</option>
+                    </select>
+                </div>
 
-            <div class="col-md-3">
-                <input type="text"
-                       name="links[${index}][label]"
-                       class="form-control"
-                       placeholder="Custom label">
-            </div>
+                <div class="col-md-3">
+                    <input type="text"
+                        name="links[${index}][label]"
+                        class="form-control"
+                        placeholder="Custom label">
+                </div>
 
-            <div class="col-md-4">
-                <input type="url"
-                       name="links[${index}][url]"
-                       class="form-control"
-                       placeholder="https://example.com">
-            </div>
+                <div class="col-md-4">
+                    <input type="url"
+                        name="links[${index}][url]"
+                        class="form-control"
+                        placeholder="https://example.com">
+                </div>
 
-            <div class="col-md-2">
-                <button type="button"
-                        class="w-100 btn btn-danger remove-link">
-                    Remove
-                </button>
+                <div class="col-md-2">
+                    <button type="button"
+                            class="w-100 btn btn-danger remove-link">
+                        Remove
+                    </button>
+                </div>
             </div>
-        </div>
-    `;
+        `;
 
         $('#social-links-group').append(row);
     });
@@ -615,49 +763,59 @@
     /* =====================
     ADDITIONAL PROFILE
     =================== */
-    $(document).on('submit', '.mm-spg-additional-profile-form', function (e) {
-        e.preventDefault();
+    $(document)
+        .off('submit.mmSpgAdditionalProfile', '.mm-spg-additional-profile-form')
+        .on('submit.mmSpgAdditionalProfile', '.mm-spg-additional-profile-form', function (e) {
 
-        const $form = $(this);
+            e.preventDefault();
 
-        // Keywords
-        const keywords = [];
-        $form.find('#keyword-tags .keyword-tag').each(function () {
-            keywords.push(
-                $(this).clone().children().remove().end().text().trim()
-            );
-        });
-        $form.find('#keywords-hidden').val(keywords.join(', '));
+            const $form = $(this);
 
-        // Hashtags
-        const hashtags = [];
-        $form.find('#hashtag-tags .hashtag-tag').each(function () {
-            hashtags.push(
-                $(this).clone().children().remove().end().text().trim()
-            );
-        });
-        $form.find('#hashtags-hidden').val(hashtags.join(', '));
-
-        console.log('KEYWORDS:', $form.find('#keywords-hidden').val());
-        console.log('HASHTAGS:', $form.find('#hashtags-hidden').val());
-
-        $.post(MM_SPG.ajax_url, {
-            action: 'mm_spg_save_additional_profile',
-            nonce: $form.find('[name="mm_spg_additional_nonce"]').val(),
-            designation: $form.find('[name="designation"]').val(),
-            about_me_short: $form.find('[name="about_me_short"]').val(),
-            user_keywords: $form.find('#keywords-hidden').val(),
-            user_hashtags: $form.find('#hashtags-hidden').val()
-        }, function (res) {
-            $form.find('.alert').remove();
-
-            if (res.success) {
-                $form.prepend('<div class="alert alert-success mb-2">' + res.data + '</div>');
-            } else {
-                $form.prepend('<div class="alert alert-danger mb-2">' + res.data + '</div>');
+            if (!validateAdditionalProfileForm()) {
+                return;
             }
+
+            // Keywords
+            const keywords = [];
+            $form.find('#keyword-tags .keyword-tag').each(function () {
+                keywords.push(
+                    $(this).clone().children().remove().end().text().trim()
+                );
+            });
+            $form.find('#keywords-hidden').val(keywords.join(', '));
+
+            // Hashtags
+            const hashtags = [];
+            $form.find('#hashtag-tags .hashtag-tag').each(function () {
+                hashtags.push(
+                    $(this).clone().children().remove().end().text().trim()
+                );
+            });
+            $form.find('#hashtags-hidden').val(hashtags.join(', '));
+
+            console.log('KEYWORDS:', $form.find('#keywords-hidden').val());
+            console.log('HASHTAGS:', $form.find('#hashtags-hidden').val());
+
+            $.post(MM_SPG.ajax_url, {
+                action: 'mm_spg_save_additional_profile',
+                nonce: $form.find('[name="mm_spg_additional_nonce"]').val(),
+                designation: $form.find('[name="designation"]').val(),
+                place_display_name: $form.find('[name="place_display_name"]').val(),
+                show_full_address: $form.find('[name="show_full_address"]').is(':checked') ? '1' : '0',
+                about_me_short: $form.find('[name="about_me_short"]').val(),
+                user_keywords: $form.find('#keywords-hidden').val(),
+                user_hashtags: $form.find('#hashtags-hidden').val()
+            }, function (res) {
+
+                $form.find('.alert').remove();
+
+                if (res.success) {
+                    $form.prepend('<div class="alert alert-success mb-2">' + res.data + '</div>');
+                } else {
+                    $form.prepend('<div class="alert alert-danger mb-2">' + res.data + '</div>');
+                }
+            });
         });
-    });
 
 
 

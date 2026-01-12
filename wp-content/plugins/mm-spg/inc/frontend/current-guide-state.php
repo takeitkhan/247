@@ -3,7 +3,7 @@
 /**
  * Get current guide state
  */
-function mm_spg_get_state()
+/* function mm_spg_get_state()
 {
     if (!is_user_logged_in()) {
         wp_send_json_error();
@@ -19,15 +19,57 @@ function mm_spg_get_state()
 
     // Phase detection
     $phase_2_done = (bool) get_user_meta($user_id, 'mm_spg_phase_2_completed', true);
+    $phase_3_done = (bool) get_user_meta($user_id, 'mm_spg_phase_3_completed', true);
+
 
     // Determine active phase
     $current_phase = $phase_2_done ? 3 : 2;
+
+    $completed = (bool) get_user_meta($user_id, 'mm_spg_completed', true);
 
     wp_send_json_success([
         'status'        => $status,
         'step'          => $step,
         'wait_until'    => $wait_until,
         'current_phase' => $current_phase,
+        'completed'     => $completed,
+    ]);
+}
+add_action('wp_ajax_mm_spg_get_state', 'mm_spg_get_state');
+ */
+
+
+function mm_spg_get_state()
+{
+    if (!is_user_logged_in()) {
+        wp_send_json_error();
+    }
+
+    check_ajax_referer('mm_spg_security', 'nonce');
+
+    $user_id = get_current_user_id();
+
+    // Current state
+    $status     = get_user_meta($user_id, 'mm_spg_status', true);
+    $step       = (int) get_user_meta($user_id, 'mm_spg_step', true);
+    $wait_until = (int) get_user_meta($user_id, 'mm_spg_waiting_until', true);
+
+    // Phase detection
+    $phase_2_done = (bool) get_user_meta($user_id, 'mm_spg_phase_2_completed', true);
+    $phase_3_done = (bool) get_user_meta($user_id, 'mm_spg_phase_3_completed', true);
+
+    // Determine active phase
+    $current_phase = $phase_2_done ? 3 : 2;
+
+    // ✅ SINGLE SOURCE OF TRUTH (FINAL)
+    $completed = $phase_3_done;
+
+    wp_send_json_success([
+        'status'        => $status,
+        'step'          => $step,
+        'wait_until'    => $wait_until,
+        'current_phase' => $current_phase,
+        'completed'     => $completed,
     ]);
 }
 add_action('wp_ajax_mm_spg_get_state', 'mm_spg_get_state');
@@ -144,6 +186,25 @@ add_action('wp_ajax_mm_spg_complete_phase_2', function () {
     update_user_meta($user_id, 'mm_spg_phase_3_started', 1);
     update_user_meta($user_id, 'mm_spg_step', 0);
     update_user_meta($user_id, 'mm_spg_status', 'active');
+
+    wp_send_json_success();
+});
+
+
+add_action('wp_ajax_mm_spg_complete_phase_3', function () {
+
+    if (!is_user_logged_in()) {
+        wp_send_json_error();
+    }
+
+    check_ajax_referer('mm_spg_security', 'nonce');
+
+    $user_id = get_current_user_id();
+
+    // 🔒 FINAL TERMINAL STATE
+    update_user_meta($user_id, 'mm_spg_phase_3_completed', 1);
+    update_user_meta($user_id, 'mm_spg_status', 'completed');
+    update_user_meta($user_id, 'mm_spg_step', -1);
 
     wp_send_json_success();
 });
