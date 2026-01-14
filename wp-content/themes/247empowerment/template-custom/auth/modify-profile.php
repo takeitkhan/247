@@ -71,9 +71,9 @@ if ($user) {
 $profile = $profile ?: [];
 $val = fn($key, $default = '') => esc_attr($profile[$key] ?? $default);
 
-// echo '<pre>';
-// var_dump($profile);
-// echo '</pre>';
+/*  echo '<pre>';
+ var_dump($profile);
+ echo '</pre>'; */
 ?>
 
 <div class="container profile-page pt20">
@@ -208,7 +208,7 @@ $val = fn($key, $default = '') => esc_attr($profile[$key] ?? $default);
 
                             <div class="col-12">
                                 <label class="form-label">Referrer:</label>
-                                <input type="text" class="form-control input" value="<?php echo esc_attr($referrer ?? 'No Referrer'); ?>" disabled>
+                                <input type="text" class="form-control input" value="<?php echo esc_attr( $profile['referred_users'][0]->user_login ?? '' ); ?>" disabled>
                             </div>
 
 

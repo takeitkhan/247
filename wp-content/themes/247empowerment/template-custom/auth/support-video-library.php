@@ -100,6 +100,8 @@ if ($user) {
                     ?>
                 </div>
 
+                <?php
+                /**
                 <!-- FEATURED THIS WEEK -->
                 <div class="mt-5">
                     <h4 class="fs24 fw-bold">Featured this week</h4>
@@ -143,6 +145,9 @@ if ($user) {
                         wp_reset_postdata(); ?>
                     </div>
                 </div>
+
+                 */
+                ?>
 
                 <!-- PLAYLISTS SECTION -->
                 <div class="mt-5">

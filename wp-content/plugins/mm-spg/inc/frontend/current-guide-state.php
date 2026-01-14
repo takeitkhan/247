@@ -75,7 +75,6 @@ function mm_spg_get_state()
 add_action('wp_ajax_mm_spg_get_state', 'mm_spg_get_state');
 
 
-
 /**
  * Update guide state
  */

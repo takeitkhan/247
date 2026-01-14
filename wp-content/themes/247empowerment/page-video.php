@@ -52,6 +52,8 @@ get_header_based_on_login();
     </div>
 
 
+    <?php
+    /**
     <!-- FEATURED THIS WEEK -->
     <div class="mt-5">
         <h4 class="fs24 fw-bold">Featured this week</h4>
@@ -97,6 +99,8 @@ get_header_based_on_login();
         </div>
     </div>
 
+     */
+    ?>
     <!-- ALL VIDEOS SECTION -->
     <div class="mt-5">
         <h4 class="fs24 fw-bold">All Videos</h4>

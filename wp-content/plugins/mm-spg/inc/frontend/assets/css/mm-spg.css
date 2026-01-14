@@ -18,16 +18,18 @@
 }
 
 .mm-spg-dialog {
-    position: relative; /* dialog moves, backdrop doesn't */
+    position: relative;
     max-width: 720px;
-    margin: 10vh auto;
+    margin: 0 auto;
     background: #fff;
     border-radius: 20px;
-    z-index: 2;
 
-    transition: transform 0.25s ease-out;
+    top: 10vh; /* starting position */
+
+    transition: transform 0.15s ease-out;
     will-change: transform;
 }
+
 
 
 .mm-spg-close {

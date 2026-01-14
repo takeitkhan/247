@@ -1,12 +1,6 @@
 (function ($) {
     'use strict';
 
-
-    if (res.data.completed) {
-        $('#mm-spg-launcher').addClass('mm-spg-hidden');
-        return; // 🔒 hard stop
-    }
-
     /* =========================
        DIALOG DRAG ON SCROLL
     ========================= */
@@ -14,27 +8,71 @@
     if (!$dialog.length) return;
 
     let translateY = 0;
+    const MAX_UP = -300;    // 🔼 how far up
+    const MAX_DOWN = 600;  // 🔽 how far down
+    const SPEED = 0.25;
 
-    $(window).on('wheel', function (e) {
+    $(window).on('wheel.mmSpgDialog', function (e) {
+        e.preventDefault(); // 🚫 block page scroll
+
         const deltaY = e.originalEvent.deltaY || 0;
+        translateY -= deltaY * SPEED;
 
-        // 🔁 invert wheel direction
-        translateY -= deltaY * 0.15;
+        translateY = Math.max(MAX_UP, Math.min(MAX_DOWN, translateY));
 
-        translateY = Math.max(-120, Math.min(120, translateY));
-
-        $dialog.css('transform', 'translateY(' + translateY + 'px)');
+        $dialog.css('transform', `translateY(${translateY}px)`);
     });
+
+    let startY = 0;
+
+    $(document).on('touchstart.mmSpgDialog', function (e) {
+        startY = e.originalEvent.touches[0].clientY;
+    });
+
+    $(document).on('touchmove.mmSpgDialog', function (e) {
+        const currentY = e.originalEvent.touches[0].clientY;
+        const delta = startY - currentY;
+
+        translateY -= delta * 0.6;
+        translateY = Math.max(MAX_UP, Math.min(MAX_DOWN, translateY));
+
+        $dialog.css('transform', `translateY(${translateY}px)`);
+
+        startY = currentY;
+        e.preventDefault();
+    });
+
+
 
 
     let steps = MM_SPG.steps || [];
     let currentStep = 0;
     let avatar = MM_SPG.avatar || '';
 
+    function lockBodyScroll() {
+        $('body').css({
+            overflow: 'hidden',
+            height: '100vh'
+        });
+    }
+
+    function unlockBodyScroll() {
+        $('body').css({
+            overflow: '',
+            height: ''
+        });
+    }
+
+
     /* =========================
        LAUNCHER
     ========================= */
     function updateLauncher(status) {
+        // 🔒 FINAL TERMINAL STATE
+        if (status === 'completed') {
+            $('#mm-spg-launcher').addClass('mm-spg-hidden');
+            return;
+        }
         if (!avatar) {
             $('#mm-spg-launcher').addClass('mm-spg-hidden');
             return;
@@ -146,7 +184,14 @@
             $('.mm-spg-pause').show();
         } */
 
-        $('.mm-spg-pause').show();
+        // Pause is allowed unless guide is completed
+        if (step.phase === 3 && currentStep >= steps.length - 1) {
+            // Last step only (final screen)
+            $('.mm-spg-pause').hide();
+        } else {
+            $('.mm-spg-pause').show();
+        }
+
     }
 
     function nl2br(str) {
@@ -302,7 +347,7 @@
         });
 
         if (!allHavePriority) {
-            $error.text('Oops: Please assign a priority to each selected interest.').show();
+            $error.text('Oops: Please assign a priority to each selected interest.').show();            
             return false;
         }
 
@@ -421,7 +466,7 @@
             $input.val('');
         }
     });
-
+    
     // Remove keyword tag
     $(document).on('click', '.remove-tag', function () {
         $(this).closest('.keyword-tag').remove();
@@ -561,18 +606,15 @@
         } */
 
         if (step.phase === 3 && currentStep >= steps.length - 1) {
-
             $.post(MM_SPG.ajax_url, {
                 action: 'mm_spg_complete_phase_3',
                 nonce: MM_SPG.nonce
             }, function () {
                 hideModal();
-                $('#mm-spg-launcher').addClass('mm-spg-hidden');
+                updateLauncher('completed');
             });
-
             return;
         }
-
 
         /* =========================
            REDIRECT
@@ -602,8 +644,8 @@
     // Launcher click
     $(document).on('click', '#mm-spg-launcher', function () {
 
-        if (MM_SPG.completed) {
-            return; // 🔒 guide finished
+        if (MM_SPG.completed === true) {
+            return;
         }
 
         // ✅ Avatar must exist
@@ -767,55 +809,55 @@
         .off('submit.mmSpgAdditionalProfile', '.mm-spg-additional-profile-form')
         .on('submit.mmSpgAdditionalProfile', '.mm-spg-additional-profile-form', function (e) {
 
-            e.preventDefault();
+        e.preventDefault();
 
-            const $form = $(this);
+        const $form = $(this);
 
-            if (!validateAdditionalProfileForm()) {
-                return;
-            }
+        if (!validateAdditionalProfileForm()) {
+            return;
+        }
 
-            // Keywords
-            const keywords = [];
-            $form.find('#keyword-tags .keyword-tag').each(function () {
-                keywords.push(
-                    $(this).clone().children().remove().end().text().trim()
-                );
-            });
-            $form.find('#keywords-hidden').val(keywords.join(', '));
-
-            // Hashtags
-            const hashtags = [];
-            $form.find('#hashtag-tags .hashtag-tag').each(function () {
-                hashtags.push(
-                    $(this).clone().children().remove().end().text().trim()
-                );
-            });
-            $form.find('#hashtags-hidden').val(hashtags.join(', '));
-
-            console.log('KEYWORDS:', $form.find('#keywords-hidden').val());
-            console.log('HASHTAGS:', $form.find('#hashtags-hidden').val());
-
-            $.post(MM_SPG.ajax_url, {
-                action: 'mm_spg_save_additional_profile',
-                nonce: $form.find('[name="mm_spg_additional_nonce"]').val(),
-                designation: $form.find('[name="designation"]').val(),
-                place_display_name: $form.find('[name="place_display_name"]').val(),
-                show_full_address: $form.find('[name="show_full_address"]').is(':checked') ? '1' : '0',
-                about_me_short: $form.find('[name="about_me_short"]').val(),
-                user_keywords: $form.find('#keywords-hidden').val(),
-                user_hashtags: $form.find('#hashtags-hidden').val()
-            }, function (res) {
-
-                $form.find('.alert').remove();
-
-                if (res.success) {
-                    $form.prepend('<div class="alert alert-success mb-2">' + res.data + '</div>');
-                } else {
-                    $form.prepend('<div class="alert alert-danger mb-2">' + res.data + '</div>');
-                }
-            });
+        // Keywords
+        const keywords = [];
+        $form.find('#keyword-tags .keyword-tag').each(function () {
+            keywords.push(
+                $(this).clone().children().remove().end().text().trim()
+            );
         });
+        $form.find('#keywords-hidden').val(keywords.join(', '));
+
+        // Hashtags
+        const hashtags = [];
+        $form.find('#hashtag-tags .hashtag-tag').each(function () {
+            hashtags.push(
+                $(this).clone().children().remove().end().text().trim()
+            );
+        });
+        $form.find('#hashtags-hidden').val(hashtags.join(', '));
+
+        console.log('KEYWORDS:', $form.find('#keywords-hidden').val());
+        console.log('HASHTAGS:', $form.find('#hashtags-hidden').val());
+
+        $.post(MM_SPG.ajax_url, {
+            action: 'mm_spg_save_additional_profile',
+            nonce: $form.find('[name="mm_spg_additional_nonce"]').val(),
+            designation: $form.find('[name="designation"]').val(),
+            place_display_name: $form.find('[name="place_display_name"]').val(),
+            show_full_address: $form.find('[name="show_full_address"]').is(':checked') ? '1' : '0',
+            about_me_short: $form.find('[name="about_me_short"]').val(),
+            user_keywords: $form.find('#keywords-hidden').val(),
+            user_hashtags: $form.find('#hashtags-hidden').val()
+        }, function (res) {
+
+            $form.find('.alert').remove();
+
+            if (res.success) {
+                $form.prepend('<div class="alert alert-success mb-2">' + res.data + '</div>');
+            } else {
+                $form.prepend('<div class="alert alert-danger mb-2">' + res.data + '</div>');
+            }
+        });
+    });
 
 
 
