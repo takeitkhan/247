@@ -93,7 +93,7 @@
     color: $black;
     font-weight: 500;
     padding: 0px 5px;
-    margin: 0 15px;
+    margin: 0px;
     border-bottom: 0px solid transparent; // ✅ reserve space for the border
 
     .dropdown-menu {
@@ -520,7 +520,6 @@
   /* Menu items */
   .mobile-menu .nav-link {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 14px 16px;
     font-weight: 500;
