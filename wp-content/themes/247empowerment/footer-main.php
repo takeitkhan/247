@@ -70,7 +70,44 @@
 
 <!-- Custom JS -->
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
 
+        if (window.innerWidth > 1365) return;
+
+        const toggles = document.querySelectorAll(
+            '.mobile-menu .nav-item.dropdown > .nav-link'
+        );
+
+        toggles.forEach(toggle => {
+
+            toggle.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const parent = this.parentElement;
+                const submenu = parent.querySelector('.dropdown-menu');
+
+                if (!submenu) return;
+
+                /* Close other open submenus (accordion) */
+                document
+                    .querySelectorAll('.mobile-menu .dropdown-menu.show')
+                    .forEach(open => {
+                        if (open !== submenu) {
+                            open.classList.remove('show');
+                            open.parentElement
+                                .querySelector('.nav-link')
+                                ?.classList.remove('active');
+                        }
+                    });
+
+                /* Toggle current */
+                submenu.classList.toggle('show');
+                this.classList.toggle('active');
+            });
+
+        });
+
+    });
     document.addEventListener('DOMContentLoaded', function () {
 
         // ===== Search toggle =====

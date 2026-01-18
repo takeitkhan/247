@@ -107,10 +107,6 @@ class MM_Walker_Nav_Menu extends Walker_Nav_Menu
         if ($has_children) {
             // IMPORTANT: prevent navigation on toggle
             $atts .= ' href="javascript:void(0)"';
-            $atts .= ' data-bs-toggle="dropdown"';
-            $atts .= ' data-bs-auto-close="outside"';
-            $atts .= ' aria-expanded="false"';
-            $atts .= ' role="button"';
         } else {
             $atts .= ' href="' . esc_url($item->url) . '"';
         }
