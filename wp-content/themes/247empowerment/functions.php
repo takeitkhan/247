@@ -789,6 +789,46 @@ add_action('wp_footer', function () {
     }
 }, 1);
 
+
+/**
+ * Sort users by most recently registered (DESC) in admin
+ */
+add_action('pre_get_users', function ($query) {
+
+    if (!is_admin()) {
+        return;
+    }
+
+    global $pagenow;
+
+    if ($pagenow === 'users.php' && empty($_GET['orderby'])) {
+        $query->set('orderby', 'registered');
+        $query->set('order', 'DESC');
+    }
+});
+/**
+ * Add Phone column in users list
+ */
+add_filter('manage_users_columns', function ($columns) {
+    $columns['phone'] = 'Phone';
+    return $columns;
+});
+
+/**
+ * Show Phone value in users list
+ */
+add_filter('manage_users_custom_column', function ($value, $column_name, $user_id) {
+
+    if ($column_name === 'phone') {
+        $phone = get_user_meta($user_id, 'phone', true);
+        return $phone ? esc_html($phone) : '—';
+    }
+
+    return $value;
+
+}, 10, 3);
+
+
 require_once get_template_directory() . '/inc/UserProfileData.php';
 require_once get_template_directory() . '/inc/Notifications.php';
 require_once get_template_directory() . '/inc/UserConnectionManager.php';

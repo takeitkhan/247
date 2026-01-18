@@ -20,32 +20,26 @@
                     <?php
                     // Social media platforms and icon filenames
                     $social_platforms = [
-                        'facebook'  => 'face.svg',
-                        'twitter'   => 'x.svg',
+                        'facebook' => 'face.svg',
+                        'twitter' => 'x.svg',
                         'instagram' => 'inst.svg',
-                        'linkedin'  => 'linked.svg',
-                        'youtube'   => 'yt.svg'
+                        'linkedin' => 'linked.svg',
+                        'youtube' => 'yt.svg'
                     ];
 
                     // Loop through each platform and show only those with URLs set in the Customizer
-                    foreach ($social_platforms as $platform => $icon) :
+                    foreach ($social_platforms as $platform => $icon):
                         $url = get_theme_mod("{$platform}_url"); // Get from Customizer
-                        if (!empty($url)) :
-                    ?>
+                        if (!empty($url)):
+                            ?>
                             <li class="list-inline-item">
-                                <a href="<?php echo esc_url($url); ?>"
-                                    class="text-decoration-none xtext-white fs-3"
-                                    target="_blank"
-                                    rel="noopener"
-                                    aria-label="<?php echo ucfirst($platform); ?>">
-                                    <img
-                                        src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/nd/' . $icon); ?>"
-                                        alt="<?php echo ucfirst($platform); ?>"
-                                        width="24"
-                                        height="24">
+                                <a href="<?php echo esc_url($url); ?>" class="text-decoration-none xtext-white fs-3"
+                                    target="_blank" rel="noopener" aria-label="<?php echo ucfirst($platform); ?>">
+                                    <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/nd/' . $icon); ?>"
+                                        alt="<?php echo ucfirst($platform); ?>" width="24" height="24">
                                 </a>
                             </li>
-                    <?php
+                            <?php
                         endif;
                     endforeach;
                     ?>
@@ -76,7 +70,8 @@
 
 <!-- Custom JS -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+
+    document.addEventListener('DOMContentLoaded', function () {
 
         // ===== Search toggle =====
         const searchIcon = document.querySelector(".search-icon");

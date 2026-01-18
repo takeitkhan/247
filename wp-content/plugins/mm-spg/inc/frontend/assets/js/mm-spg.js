@@ -8,9 +8,10 @@
     if (!$dialog.length) return;
 
     let translateY = 0;
-    const MAX_UP = -300;    // 🔼 how far up
-    const MAX_DOWN = 600;  // 🔽 how far down
-    const SPEED = 0.25;
+    const MAX_UP   = -350;
+    const MAX_DOWN = 1200;
+    const SPEED    = 0.22;
+
 
     $(window).on('wheel.mmSpgDialog', function (e) {
         e.preventDefault(); // 🚫 block page scroll
@@ -212,7 +213,7 @@
                 case 'text':
                     html += `
                     <div class="mm-spg-text">
-                        <p>${nl2br(block.content)}</p>
+                        ${block.content}
                     </div>
                 `;
                     break;
@@ -410,7 +411,7 @@
 
 
     // 1️⃣ Comma → tag (keywords)
-    $(document).on('keydown', '#keywordInput', function (e) {
+    /* $(document).on('keydown', '#keywordInput', function (e) {
         if (e.key === ',' || e.key === 'Enter') {
             e.preventDefault();
 
@@ -434,10 +435,10 @@
 
             $input.val('');
         }
-    });
+    }); */
 
     // 2️⃣ Comma → tag (hashtags)
-    $(document).on('keydown', '#hashtagInput', function (e) {
+    /* $(document).on('keydown', '#hashtagInput', function (e) {
         if (e.key === ',' || e.key === 'Enter') {
             e.preventDefault();
 
@@ -465,7 +466,46 @@
 
             $input.val('');
         }
+    }); */
+
+    function addTag($input, container, tagClass, removeClass, prefix = '') {
+        let value = $input.val().replace(',', '').trim();
+        if (!value) return;
+
+        if (prefix && !value.startsWith(prefix)) {
+            value = prefix + value;
+        }
+
+        const exists = $(container).find(`.${tagClass}`).filter(function () {
+            return $(this).clone().children().remove().end().text().trim() === value;
+        }).length;
+
+        if (!exists) {
+            $(container).prepend(`
+                <span class="bg-light border text-dark badge ${tagClass}">
+                    ${value}
+                    <button type="button" class="btn-close ${removeClass}"></button>
+                </span>
+            `);
+        }
+
+        $input.val('');
+    }
+
+    $(document).on('input', '#keywordInput', function () {
+        const $input = $(this);
+        if ($input.val().includes(',')) {
+            addTag($input, '#keyword-tags', 'keyword-tag', 'remove-tag');
+        }
     });
+
+    $(document).on('input', '#hashtagInput', function () {
+        const $input = $(this);
+        if ($input.val().includes(',')) {
+            addTag($input, '#hashtag-tags', 'hashtag-tag', 'remove-hashtag', '#');
+        }
+    });
+
     
     // Remove keyword tag
     $(document).on('click', '.remove-tag', function () {
@@ -642,7 +682,7 @@
     });
 
     // Launcher click
-    $(document).on('click', '#mm-spg-launcher', function () {
+    /* $(document).on('click', '#mm-spg-launcher', function () {
 
         if (MM_SPG.completed === true) {
             return;
@@ -664,10 +704,32 @@
         } else {
             currentStep = 0; // Phase 2
         }
+        // ✅ Resume from saved step
+        //currentStep = currentStep || 0;
+
 
         saveState('active');
         showModal();
+    }); */
+
+    $(document).on('click', '#mm-spg-launcher', function () {
+
+        if (MM_SPG.completed === true) {
+            return;
+        }
+
+        // Avatar not selected → Phase 1
+        if (!avatar) {
+            currentStep = 0;
+            showModal();
+            return;
+        }
+
+        // ✅ Resume from last saved step
+        saveState('active');
+        showModal();
     });
+
 
 
 

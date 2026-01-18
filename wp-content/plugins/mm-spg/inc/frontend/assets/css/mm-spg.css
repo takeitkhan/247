@@ -19,12 +19,12 @@
 
 .mm-spg-dialog {
     position: relative;
-    max-width: 720px;
+    max-width: 1000px;
     margin: 0 auto;
     background: #fff;
     border-radius: 20px;
 
-    top: 10vh; /* starting position */
+    top: 1vh; /* starting position */
 
     transition: transform 0.15s ease-out;
     will-change: transform;
@@ -252,22 +252,28 @@ body.mm-spg-highlighting {
     font-family: Plus Jakarta Sans, sans-serif;    
 }
 
-
+/* Text tighter */
 .mm-spg-text p,
 .mm-spg-html p {
-    margin-bottom: 1rem;
-    line-height: 1.6;
-    font-size: 18px;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 8px;
 }
 
-.mm-spg-html strong {
-    font-weight: 600;
-}
-
+/* Lists tighter */
 .mm-spg-html ul {
-    list-style-type: disc;
-    padding-left: 20px;
-    margin-bottom: 1rem;
+    padding-left: 18px;
+    margin-bottom: 10px;
+}
+
+.mm-spg-html li {
+    margin-bottom: 4px;
+}
+
+/* Video smaller */
+.mm-spg-video iframe {
+    height: 180px;
+    border-radius: 6px;
 }
 
 .mm-spg-error {

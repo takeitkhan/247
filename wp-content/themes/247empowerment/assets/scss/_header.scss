@@ -40,7 +40,7 @@
     }
   }
 
-  
+
   span.notif-bubble {
     position: absolute;
     top: -15px;
@@ -82,7 +82,7 @@
     align-items: center;
     justify-content: center;
   }
-  
+
 
   /* 1️⃣ Kill Bootstrap caret */
   a.dropdown-toggle::after {
@@ -124,13 +124,13 @@
       }
     }
 
-    > a.dropdown-toggle {
+    >a.dropdown-toggle {
       position: relative;
       padding-right: 22px; // space for arrow
     }
 
     /* 2️⃣ Custom caret (USE ::before) */
-    > a.dropdown-toggle::before {
+    >a.dropdown-toggle::before {
       content: '';
       position: absolute;
       right: 0;
@@ -147,7 +147,7 @@
     }
 
     /* 3️⃣ Rotate when open */
-    &.show > a.dropdown-toggle::before {
+    &.show>a.dropdown-toggle::before {
       transform: translateY(-50%) rotate(180deg);
     }
   }
@@ -224,21 +224,6 @@
     }
   }
 
-  @media (max-width: 991px) {
-    .nav-item {
-      border: none;
-    }
-
-    .nav-link {
-      &:hover {
-        background-color: $primary-color;
-        border: none;
-        color: $white !important;
-        border-radius: 4px !important;
-      }
-    }
-  }
-
   /* ===== Mobile Menu ===== */
   .mobile-menu {
     display: none;
@@ -286,24 +271,6 @@
   display: flex;
   gap: 16px;
 }
-
-// .dropdown-menu .dropdown-item {
-//   color: inherit !important;
-//   background-color: transparent !important;
-// }
-// // .dropdown-menu.notification-width.dropdown-menu-end {
-// //     box-shadow: 0px 1px 4px #ddd !important;
-// // }
-
-// .dropdown-menu .dropdown-item:hover,
-// .dropdown-menu .dropdown-item:focus,
-// .dropdown-menu .dropdown-item:active,
-// .dropdown-menu .dropdown-item.show {
-//   color: inherit !important;
-//   background-color: transparent !important;
-//   outline: none !important;
-//   box-shadow: none !important;
-// }
 
 .profile-width {
   min-width: 320px !important;
@@ -509,5 +476,88 @@
         }
       }
     }
+  }
+}
+
+/* =========================
+   MOBILE (≤1365px)
+========================= */
+@media (max-width: 1365px) {
+
+  /* Hide desktop menu */
+  .desktop-menu,
+  .custom-navbar nav.navbar {
+    display: none !important;
+  }
+
+  /* Show mobile toggle */
+  .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mobile menu */
+  .mobile-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 9999;
+  }
+
+  .mobile-menu.show {
+    display: block;
+  }
+
+  /* Vertical dropdown */
+  .mobile-menu .dropdown-menu {
+    position: static;
+    border: 0;
+    box-shadow: none;
+    display: none;
+  }
+
+  .mobile-menu .dropdown-menu.show {
+    display: block;
+  }
+}
+
+/* =========================
+   DESKTOP (≥1366px)
+========================= */
+@media (min-width: 1366px) {
+
+  /* Show desktop menu */
+  .custom-navbar nav.navbar,
+  .desktop-menu {
+    display: flex !important;
+  }
+
+  /* Hide mobile UI */
+  .menu-toggle,
+  .mobile-menu {
+    display: none !important;
+  }
+
+  /* Horizontal layout */
+  .navbar-nav.desktop-menu {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Desktop dropdown */
+  .navbar-nav.desktop-menu .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: none;
+  }
+
+  .navbar-nav.desktop-menu .dropdown:hover > .dropdown-menu {
+    display: block;
   }
 }

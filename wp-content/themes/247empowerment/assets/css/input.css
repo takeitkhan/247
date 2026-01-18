@@ -11,6 +11,7 @@
     opacity: 0;
   }
 }
+
 /* Define the slow-ping class */
 .slow-ping {
   animation: pulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
@@ -25,5 +26,3 @@
     font-size: 30px;
   }
 }
-
-

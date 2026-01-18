@@ -60,7 +60,8 @@ class MM_Walker_Nav_Menu extends Walker_Nav_Menu
     public function start_lvl(&$output, $depth = 0, $args = null)
     {
         $indent = str_repeat("\t", $depth);
-        $output .= "\n$indent<ul class=\"dropdown-menu\">\n";
+        $submenu_class = $depth === 0 ? 'dropdown-menu' : 'dropdown-menu dropdown-submenu';
+        $output .= "\n$indent<ul class=\"$submenu_class\">\n";
     }
 
     /* START ITEM */
@@ -69,8 +70,9 @@ class MM_Walker_Nav_Menu extends Walker_Nav_Menu
         $classes = empty($item->classes) ? [] : (array) $item->classes;
         $has_children = in_array('menu-item-has-children', $classes, true);
 
-        // Active check
-        $current_url  = home_url(add_query_arg([], $GLOBALS['wp']->request));
+        /* ACTIVE CHECK */
+        global $wp;
+        $current_url  = home_url(add_query_arg([], $wp->request));
         $menu_path    = $this->relative_url($item->url);
         $current_path = $this->relative_url($current_url);
 
@@ -84,10 +86,7 @@ class MM_Walker_Nav_Menu extends Walker_Nav_Menu
         $li_classes = ['nav-item'];
 
         if ($has_children) {
-            $li_classes[] = 'dropdown'; // REQUIRED for all dropdown levels
-            if ($depth > 0) {
-                $li_classes[] = 'dropdown-submenu'; // optional (CSS only)
-            }
+            $li_classes[] = 'dropdown';
         }
 
         if ($is_active) {
@@ -95,25 +94,29 @@ class MM_Walker_Nav_Menu extends Walker_Nav_Menu
         }
 
         /* <a> CLASSES */
-        if ($depth === 0) {
-            $link_classes = ['nav-link'];
-        } else {
-            $link_classes = ['dropdown-item'];
-        }
+        $link_classes = $depth === 0 ? ['nav-link'] : ['dropdown-item'];
 
         if ($has_children) {
             $link_classes[] = 'dropdown-toggle';
         }
 
-        /* ATTRIBUTES */
-        $atts  = ' href="' . esc_url($item->url) . '"';
+        /* LINK ATTRIBUTES */
+        $atts = '';
         $atts .= ' class="' . esc_attr(implode(' ', $link_classes)) . '"';
 
         if ($has_children) {
+            // IMPORTANT: prevent navigation on toggle
+            $atts .= ' href="javascript:void(0)"';
             $atts .= ' data-bs-toggle="dropdown"';
+            $atts .= ' data-bs-auto-close="outside"';
             $atts .= ' aria-expanded="false"';
-            $atts .= ' aria-haspopup="true"';
             $atts .= ' role="button"';
+        } else {
+            $atts .= ' href="' . esc_url($item->url) . '"';
+        }
+
+        if ($is_active) {
+            $atts .= ' aria-current="page"';
         }
 
         /* OUTPUT */
