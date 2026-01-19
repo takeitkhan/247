@@ -233,7 +233,9 @@
 
     &.show {
       display: block;
-      max-height: 400px;
+      max-height: 900px;
+      margin-top: -20px;
+      margin-bottom: 20px;
     }
 
     .nav-link {
@@ -550,7 +552,8 @@
 
   /* Open state */
   .mobile-menu .dropdown-menu.show {
-    max-height: 700px; /* enough for 2 levels */
+    max-height: 700px;
+    /* enough for 2 levels */
     padding: 0 !important;
     margin: 0 !important;
   }
@@ -563,15 +566,16 @@
 
   /* Submenu links */
   .mobile-menu .dropdown-item {
-    padding: 10px 16px;
+    padding: 5px 16px;
     font-size: 14px;
   }
 
   div.mobile-menu ul li.nav-item {
-      background: #05489c;
-      padding: 10px;
-      border-radius: 0;
-      border-bottom: 1px solid aqua;
+    background: #05489c;
+    padding: 5px 10px;
+    border-radius: 0;
+    margin: 0px !important;
+    border-bottom: 1px solid aqua;
   }
 
   div.mobile-menu ul li.nav-item a.nav-link {
@@ -579,24 +583,30 @@
   }
 
   div.mobile-menu ul.dropdown-menu.show li.nav-item {
-      margin: 0 !important;
-      padding: 0 !important;
-      border-radius: 0 !important;
-      border-bottom: 1px solid #FFFFFF;
-      border-color: antiquewhite;
-      color: #FFFFFF;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    border-bottom: 1px solid #FFFFFF;
+    border-color: antiquewhite;
+    color: #FFFFFF;
   }
+
   .custom-navbar div.mobile-menu ul.dropdown-menu li.nav-item a.dropdown-item {
-      color: #FFFFFF !important;
+    color: #FFFFFF !important;
   }
+
   .custom-navbar div.mobile-menu ul.dropdown-menu li.nav-item a.dropdown-item:hover {
-      color: #FFFFFF !important;
+    color: #FFFFFF !important;
   }
-  .custom-navbar div.mobile-menu li.dropdown:hover, .custom-navbar div.mobile-menu li.dropdown.active-menu {
+
+  .custom-navbar div.mobile-menu li.dropdown:hover,
+  .custom-navbar div.mobile-menu li.dropdown.active-menu {
     background-color: #606770 !important;
   }
-  .custom-navbar div.mobile-menu .nav-item:hover, .custom-navbar div.mobile-menu .nav-item.active-menu {
-      background-color: #606770 !important;
+
+  .custom-navbar div.mobile-menu .nav-item:hover,
+  .custom-navbar div.mobile-menu .nav-item.active-menu {
+    background-color: #606770 !important;
   }
 
 }

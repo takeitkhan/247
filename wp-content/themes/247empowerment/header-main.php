@@ -116,8 +116,8 @@
     </div>
 
     <!-- MOBILE MENU -->
-    <div class="mobile-menu bg-white shadow-sm" id="mobileMenu">
-        <ul class="nav flex-column p-3 text-center">
+    <div class="mobile-menu bg-white" id="mobileMenu">
+        <ul class="nav flex-column text-center">
             <?php
             wp_nav_menu( [
                 'theme_location' => 'primary',
