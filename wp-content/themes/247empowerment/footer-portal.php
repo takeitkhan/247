@@ -77,6 +77,30 @@
 
 <!-- Custom JS -->
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+    // Edit Profile menu toggle
+    document.querySelectorAll('.edit-profile-toggle').forEach(toggle => {
+        toggle.addEventListener('click', function () {
+            if (window.innerWidth < 1366) {
+                this.closest('.edit-profile-wrapper')
+                    .classList.toggle('active');
+            }
+        });
+    });
+
+    // Normal Profile menu toggle
+    document.querySelectorAll('.profile-menu-toggle').forEach(toggle => {
+        toggle.addEventListener('click', function () {
+            if (window.innerWidth < 1366) {
+                this.closest('.profile-menu-wrapper')
+                    .classList.toggle('active');
+            }
+        });
+    });
+
+});
+
     document.addEventListener('DOMContentLoaded', function() {
 
         // ===== Search toggle =====

@@ -34,7 +34,7 @@ function mm_spg_render_modal()
     </div>
 
 
-    <button id="mm-spg-launcher" class="mm-spg-hidden mm-spg-launcher">
+    <button id="mm-spg-launcher" class="mm-spg-hidden mm-spg-launcher guide-btn">
         Guide
     </button>
 

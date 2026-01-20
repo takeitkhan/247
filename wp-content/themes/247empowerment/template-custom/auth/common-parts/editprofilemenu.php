@@ -1,13 +1,19 @@
-<div class="bg-white custom-card navbar-link">
-    <div>
-        <h5 class="text-start portal-title">Profile</h5>
+<div class="bg-white custom-card navbar-link edit-profile-wrapper">
+
+    <div class="d-flex justify-content-between align-items-center edit-profile-toggle">
+        <h5 class="text-start portal-title mb-0">Profile</h5>
+        <span class="toggle-icon">&#9662;</span>
     </div>
-    <?php
-    wp_nav_menu(array(
-        'theme_location' => 'editprofilemenu',
-        'container' => false,
-        'menu_class' => 'nav d-flex flex-column gap10 menu-edit-profile-menu',
-        'walker' => new Edit_Profile_Walker(),
-    ));
-    ?>
+
+    <div class="edit-profile-menu">
+        <?php
+        wp_nav_menu([
+            'theme_location' => 'editprofilemenu',
+            'container' => false,
+            'menu_class' => 'nav d-flex flex-column xgap10 menu-edit-profile-menu',
+            'walker' => new Edit_Profile_Walker(),
+        ]);
+        ?>
+    </div>
+
 </div>
