@@ -35,6 +35,9 @@ mm_register_action('next_concurrent_posts', 'Next concurrent posts');
 mm_register_action('next_event_posts', 'Next event posts');
 mm_register_action('birthday_update', 'Birthday update');
 mm_register_action('location_update', 'Location update');
+mm_register_action('suggestion_submitted', 'Suggestion Submitted');
+mm_register_action('report_submitted', 'Issue Report Submitted');
+
 
 /**
  * Starts a session if one doesn't already exist.

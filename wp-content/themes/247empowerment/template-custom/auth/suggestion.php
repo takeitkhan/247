@@ -53,6 +53,12 @@ if (isset($_POST['submit_suggestion'])) {
         update_post_meta($post_id, 'attachment_url', $attachment_url);
     }
 
+    // Award gamification points
+    if (function_exists('mm_award_points_and_notify')) {
+        mm_award_points_and_notify(get_current_user_id(), 'suggestion_submitted');
+        update_user_meta($user_id, 'suggestion_rewarded', 1);
+    }
+
     // ✅ Use current URL safely
     $current_url = home_url(add_query_arg(null, null)); // get the current URL
     $redirect_url = add_query_arg('suggestion', 'success', $current_url);

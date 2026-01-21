@@ -73,6 +73,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_report'])) {
         update_post_meta($post_id, 'consent', $consent);
         update_post_meta($post_id, 'attachment_url', $attachment_url);
 
+        // Award gamification points
+        if (function_exists('mm_award_points_and_notify')) {
+            mm_award_points_and_notify(get_current_user_id(), 'report_submitted');
+            update_user_meta($user_id, 'report_submitted', 1);
+        }
         // ✅ Use current URL safely
         $current_url = home_url(add_query_arg(null, null)); // get the current URL
         $redirect_url = add_query_arg('report', 'success', $current_url);
