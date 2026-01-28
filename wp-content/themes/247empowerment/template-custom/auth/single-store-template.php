@@ -174,7 +174,7 @@ if (!$is_shareable) {
                         </div>
                         <div class="d-flex flex-column">
                             <div>
-                                <div class="d-flex justify-content-between my-1">
+                                <div class="d-flex justify-content-between my-1 pb-2">
                                     <?php if ($instructor): ?>
                                         <div class="d-flex align-items-center">
                                             <i class="me-2 text-primary-color bi bi-person-fill"></i>
@@ -191,13 +191,13 @@ if (!$is_shareable) {
                                 </div>
 
                                 <div class="pb-4">
-                                    <div class="img271">
-                                        <img class="w-100 h-100 object-fit-cover" src="<?= get_template_directory_uri(); ?>/assets/img/nd/legacy.png" alt="">
+                                    <div class="ximg271">
+                                        <img class="w-100 h-300 object-fit-cover" src="<?= esc_url($thumbnail_url); ?>" alt="<?= esc_attr(get_the_title($course)); ?>">
                                     </div>
                                 </div>
                                 <div>
                                     <?php if ($short_details): ?>
-                                        <div class="mb-4 custom-card">
+                                        <div class="mb-4 custom-card bg-custom-gray">
                                             <p class="mb-3 lead"><?= esc_html($short_details); ?></p>
 
                                             <?php

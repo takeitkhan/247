@@ -63,7 +63,6 @@
             height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
 <!-- End Google Tag Manager (noscript) -->
-
 <header class="custom-navbar">
     <div class="container d-flex align-items-center justify-content-between w-100 h-100">
 

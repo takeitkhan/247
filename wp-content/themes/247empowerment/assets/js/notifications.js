@@ -153,22 +153,84 @@ jQuery(document).ready(function ($) {
 let mmNotificationAudio = null;
 let mmAudioUnlocked = false;
 
-// Unlock audio after first user interaction (required by browsers)
-jQuery(document).one('click keydown touchstart', function () {
-
-    if (!mmNotificationAudio) {
-        mmNotificationAudio = new Audio(notificationsData.sound);
-        mmNotificationAudio.volume = 0.5;
+// Initialize audio immediately
+function initializeNotificationAudio() {
+    if (!mmNotificationAudio && typeof notificationsData !== 'undefined' && notificationsData.sound) {
+        try {
+            mmNotificationAudio = new Audio(notificationsData.sound);
+            mmNotificationAudio.volume = 0.5;
+            mmNotificationAudio.preload = 'auto';
+            console.log('✅ Notification audio initialized');
+            return true;
+        } catch (error) {
+            console.error('❌ Failed to initialize notification audio:', error);
+            return false;
+        }
     }
+    return false;
+}
+
+// Play notification sound with fallback approach
+function playNotificationSound() {
+    if (!mmNotificationAudio) {
+        initializeNotificationAudio();
+    }
+
+    if (mmNotificationAudio) {
+        mmNotificationAudio.currentTime = 0;
+        
+        // Modern approach with promise
+        const playPromise = mmNotificationAudio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise
+                .then(() => {
+                    console.log('✅ Notification sound played successfully');
+                    mmAudioUnlocked = true;
+                })
+                .catch(err => {
+                    console.warn('⚠️ Sound play blocked, waiting for user interaction:', err.name);
+                    // Sound blocked by browser, will attempt after user interaction
+                    window.mmPendingLoginSound = true;
+                });
+        } else {
+            // Older browsers
+            console.log('📻 Using legacy audio play method');
+            mmAudioUnlocked = true;
+        }
+    }
+}
+
+// Unlock audio and play any pending sound after first user interaction
+jQuery(document).one('click keydown touchstart', function () {
+    console.log('🔓 Audio context unlocked by user interaction');
+    
+    // Initialize if not done yet
+    if (!mmNotificationAudio) {
+        initializeNotificationAudio();
+    }
+    
+    mmAudioUnlocked = true;
 
     // 🔥 Play delayed login sound
-    if (window.mmPendingLoginSound) {
-        mmNotificationAudio.currentTime = 0;
-        mmNotificationAudio.play().catch(() => {});
+    if (window.mmPendingLoginSound && mmNotificationAudio) {
+        console.log('🔊 Playing delayed login notification sound');
+        playNotificationSound();
         window.mmPendingLoginSound = false;
     }
+});
 
-    mmAudioUnlocked = true;
+// Try to initialize audio on page load
+jQuery(document).ready(function() {
+    initializeNotificationAudio();
+    
+    // If there's a pending login notification, try to play it
+    if (window.mmPendingLoginSound) {
+        setTimeout(() => {
+            console.log('📌 Attempting to play pending login sound');
+            playNotificationSound();
+        }, 500);
+    }
 });
 
 /* =========================================================
@@ -176,21 +238,19 @@ jQuery(document).one('click keydown touchstart', function () {
  * ======================================================= */
 
 window.mmPushNotification = function (notification) {
-    if (!notification || !notification.message) return;
-
-     // Mark pending login sound
-    if (notification.play_sound_on_load) {
-        window.mmPendingLoginSound = true;
+    if (!notification || !notification.message) {
+        console.warn('⚠️ Invalid notification data');
+        return;
     }
+
+    console.log('📬 New notification received:', notification);
 
     const $list = jQuery('#notificationList');
     const $count = jQuery('#notif-unread-count');
 
-    // 🔊 Play notification sound
-    if (mmAudioUnlocked && mmNotificationAudio) {
-        mmNotificationAudio.currentTime = 0;
-        mmNotificationAudio.play().catch(() => { });
-    }
+    // 🔊 Play notification sound immediately when notification arrives
+    console.log('🔊 Notification arrived - attempting to play sound');
+    playNotificationSound();
 
     // ✅ Increment unread counter
     window.mmUnreadCount++;
@@ -231,6 +291,9 @@ jQuery(document).ready(function () {
 
     // If unread exists on load, assume login notification
     if ($badge.length && window.mmUnreadCount > 0) {
+        console.log('🔔 Login notification detected, unread count:', window.mmUnreadCount);
         window.mmPendingLoginSound = true;
+    } else {
+        console.log('📊 Notification status - Badge exists:', $badge.length > 0, 'Unread count:', window.mmUnreadCount);
     }
 });

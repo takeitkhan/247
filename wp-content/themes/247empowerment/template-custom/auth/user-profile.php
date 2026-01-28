@@ -75,8 +75,16 @@ else:
             }
 
             // --- 3. Play Sound ---
-            const audio = new Audio("<?= get_template_directory_uri(); ?>/sounds/coin.mp3");
-            audio.play().catch(e => console.error("Audio play failed:", e));
+            if (typeof playNotificationSound === 'function') {
+                console.log('🎵 Playing profile update notification sound via theme audio system');
+                playNotificationSound();
+            } else {
+                // Fallback: Play sound directly
+                console.log('📻 Playing profile update notification sound directly');
+                const audio = new Audio("<?= get_template_directory_uri(); ?>/sounds/coin.mp3");
+                audio.volume = 0.5;
+                audio.play().catch(e => console.error("Audio play failed:", e));
+            }
         }
 
         /**

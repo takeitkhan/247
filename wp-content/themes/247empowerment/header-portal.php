@@ -151,7 +151,6 @@
   </head>
 
   <body>
-
       <header class="custom-navbar">
           <div class="d-flex align-items-center justify-content-between w-100 h-100 container">
               <!-- logo-nav -->
@@ -200,3 +199,4 @@
                 ?>
           </div>
       </header>
+      <?php get_template_part('template-parts/soft-launch-banner'); ?>

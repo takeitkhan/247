@@ -167,9 +167,17 @@ $profile = (new UserProfileData($user_slug))->getProfile();
     document.addEventListener("DOMContentLoaded", function() {
         var notify = document.getElementById("points-notification");
         if (notify) {
-            // Play sound
-            var audio = new Audio("<?= get_template_directory_uri(); ?>/sounds/coin.mp3");
-            audio.play();
+            // Play sound using theme's unified sound system if available
+            if (typeof playNotificationSound === 'function') {
+                console.log('🎵 Playing wallet notification sound via theme audio system');
+                playNotificationSound();
+            } else {
+                // Fallback: Play sound directly
+                console.log('📻 Playing wallet notification sound directly');
+                var audio = new Audio("<?= get_template_directory_uri(); ?>/sounds/coin.mp3");
+                audio.volume = 0.5;
+                audio.play().catch(err => console.warn('⚠️ Could not play sound:', err.name));
+            }
 
             // Animate notification
             notify.classList.add("show");

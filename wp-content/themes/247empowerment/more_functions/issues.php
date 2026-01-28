@@ -160,3 +160,115 @@ function render_suggestion_details_meta_box($post)
     }
     echo '</table>';
 }
+
+// AJAX Handler for Bug Report Submission
+add_action('wp_ajax_submit_bug_report', 'handle_bug_report_submission');
+add_action('wp_ajax_nopriv_submit_bug_report', 'handle_bug_report_submission');
+
+function handle_bug_report_submission()
+{
+    // Verify nonce
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'bug_report_nonce')) {
+        wp_send_json_error(['message' => 'Security check failed']);
+    }
+
+    // Get current user info
+    $user_id = get_current_user_id();
+    $user_email = $user_id ? get_userdata($user_id)->user_email : $_POST['email'] ?? 'anonymous@example.com';
+    $user_name = $user_id ? get_userdata($user_id)->display_name : 'Anonymous User';
+
+    // Sanitize inputs
+    $bug_title = sanitize_text_field($_POST['bug_title'] ?? '');
+    $bug_description = sanitize_textarea_field($_POST['bug_description'] ?? '');
+    $bug_page = sanitize_text_field($_POST['bug_page'] ?? '');
+
+    // Validation
+    if (empty($bug_title) || empty($bug_description) || empty($bug_page)) {
+        wp_send_json_error(['message' => 'All fields are required']);
+    }
+
+    // Create post
+    $post_id = wp_insert_post([
+        'post_type'   => 'issue_report',
+        'post_title'  => $bug_title,
+        'post_status' => 'publish',
+        'post_author' => $user_id,
+    ]);
+
+    if (is_wp_error($post_id)) {
+        wp_send_json_error(['message' => 'Failed to create bug report']);
+    }
+
+    // Add metadata
+    update_post_meta($post_id, 'name', $user_name);
+    update_post_meta($post_id, 'email', $user_email);
+    update_post_meta($post_id, 'problem_type', 'bug');
+    update_post_meta($post_id, 'description', $bug_description);
+    update_post_meta($post_id, 'page_url', sanitize_url($_SERVER['HTTP_REFERER'] ?? ''));
+    update_post_meta($post_id, 'datetime', current_time('mysql'));
+    update_post_meta($post_id, 'consent', true);
+
+    // Award points if user is logged in
+    if ($user_id) {
+        // You can integrate points system here
+        // award_user_points($user_id, 50, 'Bug Report Submitted');
+    }
+
+    wp_send_json_success(['message' => 'Bug report submitted successfully']);
+}
+
+// AJAX Handler for Suggestion Submission
+add_action('wp_ajax_submit_suggestion', 'handle_suggestion_submission');
+add_action('wp_ajax_nopriv_submit_suggestion', 'handle_suggestion_submission');
+
+function handle_suggestion_submission()
+{
+    // Verify nonce
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'suggestion_nonce')) {
+        wp_send_json_error(['message' => 'Security check failed']);
+    }
+
+    // Get current user info
+    $user_id = get_current_user_id();
+    $user_email = $user_id ? get_userdata($user_id)->user_email : $_POST['email'] ?? 'anonymous@example.com';
+    $user_name = $user_id ? get_userdata($user_id)->display_name : 'Anonymous User';
+
+    // Sanitize inputs
+    $suggestion_title = sanitize_text_field($_POST['suggestion_title'] ?? '');
+    $suggestion_description = sanitize_textarea_field($_POST['suggestion_description'] ?? '');
+    $suggestion_category = sanitize_text_field($_POST['suggestion_category'] ?? '');
+
+    // Validation
+    if (empty($suggestion_title) || empty($suggestion_description) || empty($suggestion_category)) {
+        wp_send_json_error(['message' => 'All fields are required']);
+    }
+
+    // Create post
+    $post_id = wp_insert_post([
+        'post_type'   => 'suggestion_report',
+        'post_title'  => $suggestion_title,
+        'post_status' => 'publish',
+        'post_author' => $user_id,
+    ]);
+
+    if (is_wp_error($post_id)) {
+        wp_send_json_error(['message' => 'Failed to create suggestion']);
+    }
+
+    // Add metadata
+    update_post_meta($post_id, 'name', $user_name);
+    update_post_meta($post_id, 'email', $user_email);
+    update_post_meta($post_id, 'suggestion_type', $suggestion_category);
+    update_post_meta($post_id, 'description', $suggestion_description);
+    update_post_meta($post_id, 'page_url', sanitize_url($_SERVER['HTTP_REFERER'] ?? ''));
+    update_post_meta($post_id, 'datetime', current_time('mysql'));
+    update_post_meta($post_id, 'consent', true);
+
+    // Award points if user is logged in
+    if ($user_id) {
+        // You can integrate points system here
+        // award_user_points($user_id, 30, 'Suggestion Submitted');
+    }
+
+    wp_send_json_success(['message' => 'Suggestion submitted successfully']);
+}
