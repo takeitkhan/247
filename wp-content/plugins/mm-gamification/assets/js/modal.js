@@ -39,26 +39,7 @@ function showGamificationPointsModal(data) {
         modalMessage.innerHTML = config.message;
     }
 
-    // 🔊 Play notification sound if available (from theme)
-    if (typeof playNotificationSound === 'function') {
-        console.log('🎵 Playing gamification sound via theme audio system');
-        playNotificationSound();
-    } else {
-        // Fallback: Play sound directly if theme audio system not available
-        console.log('📻 Playing gamification sound directly');
-        try {
-            const audio = new Audio(
-                document.currentScript?.getAttribute('data-sound-url') || 
-                '/wp-content/themes/247empowerment/assets/sounds/coin.mp3'
-            );
-            audio.volume = 0.5;
-            audio.play().catch(err => console.warn('⚠️ Could not play sound:', err.name));
-        } catch (err) {
-            console.warn('❌ Sound play failed:', err);
-        }
-    }
-
-    // Show the modal
+    // Show the modal (sound plays when notification arrives, not when modal appears)
     gamificationModal.show();
 }
 

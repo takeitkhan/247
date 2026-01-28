@@ -102,18 +102,6 @@ $profession = get_user_meta($user->ID, 'about_me_short', true);
             var gamificationModal = new bootstrap.Modal(modal);
             gamificationModal.show();
         }
-
-        // --- 3. Play Sound ---
-        if (typeof playNotificationSound === 'function') {
-            console.log('🎵 Playing photo upload notification sound via theme audio system');
-            playNotificationSound();
-        } else {
-            // Fallback: Play sound directly
-            console.log('📻 Playing photo upload notification sound directly');
-            const audio = new Audio("<?= get_template_directory_uri(); ?>/sounds/coin.mp3");
-            audio.volume = 0.5;
-            audio.play().catch(e => console.error("Audio play failed:", e));
-        }
     }
 
     /**

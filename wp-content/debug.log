@@ -55,3 +55,7 @@
 [28-Jan-2026 13:59:50 UTC] PHP Warning:  Undefined variable $profile in /var/www/html/wp-content/themes/247empowerment/template-custom/auth/referrals.php on line 100
 [28-Jan-2026 14:02:08 UTC] PHP Warning:  Undefined variable $profile in /var/www/html/wp-content/themes/247empowerment/template-custom/auth/referrals.php on line 99
 [28-Jan-2026 14:02:08 UTC] PHP Warning:  Undefined variable $profile in /var/www/html/wp-content/themes/247empowerment/template-custom/auth/referrals.php on line 100
+[28-Jan-2026 14:46:26 UTC] PHP Warning:  Undefined variable $profile in /var/www/html/wp-content/themes/247empowerment/template-custom/auth/referrals.php on line 99
+[28-Jan-2026 14:46:26 UTC] PHP Warning:  Undefined variable $profile in /var/www/html/wp-content/themes/247empowerment/template-custom/auth/referrals.php on line 100
+[28-Jan-2026 17:17:55 UTC] PHP Warning:  Undefined variable $username in /var/www/html/wp-content/themes/247empowerment/template-custom/auth/store-template.php on line 78
+[28-Jan-2026 17:17:58 UTC] PHP Warning:  Undefined variable $username in /var/www/html/wp-content/themes/247empowerment/template-custom/auth/store-template.php on line 78
