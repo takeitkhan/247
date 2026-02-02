@@ -79,16 +79,32 @@ function handle_profile_photo_upload()
 
 function enqueue_post_create_script()
 {
+    wp_enqueue_style(
+        'sweetalert2',
+        'https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css',
+        [],
+        '11.10.5'
+    );
+
+    wp_enqueue_script(
+        'sweetalert2',
+        'https://cdn.jsdelivr.net/npm/sweetalert2@11',
+        [],
+        '11.10.5',
+        true
+    );
+
     wp_enqueue_script(
         'post-create-js',
         get_template_directory_uri() . '/assets/js/post-create.js',
-        array('jquery'),
+        array('jquery', 'sweetalert2'),
         null,
         true
     );
 
     wp_localize_script('post-create-js', 'ajax_object', array(
-        'ajax_url' => admin_url('admin-ajax.php')
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('post_comment_nonce')
     ));
 }
 add_action('wp_enqueue_scripts', 'enqueue_post_create_script');
@@ -158,6 +174,40 @@ function handle_create_post()
         'post_id' => $post_id,
         'privacy' => $post_privacy
     ));
+}
+
+// AJAX handler to update post privacy
+add_action('wp_ajax_update_post_privacy', 'handle_update_post_privacy');
+function handle_update_post_privacy()
+{
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Not authorized'], 403);
+    }
+
+    $post_id = intval($_POST['post_id'] ?? 0);
+    $current_user_id = get_current_user_id();
+    
+    if (!$post_id) {
+        wp_send_json_error(['message' => 'Invalid post ID']);
+    }
+
+    // Check if user is the author
+    $post_author_id = get_post_field('post_author', $post_id);
+    if ($current_user_id !== (int)$post_author_id) {
+        wp_send_json_error(['message' => 'You can only edit your own posts'], 403);
+    }
+
+    // Sanitize privacy option
+    $privacy_options = ['only_me', 'referral_partners', 'public'];
+    $new_privacy = in_array($_POST['privacy'] ?? '', $privacy_options) ? $_POST['privacy'] : 'only_me';
+
+    // Update post privacy meta
+    update_post_meta($post_id, '_post_privacy', $new_privacy);
+
+    wp_send_json_success([
+        'message' => 'Privacy updated successfully',
+        'privacy' => $new_privacy
+    ]);
 }
 
 // Add inside your theme's functions.php or a loaded plugin
@@ -553,4 +603,420 @@ if (!empty($_POST['user_categories_priority'])) {
         // Optional: error flag for UI
         update_user_meta($user_id, 'mm_spg_interest_error', 'duplicate_priority');
     }
+}
+
+// AJAX handler for reactions
+add_action('wp_ajax_add_reaction', 'handle_add_reaction');
+function handle_add_reaction()
+{
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Not authorized'], 403);
+    }
+
+    $post_id = intval($_POST['post_id'] ?? 0);
+    $reaction = sanitize_text_field($_POST['reaction'] ?? '');
+    $user_id = get_current_user_id();
+
+    if (!$post_id || empty($reaction)) {
+        wp_send_json_error(['message' => 'Invalid post ID or reaction']);
+    }
+
+    // Allowed reactions
+    $allowed_reactions = ['like', 'love', 'happy', 'wow', 'sad', 'angry'];
+    if (!in_array($reaction, $allowed_reactions)) {
+        wp_send_json_error(['message' => 'Invalid reaction type']);
+    }
+
+    // Get current reactions
+    $reactions = get_post_meta($post_id, '_post_reactions', true);
+    $reactions = is_array($reactions) ? $reactions : [];
+
+    // Initialize all reaction types
+    foreach ($allowed_reactions as $r) {
+        if (!isset($reactions[$r])) {
+            $reactions[$r] = [];
+        }
+    }
+
+    // Check if user already has a reaction on this post
+    $user_current_reaction = null;
+    foreach ($allowed_reactions as $r) {
+        $user_key = array_search($user_id, $reactions[$r]);
+        if ($user_key !== false) {
+            $user_current_reaction = $r;
+            // Remove user from this reaction
+            unset($reactions[$r][$user_key]);
+            $reactions[$r] = array_values($reactions[$r]);
+            break;
+        }
+    }
+
+    // If user is clicking the same reaction, toggle it off
+    if ($user_current_reaction === $reaction) {
+        // Remove the reaction (already removed above)
+    } else {
+        // Add new reaction
+        $reactions[$reaction][] = $user_id;
+    }
+
+    // Update post meta
+    update_post_meta($post_id, '_post_reactions', $reactions);
+
+    // Get reaction counts
+    $reaction_counts = [];
+    foreach ($allowed_reactions as $r) {
+        $reaction_counts[$r] = isset($reactions[$r]) ? count($reactions[$r]) : 0;
+    }
+
+    wp_send_json_success([
+        'message' => 'Reaction updated',
+        'reactions' => $reaction_counts,
+        'user_reaction' => get_user_reactions($post_id, $user_id)
+    ]);
+}
+
+// Helper function to get user's reactions
+function get_user_reactions($post_id, $user_id) {
+    $reactions = get_post_meta($post_id, '_post_reactions', true);
+    $reactions = is_array($reactions) ? $reactions : [];
+    
+    $user_reactions = [];
+    foreach ($reactions as $reaction_type => $users) {
+        if (is_array($users) && in_array($user_id, $users)) {
+            $user_reactions[] = $reaction_type;
+        }
+    }
+    return $user_reactions;
+}
+
+// Helper function to clean duplicate reactions (ensure one user has only one reaction)
+function clean_user_reactions($post_id, $user_id) {
+    $reactions = get_post_meta($post_id, '_post_reactions', true);
+    $reactions = is_array($reactions) ? $reactions : [];
+    
+    $allowed_reactions = ['like', 'love', 'happy', 'wow', 'sad', 'angry'];
+    $user_reaction_found = null;
+    
+    // Remove user from all reactions
+    foreach ($allowed_reactions as $r) {
+        if (isset($reactions[$r]) && is_array($reactions[$r])) {
+            $user_key = array_search($user_id, $reactions[$r]);
+            if ($user_key !== false) {
+                if ($user_reaction_found === null) {
+                    $user_reaction_found = $r; // Keep first found
+                } else {
+                    // Remove duplicate
+                    unset($reactions[$r][$user_key]);
+                    $reactions[$r] = array_values($reactions[$r]);
+                }
+            }
+        }
+    }
+    
+    if ($user_reaction_found !== null) {
+        update_post_meta($post_id, '_post_reactions', $reactions);
+    }
+}
+
+// Helper function to get reaction counts
+function get_post_reaction_counts($post_id) {
+    $allowed_reactions = ['like', 'love', 'happy', 'wow', 'sad', 'angry'];
+    $reactions = get_post_meta($post_id, '_post_reactions', true);
+    $reactions = is_array($reactions) ? $reactions : [];
+    
+    $counts = [];
+    foreach ($allowed_reactions as $r) {
+        $counts[$r] = isset($reactions[$r]) ? count($reactions[$r]) : 0;
+    }
+    return $counts;
+}
+
+// AJAX handler for comments
+add_action('wp_ajax_add_post_comment', 'handle_add_post_comment');
+function handle_add_post_comment()
+{
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Not authorized'], 403);
+    }
+
+    check_ajax_referer('post_comment_nonce', 'nonce');
+
+    $post_id = intval($_POST['post_id'] ?? 0);
+    $comment_text = sanitize_textarea_field($_POST['comment'] ?? '');
+    $parent_id = intval($_POST['parent_id'] ?? 0);
+    $user_id = get_current_user_id();
+
+    if (!$post_id || empty($comment_text)) {
+        wp_send_json_error(['message' => 'Post ID and comment text required']);
+    }
+
+    // Check if post exists and user can view it
+    if (!UserProfileData::canViewPost($post_id, $user_id)) {
+        wp_send_json_error(['message' => 'You do not have permission to comment on this post'], 403);
+    }
+
+    // Create comment
+    $comment_data = [
+        'comment_post_ID'      => $post_id,
+        'comment_author_email' => wp_get_current_user()->user_email,
+        'comment_author'       => wp_get_current_user()->display_name,
+        'comment_content'      => $comment_text,
+        'user_id'              => $user_id,
+        'comment_approved'     => 1,
+        'comment_parent'       => $parent_id
+    ];
+
+    $comment_id = wp_insert_comment($comment_data);
+
+    if (is_wp_error($comment_id)) {
+        wp_send_json_error(['message' => 'Failed to add comment']);
+    }
+
+    wp_send_json_success([
+        'message' => 'Comment added successfully',
+        'comment_id' => $comment_id
+    ]);
+}
+
+// AJAX handler for deleting comments
+add_action('wp_ajax_delete_post_comment', 'handle_delete_post_comment');
+function handle_delete_post_comment()
+{
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Not authorized'], 403);
+    }
+
+    check_ajax_referer('post_comment_nonce', 'nonce');
+
+    $comment_id = intval($_POST['comment_id'] ?? 0);
+    if (!$comment_id) {
+        wp_send_json_error(['message' => 'Invalid comment ID']);
+    }
+
+    $comment = get_comment($comment_id);
+    if (!$comment) {
+        wp_send_json_error(['message' => 'Comment not found']);
+    }
+
+    $current_user_id = get_current_user_id();
+    $comment_author_id = (int) $comment->user_id;
+    $post_author_id = (int) get_post_field('post_author', $comment->comment_post_ID);
+
+    if ($current_user_id !== $comment_author_id && $current_user_id !== $post_author_id && !current_user_can('moderate_comments')) {
+        wp_send_json_error(['message' => 'You do not have permission to delete this comment'], 403);
+    }
+
+    $deleted = wp_delete_comment($comment_id, true);
+    if (!$deleted) {
+        wp_send_json_error(['message' => 'Failed to delete comment']);
+    }
+
+    wp_send_json_success([
+        'message' => 'Comment deleted successfully',
+        'comment_id' => $comment_id
+    ]);
+}
+
+// AJAX handler for updating comments
+add_action('wp_ajax_update_post_comment', 'handle_update_post_comment');
+function handle_update_post_comment()
+{
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Not authorized'], 403);
+    }
+
+    check_ajax_referer('post_comment_nonce', 'nonce');
+
+    $comment_id = intval($_POST['comment_id'] ?? 0);
+    $comment_text = sanitize_textarea_field($_POST['comment'] ?? '');
+
+    if (!$comment_id || empty($comment_text)) {
+        wp_send_json_error(['message' => 'Comment ID and text required']);
+    }
+
+    $comment = get_comment($comment_id);
+    if (!$comment) {
+        wp_send_json_error(['message' => 'Comment not found']);
+    }
+
+    $current_user_id = get_current_user_id();
+    $comment_author_id = (int) $comment->user_id;
+    $post_author_id = (int) get_post_field('post_author', $comment->comment_post_ID);
+
+    if ($current_user_id !== $comment_author_id && $current_user_id !== $post_author_id && !current_user_can('moderate_comments')) {
+        wp_send_json_error(['message' => 'You do not have permission to edit this comment'], 403);
+    }
+
+    $updated = wp_update_comment([
+        'comment_ID' => $comment_id,
+        'comment_content' => $comment_text,
+    ]);
+
+    if (!$updated) {
+        wp_send_json_error(['message' => 'Failed to update comment']);
+    }
+
+    wp_send_json_success([
+        'message' => 'Comment updated successfully',
+        'comment_id' => $comment_id,
+        'comment' => $comment_text
+    ]);
+}
+
+// Get post comments
+add_action('wp_ajax_load_post_comments', 'handle_load_post_comments');
+add_action('wp_ajax_nopriv_load_post_comments', 'handle_load_post_comments');
+function handle_load_post_comments()
+{
+    $post_id = intval($_POST['post_id'] ?? 0);
+    
+    if (!$post_id) {
+        wp_send_json_error(['message' => 'Invalid post ID']);
+    }
+
+    $comments = get_comments([
+        'post_id' => $post_id,
+        'status'  => 'approve',
+        'orderby' => 'comment_date',
+        'order'   => 'ASC'
+    ]);
+
+    $comment_html = build_comment_tree($comments, 0);
+
+    wp_send_json_success([
+        'comments' => $comment_html,
+        'count' => count($comments)
+    ]);
+}
+
+// Build nested comment HTML with modern Facebook/Instagram style
+function build_comment_tree($comments, $parent_id = 0, $depth = 0) {
+    $html = '';
+    
+    foreach ($comments as $comment) {
+        // Convert both to int for proper comparison
+        if ((int)$comment->comment_parent !== (int)$parent_id) {
+            continue;
+        }
+        
+        // Get user profile data
+        $user_profile = new UserProfileData($comment->user_id);
+        $profile = $user_profile->getProfile();
+        
+        // Get name and photo
+        $author_first_name = $profile['first_name'] ?? $comment->comment_author;
+        $author_last_name = $profile['last_name'] ?? '';
+        $author_name = trim($author_first_name . ' ' . $author_last_name);
+        
+        // Get profile photo with fallback
+        $default_photo = get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg';
+        $author_photo = (!empty($profile['profile_photo'])) ? $profile['profile_photo'] : $default_photo;
+        
+        // Get current user photo for reply input
+        $current_user_photo = $default_photo;
+        if (is_user_logged_in()) {
+            $current_user_profile = new UserProfileData(get_current_user_id());
+            $current_user_data = $current_user_profile->getProfile();
+            $current_user_photo = (!empty($current_user_data['profile_photo'])) ? $current_user_data['profile_photo'] : $default_photo;
+        }
+        
+        // Format time - improved format
+        $comment_time = strtotime($comment->comment_date);
+        $current_time = current_time('timestamp');
+        $time_diff = $current_time - $comment_time;
+        
+        if ($time_diff < 60) {
+            $time_ago = 'Just now';
+        } elseif ($time_diff < 3600) {
+            $minutes = floor($time_diff / 60);
+            $time_ago = $minutes . 'min ago';
+        } elseif ($time_diff < 86400) {
+            $hours = floor($time_diff / 3600);
+            $time_ago = $hours . 'h ago';
+        } elseif ($time_diff < 604800) {
+            $days = floor($time_diff / 86400);
+            $time_ago = $days . 'd ago';
+        } else {
+            $weeks = floor($time_diff / 604800);
+            $time_ago = $weeks . 'w ago';
+        }
+        
+        // Calculate margin left for nested comments
+        $margin_left = $depth > 0 ? ($depth * 45) : 0;
+        
+        // Main comment container with modern style
+        $html .= '<div class="comment-item" data-comment-id="' . $comment->comment_ID . '" data-comment-content="' . esc_attr($comment->comment_content) . '" style="margin-left: ' . $margin_left . 'px; margin-bottom: 12px; padding: 0 8px;">';
+        
+        // Header: Profile photo + name + time + options
+        $html .= '<div class="d-flex justify-content-between align-items-flex-start mb-1">';
+        $html .= '<div class="d-flex align-items-center gap-2" style="flex: 1;">';
+        
+        // Profile photo (larger - 40px)
+        $html .= '<div class="position-relative" style="width: 40px; height: 40px; flex-shrink: 0;">';
+        $html .= '<img src="' . esc_url($author_photo) . '" alt="' . esc_attr($author_name) . '" class="rounded-circle w-100 h-100" style="object-fit: cover; border: 2px solid #f0f0f0;">';
+        $html .= '</div>';
+        
+        // Name and time
+        $html .= '<div style="flex: 1;">';
+        $html .= '<strong class="text-dark" style="font-size: 14px; display: block; margin-bottom: 2px;">' . esc_html($author_name) . '</strong>';
+        $html .= '<small class="text-muted" style="font-size: 12px;">' . $time_ago . '</small>';
+        $html .= '</div>';
+        $html .= '</div>';
+        
+        // Options menu (3-dot button)
+        $html .= '<button class="btn btn-sm p-0 text-muted comment-options-btn" data-comment-id="' . $comment->comment_ID . '" style="font-size: 18px; border: none; background: none;">';
+        $html .= '<i class="fas fa-ellipsis-h"></i>';
+        $html .= '</button>';
+        $html .= '</div>';
+        
+        // Comment content bubble
+        $html .= '<div style="margin-left: 48px; margin-bottom: 6px;">';
+        $html .= '<div class="comment-bubble" style="background-color: #f0f2f5; padding: 12px 14px; border-radius: 18px; word-wrap: break-word;">';
+        $html .= '<p class="mb-0 text-dark" style="font-size: 14px; line-height: 1.5;">' . nl2br(esc_html($comment->comment_content)) . '</p>';
+        $html .= '</div>';
+        $html .= '</div>';
+        
+        // Action buttons: Like, Reply
+        $html .= '<div style="margin-left: 48px; margin-bottom: 8px;">';
+        $html .= '<div class="d-flex gap-3">';
+        $html .= '<button class="btn btn-sm p-0 text-muted comment-like-btn" data-comment-id="' . $comment->comment_ID . '" style="font-size: 12px; border: none; background: none; cursor: pointer;">';
+        $html .= '<i class="far fa-thumbs-up" style="margin-right: 4px;"></i>Like';
+        $html .= '</button>';
+        
+        if ($depth < 2) { // Only show reply button for first 2 levels
+            $html .= '<button class="btn btn-sm p-0 text-muted reply-btn" data-comment-id="' . $comment->comment_ID . '" data-author-name="' . esc_attr($author_name) . '" style="font-size: 12px; border: none; background: none; cursor: pointer;">';
+            $html .= '<i class="fas fa-reply" style="margin-right: 4px;"></i>Reply';
+            $html .= '</button>';
+        }
+        $html .= '</div>';
+        $html .= '</div>';
+        
+        // Reply input (hidden by default)
+        if ($depth < 2) {
+            $html .= '<div class="reply-input-container" id="reply-container-' . $comment->comment_ID . '" style="display: none; margin-left: 48px; margin-bottom: 10px;">';
+            
+            $html .= '<div class="d-flex gap-2 align-items-start">';
+            $html .= '<div class="position-relative" style="width: 36px; height: 36px; flex-shrink: 0;">';
+            $html .= '<img src="' . esc_url($current_user_photo) . '" alt="You" class="rounded-circle w-100 h-100" style="object-fit: cover;">';
+            $html .= '</div>';
+            
+            $reply_nonce = wp_create_nonce('post_comment_nonce');
+            $html .= '<div class="flex-grow-1 position-relative">';
+            $html .= '<input type="text" class="form-control comment-reply-input" data-parent-id="' . $comment->comment_ID . '" data-nonce="' . esc_attr($reply_nonce) . '" placeholder="Write a reply..." style="font-size: 14px; border-radius: 18px; padding: 10px 14px; border: 1px solid #e0e0e0; background-color: #f0f2f5;">';
+            $html .= '<img class="position-absolute emoji-icon" src="' . get_template_directory_uri() . '/assets/img/emoji.svg" alt="Emoji" style="right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; width: 18px; height: 18px;">';
+            $html .= '</div>';
+            $html .= '</div>';
+            
+            $html .= '</div>';
+        }
+        
+        // Recursively build child comments
+        if ($depth < 2) {
+            $html .= build_comment_tree($comments, $comment->comment_ID, $depth + 1);
+        }
+        
+        $html .= '</div>';
+    }
+    
+    return $html;
 }

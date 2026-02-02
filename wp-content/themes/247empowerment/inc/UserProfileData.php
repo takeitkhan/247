@@ -465,6 +465,59 @@ class UserProfileData
 
 
 
+    /**
+     * Check if a post can be viewed by the current user based on privacy settings
+     * 
+     * @param int $post_id
+     * @param int|null $current_user_id (defaults to wp_get_current_user()->ID)
+     * @return bool
+     */
+    public static function canViewPost($post_id, $current_user_id = null)
+    {
+        if (!$current_user_id) {
+            $current_user_id = get_current_user_id();
+        }
+
+        $post_author_id = get_post_field('post_author', $post_id);
+        $privacy = get_post_meta($post_id, '_post_privacy', true) ?: 'only_me';
+
+        // Post author can always view their own post
+        if ($current_user_id === (int)$post_author_id) {
+            return true;
+        }
+
+        // Public posts can be viewed by anyone
+        if ($privacy === 'public') {
+            return true;
+        }
+
+        // Private posts can only be viewed by the owner
+        if ($privacy === 'only_me') {
+            return false;
+        }
+
+        // Referral partners can view posts shared with referral partners
+        if ($privacy === 'referral_partners') {
+            if (!$current_user_id) {
+                return false; // Only logged-in users can view partner posts
+            }
+
+            // Check if current user is a referral partner of post author
+            $author_profile = new self($post_author_id);
+            $referral_partners = $author_profile->getReferredUsers();
+
+            foreach ($referral_partners as $partner) {
+                if ($partner->ID === (int)$current_user_id) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return false;
+    }
+
     public function toJSON()
     {
         return wp_json_encode($this->getProfile());

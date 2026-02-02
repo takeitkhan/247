@@ -27,6 +27,17 @@ $user_posts = new WP_Query($args);
 if ($user_posts->have_posts()):
     while ($user_posts->have_posts()): $user_posts->the_post();
         $post_id     = get_the_ID();
+
+        // Check privacy before displaying the post
+        if (!UserProfileData::canViewPost($post_id, get_current_user_id())) {
+            continue; // Skip this post if user doesn't have permission
+        }
+
+        // Clean duplicate reactions for current user
+        if (is_user_logged_in()) {
+            clean_user_reactions($post_id, get_current_user_id());
+        }
+
         $post_time   = get_the_date('F j, Y \a\t g:i A');
         $post_author = get_the_author();
         $post_image  = get_the_post_thumbnail_url($post_id, 'large');
@@ -46,8 +57,43 @@ if ($user_posts->have_posts()):
                         <span><?php echo esc_html($post_time); ?></span>
                     </div>
                 </div>
-                <div>
-                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/post_option_icon.png" alt="Post Options">
+                <div class="dropdown">
+                    <button class="p-0 border-0 text-dark btn btn-link" type="button" id="postOptions<?php echo $post_id; ?>" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/post_option_icon.png" alt="Post Options">
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="postOptions<?php echo $post_id; ?>">
+                        <li>
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#privacyModal<?php echo $post_id; ?>">
+                                Edit Privacy
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Privacy Edit Modal -->
+                <?php
+                $post_privacy = get_post_meta($post_id, '_post_privacy', true) ?: 'only_me';
+                ?>
+                <div class="modal fade" id="privacyModal<?php echo $post_id; ?>" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Post Privacy</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <select class="form-select post-privacy-select" data-post-id="<?php echo $post_id; ?>" data-current-privacy="<?php echo esc_attr($post_privacy); ?>">
+                                    <option value="only_me" <?php selected($post_privacy, 'only_me'); ?>>Only Me</option>
+                                    <option value="referral_partners" <?php selected($post_privacy, 'referral_partners'); ?>>Only Referral Partners</option>
+                                    <option value="public" <?php selected($post_privacy, 'public'); ?>>Public</option>
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary save-privacy-btn" data-post-id="<?php echo $post_id; ?>">Save</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -75,29 +121,89 @@ if ($user_posts->have_posts()):
                 </div>
             <?php endif; ?>
 
+            <!-- Reactions Section -->
+            <?php
+            $reaction_counts = get_post_reaction_counts($post_id);
+            $user_reactions = is_user_logged_in() ? get_user_reactions($post_id, get_current_user_id()) : [];
+            $total_reactions = array_sum($reaction_counts);
+            
+            // Get comments count
+            $comments_count = get_comments([
+                'post_id' => $post_id,
+                'status'  => 'approve',
+                'count'   => true
+            ]);
+            
+            $template_uri = get_template_directory_uri();
+            $icons_path = $template_uri . '/assets/img/nd/icons';
+            $comment_nonce = wp_create_nonce('post_comment_nonce');
+            ?>
+            
+            <hr class="border-underline my-2" />
+            
+            <!-- Reactions & Comments Stats -->
+            <div class="post-stats d-flex gap-4 px-3 py-2 small text-muted">
+                <?php if ($total_reactions > 0): ?>
+                    <span class="d-flex align-items-center gap-1 reaction-stat">
+                        <img src="<?php echo esc_url($icons_path . '/reaction.svg'); ?>" alt="Reactions" style="width: 16px; height: 16px;">
+                        <span><?php echo esc_html($total_reactions); ?></span>
+                    </span>
+                <?php endif; ?>
+                
+                <?php if ($comments_count > 0): ?>
+                    <span class="d-flex align-items-center gap-1 comment-stat">
+                        <img src="<?php echo esc_url($icons_path . '/comments.svg'); ?>" alt="Comments" style="width: 16px; height: 16px;">
+                        <span id="comment-count-<?php echo $post_id; ?>"><?php echo esc_html($comments_count); ?></span>
+                    </span>
+                <?php endif; ?>
+            </div>
 
-            <!-- <hr class="border-underline"> -->
+            <hr class="border-underline my-0" />
 
-            <!-- Post Actions -->
-            <!-- <div class="d-flex gap-5">
-                <span class="d-flex align-items-center gap-1"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/like.png" alt=""> <?php echo esc_html($like_count ?? 0); ?></span>
-                <span class="d-flex align-items-center gap-1"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/comment.png" alt=""> <?php echo esc_html($comment_count ?? 0); ?></span>
-                <span class="d-flex align-items-center gap-1"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/share.png" alt=""> <?php echo esc_html($share_count ?? 0); ?></span>
-            </div> -->
+            <!-- Action Buttons -->
+            <div class="d-flex gap-2 px-2 pb-2 flex-wrap">
+                <button class="btn btn-sm btn-light reaction-btn" data-post-id="<?php echo $post_id; ?>" data-reaction="like" title="Like">
+                    <img src="<?php echo esc_url($icons_path . '/reaction.svg'); ?>" alt="Like" style="width: 16px; height: 16px; margin-right: 4px;"> Like
+                </button>
+                <button class="btn btn-sm btn-light reaction-btn" data-post-id="<?php echo $post_id; ?>" data-reaction="love" title="Love">
+                    <img src="<?php echo esc_url($icons_path . '/reaction.svg'); ?>" alt="Love" style="width: 16px; height: 16px; margin-right: 4px;"> Love
+                </button>
+                <button class="btn btn-sm btn-light reaction-btn" data-post-id="<?php echo $post_id; ?>" data-reaction="happy" title="Happy">
+                    <img src="<?php echo esc_url($icons_path . '/reaction.svg'); ?>" alt="Happy" style="width: 16px; height: 16px; margin-right: 4px;"> Haha
+                </button>
+                <button class="btn btn-sm btn-light reaction-btn" data-post-id="<?php echo $post_id; ?>" data-reaction="wow" title="Wow">
+                    <img src="<?php echo esc_url($icons_path . '/reaction.svg'); ?>" alt="Wow" style="width: 16px; height: 16px; margin-right: 4px;"> Wow
+                </button>
+                <button class="btn btn-sm btn-light reaction-btn" data-post-id="<?php echo $post_id; ?>" data-reaction="sad" title="Sad">
+                    <img src="<?php echo esc_url($icons_path . '/reaction.svg'); ?>" alt="Sad" style="width: 16px; height: 16px; margin-right: 4px;"> Sad
+                </button>
+                <button class="btn btn-sm btn-light reaction-btn" data-post-id="<?php echo $post_id; ?>" data-reaction="angry" title="Angry">
+                    <img src="<?php echo esc_url($icons_path . '/reaction.svg'); ?>" alt="Angry" style="width: 16px; height: 16px; margin-right: 4px;"> Angry
+                </button>
+            </div>
 
-            <!-- Comment Input -->
-            <!-- <div class="d-flex align-items-center gap-3 pt-3">
-                <div>
-                    <div class="position-relative img44">
-                        <img src="<?php echo esc_url(get_user_meta(get_current_user_id(), 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg'); ?>" class="rounded-circle w-100 h-100 object-fit-cover" alt="Profile">
-                        <img class="position-absolute active-icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/active_icon.png" alt="">
+            <hr class="border-underline my-0" />
+
+            <!-- Comments Section -->
+            <div class="pt-3 px-3">
+                <!-- Comments Container -->
+                <div class="comment-section mb-3" id="comments-<?php echo $post_id; ?>" data-nonce="<?php echo esc_attr($comment_nonce); ?>"></div>
+
+                <!-- Comment Input -->
+                <?php if (is_user_logged_in()): ?>
+                <div class="mt-2 pt-2 border-top">
+                    <div class="d-flex gap-2 align-items-start">
+                        <div class="position-relative" style="width: 36px; height: 36px; flex-shrink: 0;">
+                            <img src="<?php echo esc_url(get_user_meta(get_current_user_id(), 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg'); ?>" alt="You" class="rounded-circle w-100 h-100" style="object-fit: cover;">
+                        </div>
+                        <div class="flex-grow-1 position-relative">
+                            <input type="text" class="form-control comment-input" data-post-id="<?php echo $post_id; ?>" data-nonce="<?php echo esc_attr($comment_nonce); ?>" placeholder="Write a comment..." style="border-radius: 18px; padding: 10px 14px; border: 1px solid #e0e0e0; background-color: #f0f2f5; font-size: 14px;">
+                            <img src="<?php echo esc_url($icons_path . '/smile.svg'); ?>" alt="Emoji" class="position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; cursor: pointer;">
+                        </div>
                     </div>
                 </div>
-                <div class="position-relative w-100">
-                    <input type="text" class="w-100 input" placeholder="Write a comment..." data-post-id="<?php echo esc_attr($post_id); ?>">
-                    <img class="position-absolute emoji-pos" src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/imogi.png" alt="Emoji">
-                </div>
-            </div> -->
+                <?php endif; ?>
+            </div>
         </div>
 
 

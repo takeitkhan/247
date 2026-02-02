@@ -34,6 +34,17 @@ if ($query->have_posts()):
     while ($query->have_posts()): $query->the_post();
 
         $post_id = get_the_ID();
+
+        // Check privacy before displaying the post
+        if (!UserProfileData::canViewPost($post_id, get_current_user_id())) {
+            continue; // Skip this post if user doesn't have permission
+        }
+
+        // Clean duplicate reactions for current user
+        if (is_user_logged_in()) {
+            clean_user_reactions($post_id, get_current_user_id());
+        }
+
         $post_time = get_the_date('F j, Y \a\t g:i A');
         $post_author_id = get_post_field('post_author', $post_id);
         $post_image = get_the_post_thumbnail_url($post_id, 'large');
@@ -80,6 +91,7 @@ if ($query->have_posts()):
                     <?php
                     $current_user_id = get_current_user_id();
                     $post_author_id = get_post_field('post_author', $post_id);
+                    $post_privacy = get_post_meta($post_id, '_post_privacy', true) ?: 'only_me';
 
                     if ($current_user_id === (int) $post_author_id): ?>
                         <!-- Three-dot dropdown menu -->
@@ -89,6 +101,11 @@ if ($query->have_posts()):
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="postOptions<?php echo $post_id; ?>">
                                 <li>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#privacyModal<?php echo $post_id; ?>">
+                                        Edit Privacy
+                                    </a>
+                                </li>
+                                <li>
                                     <a class="text-danger dropdown-item"
                                         href="<?php echo esc_url($delete_url); ?>"
                                         onclick="return confirm('Are you sure you want to delete this post?');">
@@ -96,6 +113,29 @@ if ($query->have_posts()):
                                     </a>
                                 </li>
                             </ul>
+                        </div>
+
+                        <!-- Privacy Edit Modal -->
+                        <div class="modal fade" id="privacyModal<?php echo $post_id; ?>" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Edit Post Privacy</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <select class="form-select post-privacy-select" data-post-id="<?php echo $post_id; ?>" data-current-privacy="<?php echo esc_attr($post_privacy); ?>">
+                                            <option value="only_me" <?php selected($post_privacy, 'only_me'); ?>>Only Me</option>
+                                            <option value="referral_partners" <?php selected($post_privacy, 'referral_partners'); ?>>Only Referral Partners</option>
+                                            <option value="public" <?php selected($post_privacy, 'public'); ?>>Public</option>
+                                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-primary save-privacy-btn" data-post-id="<?php echo $post_id; ?>">Save</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -123,6 +163,58 @@ if ($query->have_posts()):
                         alt="" />
                 </div>
             <?php endif; ?>
+
+            <!-- Reactions Section -->
+            <?php
+            $reaction_counts = get_post_reaction_counts($post_id);
+            $user_reactions = is_user_logged_in() ? get_user_reactions($post_id, get_current_user_id()) : [];
+            $total_reactions = array_sum($reaction_counts);
+            ?>
+            <div class="post-actions border-top pt-2 mt-3">
+                <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                    <span class="text-muted small"><?php echo $total_reactions; ?> Reaction<?php echo $total_reactions !== 1 ? 's' : ''; ?></span>
+                    <span class="text-muted small" id="comment-count-<?php echo $post_id; ?>">0 Comments</span>
+                </div>
+
+                <!-- Reaction Buttons -->
+                <div class="d-flex gap-2 px-2 pb-1 flex-wrap">
+                    <button class="btn btn-sm btn-light reaction-btn <?php echo in_array('like', $user_reactions) ? 'active' : ''; ?>" data-post-id="<?php echo $post_id; ?>" data-reaction="like" title="Like">
+                        👍 Like
+                    </button>
+                    <button class="btn btn-sm btn-light reaction-btn <?php echo in_array('love', $user_reactions) ? 'active' : ''; ?>" data-post-id="<?php echo $post_id; ?>" data-reaction="love" title="Love">
+                        ❤️ Love
+                    </button>
+                    <button class="btn btn-sm btn-light reaction-btn <?php echo in_array('happy', $user_reactions) ? 'active' : ''; ?>" data-post-id="<?php echo $post_id; ?>" data-reaction="happy" title="Happy">
+                        😄 Haha
+                    </button>
+                    <button class="btn btn-sm btn-light reaction-btn <?php echo in_array('wow', $user_reactions) ? 'active' : ''; ?>" data-post-id="<?php echo $post_id; ?>" data-reaction="wow" title="Wow">
+                        😮 Wow
+                    </button>
+                    <button class="btn btn-sm btn-light reaction-btn <?php echo in_array('sad', $user_reactions) ? 'active' : ''; ?>" data-post-id="<?php echo $post_id; ?>" data-reaction="sad" title="Sad">
+                        😢 Sad
+                    </button>
+                    <button class="btn btn-sm btn-light reaction-btn <?php echo in_array('angry', $user_reactions) ? 'active' : ''; ?>" data-post-id="<?php echo $post_id; ?>" data-reaction="angry" title="Angry">
+                        😠 Angry
+                    </button>
+                </div>
+
+                <!-- Comments Section -->
+                <div class="border-top pt-1 px-2">
+                    <div class="comment-section" id="comments-<?php echo $post_id; ?>"></div>
+
+                    <!-- Comment Input -->
+                    <?php if (is_user_logged_in()): ?>
+                    <div class="mt-1 pt-1 border-top">
+                        <div class="d-flex gap-2 align-items-flex-start">
+                            <img src="<?php echo esc_url(get_user_meta(get_current_user_id(), 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg'); ?>" alt="You" class="rounded-circle" width="32" height="32" style="object-fit: cover;">
+                            <div class="flex-grow-1">
+                                <input type="text" class="form-control form-control-sm comment-input" data-post-id="<?php echo $post_id; ?>" placeholder="Write a comment..." style="font-size: 12px;">
+                            </div>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
         </div>
 <?php
     endwhile;
