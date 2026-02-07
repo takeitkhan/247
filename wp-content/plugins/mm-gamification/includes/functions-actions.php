@@ -37,6 +37,52 @@ mm_register_action('birthday_update', 'Birthday update');
 mm_register_action('location_update', 'Location update');
 mm_register_action('suggestion_submitted', 'Suggestion Submitted');
 mm_register_action('report_submitted', 'Issue Report Submitted');
+mm_register_action('referral_signup', 'Referral Signup');
+
+/**
+ * Ensure a gamification action exists in DB (seed if missing)
+ */
+function mm_ensure_gamification_action_exists($action_key, $custom_message, $notification_message, $points)
+{
+    global $wpdb;
+    $table = $wpdb->prefix . 'gamification_actions';
+
+    $table_exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+    if (!$table_exists) {
+        return;
+    }
+
+    $existing = $wpdb->get_var($wpdb->prepare("SELECT id FROM {$table} WHERE action_key = %s", $action_key));
+    if ($existing) {
+        return;
+    }
+
+    $wpdb->insert(
+        $table,
+        [
+            'action_key' => $action_key,
+            'custom_message' => $custom_message,
+            'notification_message' => $notification_message,
+            'points' => (float) $points,
+            'created_at' => current_time('mysql'),
+        ],
+        ['%s', '%s', '%s', '%f', '%s']
+    );
+}
+
+/**
+ * Seed referral action if missing
+ */
+function mm_seed_referral_gamification_action()
+{
+    mm_ensure_gamification_action_exists(
+        'referral_signup',
+        'You earned 30 points for referring a new user.',
+        'You have earned {points} points for referring a new user.',
+        30
+    );
+}
+add_action('init', 'mm_seed_referral_gamification_action');
 
 
 /**

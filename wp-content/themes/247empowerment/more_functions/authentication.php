@@ -140,7 +140,8 @@ add_action('init', function () {
             */
 
             // Get referrer username
-            $referrer_username = !empty($_POST['referrer'])
+            $is_explicit_referrer = !empty($_POST['referrer']);
+            $referrer_username = $is_explicit_referrer
                 ? sanitize_text_field($_POST['referrer'])
                 : sanitize_text_field(get_option('default_referrer_username'));
 
@@ -148,11 +149,20 @@ add_action('init', function () {
             update_user_meta($user_id, 'referrer', $referrer_username);
 
             // Convert username → WP_User object
-            $referrer_user = get_user_by('login', $referrer_username);
+            $referrer_user = is_numeric($referrer_username)
+                ? get_user_by('id', (int) $referrer_username)
+                : get_user_by('login', $referrer_username);
 
-            if ($referrer_user) {
+            if ($referrer_user && (int) $referrer_user->ID !== (int) $user_id) {
 
                 $referrer_id = $referrer_user->ID;
+
+                // Award referral points to referrer (once per new user)
+                $already_awarded = get_user_meta($user_id, 'referral_points_awarded', true);
+                if ($is_explicit_referrer && !$already_awarded && function_exists('mm_award_points_and_notify')) {
+                    mm_award_points_and_notify($referrer_id, 'referral_signup');
+                    update_user_meta($user_id, 'referral_points_awarded', $referrer_id);
+                }
 
                 /*
                 |--------------------------------------------------------------------------

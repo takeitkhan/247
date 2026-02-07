@@ -18,7 +18,7 @@ $current_points = $args['current_points'] ?? 0;
                     <img src="<?php echo get_template_directory_uri(); ?>/assets/img/nd/referral.svg" alt="">
                     <span class="fs20 fw-bold">Wallet</span>
                 </div>
-                <p class="mt-2">Earned from invited users</p>
+                <p class="mt-2">Ask about our $600 Referrals.</p>
                 <div class="py-3">
                     <p class="d-flex align-items-center justify-content-between">
                         <span class="fw-medium">Balance:</span>
