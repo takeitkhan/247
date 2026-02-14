@@ -63,8 +63,6 @@ nav ul li {
     text-align: center;
 }
 
-
-/* Anchor Styles */
 /* Anchor Styles */
 .nav-item a,
 .list-inline-item a {
@@ -700,11 +698,10 @@ h1.fs-giant {
 }
 
 // Gutenberg Content Styling with Bootstrap 5 equivalents
-// Paragraphs
 .wp-block-paragraph {
     margin-bottom: 1rem;
-    font-size: 1rem;
-    line-height: 2rem;
+    font-size: 1.2rem;
+    line-height: 2.5rem;
     color: #212529;
 }
 
@@ -714,8 +711,7 @@ h1.fs-giant {
 
 // Headings
 .wp-block-heading {
-    margin-top: 1.5rem;
-    margin-bottom: 1rem;
+    margin-top: 0.5rem;
     line-height: 1.6;
 
     &.has-text-align-center {
@@ -750,7 +746,7 @@ ol.wp-block-lists,
 ol.wp-block-list {
     counter-reset: list-counter;
     margin-bottom: 1rem;
-    padding-left: 1rem;
+    padding-left: 2rem;
 
     li {
         counter-increment: list-counter;
@@ -803,6 +799,9 @@ ol.wp-block-list {
     &:hover {
         text-decoration: underline;
         color: #0a58ca;
+    }
+    p {
+        text-align: justify !important;
     }
 }
 
