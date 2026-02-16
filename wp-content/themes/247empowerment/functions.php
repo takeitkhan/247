@@ -1,5 +1,22 @@
 <?php
 
+// ============================================
+// Load Payout System Classes
+// ============================================
+require_once get_template_directory() . '/inc/PayoutSystem.php';
+require_once get_template_directory() . '/inc/PayPalAPI.php';
+require_once get_template_directory() . '/inc/PayoutNotifications.php';
+
+// Activation hook
+register_activation_hook(__FILE__, ['PayoutSystem', 'activate']);
+
+// Initialize Payout System
+if (is_admin() || is_user_logged_in()) {
+    new PayoutSystem();
+    new PayPalAPI();
+    new PayoutNotifications();
+}
+
 add_action('init', function () {
     if (!session_id()) {
         session_start();
@@ -987,6 +1004,32 @@ function enqueue_notifications_assets()
 }
 add_action('wp_enqueue_scripts', 'enqueue_notifications_assets');
 
+// Enqueue SimpleMDE for Modify-Profile About Me editor
+add_action('wp_enqueue_scripts', function () {
+    if (!is_user_logged_in()) return;
+    // Only enqueue on modify-profile page (adjust slug as needed)
+    if (!is_page('modify-profile')) return;
+
+    // SimpleMDE CSS & JS
+    wp_enqueue_style('simplemde-css', 'https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css');
+    wp_enqueue_script('simplemde-js', 'https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js', [], null, true);
+
+    // Inline JS to initialize SimpleMDE on About Me textarea
+    $init_js = "
+    document.addEventListener('DOMContentLoaded', function() {
+        var textarea = document.querySelector('textarea[name=\'about_me\']');
+        if (textarea && typeof SimpleMDE !== 'undefined') {
+            // Prevent duplicate editors if other scripts try to init
+            if (!textarea.dataset.mdeInitialized) {
+                new SimpleMDE({ element: textarea });
+                textarea.dataset.mdeInitialized = '1';
+            }
+        }
+    });
+    ";
+    wp_add_inline_script('simplemde-js', $init_js);
+});
+
 
 add_action('wp_ajax_mark_all_notifications_read', 'mark_all_notifications_read');
 function mark_all_notifications_read()
@@ -1078,6 +1121,19 @@ require_once get_template_directory() . '/inc/Notifications.php';
 require_once get_template_directory() . '/inc/UserConnectionManager.php';
 require_once get_template_directory() . '/more_functions/walker-menu.php';
 require_once get_template_directory() . '/more_functions/authentication.php';
+
+// ============================================
+// Withdrawal Shortcode
+// ============================================
+add_shortcode('withdrawal_form', function() {
+    if (!is_user_logged_in()) {
+        return '<p style="text-align: center; padding: 20px; background: #f5f5f5; border-radius: 5px;">Please <a href="' . wp_login_url() . '">log in</a> to request a withdrawal.</p>';
+    }
+    ob_start();
+    include get_template_directory() . '/template-custom/frontend/withdrawal-form.php';
+    return ob_get_clean();
+});
+
 require_once get_template_directory() . '/more_functions/profile.php';
 require_once get_template_directory() . '/more_functions/store.php';
 require_once get_template_directory() . '/more_functions/event.php';

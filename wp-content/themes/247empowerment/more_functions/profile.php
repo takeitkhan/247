@@ -1,6 +1,4 @@
 <?php
-
-
 add_action('wp_enqueue_scripts', function () {
     if (is_page_template('modify-profile.php')) {
         wp_enqueue_media();  // Enqueue WordPress media

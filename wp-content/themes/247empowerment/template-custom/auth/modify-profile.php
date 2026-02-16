@@ -157,8 +157,8 @@ $val = fn($key, $default = '') => esc_attr($profile[$key] ?? $default);
                             <div class="col-12">
                                 <label class="form-label">About me (full description):</label>
                                 <div class="position-relative">
-                                    <textarea name="about_me" class="form-control input" rows="5"
-                                        placeholder="Write about you elaborately!"><?= esc_textarea($profile['about_me'] ?? ''); ?></textarea>
+                                    <textarea name="about_me" id="about_me_full" class="form-control" rows="8" placeholder="Write your full description here..."><?= esc_textarea(html_entity_decode($profile['about_me'] ?? '')); ?></textarea>
+                                    <small class="text-muted">Supports Markdown formatting: Bold, Headings, Lists, Images, Video links, and Hyperlinks.</small>
                                 </div>
                             </div>
 

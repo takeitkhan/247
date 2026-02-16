@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name: Kirki Customizer Framework
- * Plugin URI: https://themeum.com
+ * Plugin URI: https://www.themeum.com
  * Description: The Ultimate WordPress Customizer Framework
  * Author: Themeum
- * Author URI: https://themeum.com
- * Version: 5.1.1
+ * Author URI: https://www.themeum.com
+ * Version: 5.2.1
  * Text Domain: kirki
- * Requires at least: 5.2
+ * Requires at least: 5.3
  * Requires PHP: 7.4
  *
  * @package Kirki
@@ -38,13 +38,13 @@ if ( ! defined( 'KIRKI_PLUGIN_FILE' ) ) {
 	define( 'KIRKI_PLUGIN_FILE', __FILE__ );
 }
 
-require_once __DIR__ . '/lib/class-aricolor.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
-require_once __DIR__ . '/lib/class-kirki-color.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
-require_once __DIR__ . '/kirki-composer/autoload.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
-require_once __DIR__ . '/inc/bootstrap.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
+require_once __DIR__ . '/customizer/lib/class-aricolor.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
+require_once __DIR__ . '/customizer/lib/class-kirki-color.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
+require_once __DIR__ . '/vendor/autoload.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
+require_once __DIR__ . '/customizer/bootstrap.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
 
 if ( ! defined( 'KIRKI_VERSION' ) ) {
-	define( 'KIRKI_VERSION', '5.1.1' );
+	define( 'KIRKI_VERSION', '5.2.1' );
 }
 
 if ( ! defined( 'KIRKI_PLUGIN_DIR' ) ) {
@@ -77,10 +77,6 @@ new Kirki();
 new L10n( 'kirki', __DIR__ . '/languages' );
 new \Kirki\Settings\SetupSettings();
 
-// ? Bagus: Do we really need to-reinclude this file? It was included above.
-// Include the ariColor library.
-require_once wp_normalize_path( dirname( __FILE__ ) . '/lib/class-aricolor.php' ); // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
-
 // Add an empty config for global fields.
 Kirki::add_config( '' ); // ? Bagus: what is this for? Adding empty config.
 
@@ -92,7 +88,7 @@ if ( file_exists( $custom_config_path ) ) {
 }
 
 // Add upgrade notifications.
-require_once wp_normalize_path( dirname( __FILE__ ) . '/upgrade-notifications.php' ); // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
+require_once wp_normalize_path( dirname( __FILE__ ) . '/customizer/lib/upgrade-notifications.php' ); // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
 
 /**
  * To enable tests, add this line to your wp-config.php file (or anywhere else):
@@ -101,8 +97,8 @@ require_once wp_normalize_path( dirname( __FILE__ ) . '/upgrade-notifications.ph
  * Please note that the example.php file is not included in the wordpress.org distribution
  * and will only be included in dev versions of the plugin in the github repository.
  */
-if ( defined( 'KIRKI_TEST' ) && true === KIRKI_TEST && file_exists( dirname( __FILE__ ) . '/example.php' ) ) {
+if ( defined( 'KIRKI_TEST' ) && true === constant( 'KIRKI_TEST' ) && file_exists( dirname( __FILE__ ) . '/example.php' ) ) {
 	include_once dirname( __FILE__ ) . '/example.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
 }
 
-require_once __DIR__ . '/pro-src/pro-index.php';
+require_once __DIR__ . '/customizer/packages/index.php';

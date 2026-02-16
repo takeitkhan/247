@@ -59,3 +59,218 @@
 [28-Jan-2026 14:46:26 UTC] PHP Warning:  Undefined variable $profile in /var/www/html/wp-content/themes/247empowerment/template-custom/auth/referrals.php on line 100
 [28-Jan-2026 17:17:55 UTC] PHP Warning:  Undefined variable $username in /var/www/html/wp-content/themes/247empowerment/template-custom/auth/store-template.php on line 78
 [28-Jan-2026 17:17:58 UTC] PHP Warning:  Undefined variable $username in /var/www/html/wp-content/themes/247empowerment/template-custom/auth/store-template.php on line 78
+[15-Feb-2026 03:45:23 UTC] Automatic updates starting...
+[15-Feb-2026 03:45:24 UTC]   Automatic plugin updates starting...
+[15-Feb-2026 03:45:24 UTC]   Automatic plugin updates complete.
+[15-Feb-2026 03:45:25 UTC] Automatic updates complete.
+[15-Feb-2026 07:28:45 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:28:45 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:28:53 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:28:53 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:28:56 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:28:56 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:29:45 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:29:45 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:29:47 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:29:47 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:30:09 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:30:09 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:30:29 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:30:29 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:30:32 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:30:32 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:32:51 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:32:51 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:32:54 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:32:54 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:01 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:01 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:02 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:02 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:41 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:41 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:44 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:44 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:47 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:47 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:48 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:48 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:48 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:48 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:48 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:48 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:48 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:48 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:48 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:48 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:48 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:48 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:48 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:48 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:33:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:34:46 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:34:49 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 07:40:24 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 11:36:52 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
+[15-Feb-2026 11:39:22 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT * FROM pet_withdrawal_requests WHERE user_id = 1 ORDER BY created_at DESC LIMIT 5 made by require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, WP_REST_Posts_Controller->update_item, WP_REST_Posts_Controller->prepare_item_for_response, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, {closure}, include('/themes/247empowerment/template-custom/frontend/withdrawal-form.php'), PayoutSystem->get_user_withdrawals
+[15-Feb-2026 11:39:22 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT * FROM pet_withdrawal_requests WHERE user_id = 1 ORDER BY created_at DESC LIMIT 5 made by require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, WP_REST_Posts_Controller->update_item, WP_REST_Posts_Controller->prepare_item_for_response, apply_filters('rest_prepare_page'), WP_Hook->apply_filters, insert_hooked_blocks_into_rest_response, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, {closure}, include('/themes/247empowerment/template-custom/frontend/withdrawal-form.php'), PayoutSystem->get_user_withdrawals
+[15-Feb-2026 11:39:40 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT * FROM pet_withdrawal_requests WHERE user_id = 1 ORDER BY created_at DESC LIMIT 5 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/247empowerment/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, {closure}, include('/themes/247empowerment/template-custom/frontend/withdrawal-form.php'), PayoutSystem->get_user_withdrawals
+[16-Feb-2026 14:04:21 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT * FROM pet_withdrawal_requests WHERE user_id = 1 ORDER BY created_at DESC LIMIT 5 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/247empowerment/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, {closure}, include('/themes/247empowerment/template-custom/frontend/withdrawal-form.php'), PayoutSystem->get_user_withdrawals
+[16-Feb-2026 14:04:30 UTC] WordPress database error Table 'wp.pet_withdrawal_requests' doesn't exist for query SELECT wr.*, u.user_login, u.user_email 
+                  FROM pet_withdrawal_requests wr 
+                  LEFT JOIN pet_users u ON wr.user_id = u.ID ORDER BY wr.created_at DESC LIMIT 20 OFFSET 0 made by do_action('toplevel_page_payout-requests'), WP_Hook->do_action, WP_Hook->apply_filters, PayoutSystem->render_admin_page, PayoutSystem->get_all_withdrawals
