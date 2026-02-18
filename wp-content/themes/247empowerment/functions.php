@@ -6,6 +6,7 @@
 require_once get_template_directory() . '/inc/PayoutSystem.php';
 require_once get_template_directory() . '/inc/PayPalAPI.php';
 require_once get_template_directory() . '/inc/PayoutNotifications.php';
+require_once get_template_directory() . '/inc/payout-balance.php';
 
 // Activation hook - for theme activation
 register_activation_hook(__FILE__, ['PayoutSystem', 'activate']);

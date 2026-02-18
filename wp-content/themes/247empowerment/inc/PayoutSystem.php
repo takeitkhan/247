@@ -142,19 +142,21 @@ class PayoutSystem {
             // Enable error logging for debugging
             error_log('=== WITHDRAWAL REQUEST START ===');
             error_log('POST data: ' . json_encode($_POST));
+            error_log('Is user logged in: ' . (is_user_logged_in() ? 'yes' : 'no'));
 
             // Verify nonce properly without dying
             $nonce = $_POST['nonce'] ?? $_POST['payout_nonce'] ?? '';
             error_log('Nonce received: ' . $nonce);
-
-            if (!$nonce || !wp_verify_nonce($nonce, 'payout_security')) {
-                error_log('Nonce verification failed');
-                wp_send_json_error('Security check failed. Please refresh the page and try again.');
-            }
+            error_log('Nonce verification result: ' . (wp_verify_nonce($nonce, 'payout_security') ? 'PASS' : 'FAIL'));
 
             if (!is_user_logged_in()) {
                 error_log('User not logged in');
                 wp_send_json_error('User not logged in');
+            }
+
+            if (!$nonce || !wp_verify_nonce($nonce, 'payout_security')) {
+                error_log('Nonce verification failed');
+                wp_send_json_error('Security check failed. Please refresh the page and try again.');
             }
 
             $user_id = get_current_user_id();
