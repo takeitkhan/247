@@ -7,7 +7,7 @@
 class PayoutSystem {
 
     const TABLE_NAME = 'withdrawal_requests';
-    const MIN_WITHDRAWAL = 5;
+    const MIN_WITHDRAWAL = 0.20;
     const MAX_WITHDRAWAL = 5000;
     private static $admin_menu_registered = false;
 
@@ -21,12 +21,18 @@ class PayoutSystem {
     }
 
     /**
-     * Create withdrawal requests table on plugin activation
+     * Create withdrawal requests table on plugin/theme activation
      */
     public static function activate() {
         global $wpdb;
+        
+        error_log('=== PayoutSystem::activate() called ===');
+        
         $table_name = $wpdb->prefix . self::TABLE_NAME;
         $charset_collate = $wpdb->get_charset_collate();
+        
+        error_log('Table name: ' . $table_name);
+        error_log('Charset collate: ' . $charset_collate);
 
         $sql = "CREATE TABLE IF NOT EXISTS $table_name (
             id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -43,8 +49,12 @@ class PayoutSystem {
             KEY created_at (created_at)
         ) $charset_collate;";
 
+        error_log('SQL: ' . $sql);
+        
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        dbDelta($sql);
+        $result = dbDelta($sql);
+        
+        error_log('dbDelta result: ' . print_r($result, true));
 
         // Create audit log table
         $audit_table = $wpdb->prefix . 'payout_audit_log';
@@ -61,7 +71,12 @@ class PayoutSystem {
             FOREIGN KEY (withdrawal_id) REFERENCES $table_name(id) ON DELETE CASCADE
         ) $charset_collate;";
 
-        dbDelta($audit_sql);
+        error_log('Audit SQL: ' . $audit_sql);
+        
+        $audit_result = dbDelta($audit_sql);
+        
+        error_log('dbDelta audit result: ' . print_r($audit_result, true));
+        error_log('=== PayoutSystem::activate() completed ===');
     }
 
     /**
@@ -123,54 +138,91 @@ class PayoutSystem {
      * Handle withdrawal request submission
      */
     public function handle_withdrawal_request() {
-        check_ajax_referer('payout_security', 'nonce');
+        try {
+            // Enable error logging for debugging
+            error_log('=== WITHDRAWAL REQUEST START ===');
+            error_log('POST data: ' . json_encode($_POST));
 
-        if (!is_user_logged_in()) {
-            wp_send_json_error('User not logged in');
-        }
+            // Verify nonce properly without dying
+            $nonce = $_POST['nonce'] ?? $_POST['payout_nonce'] ?? '';
+            error_log('Nonce received: ' . $nonce);
 
-        $user_id = get_current_user_id();
-        $amount = floatval($_POST['amount'] ?? 0);
-        
-        // Get PayPal email from user meta instead of form input
-        $paypal_email = get_user_meta($user_id, 'paypal_email', true);
+            if (!$nonce || !wp_verify_nonce($nonce, 'payout_security')) {
+                error_log('Nonce verification failed');
+                wp_send_json_error('Security check failed. Please refresh the page and try again.');
+            }
 
-        // Validation
-        if ($amount < self::MIN_WITHDRAWAL) {
-            wp_send_json_error("Minimum withdrawal amount is \$" . self::MIN_WITHDRAWAL);
-        }
+            if (!is_user_logged_in()) {
+                error_log('User not logged in');
+                wp_send_json_error('User not logged in');
+            }
 
-        if ($amount > self::MAX_WITHDRAWAL) {
-            wp_send_json_error("Maximum withdrawal amount is \$" . self::MAX_WITHDRAWAL);
-        }
+            $user_id = get_current_user_id();
+            $amount = floatval($_POST['amount'] ?? 0);
+            error_log('User ID: ' . $user_id . ', Amount: ' . $amount);
+            
+            // Get PayPal email from user meta instead of form input
+            $paypal_email = get_user_meta($user_id, 'paypal_email', true);
+            error_log('PayPal email: ' . $paypal_email);
 
-        if (!$paypal_email || !is_email($paypal_email)) {
-            wp_send_json_error('Please set your PayPal email in your profile settings before requesting a withdrawal');
-        }
+            // Validation
+            if ($amount < self::MIN_WITHDRAWAL) {
+                error_log('Amount below minimum: ' . $amount . ' < ' . self::MIN_WITHDRAWAL);
+                wp_send_json_error("Minimum withdrawal amount is \$" . self::MIN_WITHDRAWAL);
+            }
 
-        // Check balance
-        $balance = floatval(get_user_meta($user_id, 'referral_commission', true) ?: 0);
-        if ($amount > $balance) {
-            wp_send_json_error("Insufficient balance. Your balance: \$" . number_format($balance, 2));
-        }
+            if ($amount > self::MAX_WITHDRAWAL) {
+                error_log('Amount above maximum: ' . $amount . ' > ' . self::MAX_WITHDRAWAL);
+                wp_send_json_error("Maximum withdrawal amount is \$" . self::MAX_WITHDRAWAL);
+            }
 
-        // Check rate limiting (max 1 request per day)
-        $last_request = $this->get_last_withdrawal_request($user_id);
-        if ($last_request && strtotime('now') - strtotime($last_request->created_at) < 86400) {
-            wp_send_json_error('You can only submit one withdrawal request per day');
-        }
+            if (!$paypal_email || !is_email($paypal_email)) {
+                error_log('Invalid PayPal email: ' . $paypal_email);
+                wp_send_json_error('Please set your PayPal email in your profile settings before requesting a withdrawal');
+            }
 
-        // Create withdrawal request
-        $withdrawal_id = $this->create_withdrawal_request($user_id, $amount, $paypal_email);
+            // Check balance
+            $balance = floatval(get_user_meta($user_id, 'referral_commission', true) ?: 0);
+            error_log('User balance: ' . $balance);
+            
+            if ($amount > $balance) {
+                error_log('Insufficient balance: ' . $amount . ' > ' . $balance);
+                wp_send_json_error("Insufficient balance. Your balance: \$" . number_format($balance, 2));
+            }
 
-        if ($withdrawal_id) {
-            do_action('payout_withdrawal_requested', $user_id, $withdrawal_id, $amount, $paypal_email);
-            wp_send_json_success([
-                'message' => 'Withdrawal request submitted successfully',
-                'withdrawal_id' => $withdrawal_id
-            ]);
-        } else {
-            wp_send_json_error('Failed to create withdrawal request');
+            // Check rate limiting (max 1 request per day)
+            $last_request = $this->get_last_withdrawal_request($user_id);
+            if ($last_request) {
+                error_log('Last request time: ' . $last_request->created_at);
+                $time_diff = strtotime('now') - strtotime($last_request->created_at);
+                error_log('Time since last request: ' . $time_diff . ' seconds');
+                
+                if ($time_diff < 86400) {
+                    error_log('Rate limiting triggered');
+                    wp_send_json_error('You can only submit one withdrawal request per day');
+                }
+            }
+
+            // Create withdrawal request
+            error_log('Creating withdrawal request...');
+            $withdrawal_id = $this->create_withdrawal_request($user_id, $amount, $paypal_email);
+            error_log('Withdrawal ID created: ' . $withdrawal_id);
+
+            if ($withdrawal_id) {
+                do_action('payout_withdrawal_requested', $user_id, $withdrawal_id, $amount, $paypal_email);
+                error_log('=== WITHDRAWAL REQUEST SUCCESS ===');
+                wp_send_json_success([
+                    'message' => 'Withdrawal request submitted successfully',
+                    'withdrawal_id' => $withdrawal_id
+                ]);
+            } else {
+                error_log('Failed to get insertion ID');
+                wp_send_json_error('Failed to create withdrawal request');
+            }
+        } catch (Exception $e) {
+            error_log('Exception in handle_withdrawal_request: ' . $e->getMessage());
+            error_log('Exception trace: ' . $e->getTraceAsString());
+            wp_send_json_error('An unexpected error occurred: ' . $e->getMessage());
         }
     }
 
@@ -180,7 +232,20 @@ class PayoutSystem {
     public function create_withdrawal_request($user_id, $amount, $paypal_email) {
         global $wpdb;
         $table_name = $wpdb->prefix . self::TABLE_NAME;
+        
+        error_log('Database table name: ' . $table_name);
+        
+        // Check if table exists
+        $table_exists = $wpdb->get_var("SHOW TABLES LIKE '" . $table_name . "'") === $table_name;
+        error_log('Table exists: ' . ($table_exists ? 'yes' : 'no'));
+        
+        if (!$table_exists) {
+            error_log('Table does not exist, attempting to create it');
+            self::activate(); // Try to create the table
+        }
 
+        error_log('Attempting to insert: user_id=' . $user_id . ', amount=' . $amount . ', email=' . $paypal_email);
+        
         $result = $wpdb->insert(
             $table_name,
             [
@@ -192,7 +257,14 @@ class PayoutSystem {
             ['%d', '%f', '%s', '%s']
         );
 
-        return $result ? $wpdb->insert_id : false;
+        if ($result === false) {
+            error_log('Database insert failed. Error: ' . $wpdb->last_error);
+            error_log('Query: ' . $wpdb->last_query);
+            return false;
+        }
+        
+        error_log('Insert successful, ID: ' . $wpdb->insert_id);
+        return $wpdb->insert_id;
     }
 
     /**
@@ -246,31 +318,49 @@ class PayoutSystem {
      * Handle approval of withdrawal
      */
     public function handle_approve_withdrawal() {
-        check_ajax_nonce('payout_security', 'nonce');
+        error_log('=== APPROVE WITHDRAWAL START ===');
+        error_log('POST data: ' . json_encode($_POST));
+        
+        // Verify nonce properly without dying
+        $nonce = $_POST['nonce'] ?? $_POST['payout_nonce'] ?? '';
+        error_log('Nonce: ' . $nonce);
+        
+        if (!$nonce || !wp_verify_nonce($nonce, 'payout_security')) {
+            error_log('Nonce verification failed');
+            wp_send_json_error('Security check failed. Please refresh the page and try again.');
+        }
 
         if (!current_user_can('manage_options')) {
+            error_log('User does not have manage_options capability');
             wp_send_json_error('Unauthorized');
         }
 
         $withdrawal_id = intval($_POST['withdrawal_id'] ?? 0);
         $notes = sanitize_textarea_field($_POST['notes'] ?? '');
+        
+        error_log('Withdrawal ID: ' . $withdrawal_id . ', Notes: ' . $notes);
 
         if (!$withdrawal_id) {
+            error_log('Invalid withdrawal ID');
             wp_send_json_error('Invalid withdrawal ID');
         }
 
         $withdrawal = $this->get_withdrawal($withdrawal_id);
         if (!$withdrawal) {
+            error_log('Withdrawal not found for ID: ' . $withdrawal_id);
             wp_send_json_error('Withdrawal not found');
         }
 
+        error_log('Updating withdrawal status to processing');
         // Update status to processing
         $this->update_withdrawal_status($withdrawal_id, 'processing');
         $this->log_audit($withdrawal_id, 'approved', $notes, get_current_user_id());
 
+        error_log('Triggering payout_process_paypal action');
         // Trigger PayPal payout
         do_action('payout_process_paypal', $withdrawal_id);
 
+        error_log('=== APPROVE WITHDRAWAL SUCCESS ===');
         wp_send_json_success('Withdrawal approved and processing');
     }
 
@@ -278,30 +368,48 @@ class PayoutSystem {
      * Handle rejection of withdrawal
      */
     public function handle_reject_withdrawal() {
-        check_ajax_nonce('payout_security', 'nonce');
+        error_log('=== REJECT WITHDRAWAL START ===');
+        error_log('POST data: ' . json_encode($_POST));
+        
+        // Verify nonce properly without dying
+        $nonce = $_POST['nonce'] ?? $_POST['payout_nonce'] ?? '';
+        error_log('Nonce: ' . $nonce);
+        
+        if (!$nonce || !wp_verify_nonce($nonce, 'payout_security')) {
+            error_log('Nonce verification failed');
+            wp_send_json_error('Security check failed. Please refresh the page and try again.');
+        }
 
         if (!current_user_can('manage_options')) {
+            error_log('User does not have manage_options capability');
             wp_send_json_error('Unauthorized');
         }
 
         $withdrawal_id = intval($_POST['withdrawal_id'] ?? 0);
         $notes = sanitize_textarea_field($_POST['notes'] ?? '');
+        
+        error_log('Withdrawal ID: ' . $withdrawal_id . ', Notes: ' . $notes);
 
         if (!$withdrawal_id) {
+            error_log('Invalid withdrawal ID');
             wp_send_json_error('Invalid withdrawal ID');
         }
 
         $withdrawal = $this->get_withdrawal($withdrawal_id);
         if (!$withdrawal) {
+            error_log('Withdrawal not found for ID: ' . $withdrawal_id);
             wp_send_json_error('Withdrawal not found');
         }
 
+        error_log('Updating withdrawal status to rejected');
         // Update status to rejected
         $this->update_withdrawal_status($withdrawal_id, 'rejected');
         $this->log_audit($withdrawal_id, 'rejected', $notes, get_current_user_id());
 
+        error_log('Triggering payout_withdrawal_rejected action');
         do_action('payout_withdrawal_rejected', $withdrawal->user_id, $withdrawal_id, $withdrawal->amount);
 
+        error_log('=== REJECT WITHDRAWAL SUCCESS ===');
         wp_send_json_success('Withdrawal rejected');
     }
 
@@ -422,6 +530,97 @@ class PayoutSystem {
                 </tbody>
             </table>
         </div>
+
+        <script>
+        jQuery(document).ready(function($) {
+            const nonce = '<?php echo wp_create_nonce('payout_security'); ?>';
+            
+            // Approve button handler
+            $(document).on('click', '.approve-btn', function(e) {
+                e.preventDefault();
+                const withdrawal_id = $(this).data('id');
+                const $btn = $(this);
+                
+                console.log('Approve button clicked, ID:', withdrawal_id);
+                
+                if (!confirm('Are you sure you want to approve this withdrawal?')) {
+                    return;
+                }
+                
+                const notes = prompt('Enter notes (optional):');
+                
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        action: 'approve_withdrawal',
+                        nonce: nonce,
+                        withdrawal_id: withdrawal_id,
+                        notes: notes || ''
+                    },
+                    success: function(response) {
+                        console.log('Approve response:', response);
+                        if (response.success) {
+                            alert('Withdrawal approved successfully!');
+                            location.reload();
+                        } else {
+                            alert('Error: ' + (response.data || 'Unknown error'));
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', error, xhr.responseText);
+                        alert('An error occurred: ' + error);
+                    }
+                });
+            });
+            
+            // Reject button handler
+            $(document).on('click', '.reject-btn', function(e) {
+                e.preventDefault();
+                const withdrawal_id = $(this).data('id');
+                const $btn = $(this);
+                
+                console.log('Reject button clicked, ID:', withdrawal_id);
+                
+                if (!confirm('Are you sure you want to reject this withdrawal?')) {
+                    return;
+                }
+                
+                const notes = prompt('Enter rejection reason:');
+                
+                if (!notes) {
+                    alert('Please provide a rejection reason');
+                    return;
+                }
+                
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        action: 'reject_withdrawal',
+                        nonce: nonce,
+                        withdrawal_id: withdrawal_id,
+                        notes: notes
+                    },
+                    success: function(response) {
+                        console.log('Reject response:', response);
+                        if (response.success) {
+                            alert('Withdrawal rejected!');
+                            location.reload();
+                        } else {
+                            alert('Error: ' + (response.data || 'Unknown error'));
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', error, xhr.responseText);
+                        alert('An error occurred: ' + error);
+                    }
+                });
+            });
+        });
+        </script>
         <?php
     }
 
@@ -436,19 +635,25 @@ class PayoutSystem {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             check_admin_referer('payout_settings_nonce');
 
-            update_option('payout_min_amount', floatval($_POST['min_amount'] ?? 5));
+            update_option('payout_min_amount', floatval($_POST['min_amount'] ?? 0.20));
             update_option('payout_max_amount', floatval($_POST['max_amount'] ?? 5000));
             update_option('payout_paypal_client_id', sanitize_text_field($_POST['paypal_client_id'] ?? ''));
-            update_option('payout_paypal_secret', sanitize_text_field($_POST['paypal_secret'] ?? ''));
             update_option('payout_paypal_mode', sanitize_text_field($_POST['paypal_mode'] ?? 'sandbox'));
+            
+            // Only update secret if a new value is provided
+            if (!empty($_POST['paypal_secret'])) {
+                update_option('payout_paypal_secret', sanitize_text_field($_POST['paypal_secret']));
+            }
 
             echo '<div class="notice notice-success"><p>Settings saved!</p></div>';
         }
 
-        $min_amount = get_option('payout_min_amount', 5);
+        $min_amount = get_option('payout_min_amount', 0.20);
         $max_amount = get_option('payout_max_amount', 5000);
         $client_id = get_option('payout_paypal_client_id', '');
         $mode = get_option('payout_paypal_mode', 'sandbox');
+        $secret = get_option('payout_paypal_secret', '');
+        $has_secret = !empty($secret);
         ?>
         <div class="wrap">
             <h1>Payout Settings</h1>
@@ -479,7 +684,12 @@ class PayoutSystem {
                     </tr>
                     <tr>
                         <th><label for="paypal_secret">PayPal Secret</label></th>
-                        <td><input type="password" name="paypal_secret" style="width: 400px;" /></td>
+                        <td>
+                            <input type="password" name="paypal_secret" placeholder="<?php echo $has_secret ? 'Leave blank to keep current secret' : 'Enter PayPal Secret'; ?>" style="width: 400px;" />
+                            <?php if ($has_secret) { ?>
+                                <p style="margin-top: 8px; color: #28a745;"><span style="font-weight: bold;">✓</span> Secret is set and saved</p>
+                            <?php } ?>
+                        </td>
                     </tr>
                 </table>
                 

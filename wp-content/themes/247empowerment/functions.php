@@ -7,8 +7,17 @@ require_once get_template_directory() . '/inc/PayoutSystem.php';
 require_once get_template_directory() . '/inc/PayPalAPI.php';
 require_once get_template_directory() . '/inc/PayoutNotifications.php';
 
-// Activation hook
+// Activation hook - for theme activation
 register_activation_hook(__FILE__, ['PayoutSystem', 'activate']);
+
+// Ensure tables exist on every page load (fallback)
+add_action('init', function() {
+    static $tables_checked = false;
+    if (!$tables_checked) {
+        PayoutSystem::activate();
+        $tables_checked = true;
+    }
+}, 1); // Run early
 
 // Initialize Payout System
 if (is_admin() || is_user_logged_in()) {
