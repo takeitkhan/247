@@ -222,26 +222,20 @@ $withdrawals = $payout_system->get_user_withdrawals($user_id, 5);
             const amount = parseFloat($('#amount').val());
 
             if (!amount || amount <= 0) {
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire('Error', 'Please enter a valid amount', 'error');
-                } else {
-                    alert('Please enter a valid amount');
-                }
+                Swal.fire('Error', 'Please enter a valid amount', 'error');
                 return;
             }
 
             // Show loading state
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    title: 'Processing...',
-                    html: 'Submitting your withdrawal request...',
-                    icon: 'info',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-            }
+            Swal.fire({
+                title: 'Processing...',
+                html: 'Submitting your withdrawal request...',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
 
             console.log('Sending withdrawal request:', {
                 action: 'submit_withdrawal',
@@ -260,38 +254,24 @@ $withdrawals = $payout_system->get_user_withdrawals($user_id, 5);
                 success: function(response) {
                     console.log('AJAX success:', response);
                     if (response.success) {
-                        if (typeof Swal !== 'undefined') {
-                            Swal.fire({
-                                title: 'Success!',
-                                html: response.data.message || 'Withdrawal request submitted successfully',
-                                icon: 'success',
-                                timer: 2000,
-                                timerProgressBar: true,
-                                didClose: () => {
-                                    location.reload();
-                                }
-                            });
-                        } else {
-                            alert(response.data.message || 'Withdrawal request submitted successfully');
-                            $form[0].reset();
-                            setTimeout(() => location.reload(), 2000);
-                        }
+                        Swal.fire({
+                            title: 'Success!',
+                            html: response.data.message || 'Withdrawal request submitted successfully',
+                            icon: 'success',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didClose: () => {
+                                location.reload();
+                            }
+                        });
                     } else {
                         const errorMsg = response.data || 'Error occurred';
-                        if (typeof Swal !== 'undefined') {
-                            Swal.fire('Error', errorMsg, 'error');
-                        } else {
-                            alert('Error: ' + errorMsg);
-                        }
+                        Swal.fire('Error', errorMsg, 'error');
                     }
                 },
                 error: function(xhr, status, error) {
                     console.error('AJAX error:', {status, error, xhr});
-                    if (typeof Swal !== 'undefined') {
-                        Swal.fire('Error', 'An error occurred. Please try again.', 'error');
-                    } else {
-                        alert('An error occurred. Please try again.');
-                    }
+                    Swal.fire('Error', 'An error occurred. Please try again.', 'error');
                 }
             });
         });
