@@ -110,6 +110,7 @@ $withdrawals = $payout_system->get_user_withdrawals($user_id, 5);
                     <th style="padding: 10px; text-align: left;">Amount</th>
                     <th style="padding: 10px; text-align: left;">Status</th>
                     <th style="padding: 10px; text-align: left;">Requested</th>
+                    <th style="padding: 10px; text-align: left;">Details</th>
                 </tr>
             </thead>
             <tbody>
@@ -132,6 +133,36 @@ $withdrawals = $payout_system->get_user_withdrawals($user_id, 5);
                         </td>
                         <td style="padding: 10px;">
                             <?php echo date('M d, Y', strtotime($withdrawal->created_at)); ?>
+                        </td>
+                        <td style="padding: 10px; font-size: 12px;">
+                            <?php if ($withdrawal->status === 'failed' && !empty($withdrawal->admin_notes)) { ?>
+                                <details style="cursor: pointer; color: #d32f2f;">
+                                    <summary style="font-weight: bold;">⚠️ Failed - Click for details</summary>
+                                    <div style="background: #ffebee; padding: 8px; margin-top: 5px; border-left: 3px solid #d32f2f; border-radius: 3px; margin-top: 8px;">
+                                        <strong style="color: #d32f2f;">Error Reason:</strong><br>
+                                        <span style="color: #c62828;"><?php echo esc_html($withdrawal->admin_notes); ?></span>
+                                        <p style="margin: 10px 0 0 0; font-size: 11px; color: #666;">
+                                            ✓ Your balance has been restored.<br>
+                                            Please contact support if you need assistance.
+                                        </p>
+                                    </div>
+                                </details>
+                            <?php } elseif ($withdrawal->status === 'rejected' && !empty($withdrawal->admin_notes)) { ?>
+                                <details style="cursor: pointer; color: #f57c00;">
+                                    <summary style="font-weight: bold;">ℹ️ Rejected - Click for reason</summary>
+                                    <div style="background: #fff3e0; padding: 8px; margin-top: 5px; border-left: 3px solid #f57c00; border-radius: 3px; margin-top: 8px;">
+                                        <strong style="color: #f57c00;">Reason:</strong><br>
+                                        <span style="color: #e65100;"><?php echo esc_html($withdrawal->admin_notes); ?></span>
+                                    </div>
+                                </details>
+                            <?php } elseif ($withdrawal->status === 'paid' && !empty($withdrawal->transaction_id)) { ?>
+                                <small style="color: #27ae60;">
+                                    ✓ Completed<br>
+                                    <code style="font-size: 10px;"><?php echo esc_html(substr($withdrawal->transaction_id, 0, 12)); ?>...</code>
+                                </small>
+                            <?php } else { ?>
+                                <span style="color: #999;">-</span>
+                            <?php } ?>
                         </td>
                     </tr>
                 <?php } ?>

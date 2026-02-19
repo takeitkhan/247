@@ -73,9 +73,16 @@ class PayPalAPI {
         // Get access token
         $token = $this->get_access_token();
         if (is_wp_error($token)) {
-            $this->payout_system->log_audit($withdrawal_id, 'payout_failed', 'Token error: ' . $token->get_error_message());
-            $this->payout_system->update_withdrawal_status($withdrawal_id, 'failed');
-            do_action('payout_payment_failed', $withdrawal->user_id, $withdrawal_id, $token->get_error_message());
+            $error_msg = $token->get_error_message();
+            error_log('PayPal token error: ' . $error_msg);
+            $this->payout_system->log_audit($withdrawal_id, 'payout_failed', 'Token error: ' . $error_msg);
+            $this->payout_system->update_withdrawal_status($withdrawal_id, 'failed', null, 'Token Error: ' . $error_msg);
+            
+            // Refund balance
+            error_log('Refunding balance of $' . $withdrawal->amount . ' to user ' . $withdrawal->user_id);
+            payout_refund_withdrawal($withdrawal->user_id, $withdrawal->amount, 'PayPal token error: ' . $error_msg);
+            
+            do_action('payout_payment_failed', $withdrawal->user_id, $withdrawal_id, $error_msg);
             return $token;
         }
 
@@ -112,9 +119,18 @@ class PayPalAPI {
         ]);
 
         if (is_wp_error($response)) {
-            $this->payout_system->log_audit($withdrawal_id, 'payout_failed', 'API error: ' . $response->get_error_message());
-            $this->payout_system->update_withdrawal_status($withdrawal_id, 'failed');
-            do_action('payout_payment_failed', $withdrawal->user_id, $withdrawal_id, $response->get_error_message());
+            $error_msg = $response->get_error_message();
+            error_log('PayPal API request error: ' . $error_msg);
+            
+            // Log error to audit
+            $this->payout_system->log_audit($withdrawal_id, 'payout_failed', 'API Error: ' . $error_msg);
+            $this->payout_system->update_withdrawal_status($withdrawal_id, 'failed', null, 'API Error: ' . $error_msg);
+            
+            // CRITICAL: Refund the balance back to user since API call failed
+            error_log('Refunding balance of $' . $withdrawal->amount . ' to user ' . $withdrawal->user_id);
+            payout_refund_withdrawal($withdrawal->user_id, $withdrawal->amount, 'PayPal API error: ' . $error_msg);
+            
+            do_action('payout_payment_failed', $withdrawal->user_id, $withdrawal_id, $error_msg);
             return $response;
         }
 
@@ -130,8 +146,24 @@ class PayPalAPI {
 
         if ($http_code >= 400 || isset($body['name'])) {
             $error_msg = $body['message'] ?? $body['name'] ?? 'Unknown error';
-            $this->payout_system->log_audit($withdrawal_id, 'payout_failed', $error_msg);
-            $this->payout_system->update_withdrawal_status($withdrawal_id, 'failed');
+            error_log('PayPal payout failed: ' . $error_msg);
+            
+            // Log error to audit with detailed information
+            $error_details = [
+                'http_code' => $http_code,
+                'error_message' => $error_msg,
+                'response_body' => $body,
+                'timestamp' => current_time('mysql')
+            ];
+            $this->payout_system->log_audit($withdrawal_id, 'payout_failed', json_encode($error_details));
+            
+            // Update withdrawal status to 'failed' with error reason in admin_notes
+            $this->payout_system->update_withdrawal_status($withdrawal_id, 'failed', null, $error_msg);
+            
+            // CRITICAL: Refund the balance back to user since PayPal payout failed
+            error_log('Refunding balance of $' . $withdrawal->amount . ' to user ' . $withdrawal->user_id);
+            payout_refund_withdrawal($withdrawal->user_id, $withdrawal->amount, 'PayPal payout failed - Error: ' . $error_msg);
+            
             do_action('payout_payment_failed', $withdrawal->user_id, $withdrawal_id, $error_msg);
             return new WP_Error('paypal_error', $error_msg);
         }

@@ -17,6 +17,7 @@ class PayoutSystem {
         add_action('wp_ajax_submit_withdrawal', [$this, 'handle_withdrawal_request']);
         add_action('wp_ajax_approve_withdrawal', [$this, 'handle_approve_withdrawal']);
         add_action('wp_ajax_reject_withdrawal', [$this, 'handle_reject_withdrawal']);
+        add_action('wp_ajax_retry_withdrawal', [$this, 'handle_retry_withdrawal']);
         add_action('wp_footer', [$this, 'enqueue_frontend_assets']);
     }
 
@@ -362,13 +363,9 @@ class PayoutSystem {
             wp_send_json_error('Withdrawal not found');
         }
 
-        error_log('Deducting balance from user account');
-        // Deduct balance when approved
-        payout_deduct_balance($withdrawal->user_id, $withdrawal->amount, 'Withdrawal request approved - ID: ' . $withdrawal_id);
-        
         error_log('Updating withdrawal status to processing');
-        // Update status to processing
-        $this->update_withdrawal_status($withdrawal_id, 'processing');
+        // Update status to processing (do NOT deduct balance yet - will be deducted when PayPal payment succeeds)
+        $this->update_withdrawal_status($withdrawal_id, 'processing', null, $notes);
         $this->log_audit($withdrawal_id, 'approved', $notes, get_current_user_id());
 
         error_log('Triggering payout_process_paypal action');
@@ -429,6 +426,60 @@ class PayoutSystem {
     }
 
     /**
+     * Handle retry of a failed withdrawal
+     */
+    public function handle_retry_withdrawal() {
+        error_log('=== RETRY WITHDRAWAL START ===');
+        error_log('POST data: ' . json_encode($_POST));
+        
+        // Verify nonce properly without dying
+        $nonce = $_POST['nonce'] ?? $_POST['payout_nonce'] ?? '';
+        error_log('Nonce: ' . $nonce);
+        
+        if (!$nonce || !wp_verify_nonce($nonce, 'payout_security')) {
+            error_log('Nonce verification failed');
+            wp_send_json_error('Security check failed. Please refresh the page and try again.');
+        }
+
+        if (!current_user_can('manage_options')) {
+            error_log('User does not have manage_options capability');
+            wp_send_json_error('Unauthorized');
+        }
+
+        $withdrawal_id = intval($_POST['withdrawal_id'] ?? 0);
+        
+        error_log('Withdrawal ID: ' . $withdrawal_id);
+
+        if (!$withdrawal_id) {
+            error_log('Invalid withdrawal ID');
+            wp_send_json_error('Invalid withdrawal ID');
+        }
+
+        $withdrawal = $this->get_withdrawal($withdrawal_id);
+        if (!$withdrawal) {
+            error_log('Withdrawal not found for ID: ' . $withdrawal_id);
+            wp_send_json_error('Withdrawal not found');
+        }
+
+        if ($withdrawal->status !== 'failed') {
+            error_log('Withdrawal is not in failed status, current status: ' . $withdrawal->status);
+            wp_send_json_error('Only failed withdrawals can be retried. Current status: ' . $withdrawal->status);
+        }
+
+        error_log('Updating withdrawal status to pending for retry');
+        // Reset to pending status to trigger approval workflow again
+        $this->update_withdrawal_status($withdrawal_id, 'pending', null, 'Retry initiated by admin');
+        $this->log_audit($withdrawal_id, 'retry', 'Retry initiated', get_current_user_id());
+
+        error_log('Triggering payout_withdrawal_retry action');
+        do_action('payout_withdrawal_retry', $withdrawal->user_id, $withdrawal_id, $withdrawal->amount);
+
+        error_log('=== RETRY WITHDRAWAL SUCCESS ===');
+        wp_send_json_success('Withdrawal moved back to pending for retry. Please approve again.');
+    }
+
+
+    /**
      * Get single withdrawal
      */
     public function get_withdrawal($withdrawal_id) {
@@ -444,18 +495,23 @@ class PayoutSystem {
     /**
      * Update withdrawal status
      */
-    public function update_withdrawal_status($withdrawal_id, $status, $transaction_id = null) {
+    public function update_withdrawal_status($withdrawal_id, $status, $transaction_id = null, $admin_notes = null) {
         global $wpdb;
         $table_name = $wpdb->prefix . self::TABLE_NAME;
 
+        $update_data = array_filter([
+            'status' => $status,
+            'transaction_id' => $transaction_id,
+            'admin_notes' => $admin_notes
+        ], function($value) {
+            return $value !== null;
+        });
+
         return $wpdb->update(
             $table_name,
-            array_filter([
-                'status' => $status,
-                'transaction_id' => $transaction_id
-            ]),
+            $update_data,
             ['id' => $withdrawal_id],
-            ['%s', '%s'],
+            array_fill(0, count($update_data), '%s'),
             ['%d']
         );
     }
@@ -486,6 +542,10 @@ class PayoutSystem {
         if (!current_user_can('manage_options')) {
             wp_die('Unauthorized');
         }
+
+        // Enqueue SweetAlert2
+        wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js', [], '11.10.0', true);
+        wp_enqueue_style('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.min.css', [], '11.10.0');
 
         $status = isset($_GET['status']) ? sanitize_text_field($_GET['status']) : null;
         $paged = max(1, isset($_GET['paged']) ? intval($_GET['paged']) : 1);
@@ -521,23 +581,59 @@ class PayoutSystem {
                         <th>Amount</th>
                         <th>PayPal Email</th>
                         <th>Status</th>
+                        <th>Details</th>
                         <th>Requested</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($withdrawals as $withdrawal) { ?>
+                    <?php foreach ($withdrawals as $withdrawal) { 
+                        // Determine status color
+                        $status_colors = [
+                            'pending' => '#ff9800',
+                            'approved' => '#2196F3',
+                            'processing' => '#9C27B0',
+                            'paid' => '#27ae60',
+                            'rejected' => '#f44336',
+                            'failed' => '#f44336'
+                        ];
+                        $status_color = $status_colors[$withdrawal->status] ?? '#999';
+                    ?>
                         <tr>
                             <td><?php echo $withdrawal->id; ?></td>
                             <td><?php echo $withdrawal->user_login; ?> (<?php echo $withdrawal->user_email; ?>)</td>
                             <td>$<?php echo number_format($withdrawal->amount, 2); ?></td>
                             <td><?php echo esc_html($withdrawal->paypal_email); ?></td>
-                            <td><span class="status-<?php echo $withdrawal->status; ?>"><?php echo ucfirst($withdrawal->status); ?></span></td>
+                            <td>
+                                <span style="background: <?php echo $status_color; ?>; color: white; padding: 4px 8px; border-radius: 3px; font-size: 12px;">
+                                    <?php echo ucfirst($withdrawal->status); ?>
+                                </span>
+                            </td>
+                            <td>
+                                <?php if (!empty($withdrawal->admin_notes) && $withdrawal->status === 'failed') { ?>
+                                    <details style="cursor: pointer;">
+                                        <summary style="color: #f44336; font-weight: bold;">View Error</summary>
+                                        <div style="background: #fff3cd; padding: 8px; margin-top: 8px; border-left: 3px solid #f44336; border-radius: 3px; font-size: 12px;">
+                                            <strong>Error:</strong><br>
+                                            <?php echo nl2br(esc_html($withdrawal->admin_notes)); ?>
+                                        </div>
+                                    </details>
+                                <?php } elseif (!empty($withdrawal->transaction_id)) { ?>
+                                    <small style="color: #666;">
+                                        <strong>Batch ID:</strong><br>
+                                        <code><?php echo esc_html($withdrawal->transaction_id); ?></code>
+                                    </small>
+                                <?php } else { ?>
+                                    <small style="color: #999;">-</small>
+                                <?php } ?>
+                            </td>
                             <td><?php echo date('M d, Y', strtotime($withdrawal->created_at)); ?></td>
                             <td>
                                 <?php if ($withdrawal->status === 'pending') { ?>
                                     <button class="button button-primary approve-btn" data-id="<?php echo $withdrawal->id; ?>">Approve</button>
                                     <button class="button button-danger reject-btn" data-id="<?php echo $withdrawal->id; ?>">Reject</button>
+                                <?php } elseif ($withdrawal->status === 'failed') { ?>
+                                    <button class="button button-primary retry-btn" data-id="<?php echo $withdrawal->id; ?>">Retry</button>
                                 <?php } ?>
                             </td>
                         </tr>
@@ -612,7 +708,7 @@ class PayoutSystem {
                             if (response.success) {
                                 Swal.fire({
                                     title: 'Success!',
-                                    html: 'Withdrawal approved successfully!<br>User balance has been deducted.',
+                                    html: 'Withdrawal approved successfully!<br>Processing with PayPal. Balance will be deducted upon successful payment.',
                                     icon: 'success',
                                     timer: 2000,
                                     timerProgressBar: true,
@@ -632,6 +728,80 @@ class PayoutSystem {
                 }
             });
             
+            // Retry button handler
+            $(document).on('click', '.retry-btn', function(e) {
+                e.preventDefault();
+                const withdrawal_id = $(this).data('id');
+                
+                console.log('Retry button clicked, ID:', withdrawal_id);
+                
+                if (typeof Swal === 'undefined') {
+                    if (!confirm('Are you sure you want to retry this withdrawal?')) {
+                        return;
+                    }
+                    submitRetry(withdrawal_id);
+                    return;
+                }
+                
+                Swal.fire({
+                    title: 'Retry Withdrawal?',
+                    html: 'Are you sure you want to retry processing this withdrawal?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Retry',
+                    confirmButtonColor: '#2196F3',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        submitRetry(withdrawal_id);
+                    }
+                });
+                
+                function submitRetry(id) {
+                    Swal.fire({
+                        title: 'Processing...',
+                        html: 'Retrying withdrawal...',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    
+                    $.ajax({
+                        url: ajaxurl,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            action: 'retry_withdrawal',
+                            nonce: nonce,
+                            withdrawal_id: id
+                        },
+                        success: function(response) {
+                            console.log('Retry response:', response);
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    html: 'Withdrawal retry initiated.',
+                                    icon: 'success',
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    didClose: () => {
+                                        location.reload();
+                                    }
+                                });
+                            } else {
+                                Swal.fire('Error', response.data || 'Unknown error', 'error');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('AJAX Error:', error, xhr.responseText);
+                            Swal.fire('Error', 'An error occurred: ' + error, 'error');
+                        }
+                    });
+                }
+            });
+
             // Reject button handler
             $(document).on('click', '.reject-btn', function(e) {
                 e.preventDefault();
@@ -809,44 +979,103 @@ class PayoutSystem {
             wp_die('Unauthorized');
         }
 
-        // Get the markdown file path
-        $doc_file = ABSPATH . 'wp-content/themes/247empowerment/PAYOUT_SETUP_GUIDE.md';
-
-        if (!file_exists($doc_file)) {
-            echo '<div class="wrap"><div class="notice notice-error"><p>Documentation file not found.</p></div></div>';
-            return;
-        }
-
-        // Read markdown file
-        $markdown_content = file_get_contents($doc_file);
-
-        // Simple markdown to HTML conversion
-        $html = $this->markdown_to_html($markdown_content);
+        // Docs directory
+        $docs_dir = get_template_directory() . '/docs/';
+        
+        // Documentation index
+        $docs = [
+            'WITHDRAWAL_SOLUTION_SUMMARY.md' => 'Solution Summary',
+            'WITHDRAWAL_ISSUE_FIX.md' => 'Technical Analysis',
+            'WITHDRAWAL_BEFORE_AFTER.md' => 'Before & After Comparison',
+            'WITHDRAWAL_DEVELOPER_GUIDE.md' => 'Developer Guide',
+            'WITHDRAWAL_DEPLOYMENT_CHECKLIST.md' => 'Deployment Checklist',
+            'README.md' => 'Documentation Index',
+        ];
 
         ?>
-        <div class="wrap" style="background: #fff; padding: 20px; border-radius: 8px; max-width: 900px;">
-            <style>
-                .payout-docs h1 { font-size: 2em; margin: 1em 0 0.5em 0; border-bottom: 3px solid #0073aa; padding-bottom: 0.5em; }
-                .payout-docs h2 { font-size: 1.5em; margin: 1.5em 0 0.5em 0; color: #0073aa; }
-                .payout-docs h3 { font-size: 1.2em; margin: 1.2em 0 0.5em 0; color: #0073aa; }
-                .payout-docs h4 { font-size: 1.1em; margin: 1em 0 0.5em 0; }
-                .payout-docs p { line-height: 1.6; margin: 0.8em 0; }
-                .payout-docs ul, .payout-docs ol { margin: 1em 0; margin-left: 2em; }
-                .payout-docs li { margin: 0.5em 0; }
-                .payout-docs code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #d63638; }
-                .payout-docs pre { background: #f5f5f5; padding: 15px; border-left: 4px solid #0073aa; overflow-x: auto; margin: 1em 0; border-radius: 4px; }
-                .payout-docs pre code { background: none; color: #333; padding: 0; }
-                .payout-docs blockquote { border-left: 4px solid #ddd; margin-left: 0; padding-left: 15px; color: #666; font-style: italic; }
-                .payout-docs table { width: 100%; border-collapse: collapse; margin: 1em 0; }
-                .payout-docs th, .payout-docs td { padding: 10px; border: 1px solid #ddd; text-align: left; }
-                .payout-docs th { background: #f9f9f9; font-weight: bold; }
-                .payout-docs a { color: #0073aa; text-decoration: none; }
-                .payout-docs a:hover { text-decoration: underline; }
-            </style>
-            <div class="payout-docs">
-                <?php echo wp_kses_post($html); ?>
+        <div class="wrap">
+            <h1>📚 Withdrawal System Documentation</h1>
+            
+            <div style="background: #f1f1f1; border: 1px solid #ccc; padding: 20px; margin: 20px 0; border-radius: 5px;">
+                <h2 style="margin-top: 0;">Quick Start</h2>
+                <p>Complete documentation for the withdrawal system fix covering balance refund and error visibility issues.</p>
+                <ul>
+                    <li><strong>For Management:</strong> Start with <em>Solution Summary</em></li>
+                    <li><strong>For Developers:</strong> Check <em>Developer Guide</em></li>
+                    <li><strong>For Deployment:</strong> Follow <em>Deployment Checklist</em></li>
+                    <li><strong>For Understanding:</strong> Read <em>Technical Analysis</em> and <em>Before & After</em></li>
+                </ul>
             </div>
+
+            <h2>📖 Available Documentation</h2>
+            
+            <table class="widefat striped">
+                <thead>
+                    <tr>
+                        <th>Document</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($docs as $filename => $title) {
+                        $filepath = $docs_dir . $filename;
+                        $exists = file_exists($filepath);
+                        $size = $exists ? round(filesize($filepath) / 1024, 1) . ' KB' : 'N/A';
+                        $lines = $exists ? count(file($filepath)) : 0;
+                    ?>
+                        <tr>
+                            <td>
+                                <strong><?php echo esc_html($title); ?></strong><br>
+                                <small style="color: #666;"><?php echo esc_html($filename); ?></small>
+                            </td>
+                            <td>
+                                <?php if ($exists) {
+                                    echo '<span style="color: #28a745;">✓ Available</span><br>';
+                                    echo '<small style="color: #666;">Size: ' . esc_html($size) . ' | Lines: ' . intval($lines) . '</small>';
+                                } else {
+                                    echo '<span style="color: #dc3545;">✗ Not Found</span>';
+                                } ?>
+                            </td>
+                            <td>
+                                <?php if ($exists) { ?>
+                                    <button class="button button-primary" onclick="jQuery('#doc-<?php echo sanitize_html_class($filename); ?>').slideToggle();">View</button>
+                                <?php } else { ?>
+                                    <span style="color: #999;">N/A</span>
+                                <?php } ?>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+
+            <h2 style="margin-top: 40px;">📂 File Locations</h2>
+            <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; font-family: monospace; font-size: 12px;">
+                <p><strong>Documentation:</strong><br>/wp-content/themes/247empowerment/docs/</p>
+                <p><strong>Related Code:</strong><br>
+                    /wp-content/themes/247empowerment/inc/PayPalAPI.php<br>
+                    /wp-content/themes/247empowerment/inc/PayoutSystem.php<br>
+                    /wp-content/themes/247empowerment/template-custom/frontend/withdrawal-form.php
+                </p>
+            </div>
+
+            <h2 style="margin-top: 40px;">✅ Implementation Status</h2>
+            <div style="background: #e8f5e9; border: 1px solid #4caf50; padding: 15px; border-radius: 5px;">
+                <p style="margin: 0;"><strong style="color: #2e7d32;">✓ All documentation ready for implementation</strong></p>
+                <p style="margin: 10px 0 0 0; font-size: 12px; color: #555;">Documentation has been converted to English and is available in the theme folder. Follow the Deployment Checklist for step-by-step implementation.</p>
+            </div>
+
+            <h2 style="margin-top: 40px;">🔗 Quick Links</h2>
+            <ul>
+                <li><a href="<?php echo esc_url(admin_url('admin.php?page=payout-requests')); ?>" class="button">← Back to Withdrawals</a></li>
+                <li><a href="<?php echo esc_url(admin_url('admin.php?page=payout-settings')); ?>" class="button">Settings</a></li>
+            </ul>
         </div>
+
+        <style>
+            .wrap table td { vertical-align: top; }
+            .wrap .widefat tbody tr:hover { background-color: #f9f9f9; }
+        </style>
         <?php
     }
 
