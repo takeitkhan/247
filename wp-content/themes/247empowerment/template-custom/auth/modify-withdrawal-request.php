@@ -117,7 +117,12 @@ $withdrawals = $payout_system->get_user_withdrawals($user_id, 5);
                             </div>
 
                             <div class="col-12">
-                                <button type="submit" class="w-auto custom-btn">
+                                <button 
+                                    type="submit" 
+                                    class="w-auto custom-btn"
+                                    data-nonce="<?php echo wp_create_nonce('payout_security'); ?>"
+                                    data-ajaxurl="<?php echo admin_url('admin-ajax.php'); ?>"
+                                >
                                     Request Withdrawal
                                 </button>
                             </div>
@@ -176,41 +181,124 @@ $withdrawals = $payout_system->get_user_withdrawals($user_id, 5);
 </div>
 
 <script>
-jQuery(document).ready(function($) {
-    $('#withdrawal-form').on('submit', function(e) {
-        e.preventDefault();
-
-        const amount = parseFloat($('#amount').val());
-        const $message = $('#form-message');
-
-        if (!amount || amount <= 0) {
-            $message.html('<div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px;">Please enter a valid amount</div>').show();
+(function() {
+    console.log('Modify withdrawal form script initializing...');
+    
+    if (typeof jQuery === 'undefined') {
+        console.error('jQuery not loaded!');
+        return;
+    }
+    
+    const $ = jQuery;
+    
+    $(document).ready(function() {
+        console.log('Document ready, binding withdrawal form...');
+        
+        const $form = $('#withdrawal-form');
+        const $submitBtn = $form.find('[type="submit"]');
+        
+        if (!$submitBtn.length) {
+            console.error('Submit button not found');
             return;
         }
-
-        $.ajax({
-            url: PayoutData.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'submit_withdrawal',
-                nonce: PayoutData.nonce,
-                amount: amount
-            },
-            success: function(response) {
-                if (response.success) {
-                    $message.html('<div style="background: #e8f5e9; color: #2e7d32; padding: 10px; border-radius: 4px;">✓ ' + response.data.message + '</div>').show();
-                    $('#withdrawal-form')[0].reset();
-                    setTimeout(() => location.reload(), 2000);
-                } else {
-                    $message.html('<div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px;">✗ ' + response.data + '</div>').show();
-                }
-            },
-            error: function() {
-                $message.html('<div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px;">An error occurred. Please try again.</div>').show();
+        
+        const nonce = $submitBtn.data('nonce');
+        const ajaxurl = $submitBtn.data('ajaxurl');
+        
+        console.log('Form data:', { nonce, ajaxurl });
+        
+        if (!nonce || !ajaxurl) {
+            console.error('Nonce or AJAX URL not found');
+            if (typeof Swal !== 'undefined') {
+                Swal.fire('Error', 'System not initialized. Please refresh the page.', 'error');
             }
+            return;
+        }
+        
+        $form.on('submit', function(e) {
+            console.log('Form submitted!');
+            e.preventDefault();
+
+            const amount = parseFloat($('#amount').val());
+
+            if (!amount || amount <= 0) {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire('Error', 'Please enter a valid amount', 'error');
+                } else {
+                    alert('Please enter a valid amount');
+                }
+                return;
+            }
+
+            // Show loading state
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Processing...',
+                    html: 'Submitting your withdrawal request...',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+            }
+
+            console.log('Sending withdrawal request:', {
+                action: 'submit_withdrawal',
+                amount: amount,
+                nonce: nonce
+            });
+
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'submit_withdrawal',
+                    nonce: nonce,
+                    amount: amount
+                },
+                success: function(response) {
+                    console.log('AJAX success:', response);
+                    if (response.success) {
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire({
+                                title: 'Success!',
+                                html: response.data.message || 'Withdrawal request submitted successfully',
+                                icon: 'success',
+                                timer: 2000,
+                                timerProgressBar: true,
+                                didClose: () => {
+                                    location.reload();
+                                }
+                            });
+                        } else {
+                            alert(response.data.message || 'Withdrawal request submitted successfully');
+                            $form[0].reset();
+                            setTimeout(() => location.reload(), 2000);
+                        }
+                    } else {
+                        const errorMsg = response.data || 'Error occurred';
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire('Error', errorMsg, 'error');
+                        } else {
+                            alert('Error: ' + errorMsg);
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', {status, error, xhr});
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire('Error', 'An error occurred. Please try again.', 'error');
+                    } else {
+                        alert('An error occurred. Please try again.');
+                    }
+                }
+            });
         });
+        
+        console.log('Withdrawal form bound successfully');
     });
-});
+})();
 </script>
 
 <?php get_footer_based_on_login(); ?>
