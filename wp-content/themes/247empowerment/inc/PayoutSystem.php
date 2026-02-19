@@ -866,36 +866,46 @@ class PayoutSystem {
             
             $results = array();
             
-            // Clear withdrawal requests table
-            $wpdb->query("TRUNCATE TABLE {$wpdb->prefix}withdrawal_requests");
-            $results['withdrawal_requests'] = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}withdrawal_requests");
-            
-            // Clear payout audit log table
-            $wpdb->query("TRUNCATE TABLE {$wpdb->prefix}payout_audit_log");
-            $results['audit_log'] = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}payout_audit_log");
-            
-            // Clear user meta balance change logs (optional)
-            if (isset($_POST['clear_balance_logs']) && $_POST['clear_balance_logs'] === '1') {
-                $users = get_users();
-                foreach ($users as $user) {
-                    delete_user_meta($user->ID, 'balance_change_logs');
+            try {
+                // Disable foreign key constraints temporarily
+                $wpdb->query("SET FOREIGN_KEY_CHECKS=0");
+                
+                // Clear payout audit log table first (references withdrawal_requests)
+                $wpdb->query("TRUNCATE TABLE {$wpdb->prefix}payout_audit_log");
+                $results['audit_log'] = 0;
+                
+                // Then clear withdrawal requests table
+                $wpdb->query("TRUNCATE TABLE {$wpdb->prefix}withdrawal_requests");
+                $results['withdrawal_requests'] = 0;
+                
+                // Re-enable foreign key constraints
+                $wpdb->query("SET FOREIGN_KEY_CHECKS=1");
+                
+                // Clear user meta balance change logs (optional)
+                if (isset($_POST['clear_balance_logs']) && $_POST['clear_balance_logs'] === '1') {
+                    $users = get_users();
+                    foreach ($users as $user) {
+                        delete_user_meta($user->ID, 'balance_change_logs');
+                    }
+                    $results['balance_logs_cleared'] = true;
                 }
-                $results['balance_logs_cleared'] = true;
+                
+                $results['success'] = true;
+                $results['timestamp'] = current_time('mysql');
+                
+                // Display success message
+                echo '<div class="notice notice-success is-dismissible"><p>';
+                echo '✅ Test data cleared successfully!<br>';
+                echo 'Withdrawal Requests: ' . $results['withdrawal_requests'] . ' remaining<br>';
+                echo 'Audit Logs: ' . $results['audit_log'] . ' remaining<br>';
+                if (isset($results['balance_logs_cleared']) && $results['balance_logs_cleared']) {
+                    echo 'Balance change logs cleared for all users<br>';
+                }
+                echo 'Timestamp: ' . $results['timestamp'];
+                echo '</p></div>';
+            } catch (Exception $e) {
+                wp_die('Error clearing data: ' . esc_html($e->getMessage()));
             }
-            
-            $results['success'] = true;
-            $results['timestamp'] = current_time('mysql');
-            
-            // Display success message
-            echo '<div class="notice notice-success is-dismissible"><p>';
-            echo 'Test data cleared successfully!<br>';
-            echo 'Withdrawal Requests: ' . $results['withdrawal_requests'] . ' remaining<br>';
-            echo 'Audit Logs: ' . $results['audit_log'] . ' remaining<br>';
-            if (isset($results['balance_logs_cleared']) && $results['balance_logs_cleared']) {
-                echo 'Balance change logs cleared for all users<br>';
-            }
-            echo 'Timestamp: ' . $results['timestamp'];
-            echo '</p></div>';
         }
 
         // Get current counts
