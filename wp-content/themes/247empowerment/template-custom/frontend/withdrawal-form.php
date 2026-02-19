@@ -140,39 +140,70 @@ $withdrawals = $payout_system->get_user_withdrawals($user_id, 5);
 </div>
 
 <script>
-jQuery(document).ready(function($) {
-    $('#withdrawal-form').on('submit', function(e) {
-        e.preventDefault();
-
-        const amount = parseFloat($('#amount').val());
-        const $message = $('#form-message');
-
-        if (!amount || amount <= 0) {
-            $message.html('<div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px;">Please enter a valid amount</div>').show();
+(function() {
+    console.log('Withdrawal form script initializing...');
+    console.log('PayoutData:', typeof window.PayoutData !== 'undefined' ? window.PayoutData : 'NOT DEFINED');
+    
+    if (typeof jQuery === 'undefined') {
+        console.error('jQuery not loaded!');
+        return;
+    }
+    
+    const $ = jQuery;
+    
+    $(document).ready(function() {
+        console.log('Document ready, binding withdrawal form...');
+        
+        if (!window.PayoutData) {
+            console.error('PayoutData not available - localized script data missing');
+            $('#form-message').html('<div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px;">⚠️ System not initialized. Please refresh the page.</div>').show();
             return;
         }
+        
+        $('#withdrawal-form').on('submit', function(e) {
+            console.log('Form submitted!');
+            e.preventDefault();
 
-        $.ajax({
-            url: PayoutData.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'submit_withdrawal',
-                nonce: PayoutData.nonce,
-                amount: amount
-            },
-            success: function(response) {
-                if (response.success) {
-                    $message.html('<div style="background: #e8f5e9; color: #2e7d32; padding: 10px; border-radius: 4px;">✓ ' + response.data.message + '</div>').show();
-                    $('#withdrawal-form')[0].reset();
-                    setTimeout(() => location.reload(), 2000);
-                } else {
-                    $message.html('<div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px;">✗ ' + response.data + '</div>').show();
-                }
-            },
-            error: function() {
-                $message.html('<div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px;">An error occurred. Please try again.</div>').show();
+            const amount = parseFloat($('#amount').val());
+            const $message = $('#form-message');
+
+            if (!amount || amount <= 0) {
+                $message.html('<div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px;">Please enter a valid amount</div>').show();
+                return;
             }
+
+            console.log('Sending withdrawal request:', {
+                action: 'submit_withdrawal',
+                amount: amount,
+                nonce: window.PayoutData.nonce
+            });
+
+            $.ajax({
+                url: window.PayoutData.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'submit_withdrawal',
+                    nonce: window.PayoutData.nonce,
+                    amount: amount
+                },
+                success: function(response) {
+                    console.log('AJAX success:', response);
+                    if (response.success) {
+                        $message.html('<div style="background: #e8f5e9; color: #2e7d32; padding: 10px; border-radius: 4px;">✓ ' + response.data.message + '</div>').show();
+                        $('#withdrawal-form')[0].reset();
+                        setTimeout(() => location.reload(), 2000);
+                    } else {
+                        $message.html('<div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px;">✗ ' + (response.data || 'Error occurred') + '</div>').show();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', {status, error, xhr});
+                    $message.html('<div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px;">An error occurred. Please try again.</div>').show();
+                }
+            });
         });
+        
+        console.log('Withdrawal form bound successfully');
     });
-});
+})();
 </script>

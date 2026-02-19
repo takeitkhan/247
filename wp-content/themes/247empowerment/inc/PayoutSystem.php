@@ -790,9 +790,15 @@ class PayoutSystem {
      * Enqueue frontend assets
      */
     public function enqueue_frontend_assets() {
+        // Ensure jQuery is loaded
+        wp_enqueue_script('jquery');
+        
+        // Localize script data for AJAX
         wp_localize_script('jquery', 'PayoutData', [
             'nonce' => wp_create_nonce('payout_security'),
             'ajaxurl' => admin_url('admin-ajax.php')
         ]);
+        
+        error_log('PayoutData enqueued on footer with nonce: ' . wp_create_nonce('payout_security'));
     }
 }
