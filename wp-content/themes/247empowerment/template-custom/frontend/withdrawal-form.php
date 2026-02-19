@@ -170,7 +170,9 @@ $withdrawals = $payout_system->get_user_withdrawals($user_id, 5);
         
         if (!nonce || !ajaxurl) {
             console.error('Nonce or AJAX URL not found');
-            $('#form-message').html('<div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px;">⚠️ System not initialized. Please refresh the page.</div>').show();
+            if (typeof Swal !== 'undefined') {
+                Swal.fire('Error', 'System not initialized. Please refresh the page.', 'error');
+            }
             return;
         }
         
@@ -179,11 +181,27 @@ $withdrawals = $payout_system->get_user_withdrawals($user_id, 5);
             e.preventDefault();
 
             const amount = parseFloat($('#amount').val());
-            const $message = $('#form-message');
 
             if (!amount || amount <= 0) {
-                $message.html('<div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px;">Please enter a valid amount</div>').show();
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire('Error', 'Please enter a valid amount', 'error');
+                } else {
+                    alert('Please enter a valid amount');
+                }
                 return;
+            }
+
+            // Show loading state
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Processing...',
+                    html: 'Submitting your withdrawal request...',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
             }
 
             console.log('Sending withdrawal request:', {
@@ -203,16 +221,38 @@ $withdrawals = $payout_system->get_user_withdrawals($user_id, 5);
                 success: function(response) {
                     console.log('AJAX success:', response);
                     if (response.success) {
-                        $message.html('<div style="background: #e8f5e9; color: #2e7d32; padding: 10px; border-radius: 4px;">✓ ' + response.data.message + '</div>').show();
-                        $form[0].reset();
-                        setTimeout(() => location.reload(), 2000);
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire({
+                                title: 'Success!',
+                                html: response.data.message || 'Withdrawal request submitted successfully',
+                                icon: 'success',
+                                timer: 2000,
+                                timerProgressBar: true,
+                                didClose: () => {
+                                    location.reload();
+                                }
+                            });
+                        } else {
+                            alert(response.data.message || 'Withdrawal request submitted successfully');
+                            $form[0].reset();
+                            setTimeout(() => location.reload(), 2000);
+                        }
                     } else {
-                        $message.html('<div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px;">✗ ' + (response.data || 'Error occurred') + '</div>').show();
+                        const errorMsg = response.data || 'Error occurred';
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire('Error', errorMsg, 'error');
+                        } else {
+                            alert('Error: ' + errorMsg);
+                        }
                     }
                 },
                 error: function(xhr, status, error) {
                     console.error('AJAX error:', {status, error, xhr});
-                    $message.html('<div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px;">An error occurred. Please try again.</div>').show();
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire('Error', 'An error occurred. Please try again.', 'error');
+                    } else {
+                        alert('An error occurred. Please try again.');
+                    }
                 }
             });
         });
