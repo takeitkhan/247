@@ -353,6 +353,10 @@ class PayoutSystem {
             wp_send_json_error('Withdrawal not found');
         }
 
+        error_log('Deducting balance from user account');
+        // Deduct balance when approved
+        payout_deduct_balance($withdrawal->user_id, $withdrawal->amount, 'Withdrawal request approved - ID: ' . $withdrawal_id);
+        
         error_log('Updating withdrawal status to processing');
         // Update status to processing
         $this->update_withdrawal_status($withdrawal_id, 'processing');
