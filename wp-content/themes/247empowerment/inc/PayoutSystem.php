@@ -549,36 +549,78 @@ class PayoutSystem {
                 
                 console.log('Approve button clicked, ID:', withdrawal_id);
                 
-                if (!confirm('Are you sure you want to approve this withdrawal?')) {
+                if (typeof Swal === 'undefined') {
+                    if (!confirm('Are you sure you want to approve this withdrawal?')) {
+                        return;
+                    }
+                    const notes = prompt('Enter notes (optional):');
+                    submitApproval(withdrawal_id, notes || '');
                     return;
                 }
                 
-                const notes = prompt('Enter notes (optional):');
-                
-                $.ajax({
-                    url: ajaxurl,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        action: 'approve_withdrawal',
-                        nonce: nonce,
-                        withdrawal_id: withdrawal_id,
-                        notes: notes || ''
-                    },
-                    success: function(response) {
-                        console.log('Approve response:', response);
-                        if (response.success) {
-                            alert('Withdrawal approved successfully!');
-                            location.reload();
-                        } else {
-                            alert('Error: ' + (response.data || 'Unknown error'));
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX Error:', error, xhr.responseText);
-                        alert('An error occurred: ' + error);
+                Swal.fire({
+                    title: 'Approve Withdrawal?',
+                    html: 'Are you sure you want to approve this withdrawal?<br><br><input type="text" id="approval_notes" class="swal2-input" placeholder="Enter notes (optional)">',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Approve',
+                    confirmButtonColor: '#27ae60',
+                    cancelButtonText: 'Cancel',
+                    didOpen: () => {
+                        const input = Swal.getHtmlContainer().querySelector('#approval_notes');
+                        input.focus();
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const notes = document.getElementById('approval_notes').value;
+                        submitApproval(withdrawal_id, notes);
                     }
                 });
+                
+                function submitApproval(id, notes) {
+                    Swal.fire({
+                        title: 'Processing...',
+                        html: 'Approving withdrawal...',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    
+                    $.ajax({
+                        url: ajaxurl,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            action: 'approve_withdrawal',
+                            nonce: nonce,
+                            withdrawal_id: id,
+                            notes: notes
+                        },
+                        success: function(response) {
+                            console.log('Approve response:', response);
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    html: 'Withdrawal approved successfully!<br>User balance has been deducted.',
+                                    icon: 'success',
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    didClose: () => {
+                                        location.reload();
+                                    }
+                                });
+                            } else {
+                                Swal.fire('Error', response.data || 'Unknown error', 'error');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('AJAX Error:', error, xhr.responseText);
+                            Swal.fire('Error', 'An error occurred: ' + error, 'error');
+                        }
+                    });
+                }
             });
             
             // Reject button handler
@@ -589,41 +631,86 @@ class PayoutSystem {
                 
                 console.log('Reject button clicked, ID:', withdrawal_id);
                 
-                if (!confirm('Are you sure you want to reject this withdrawal?')) {
+                if (typeof Swal === 'undefined') {
+                    if (!confirm('Are you sure you want to reject this withdrawal?')) {
+                        return;
+                    }
+                    const notes = prompt('Enter rejection reason:');
+                    if (!notes) {
+                        alert('Please provide a rejection reason');
+                        return;
+                    }
+                    submitRejection(withdrawal_id, notes);
                     return;
                 }
                 
-                const notes = prompt('Enter rejection reason:');
-                
-                if (!notes) {
-                    alert('Please provide a rejection reason');
-                    return;
-                }
-                
-                $.ajax({
-                    url: ajaxurl,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        action: 'reject_withdrawal',
-                        nonce: nonce,
-                        withdrawal_id: withdrawal_id,
-                        notes: notes
-                    },
-                    success: function(response) {
-                        console.log('Reject response:', response);
-                        if (response.success) {
-                            alert('Withdrawal rejected!');
-                            location.reload();
-                        } else {
-                            alert('Error: ' + (response.data || 'Unknown error'));
+                Swal.fire({
+                    title: 'Reject Withdrawal?',
+                    html: 'Are you sure you want to reject this withdrawal?<br><br><textarea id="rejection_reason" class="swal2-textarea" placeholder="Enter rejection reason (required)" style="width: 100%; height: 100px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit;"></textarea>',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Reject',
+                    confirmButtonColor: '#f44336',
+                    cancelButtonText: 'Cancel',
+                    didOpen: () => {
+                        const textarea = Swal.getHtmlContainer().querySelector('#rejection_reason');
+                        textarea.focus();
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const reason = document.getElementById('rejection_reason').value.trim();
+                        if (!reason) {
+                            Swal.fire('Error', 'Please provide a rejection reason', 'error');
+                            return;
                         }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX Error:', error, xhr.responseText);
-                        alert('An error occurred: ' + error);
+                        submitRejection(withdrawal_id, reason);
                     }
                 });
+                
+                function submitRejection(id, notes) {
+                    Swal.fire({
+                        title: 'Processing...',
+                        html: 'Rejecting withdrawal...',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    
+                    $.ajax({
+                        url: ajaxurl,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            action: 'reject_withdrawal',
+                            nonce: nonce,
+                            withdrawal_id: id,
+                            notes: notes
+                        },
+                        success: function(response) {
+                            console.log('Reject response:', response);
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'Rejected!',
+                                    html: 'Withdrawal has been rejected.<br>User balance remains unchanged.',
+                                    icon: 'success',
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    didClose: () => {
+                                        location.reload();
+                                    }
+                                });
+                            } else {
+                                Swal.fire('Error', response.data || 'Unknown error', 'error');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('AJAX Error:', error, xhr.responseText);
+                            Swal.fire('Error', 'An error occurred: ' + error, 'error');
+                        }
+                    });
+                }
             });
         });
         </script>
