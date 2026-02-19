@@ -89,6 +89,8 @@ $withdrawals = $payout_system->get_user_withdrawals($user_id, 5);
         <button 
             type="submit" 
             class="btn-submit"
+            data-nonce="<?php echo wp_create_nonce('payout_security'); ?>"
+            data-ajaxurl="<?php echo admin_url('admin-ajax.php'); ?>"
             style="width: 100%; padding: 12px; background: #27ae60; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer;"
         >
             Request Withdrawal
@@ -142,7 +144,6 @@ $withdrawals = $payout_system->get_user_withdrawals($user_id, 5);
 <script>
 (function() {
     console.log('Withdrawal form script initializing...');
-    console.log('PayoutData:', typeof window.PayoutData !== 'undefined' ? window.PayoutData : 'NOT DEFINED');
     
     if (typeof jQuery === 'undefined') {
         console.error('jQuery not loaded!');
@@ -154,13 +155,26 @@ $withdrawals = $payout_system->get_user_withdrawals($user_id, 5);
     $(document).ready(function() {
         console.log('Document ready, binding withdrawal form...');
         
-        if (!window.PayoutData) {
-            console.error('PayoutData not available - localized script data missing');
+        const $form = $('#withdrawal-form');
+        const $submitBtn = $form.find('[type="submit"]');
+        
+        if (!$submitBtn.length) {
+            console.error('Submit button not found');
+            return;
+        }
+        
+        const nonce = $submitBtn.data('nonce');
+        const ajaxurl = $submitBtn.data('ajaxurl');
+        
+        console.log('Form data:', { nonce, ajaxurl });
+        
+        if (!nonce || !ajaxurl) {
+            console.error('Nonce or AJAX URL not found');
             $('#form-message').html('<div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px;">⚠️ System not initialized. Please refresh the page.</div>').show();
             return;
         }
         
-        $('#withdrawal-form').on('submit', function(e) {
+        $form.on('submit', function(e) {
             console.log('Form submitted!');
             e.preventDefault();
 
@@ -175,22 +189,22 @@ $withdrawals = $payout_system->get_user_withdrawals($user_id, 5);
             console.log('Sending withdrawal request:', {
                 action: 'submit_withdrawal',
                 amount: amount,
-                nonce: window.PayoutData.nonce
+                nonce: nonce
             });
 
             $.ajax({
-                url: window.PayoutData.ajaxurl,
+                url: ajaxurl,
                 type: 'POST',
                 data: {
                     action: 'submit_withdrawal',
-                    nonce: window.PayoutData.nonce,
+                    nonce: nonce,
                     amount: amount
                 },
                 success: function(response) {
                     console.log('AJAX success:', response);
                     if (response.success) {
                         $message.html('<div style="background: #e8f5e9; color: #2e7d32; padding: 10px; border-radius: 4px;">✓ ' + response.data.message + '</div>').show();
-                        $('#withdrawal-form')[0].reset();
+                        $form[0].reset();
                         setTimeout(() => location.reload(), 2000);
                     } else {
                         $message.html('<div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px;">✗ ' + (response.data || 'Error occurred') + '</div>').show();
