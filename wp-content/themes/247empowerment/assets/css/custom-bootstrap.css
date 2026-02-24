@@ -14412,4 +14412,48 @@ small {
   width: 100%;
 }
 
+/* Level 3 Menu Styling - Submenu of Submenu */
+.dropdown-submenu {
+  position: relative !important;
+}
+
+.dropdown-submenu > .dropdown-menu {
+  display: none !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 100% !important;
+  margin-left: 0 !important;
+  margin-top: -0.25rem !important;
+  border-radius: 6px !important;
+  z-index: 1001 !important;
+  min-width: 200px !important;
+  background-color: #fff !important;
+  border: 1px solid #bec9e5 !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Show Level 3 on parent hover - VERY SPECIFIC */
+.navbar-nav.desktop-menu .dropdown-submenu:hover > .dropdown-menu {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Also show when hovering the menu itself */
+.navbar-nav.desktop-menu .dropdown-submenu > .dropdown-menu:hover {
+  display: block !important;
+}
+
+/* Ensure Level 3 items have proper spacing */
+.dropdown-submenu .dropdown-menu .dropdown-item {
+  padding: 0.5rem 1rem !important;
+  white-space: nowrap !important;
+  display: block !important;
+}
+
+.dropdown-submenu .dropdown-menu .dropdown-item:hover {
+  background-color: #f8f9fa !important;
+  color: #000 !important;
+}
+
 /*# sourceMappingURL=custom-bootstrap.css.map */

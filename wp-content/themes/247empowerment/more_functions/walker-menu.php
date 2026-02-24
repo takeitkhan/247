@@ -85,8 +85,10 @@ class MM_Walker_Nav_Menu extends Walker_Nav_Menu
         /* <li> CLASSES */
         $li_classes = ['nav-item'];
 
-        if ($has_children) {
+        if ($depth === 0 && $has_children) {
             $li_classes[] = 'dropdown';
+        } elseif ($depth > 0 && $has_children) {
+            $li_classes[] = 'dropdown-submenu';
         }
 
         if ($is_active) {

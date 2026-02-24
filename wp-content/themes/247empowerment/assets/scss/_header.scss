@@ -92,7 +92,7 @@
   li.dropdown {
     color: $black;
     font-weight: 500;
-    padding: 0px 5px;
+    padding: 0px 10px !important;
     margin: 0px;
     border-bottom: 0px solid transparent; // ✅ reserve space for the border
 
@@ -126,7 +126,7 @@
 
     >a.dropdown-toggle {
       position: relative;
-      padding-right: 22px; // space for arrow
+      padding-right: 15px; // space for arrow
     }
 
     /* 2️⃣ Custom caret (USE ::before) */
@@ -135,8 +135,6 @@
       position: absolute;
       right: 0;
       top: 50%;
-      transform: translateY(-50%);
-
       width: 0;
       height: 0;
       border-left: 4px solid transparent;

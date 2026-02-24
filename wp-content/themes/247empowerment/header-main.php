@@ -84,7 +84,7 @@
                     'theme_location' => 'primary',
                     'container'      => false,
                     'items_wrap'     => '%3$s',
-                    'depth'          => 2,
+                    'depth'          => 3,
                     'fallback_cb'    => false,
                     'walker'         => new MM_Walker_Nav_Menu(),
                 ] );
@@ -122,7 +122,7 @@
                 'theme_location' => 'primary',
                 'container'      => false,
                 'items_wrap'     => '%3$s',
-                'depth'          => 2,
+                'depth'          => 3,
                 'fallback_cb'    => false,
                 'walker'         => new MM_Walker_Nav_Menu(),
             ] );
