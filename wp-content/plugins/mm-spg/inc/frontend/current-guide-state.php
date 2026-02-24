@@ -181,9 +181,11 @@ add_action('wp_ajax_mm_spg_complete_phase_2', function () {
 
     $user_id = get_current_user_id();
 
+    $phase_3_start_index = count(mm_spg_get_steps());
+
     update_user_meta($user_id, 'mm_spg_phase_2_completed', 1);
     update_user_meta($user_id, 'mm_spg_phase_3_started', 1);
-    update_user_meta($user_id, 'mm_spg_step', 0);
+    update_user_meta($user_id, 'mm_spg_step', $phase_3_start_index);
     update_user_meta($user_id, 'mm_spg_status', 'active');
 
     wp_send_json_success();
@@ -219,9 +221,11 @@ add_action('wp_ajax_mm_spg_prepare_phase_3', function () {
 
     $user_id = get_current_user_id();
 
+    $phase_3_start_index = count(mm_spg_get_steps());
+
     update_user_meta($user_id, 'mm_spg_phase_2_completed', 1);
     update_user_meta($user_id, 'mm_spg_phase_3_started', 1);
-    update_user_meta($user_id, 'mm_spg_step', 0);
+    update_user_meta($user_id, 'mm_spg_step', $phase_3_start_index);
     update_user_meta($user_id, 'mm_spg_status', 'active');
 
     wp_send_json_success();

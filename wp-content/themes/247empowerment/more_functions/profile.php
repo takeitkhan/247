@@ -102,7 +102,8 @@ function enqueue_post_create_script()
 
     wp_localize_script('post-create-js', 'ajax_object', array(
         'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('post_comment_nonce')
+        'nonce' => wp_create_nonce('post_comment_nonce'),
+        'reaction_nonce' => wp_create_nonce('post_reaction_nonce')
     ));
 }
 add_action('wp_enqueue_scripts', 'enqueue_post_create_script');
@@ -605,11 +606,14 @@ if (!empty($_POST['user_categories_priority'])) {
 
 // AJAX handler for reactions
 add_action('wp_ajax_add_reaction', 'handle_add_reaction');
+add_action('wp_ajax_nopriv_add_reaction', 'handle_add_reaction');
 function handle_add_reaction()
 {
     if (!is_user_logged_in()) {
         wp_send_json_error(['message' => 'Not authorized'], 403);
     }
+
+    check_ajax_referer('post_reaction_nonce', 'nonce', false);
 
     $post_id = intval($_POST['post_id'] ?? 0);
     $reaction = sanitize_text_field($_POST['reaction'] ?? '');

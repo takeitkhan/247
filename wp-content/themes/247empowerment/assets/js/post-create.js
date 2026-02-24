@@ -126,7 +126,10 @@ jQuery(document).ready(function($) {
 
 // Handle reactions
 jQuery(document).ready(function($) {
-    $('.reaction-btn').on('click', function() {
+    $(document).on('click', '.reaction-btn', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
         const postId = $(this).data('post-id');
         const reaction = $(this).data('reaction');
 
@@ -136,7 +139,8 @@ jQuery(document).ready(function($) {
             data: {
                 action: 'add_reaction',
                 post_id: postId,
-                reaction: reaction
+                reaction: reaction,
+                nonce: ajax_object.reaction_nonce
             },
             success: function(res) {
                 if (res.success) {
