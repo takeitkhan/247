@@ -22,6 +22,9 @@
     wp_head();
     ?>
 
+    <!-- Primary Menu V2 CSS -->
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/menu-primary-v2.css">
+
     <!-- Google Tag Manager -->
     <script>
         (function(w,d,s,l,i){
@@ -86,7 +89,7 @@
                     'items_wrap'     => '%3$s',
                     'depth'          => 3,
                     'fallback_cb'    => false,
-                    'walker'         => new MM_Walker_Nav_Menu(),
+                    'walker'         => new MM_Walker_Nav_Menu_V2(),
                 ] );
                 ?>
             </ul>

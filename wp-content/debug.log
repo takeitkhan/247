@@ -3867,3 +3867,1643 @@
 )
 
 [24-Feb-2026 19:15:03 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:16:04 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:16:04 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:16:04 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:16:04 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:16:04 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:16:04 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:16:04 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:16:04 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:18:05 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:18:05 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:18:05 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:18:05 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:18:05 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:18:05 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:18:05 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:18:05 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:20:06 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:20:06 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:20:06 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:20:06 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:20:06 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:20:06 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:20:06 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:20:06 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:22:07 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:22:07 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:22:07 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:22:07 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:22:07 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:22:07 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:22:07 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:22:07 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:23:14 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:23:14 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:23:14 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:23:14 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:23:14 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:23:14 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:23:14 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:23:14 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:23:27 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:23:27 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:23:27 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:23:27 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:23:27 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:23:27 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:23:27 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:23:27 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:24:08 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:24:08 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:24:08 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:24:08 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:24:08 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:24:08 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:24:08 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:24:08 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:25:26 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:25:26 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:25:26 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:25:26 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:25:26 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:25:26 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:25:26 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:25:26 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:25:27 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:25:27 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:25:27 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:25:27 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:25:27 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:25:27 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:25:27 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:25:27 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:26:09 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:26:09 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:26:09 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:26:09 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:26:09 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:26:09 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:26:09 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:26:09 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:34:47 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:34:47 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:34:47 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:34:47 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:34:47 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:34:47 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:34:47 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:34:47 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:35:48 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:35:48 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:35:48 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:35:48 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:35:48 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:35:48 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:35:48 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:35:48 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:37:49 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:37:49 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:37:49 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:37:49 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:37:49 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:37:49 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:37:49 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:37:49 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:39:50 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:39:50 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:39:50 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:39:50 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:39:50 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:39:50 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:39:50 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:39:50 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:41:51 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:41:51 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:41:51 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:41:51 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:41:51 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:41:51 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:41:51 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:41:51 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:43:52 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:43:52 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:43:52 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:43:52 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:43:52 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:43:52 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:43:52 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:43:52 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:46:46 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:46:46 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:46:46 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:46:46 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:46:46 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:46:46 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:46:46 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:46:46 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:46:46 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:46:46 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:46:46 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:46:46 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:46:46 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:46:46 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:46:46 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:46:46 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:55:18 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:55:18 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:55:18 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:55:18 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:18 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:18 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:18 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:18 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:55:18 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:55:18 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:55:18 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:55:18 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:18 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:18 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:18 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:18 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:55:18 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:55:18 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:55:18 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:55:18 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:18 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:18 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:18 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:18 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:55:21 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:55:21 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:55:21 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:55:21 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:21 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:21 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:21 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:21 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:55:22 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:55:22 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:55:22 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:55:22 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:22 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:22 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:22 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:22 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:55:22 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:55:22 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:55:22 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:55:22 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:22 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:22 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:22 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:22 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:55:22 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:55:22 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:55:22 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:55:22 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:22 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:22 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:22 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:22 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:55:22 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:55:22 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:55:22 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:55:22 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:22 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:22 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:22 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:22 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:55:22 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:55:22 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:55:22 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:55:22 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:22 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:22 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:22 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:22 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:55:22 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:55:22 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:55:22 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:55:22 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:22 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:22 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:22 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:22 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:55:23 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:55:23 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:55:23 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:55:23 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:23 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:23 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:55:23 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:55:23 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:56:19 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:56:19 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:56:19 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:56:19 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:56:19 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:56:19 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:56:19 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:56:19 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 19:56:19 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 19:56:19 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 19:56:19 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 19:56:19 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:56:19 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:56:19 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 19:56:19 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 19:56:19 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 20:07:54 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 20:07:54 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 20:07:54 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 20:07:54 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:07:54 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:07:54 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:07:54 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:07:54 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 20:07:55 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 20:07:55 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 20:07:55 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 20:07:55 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:07:55 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:07:55 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:07:55 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:07:55 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 20:10:06 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 20:10:06 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 20:10:06 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 20:10:06 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:10:06 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:10:06 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:10:06 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:10:06 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 20:10:07 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 20:10:07 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 20:10:07 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 20:10:07 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:10:07 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:10:07 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:10:07 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:10:07 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 20:18:51 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 20:18:51 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 20:18:51 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 20:18:51 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:18:51 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:18:51 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:18:51 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:18:51 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 20:18:51 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 20:18:51 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 20:18:51 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 20:18:51 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:18:51 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:18:51 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:18:51 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:18:51 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 20:19:29 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 20:19:29 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 20:19:29 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 20:19:29 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:19:29 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:19:29 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:19:29 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:19:29 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 20:19:29 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 20:19:29 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 20:19:29 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 20:19:29 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:19:29 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:19:29 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:19:29 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:19:29 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 20:20:45 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 20:20:45 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 20:20:45 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 20:20:45 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:20:45 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:20:45 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:20:45 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:20:45 UTC] === PayoutSystem::activate() completed ===
+[24-Feb-2026 20:20:45 UTC] === PayoutSystem::activate() called ===
+[24-Feb-2026 20:20:45 UTC] Table name: pet_withdrawal_requests
+[24-Feb-2026 20:20:45 UTC] Charset collate: DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci
+[24-Feb-2026 20:20:45 UTC] SQL: CREATE TABLE IF NOT EXISTS pet_withdrawal_requests (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            paypal_email VARCHAR(255) NOT NULL,
+            status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
+            transaction_id VARCHAR(255) DEFAULT NULL,
+            admin_notes LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            KEY user_id (user_id),
+            KEY status (status),
+            KEY created_at (created_at)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:20:45 UTC] dbDelta result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:20:45 UTC] Audit SQL: CREATE TABLE IF NOT EXISTS pet_payout_audit_log (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            withdrawal_id BIGINT(20) UNSIGNED NOT NULL,
+            admin_id BIGINT(20) UNSIGNED,
+            action VARCHAR(50) NOT NULL,
+            notes LONGTEXT DEFAULT NULL,
+            response_data LONGTEXT DEFAULT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            KEY withdrawal_id (withdrawal_id),
+            KEY admin_id (admin_id),
+            FOREIGN KEY (withdrawal_id) REFERENCES pet_withdrawal_requests(id) ON DELETE CASCADE
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+[24-Feb-2026 20:20:45 UTC] dbDelta audit result: Array
+(
+    [IF] => Created table IF
+)
+
+[24-Feb-2026 20:20:45 UTC] === PayoutSystem::activate() completed ===

@@ -1130,6 +1130,7 @@ require_once get_template_directory() . '/inc/UserProfileData.php';
 require_once get_template_directory() . '/inc/Notifications.php';
 require_once get_template_directory() . '/inc/UserConnectionManager.php';
 require_once get_template_directory() . '/more_functions/walker-menu.php';
+require_once get_template_directory() . '/more_functions/walker-menu-v2.php';
 require_once get_template_directory() . '/more_functions/authentication.php';
 
 // ============================================
