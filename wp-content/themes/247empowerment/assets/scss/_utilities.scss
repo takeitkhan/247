@@ -156,6 +156,11 @@
   //   }
 }
 
+button.more-option {
+  background-color: transparent !important;
+  border: none !important;
+}
+
 @media (max-width: 767.98px) {
   .offcanvas-start {
     width: 80% !important;
@@ -191,10 +196,13 @@
 }
 
 .btn-custom {
+  background-color: transparent !important;
+  border: none !important;
+  color: inherit !important;
 
   &:focus,
   &:active {
-    box-shadow: 0 0 0 2px $primary-color !important; // Facebook-style ring
+    box-shadow: 0 0 0 2px $primary-color !important;
     outline: none;
   }
 }

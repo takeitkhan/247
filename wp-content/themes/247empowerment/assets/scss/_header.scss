@@ -25,6 +25,7 @@
 
       a {
         color: $primary-color !important;
+        // padding: 5px 10px 5px 10px !important; // ✅ only add left padding, not all
       }
     }
 
@@ -37,6 +38,18 @@
         // optional if nav-link needs color
         color: $primary-color;
       }
+    }
+  }
+
+  ul.desktop-menu li > ul > li > a {
+    padding: 5px 10px 5px 10px !important;
+  }
+  ul.desktop-menu li a {
+    &:hover {
+      color: #000000 !important;
+    }
+    ul > li > a {
+      color: #000000 !important;
     }
   }
 
@@ -243,6 +256,7 @@
 
       &:hover {
         color: #0d6efd;
+        padding: 10px 0 !important;
       }
     }
   }
@@ -570,7 +584,7 @@
 
   div.mobile-menu ul li.nav-item {
     background: #05489c;
-    padding: 5px 10px;
+    padding: 5px 10px !important;
     border-radius: 0;
     margin: 0px !important;
     border-bottom: 1px solid aqua;
