@@ -42,6 +42,7 @@ else:
 
     <script>
         var ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
+        var isUploading = false; // Prevent duplicate requests
 
         /**
          * Shows the gamification modal and header notification.
@@ -50,8 +51,6 @@ else:
         function showGamificationNotification(notification) {
             if (!notification) return;
 
-            // --- 1. Show Header Notification ---
-            // This uses the Toastify.js library already included in your theme.
             Toastify({
                 text: notification.message,
                 duration: 5000,
@@ -61,7 +60,6 @@ else:
                 stopOnFocus: true,
             }).showToast();
 
-            // --- 2. Show Modal Popup ---
             const modal = document.getElementById('gamificationPointsModal');
             if (modal) {
                 const modalTitle = document.getElementById('gamification-modal-title');
@@ -83,9 +81,16 @@ else:
          * @param {string} previewSelector - The CSS selector for the image preview element.
          */
         function handlePhotoUpload(file, action, fieldName, previewSelector) {
+            // Prevent duplicate uploads
+            if (isUploading) {
+                console.warn('Upload already in progress');
+                return;
+            }
+
+            isUploading = true;
             const formData = new FormData();
-            formData.append('action', 'upload_profile_photo');
-            formData.append('profile_photo', file);
+            formData.append('action', action);
+            formData.append(fieldName, file);
             formData.append('nonce', '<?php echo wp_create_nonce("update_profile_photo_nonce"); ?>');
 
             fetch(ajaxurl, {
@@ -99,13 +104,18 @@ else:
                         if (previewElement) {
                             previewElement.src = response.data.url;
                         }
-                        // Show notification and modal from the AJAX response
                         showGamificationNotification(response.data.notification);
                     } else {
-                        alert('Upload failed: ' + (response.data.message || 'Unknown error'));
+                        alert('Upload failed: ' + (response.data?.message || 'Unknown error'));
                     }
                 })
-                .catch(err => console.error('Error:', err));
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('Upload error: ' + err.message);
+                })
+                .finally(() => {
+                    isUploading = false;
+                });
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -114,17 +124,20 @@ else:
             const coverInput = document.getElementById('cover-photo-input');
 
             if (coverEditBtn && coverInput) {
-                coverEditBtn.addEventListener('click', function() {
-                    coverInput.click();
-                });
+                coverEditBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!isUploading) {
+                        coverInput.click();
+                    }
+                }, false);
 
                 coverInput.addEventListener('change', function(e) {
                     const file = e.target.files[0];
-                    if (!file) return;
-                    handlePhotoUpload(file, 'upload_cover_photo', 'cover_photo', '.profile_img img');
-                });
-            } else {
-                console.log('❌ Cover photo elements not found');
+                    if (file && !isUploading) {
+                        handlePhotoUpload(file, 'upload_cover_photo', 'cover_photo', '.profile_img img');
+                    }
+                }, false);
             }
 
             // --- Profile Photo Upload ---
@@ -132,14 +145,20 @@ else:
             const profileInput = document.getElementById('profile-photo-input');
 
             if (profileEditBtn && profileInput) {
-                profileEditBtn.addEventListener('click', () => profileInput.click());
+                profileEditBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!isUploading) {
+                        profileInput.click();
+                    }
+                }, false);
+
                 profileInput.addEventListener('change', function(e) {
                     const file = e.target.files[0];
-                    if (!file) return;
-                    handlePhotoUpload(file, 'upload_profile_photo', 'profile_photo', '.img-p');
-                });
-            } else {
-                console.log('❌ Profile photo elements not found');
+                    if (file && !isUploading) {
+                        handlePhotoUpload(file, 'upload_profile_photo', 'profile_photo', '.img-p');
+                    }
+                }, false);
             }
         });
     </script>

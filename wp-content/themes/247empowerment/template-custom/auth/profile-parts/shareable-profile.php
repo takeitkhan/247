@@ -1,292 +1,297 @@
 <?php
-/* -------------------------------------------------
- * Resolve user & profile
- * ------------------------------------------------- */
-
-$user_slug = get_query_var('user_profile');
-$user      = get_user_by('slug', $user_slug);
-
-if (!$user) {
-    wp_die('User not found');
-}
-
-$profile = (new UserProfileData($user_slug))->getProfile();
-
-/* -------------------------------------------------
- * Basic profile fields
- * ------------------------------------------------- */
-$profile_img = esc_url(
-    get_user_meta($user->ID, 'profile_photo', true)
-        ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg'
-);
-
-$full_name = esc_html(trim(
-    ($profile['first_name'] ?? '') . ' ' . ($profile['last_name'] ?? '')
-));
-
-$designation = esc_html($profile['designation'] ?? 'No designation provided.');
-$digital_card_about = esc_html($profile['digital_card_about'] ?? 'No bio provided.');
-$place_display_name = esc_html($profile['place_display_name'] ?? 'Location not available.');
-$show_full_address = esc_html($profile['show_full_address'] ?? 0);
-
-$keywords = $profile['keywords']['list'] ?? [];
-$hashtags = $profile['hashtags']['list'] ?? [];
-
-/* -------------------------------------------------
- * Industry
- * ------------------------------------------------- */
-if (!empty($profile['user_category_names'])) {
-    $industry = is_array($profile['user_category_names'])
-        ? implode(', ', array_map('esc_html', $profile['user_category_names']))
-        : esc_html($profile['user_category_names']);
-} else {
-    $industry = 'Not specified';
-}
-
-/* -------------------------------------------------
- * SEO NORMALIZATION (✅ correct placement)
- * ------------------------------------------------- */
-
-// Page URL
-$page_url = home_url('/' . sanitize_title($profile['display_name'] ?? $user_slug));
-
-// Title
-$page_title = $full_name ?: get_bloginfo('name');
-
-// Description priority
-$base_description = trim(
-    $profile['digital_card_about']
-        ?? $profile['about_me_short']
-        ?? ''
-);
-
-if (!$base_description) {
-    $base_description = 'View my professional profile.';
-}
-
-// Trim for SEO (≈160 chars)
-$page_description = wp_trim_words($base_description, 28, '');
-
-// Build keyword list
-$keyword_list = [];
-
-// Keywords
-if (is_array($keywords)) {
-    $keyword_list = array_merge($keyword_list, $keywords);
-}
-
-// Hashtags → plain keywords
-if (is_array($hashtags)) {
-    foreach ($hashtags as $tag) {
-        $tag = ltrim($tag, '#');
-        if ($tag) {
-            $keyword_list[] = $tag;
-        }
-    }
-}
-
-// Add industry & designation
-if ($industry && $industry !== 'Not specified') {
-    $keyword_list[] = $industry;
-}
-if ($designation && $designation !== 'No designation provided.') {
-    $keyword_list[] = $designation;
-}
-
-// Cleanup
-$keyword_list  = array_unique(array_filter(array_map('sanitize_text_field', $keyword_list)));
-$meta_keywords = implode(', ', $keyword_list);
+/**
+ * Shareable Profile Template
+ * 
+ * Displays a public-facing profile card for non-logged-in users.
+ * Includes QR code generation, SEO meta tags, and responsive design.
+ * 
+ * @package 247empowerment
+ * @subpackage Template
+ */
 
 use Endroid\QrCode\Builder\Builder;
 
 require_once get_template_directory() . '/vendor/autoload.php';
 
-$shareable_link = $profile['shareable_link'] ?? '';
-$qrDataUri = null;
+/**
+ * ========================================
+ * INITIALIZATION & DATA VALIDATION
+ * ========================================
+ */
 
-if ($shareable_link) {
-    $result = Builder::create()
-        ->data($shareable_link)
-        ->size(300)
-        ->margin(10)
-        ->build();
+// Get user from URL slug
+$user_slug = get_query_var('user_profile');
+$user = get_user_by('slug', $user_slug);
 
-    $qrDataUri = $result->getDataUri();
+if (!$user) {
+    wp_die('User not found', 'User Not Found', ['response' => 404]);
 }
-?>
+
+// Load user profile data
+$profile = (new UserProfileData($user_slug))->getProfile();
+
+if (empty($profile)) {
+    wp_die('Profile data unavailable', 'Profile Not Available', ['response' => 404]);
+}
+
+/**
+ * ========================================
+ * PROFILE DATA EXTRACTION
+ * ========================================
+ */
+
+$profile_data = [
+    'user_id'           => $user->ID,
+    'full_name'         => trim(($profile['first_name'] ?? '') . ' ' . ($profile['last_name'] ?? '')),
+    'image'             => get_user_meta($user->ID, 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg',
+    'designation'       => $profile['designation'] ?? '',
+    'bio'               => $profile['digital_card_about'] ?? '',
+    'location'          => $profile['place_display_name'] ?? '',
+    'show_location'     => !empty($profile['show_full_address']) && $profile['show_full_address'] === '1',
+    'keywords'          => (array) ($profile['keywords']['list'] ?? []),
+    'hashtags'          => (array) ($profile['hashtags']['list'] ?? []),
+    'industry'          => '',
+    'shareable_link'    => $profile['shareable_link'] ?? '',
+];
+
+// Extract and normalize industry
+if (!empty($profile['user_category_names'])) {
+    $profile_data['industry'] = is_array($profile['user_category_names'])
+        ? implode(', ', array_map('esc_html', $profile['user_category_names']))
+        : esc_html($profile['user_category_names']);
+}
+
+// Escape all text fields
+$profile_data['full_name']    = esc_html($profile_data['full_name']);
+$profile_data['designation']  = esc_html($profile_data['designation']);
+$profile_data['bio']          = esc_html($profile_data['bio']);
+$profile_data['location']     = esc_html($profile_data['location']);
+$profile_data['image']        = esc_url($profile_data['image']);
+
+/**
+ * ========================================
+ * SEO META TAGS SETUP
+ * ========================================
+ */
+
+$seo_data = [
+    'url'          => home_url('/' . sanitize_title($profile['display_name'] ?? $user_slug)),
+    'title'        => $profile_data['full_name'] ?: get_bloginfo('name'),
+    'description'  => '',
+    'keywords'     => '',
+    'image'        => $profile_data['image'],
+];
+
+// Build SEO description
+$description_base = trim($profile_data['bio'] ?? $profile['about_me_short'] ?? '');
+$seo_data['description'] = $description_base ?: 'View my professional profile.';
+$seo_data['description'] = wp_trim_words($seo_data['description'], 28, '');
+
+// Build SEO keywords
+$keyword_collection = [];
+
+// Add keywords
+$keyword_collection = array_merge($keyword_collection, $profile_data['keywords']);
+
+// Add hashtags (without #)
+foreach ($profile_data['hashtags'] as $hashtag) {
+    $clean_tag = ltrim($hashtag, '#');
+    if ($clean_tag) {
+        $keyword_collection[] = $clean_tag;
+    }
+}
+
+// Add industry and designation
+if ($profile_data['industry']) {
+    $keyword_collection[] = $profile_data['industry'];
+}
+if ($profile_data['designation']) {
+    $keyword_collection[] = $profile_data['designation'];
+}
+
+// Sanitize and deduplicate
+$keyword_collection = array_unique(
+    array_filter(
+        array_map('sanitize_text_field', $keyword_collection)
+    )
+);
+$seo_data['keywords'] = implode(', ', $keyword_collection);
+
+/**
+ * ========================================
+ * QR CODE GENERATION
+ * ========================================
+ */
+
+$qr_code = null;
+
+if (!empty($profile_data['shareable_link'])) {
+    try {
+        $qr_result = Builder::create()
+            ->data($profile_data['shareable_link'])
+            ->size(300)
+            ->margin(10)
+            ->build();
+        
+        $qr_code = $qr_result->getDataUri();
+    } catch (Exception $e) {
+        // QR generation failed - continue without it
+        error_log('QR Code generation failed: ' . $e->getMessage());
+    }
+}
+
+/**
+ * ========================================
+ * CTA BUTTON URLS
+ * ========================================
+ */
+
+$ref_param = urlencode($user_slug);
+$cta_urls = [
+    'signin'  => home_url("/signin?ref={$ref_param}"),
+    'signup'  => home_url("/signup?ref={$ref_param}"),
+];
 
 
-<!DOCTYPE html>
+?><!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
-    <title>Guest Profile - <?php bloginfo('name'); ?></title>
+    <title><?php echo esc_html($seo_data['title']); ?> | <?php bloginfo('name'); ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <?php
-    // Assuming $profile is your user data array
-    $display_name = sanitize_title($profile['display_name'] ?? 'guest'); // fallback to 'guest'
-    $site_url = home_url(); // e.g., http://pet.test
-
-    // Construct values for meta tags
-    $page_url = "{$site_url}/{$display_name}";
-    $page_description = $profile['digital_card_about'] ?: 'Welcome to my profile.';
-    $page_title = $profile['first_name'] . ' ' . $profile['last_name'];
-    $page_image = $profile['profile_photo'] ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg';
-    ?>
-
-    <!-- Canonical -->
-    <link rel="canonical" href="<?php echo esc_url($page_url); ?>" />
-
-    <!-- SEO Meta -->
-    <meta name="description" content="<?php echo esc_attr($page_description); ?>" />
-    <?php if (!empty($meta_keywords)) : ?>
-        <meta name="keywords" content="<?php echo esc_attr($meta_keywords); ?>" />
+    <!-- SEO Meta Tags -->
+    <link rel="canonical" href="<?php echo esc_url($seo_data['url']); ?>" />
+    <meta name="description" content="<?php echo esc_attr($seo_data['description']); ?>" />
+    <meta name="robots" content="index, follow">
+    
+    <?php if (!empty($seo_data['keywords'])): ?>
+        <meta name="keywords" content="<?php echo esc_attr($seo_data['keywords']); ?>" />
     <?php endif; ?>
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="<?php echo esc_attr($page_title); ?>" />
-    <meta property="og:description" content="<?php echo esc_attr($page_description); ?>" />
-    <meta property="og:image" content="<?php echo esc_url($page_image); ?>" />
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:site_name" content="<?php bloginfo('name'); ?>" />
     <meta property="og:type" content="profile" />
-    <meta property="og:url" content="<?php echo esc_url($page_url); ?>" />
+    <meta property="og:url" content="<?php echo esc_url($seo_data['url']); ?>" />
+    <meta property="og:title" content="<?php echo esc_attr($seo_data['title']); ?>" />
+    <meta property="og:description" content="<?php echo esc_attr($seo_data['description']); ?>" />
+    <meta property="og:image" content="<?php echo esc_url($seo_data['image']); ?>" />
 
-    <!-- Twitter -->
+    <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="<?php echo esc_attr($page_title); ?>" />
-    <meta name="twitter:description" content="<?php echo esc_attr($page_description); ?>" />
-    <meta name="twitter:image" content="<?php echo esc_url($page_image); ?>" />
+    <meta name="twitter:title" content="<?php echo esc_attr($seo_data['title']); ?>" />
+    <meta name="twitter:description" content="<?php echo esc_attr($seo_data['description']); ?>" />
+    <meta name="twitter:image" content="<?php echo esc_url($seo_data['image']); ?>" />
+
     <?php wp_head(); ?>
+
+    <!-- Shareable Profile Styles -->
+    <link rel="stylesheet" href="<?php echo esc_url(get_template_directory_uri() . '/template-custom/auth/profile-parts/assets/shareable-profile.css'); ?>">
 </head>
 
-<body>
-    <div class="py-5 container">
-        <div class="justify-content-center row">
-            <div class="col-md-7 col-lg-6">
 
-                <div class="shadow border-0 rounded-4 overflow-hidden card">
+<body class="shareable-profile-page">
+    <div class="profile-container">
+        <div class="profile-card">
 
-                    <!-- QR Section -->
-                    <?php if (!empty($qrDataUri)) : ?>
-                        <div class="py-4 text-center">
-                            <a href="<?= esc_attr($qrDataUri); ?>" download="profile-qr.png">
-                                <img
-                                    src="<?= esc_attr($qrDataUri); ?>"
-                                    alt="Profile QR Code"
-                                    class="img-fluid"
-                                    style="max-width:180px;">
-                            </a>
-                            <!-- <div class="mt-2 text-muted fs14">Scan to view profile</div> -->
-                        </div>
-                    <?php endif; ?>
+            <!-- QR Code Section -->
+            <?php if (!empty($qr_code)): ?>
+                <section class="profile-qr-section" aria-label="Profile QR Code">
+                    <a href="<?php echo esc_url($qr_code); ?>" download="profile-qr.png" class="qr-link">
+                        <img src="<?php echo esc_attr($qr_code); ?>" 
+                             alt="<?php echo esc_attr($seo_data['title']); ?> - Profile QR Code" 
+                             class="qr-image"
+                             loading="lazy">
+                    </a>
+                </section>
+            <?php endif; ?>
 
+            <!-- Brand Header -->
+            <header class="profile-header">
+                <h1 class="brand-name">24/7 Empowerment</h1>
+                <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/nd/white_logo_247.svg'); ?>" 
+                     alt="24/7 Empowerment Logo" 
+                     class="brand-logo"
+                     loading="lazy">
+            </header>
 
-                    <!-- Brand Bar -->
-                    <div
-                        class="position-relative px-4 py-5 text-white text-center fw-semibold fs-2"
-                        style="background: linear-gradient(90deg, rgba(5,72,156,1) 0%, rgba(102,38,203,1) 44%, rgba(208,0,255,1) 100%);">
-                        <!-- Centered text -->
-                        <span>24/7 Empowerment</span>
+            <!-- Profile Information -->
+            <main class="profile-main">
 
-                        <!-- Right-aligned logo -->
-                        <img
-                            src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/nd/white_logo_247.svg'); ?>"
-                            alt="24/7 Empowerment"
-                            class="top-50 position-absolute me-4 translate-middle-y end-0"
-                            style="height: 150px;">
+                <!-- Profile Image -->
+                <figure class="profile-image-container">
+                    <img src="<?php echo esc_attr($profile_data['image']); ?>" 
+                         alt="<?php echo esc_attr($profile_data['full_name']); ?>" 
+                         class="profile-image"
+                         loading="lazy">
+                </figure>
+
+                <!-- Name -->
+                <h2 class="profile-name">
+                    <?php echo esc_html($profile_data['full_name']); ?>
+                </h2>
+
+                <!-- Designation -->
+                <?php if ($profile_data['designation']): ?>
+                    <p class="profile-designation">
+                        <?php echo esc_html($profile_data['designation']); ?>
+                    </p>
+                <?php endif; ?>
+
+                <!-- Bio -->
+                <?php if ($profile_data['bio']): ?>
+                    <p class="profile-bio">
+                        <?php echo esc_html($profile_data['bio']); ?>
+                    </p>
+                <?php endif; ?>
+
+                <!-- Keywords List -->
+                <?php if (!empty($profile_data['keywords'])): ?>
+                    <div class="profile-keywords" role="list" aria-label="Keywords">
+                        <?php foreach ($profile_data['keywords'] as $keyword): ?>
+                            <span class="keyword-badge" role="listitem">
+                                <?php echo esc_html($keyword); ?>
+                            </span>
+                        <?php endforeach; ?>
                     </div>
+                <?php endif; ?>
 
-
-
-                    <!-- Profile -->
-                    <div class="px-4 card-body">
-                        <img src="<?php echo $profile_img; ?>"
-                            class="shadow border border-3 border-white rounded-circle"
-                            width="90" height="90"
-                            style="margin-top:-55px; object-fit:cover;"
-                            alt="Profile Photo" />
-
-                        <h5 class="mt-3 mb-1 fw-bold">
-                            <?php echo $full_name; ?>
-                        </h5>
-
-                        <?php if ($designation): ?>
-                            <p class="mb-2 text-primary designation">
-                                <?php echo esc_html($designation); ?>
-                            </p>
-                        <?php endif; ?>
-
-                        <?php if (!empty($digital_card_about) && $digital_card_about !== 'No short bio available.'): ?>
-                            <p class="mb-3 text-muted">
-                                <?php echo $digital_card_about; ?>
-                            </p>
-                        <?php endif; ?>
-
-                        <?php if (!empty($keywords)) : ?>
-                            <div class="d-flex flex-wrap gap-2 mb-3 text-muted keyword-list">
-                                <?php foreach ($keywords as $keyword) : ?>
-                                    <span class="keyword-item">
-                                        <?= esc_html($keyword); ?>
-                                    </span>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endif; ?>
-                        <!-- Tags -->
-                        <?php if (!empty($hashtags)) : ?>
-                            <div class="d-flex flex-wrap gap-2 mb-3 text-muted">
-                                <?php foreach ($hashtags as $hashtag) : ?>
-                                    <span class="bg-light border border-light text-black badge">
-                                        <?= esc_html($hashtag); ?>
-                                    </span>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endif; ?>
-
-
-                        <!-- Location -->
-                        <?php if (!empty($show_full_address) && $show_full_address === '1') : ?>
-                            <?php if (!empty($place_display_name) && $place_display_name !== 'Unknown location'): ?>
-                                <p class="mb-4 text-muted small">
-                                    <i class="bi bi-geo-alt"></i>
-                                    <?php echo $place_display_name; ?>
-                                </p>
-                            <?php endif; ?>
-                        <?php endif; ?>
-
-                        <!-- Actions -->
-                        <?php
-                        $user_slug = get_query_var('user_profile');
-                        $ref = urlencode($user_slug);
-
-                        $signup_url = home_url("/signup?ref={$ref}");
-                        $signin_url = home_url("/signin?ref={$ref}");
-                        ?>
-
-                        <div class="d-flex align-items-center justify-content-end gap-3">                            
-                            <a href="<?php echo esc_url($signin_url); ?>" >Sign In</a>
-                            <a href="<?php echo esc_url($signup_url); ?>" class="custom-btn">Sign Up</a>
-                        </div>
-                        <?php wp_footer(); ?>
+                <!-- Hashtags List -->
+                <?php if (!empty($profile_data['hashtags'])): ?>
+                    <div class="profile-hashtags" role="list" aria-label="Hashtags">
+                        <?php foreach ($profile_data['hashtags'] as $hashtag): ?>
+                            <span class="hashtag-badge" role="listitem">
+                                <?php echo esc_html($hashtag); ?>
+                            </span>
+                        <?php endforeach; ?>
                     </div>
+                <?php endif; ?>
+
+                <!-- Location -->
+                <?php if ($profile_data['show_location'] && $profile_data['location'] && $profile_data['location'] !== 'Unknown location'): ?>
+                    <p class="profile-location">
+                        <span class="location-icon" aria-hidden="true">📍</span>
+                        <?php echo esc_html($profile_data['location']); ?>
+                    </p>
+                <?php endif; ?>
+
+                <!-- Call-to-Action Buttons -->
+                <div class="profile-cta">
+                    <a href="<?php echo esc_url($cta_urls['signin']); ?>" class="btn btn-secondary">
+                        Sign In
+                    </a>
+                    <a href="<?php echo esc_url($cta_urls['signup']); ?>" class="btn btn-primary">
+                        Sign Up
+                    </a>
                 </div>
 
-            </div>
+            </main>
+
         </div>
     </div>
-    <style>
-        .px-4.card-body {
-            z-index: 999;
-        }
 
-        @media (max-width: 576px) {
-            .position-relative img {
-                height: 32px !important;
-                margin-right: 12px;
-            }
-        }
-    </style>
+    <?php wp_footer(); ?>
 </body>
-
+</html>
+</body>
 </html>
