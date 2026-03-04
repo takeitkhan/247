@@ -30,33 +30,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         update_user_meta($user_id, 'about_me', sanitize_textarea_field($_POST['about_me']));
         update_user_meta($user_id, 'about_me_short', sanitize_text_field($_POST['about_me_short']));
         // update_user_meta($user_id, 'location', sanitize_text_field($_POST['location']));
-        if (!empty($_POST['latitude']) && !empty($_POST['longitude'])) {
-            update_user_meta($user_id, 'latitude', sanitize_text_field($_POST['latitude']));
-            update_user_meta($user_id, 'longitude', sanitize_text_field($_POST['longitude']));
-        }
-
-        if (!empty($_POST['place_display_name'])) {
-            update_user_meta($user_id, 'place_display_name', sanitize_text_field($_POST['place_display_name']));
-        }
-
-        if (!empty($_POST['place_address'])) {
-            update_user_meta($user_id, 'place_address', sanitize_text_field($_POST['place_address']));
-        }
-
-        update_user_meta($user_id, 'user_categories', array_map('intval', $_POST['user_categories'] ?? []));
-
         update_user_meta($user_id, 'show_email', isset($_POST['show_email']) ? '1' : '0');
         update_user_meta($user_id, 'show_phone', isset($_POST['show_phone']) ? '1' : '0');
         update_user_meta($user_id, 'show_dob', isset($_POST['show_dob']) ? '1' : '0');
-        update_user_meta($user_id, 'show_full_address', isset($_POST['show_full_address']) ? '1' : '0');
 
 
         echo '
         <script>
         document.addEventListener("DOMContentLoaded", function() {
-            Toastify({
-            text: "Profile updated successfully.",
-            duration: 4000,
+                            // Clear auto-saved draft after successful update
+                            localStorage.removeItem("profile_draft");
+                            localStorage.removeItem("profile_draft_timestamp");
+                            
             gravity: "bottom", // `top` or `bottom`
             position: "left", // `left`, `center` or `right`
             backgroundColor: "#28a745",
@@ -88,8 +73,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                         <div class="col-6">
                             <h5 class="mb-5">👤 My Profile</h5>
                         </div>
-                    </div>  
-                    <form method="post">
+                    </div>
+                    
+                    <!-- Auto Save Status -->
+                    <div id="autosave-status" class="alert alert-info d-none mb-3" role="alert">
+                        <small>
+                            <i class="bi bi-hourglass-split"></i> <span id="autosave-message">Draft auto-saving...</span>
+                            <span id="autosave-last-saved" class="float-end"></span>
+                        </small>
+                    </div>
+                    
+                    <form method="post" id="profile-form">
                         <?php wp_nonce_field('frontend_profile_update', 'frontend_profile_update_nonce'); ?>
 
                         <div class="row">
@@ -158,68 +152,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                         </div>
                         <div class="row">
                             <div class="col">
-                                <div class="place-autocomplete-card" id="place-autocomplete-card">
-                                    <p>Search for a place here:</p>
-                                </div>
-                                <div id="map"></div>
-
-                                <label class="form-label">Latitude</label>
-                                <input type="text" name="latitude" id="latitude" class="form-control"
-                                    value="<?php echo esc_attr(get_user_meta($current_user->ID, 'latitude', true)); ?>">
-
-                                <label class="form-label">Longitude</label>
-                                <input type="text" name="longitude" id="longitude" class="form-control"
-                                    value="<?php echo esc_attr(get_user_meta($current_user->ID, 'longitude', true)); ?>">
-
-                                <label class="form-label">Place Display Name</label>
-                                <input type="text" name="place_display_name" id="place_display_name" class="form-control"
-                                    value="<?php echo esc_attr(get_user_meta($current_user->ID, 'place_display_name', true)); ?>">
-
-                                <label class="form-label">Full Address</label>
-                                <input type="text" name="place_address" id="place_address" class="form-control"
-                                    value="<?php echo esc_attr(get_user_meta($current_user->ID, 'place_address', true)); ?>">
-
-                                <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="show_full_address" name="show_full_address" value="1" <?php checked(get_user_meta($current_user->ID, 'show_full_address', true), '1'); ?>>
-                                    <label class="form-check-label" for="show_full_address">Show full address on profile</label>
-                                </div>
-
-
-                                <!-- prettier-ignore -->
-                                <script>
-                                    (g => {
-                                        var h, a, k, p = "The Google Maps JavaScript API",
-                                            c = "google",
-                                            l = "importLibrary",
-                                            q = "__ib__",
-                                            m = document,
-                                            b = window;
-                                        b = b[c] || (b[c] = {});
-                                        var d = b.maps || (b.maps = {}),
-                                            r = new Set,
-                                            e = new URLSearchParams,
-                                            u = () => h || (h = new Promise(async (f, n) => {
-                                                await (a = m.createElement("script"));
-                                                e.set("libraries", [...r] + "");
-                                                for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]);
-                                                e.set("callback", c + ".maps." + q);
-                                                a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
-                                                d[q] = f;
-                                                a.onerror = () => h = n(Error(p + " could not load."));
-                                                a.nonce = m.querySelector("script[nonce]")?.nonce || "";
-                                                m.head.append(a)
-                                            }));
-                                        d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n))
-                                    })
-                                    ({
-                                        key: "AIzaSyBwhYFTy_B0-NBs7jGXxIsACCBo0c2W9s0",
-                                        v: "weekly"
-                                    });
-                                </script>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label">Referrer</label>
                                     <input type="text" class="form-control" value="<?php echo esc_attr($referrer); ?>" disabled>
@@ -244,130 +176,143 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                             <?php endforeach; ?>
                         </div>
 
-                        <button type="submit" name="update_profile" class="btn btn-primary">Update Profile</button>
+                        <div class="d-flex gap-2">
+                            <button type="submit" name="update_profile" class="btn btn-primary">Update Profile</button>
+                            <button type="button" id="restore-draft-btn" class="btn btn-outline-secondary d-none">Restore Draft</button>
+                        </div>
                     </form>
                 </div>
             </div>
+            
+            <script>
+            // Dummy function for Google Maps callback (suppress error)
+            window.initProfileMap = function() {
+                console.log("📍 Google Maps callback called (no map on this page)");
+            };
+            
+            // Initialize auto-save immediately (no waiting for DOMContentLoaded)
+            console.log("🚀 Auto-save script loaded!");
+            
+            const formId = "profile-form";
+            const storageKey = "profile_draft";
+            const timestampKey = "profile_draft_timestamp";
+            const autoSaveInterval = 30000; // 30 seconds
+            
+            let form = null;
+            let statusDiv = null;
+            let statusMessage = null;
+            let lastSavedSpan = null;
+            let restoreDraftBtn = null;
+            
+            // Function to initialize when elements are ready
+            function initializeAutoSave() {
+                form = document.getElementById(formId);
+                statusDiv = document.getElementById("autosave-status");
+                statusMessage = document.getElementById("autosave-message");
+                lastSavedSpan = document.getElementById("autosave-last-saved");
+                restoreDraftBtn = document.getElementById("restore-draft-btn");
+                
+                console.log("📋 Form found:", form ? "YES ✅" : "NO ❌");
+                console.log("🎨 Status div found:", statusDiv ? "YES ✅" : "NO ❌");
+                
+                if (!form) {
+                    console.error("❌ Form not found! Retrying...");
+                    setTimeout(initializeAutoSave, 500);
+                    return;
+                }
+                
+                console.log("✅ All elements found, setting up listeners...");
+                setupAutoSave();
+            }
+            
+            function setupAutoSave() {
+                // Save draft to localStorage
+                function saveDraft() {
+                    const inputs = {};
+                    
+                    // Get all input values
+                    form.querySelectorAll("input[type='text'], input[type='email'], input[type='date']").forEach(input => {
+                        if (input.name) inputs[input.name] = input.value;
+                    });
+                    
+                    // Get textarea values
+                    form.querySelectorAll("textarea").forEach(textarea => {
+                        if (textarea.name) inputs[textarea.name] = textarea.value;
+                    });
+                    
+                    // Get checkbox values
+                    form.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
+                        if (checkbox.name) {
+                            if (!inputs[checkbox.name]) inputs[checkbox.name] = [];
+                            if (checkbox.checked) {
+                                if (Array.isArray(inputs[checkbox.name])) {
+                                    inputs[checkbox.name].push(checkbox.value);
+                                }
+                            }
+                        }
+                    });
+                    
+                    localStorage.setItem(storageKey, JSON.stringify(inputs));
+                    localStorage.setItem(timestampKey, new Date().toLocaleTimeString());
+                    
+                    console.log("💾 SAVED to localStorage:", new Date().toLocaleTimeString());
+                    console.log("📦 Data:", inputs);
+                    
+                    // Show green alert
+                    if (statusDiv) {
+                        statusDiv.classList.remove("d-none");
+                        statusDiv.classList.add("alert-success");
+                        statusDiv.classList.remove("alert-info", "alert-warning");
+                        statusMessage.innerHTML = '<i class="bi bi-check-circle"></i> Draft saved';
+                        lastSavedSpan.textContent = 'Last saved: ' + new Date().toLocaleTimeString();
+                        
+                        setTimeout(() => {
+                            statusDiv.classList.add("d-none");
+                        }, 2000);
+                    }
+                }
+                
+                // Attach blur listeners to all input fields
+                const allInputs = form.querySelectorAll("input[type='text'], input[type='email'], input[type='date'], textarea");
+                console.log("📝 Attaching blur listeners to " + allInputs.length + " fields...");
+                
+                allInputs.forEach((field, index) => {
+                    field.addEventListener("blur", function(e) {
+                        console.log("👉 BLUR EVENT on field:", this.name, "| Value:", this.value.substring(0, 50));
+                        saveDraft();
+                    });
+                });
+                
+                // Checkbox changes
+                form.addEventListener("change", function(e) {
+                    if (e.target.type === "checkbox") {
+                        console.log("☑️  CHECKBOX changed:", e.target.name, "=", e.target.checked);
+                        saveDraft();
+                    }
+                });
+                
+                // Form submit - clear draft
+                form.addEventListener("submit", function() {
+                    console.log("📤 Form submitted - clearing draft");
+                    localStorage.removeItem(storageKey);
+                    localStorage.removeItem(timestampKey);
+                });
+                
+                // Every 30 seconds, auto-save
+                setInterval(saveDraft, autoSaveInterval);
+                
+                console.log("✅✅✅ AUTO-SAVE FULLY INITIALIZED ✅✅✅");
+                console.log("👉 Move between fields to see auto-save in action!");
+            }
+            
+            // Start initialization
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", initializeAutoSave);
+            } else {
+                initializeAutoSave();
+            }
+            </script>
         </div>
     </div>
 </main>
-<script>
-    "use strict";
-    let map;
-    let marker;
-    let infoWindow;
-    let center = {
-        lat: 40.749933,
-        lng: -73.98633
-    }; // New York City
-    async function initMap() {
-        // Request needed libraries.
-        //@ts-ignore
-        const [{
-            Map
-        }, {
-            AdvancedMarkerElement
-        }] = await Promise.all([
-            google.maps.importLibrary("marker"),
-            google.maps.importLibrary("places")
-        ]);
-        // Initialize the map.
-        map = new google.maps.Map(document.getElementById('map'), {
-            center,
-            zoom: 13,
-            mapId: '4504f8b37365c3d0',
-            mapTypeControl: false,
-        });
-        //@ts-ignore
-        const placeAutocomplete = new google.maps.places.PlaceAutocompleteElement();
-        //@ts-ignore
-        placeAutocomplete.id = 'place-autocomplete-input';
-        placeAutocomplete.locationBias = center;
-        const card = document.getElementById('place-autocomplete-card');
-        //@ts-ignore
-        card.appendChild(placeAutocomplete);
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(card);
-        // Create the marker and infowindow.
-        marker = new google.maps.marker.AdvancedMarkerElement({
-            map,
-        });
-        infoWindow = new google.maps.InfoWindow({});
-
-        // ✅ Pin saved location if latitude and longitude are available
-        const lat = parseFloat(document.getElementById('latitude').value);
-        const lng = parseFloat(document.getElementById('longitude').value);
-        const displayName = document.getElementById('place_display_name').value || 'Saved Location';
-        const address = document.getElementById('place_address').value;
-
-        if (!isNaN(lat) && !isNaN(lng)) {
-            const savedLocation = {
-                lat,
-                lng
-            };
-            map.setCenter(savedLocation);
-            map.setZoom(17);
-            marker.position = savedLocation;
-
-            const content = `
-        <div id="infowindow-content">
-            <span class="title">${displayName}</span><br/>
-            <span>${address}</span>
-        </div>`;
-            updateInfoWindow(content, savedLocation);
-        }
-
-
-        // Add the gmp-placeselect listener, and display the results on the map.
-        //@ts-ignore
-        placeAutocomplete.addEventListener('gmp-select', async ({
-            placePrediction
-        }) => {
-            const place = placePrediction.toPlace();
-            await place.fetchFields({
-                fields: ['displayName', 'formattedAddress', 'location']
-            });
-
-            const lat = place.location.lat();
-            const lng = place.location.lng();
-
-            // Fill hidden inputs
-            document.getElementById('latitude').value = lat;
-            document.getElementById('longitude').value = lng;
-            document.getElementById('place_display_name').value = place.displayName;
-            document.getElementById('place_address').value = place.formattedAddress;
-            // If the place has a geometry, then present it on a map.
-            if (place.viewport) {
-                map.fitBounds(place.viewport);
-            } else {
-                map.setCenter(place.location);
-                map.setZoom(17);
-            }
-            let content = '<div id="infowindow-content">' +
-                '<span id="place-displayname" class="title">' + place.displayName + '</span><br />' +
-                '<span id="place-address">' + place.formattedAddress + '</span>' +
-                '</div>';
-            updateInfoWindow(content, place.location);
-            marker.position = place.location;
-        });
-    }
-    // Helper function to create an info window.
-    function updateInfoWindow(content, center) {
-        infoWindow.setContent(content);
-        infoWindow.setPosition(center);
-        infoWindow.open({
-            map,
-            anchor: marker,
-            shouldFocus: false,
-        });
-    }
-    initMap();
-</script>
-<style>
-    html,
-    body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-</style>
 <?php get_footer(); ?>

@@ -92,6 +92,9 @@ define('WP_DEBUG_DISPLAY', false);
 error_log('functions.php loaded');
 /* Add any custom values between this line and the "stop editing" line. */
 
+define('WP_HOME', 'http://pet.test');
+define('WP_SITEURL', 'http://pet.test');
+
 /* That's all, stop editing! Happy publishing. */
 
 /** Absolute path to the WordPress directory. */

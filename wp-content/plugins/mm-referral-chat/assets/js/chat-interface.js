@@ -10,6 +10,7 @@
             this.currentConversation = null;
             this.conversations = [];
             this.pollingTimer = null;
+            this.badgePollingTimer = null;
             this.isOpen = false;
             this.currentTab = 'conversations'; // 'conversations' or 'partners'
             
@@ -23,19 +24,28 @@
             // Bind events
             this.bindEvents();
             
-            // Load initial data
+            // Load initial data (once on page load)
             this.loadConversations();
             
-            // Start polling for new messages
-            this.startPolling();
+            // Update unread count badge on initial load
+            this.updateUnreadBadge();
+            
+            // Set up periodic badge update (less frequent, not full polling)
+            this.startBadgePolling();
         }
 
         createChatUI() {
             const html = `
-                <button class="mm-chat-toggle-btn" id="mm-chat-toggle" title="Open Chat">
-                    💬
-                    <span class="mm-chat-badge hidden" id="mm-chat-badge">0</span>
-                </button>
+                <!-- Action Buttons Group -->
+                <div class="mm-action-buttons-group" id="mm-action-buttons-group">
+                    <button class="mm-action-btn" id="mm-chat-toggle" title="Open Chat" data-action="chat">
+                        💬
+                        <span class="mm-action-badge hidden" id="mm-chat-badge">0</span>
+                    </button>
+                    <button class="mm-action-btn" id="mm-resume-guide-btn" title="Resume Guide" data-action="resume">
+                        📚
+                    </button>
+                </div>
                 
                 <div class="mm-chat-container hidden" id="mm-chat-container">
                     <!-- Header -->
@@ -102,14 +112,23 @@
             `;
 
             $('body').append(html);
+            
+            // Hide the original resume guide button
+            $('#mm-spg-launcher').hide();
         }
 
         bindEvents() {
             const self = this;
 
-            // Toggle chat
-            $('#mm-chat-toggle').on('click', function() {
-                self.toggleChat();
+            // Action buttons handler
+            $('.mm-action-btn').on('click', function() {
+                const action = $(this).data('action');
+                if (action === 'chat') {
+                    self.toggleChat();
+                } else if (action === 'resume') {
+                    // Trigger the original resume guide button click
+                    $('#mm-spg-launcher').click();
+                }
             });
 
             // Close chat
@@ -171,14 +190,26 @@
         openChat() {
             this.isOpen = true;
             $('#mm-chat-container').removeClass('hidden');
-            $('#mm-chat-toggle').addClass('hidden');
+            // Highlight the chat button
+            $('#mm-chat-toggle').css({
+                'box-shadow': '0 8px 24px rgba(0, 123, 255, 0.5)',
+                'background': '#0056b3'
+            });
             this.loadConversations();
+            // Start polling when chat opens
+            this.startPolling();
         }
 
         closeChat() {
             this.isOpen = false;
             $('#mm-chat-container').addClass('hidden');
-            $('#mm-chat-toggle').removeClass('hidden');
+            // Reset the chat button style
+            $('#mm-chat-toggle').css({
+                'box-shadow': '0 4px 12px rgba(0, 123, 255, 0.3)',
+                'background': 'var(--chat-primary)'
+            });
+            // Stop polling when chat closes
+            this.stopPolling();
         }
 
         switchTab(tab) {
@@ -462,6 +493,7 @@
         startPolling() {
             const self = this;
             
+            // Only poll messages when chat is actually open
             this.pollingTimer = setInterval(function() {
                 if (self.isOpen) {
                     if (self.currentConversation) {
@@ -470,14 +502,29 @@
                         self.loadConversations();
                     }
                 }
-                self.updateUnreadBadge();
             }, mmChat.pollingInterval);
+        }
+
+        startBadgePolling() {
+            const self = this;
+            
+            // Update badge count periodically (less frequent, every 10 seconds)
+            this.badgePollingTimer = setInterval(function() {
+                self.updateUnreadBadge();
+            }, 10000);
         }
 
         stopPolling() {
             if (this.pollingTimer) {
                 clearInterval(this.pollingTimer);
                 this.pollingTimer = null;
+            }
+        }
+
+        stopBadgePolling() {
+            if (this.badgePollingTimer) {
+                clearInterval(this.badgePollingTimer);
+                this.badgePollingTimer = null;
             }
         }
     }

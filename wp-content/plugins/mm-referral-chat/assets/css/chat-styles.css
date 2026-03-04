@@ -328,10 +328,18 @@
 }
 
 /* Chat Toggle Button */
-.mm-chat-toggle-btn {
+.mm-action-buttons-group {
     position: fixed;
     bottom: 20px;
     right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 9998;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.mm-action-btn {
     width: 56px;
     height: 56px;
     border-radius: 50%;
@@ -343,21 +351,30 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--chat-shadow);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
     transition: all 0.3s;
-    z-index: 9998;
+    position: relative;
 }
 
-.mm-chat-toggle-btn:hover {
+.mm-action-btn:hover {
     transform: scale(1.1);
-    box-shadow: 0 8px 24px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 8px 24px rgba(0, 123, 255, 0.4);
 }
 
-.mm-chat-toggle-btn.hidden {
-    display: none;
+.mm-action-btn:active {
+    transform: scale(0.95);
 }
 
-.mm-chat-badge {
+.mm-action-btn[data-action="resume"] {
+    background: #28a745;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.mm-action-btn[data-action="resume"]:hover {
+    box-shadow: 0 8px 24px rgba(40, 167, 69, 0.4);
+}
+
+.mm-action-badge {
     position: absolute;
     top: -5px;
     right: -5px;
@@ -374,7 +391,7 @@
     border: 2px solid white;
 }
 
-.mm-chat-badge.hidden {
+.mm-action-badge.hidden {
     display: none;
 }
 
