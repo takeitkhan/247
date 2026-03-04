@@ -1,100 +1,100 @@
 # Withdrawal System - Before & After Comparison
 
-## Scenario: $30 Balance, $1 Withdrawal Request
+## স্ক্রিনারিও: $30 Balance থেকে $1 Withdrawal Request
 
-### ❌ BEFORE (Old System - Broken)
+### ❌ BEFORE (পুরনো সিস্টেম)
 
-#### Step 1: User Submits Request
+#### Step 1: User Request করে
 ```
 User Balance: $30.00
 Withdrawal Request: $1.00
 Status: Pending
 ```
 
-#### Step 2: Admin Approves (Clicks Approve Button)
+#### Step 2: Admin অনুমোদন দেয় (Approve Button)
 ```
-System Actions:
-  1. Deduct $1 from balance
-  2. Set status to "processing"
-  3. Trigger PayPal API call
+System Action:
+  1. Balance থেকে $1 কেটে নেয়
+  2. Withdrawal status: "processing" করে
+  3. PayPal API কল করে
   
-User Balance: $29.00 ✓ (Deducted)
+User Balance: $29.00 ✓ (কাটা হয়েছে)
 Withdrawal Status: processing
 ```
 
-#### Step 3: PayPal Fails (Network Error, Invalid Account, etc.)
+#### Step 3: PayPal API fails (Network Error, Invalid Account, etc.)
 ```
 PayPal Response: ERROR
-System Actions:
-  ❌ NO balance refund
-  ❌ NO error message saved
-  ❌ Status changed to "failed"
+System Action:
+  ❌ NO action taken
+  ❌ Balance refund করে না
+  ❌ Error message save করে না
   
-User Balance: $29.00 (Money Lost! ❌)
+User Balance: $29.00 (কাটাই থাকে!)
 Withdrawal Status: failed
 Error Visible: NO
 ```
 
-#### User Sees:
+#### User দেখে:
 ```
 Recent Withdrawals:
 - Amount: $1.00
 - Status: Failed ❌
-- Details: - (No information)
+- Details: - (কোনো বিবরণ নেই)
 
-Balance: $29.00 (Money disappeared! 😞)
+Balance: $29.00 (টাকা হারিয়ে গেছে!)
 ```
 
-#### Admin Sees:
+#### Admin দেখে:
 ```
 Withdrawal #123
 - User: josephflores
 - Amount: $1.00
 - Status: Failed ❌
-- Details: (Nothing shown)
+- Details: (কোনো তথ্য নেই)
 
-Why did it fail? Unknown! 😞
+কেনো ফেইল হয়েছে জানা যায় না!
 ```
 
 ---
 
-### ✅ AFTER (New System - Fixed)
+### ✅ AFTER (নতুন সমাধান)
 
-#### Step 1: User Submits Request
+#### Step 1: User Request করে
 ```
 User Balance: $30.00
 Withdrawal Request: $1.00
 Status: Pending
 ```
 
-#### Step 2: Admin Approves (Clicks Approve Button)
+#### Step 2: Admin অনুমোদন দেয় (Approve Button)
 ```
-System Actions:
-  1. Deduct $1 from balance
-  2. Set status to "processing"
-  3. Trigger PayPal API call
+System Action:
+  1. Balance থেকে $1 কেটে নেয়
+  2. Withdrawal status: "processing" করে
+  3. PayPal API কল করে
   
-User Balance: $29.00 ✓ (Deducted)
+User Balance: $29.00 ✓ (কাটা হয়েছে)
 Withdrawal Status: processing
 ```
 
-#### Step 3: PayPal Fails (Network Error, Invalid Account, etc.)
+#### Step 3: PayPal API fails (Network Error, Invalid Account, etc.)
 ```
 PayPal Response: ERROR
-System Actions:
-  ✓ Capture error reason
-  ✓ Refund balance automatically
-  ✓ Save error message to admin_notes
-  ✓ Log to audit trail
+System Action:
+  ✓ Error reason capture করে
+  ✓ Balance refund করে ($1 ফেরত দেয়)
+  ✓ Error message admin_notes এ save করে
+  ✓ Audit log এ record করে
   
 User Balance: $30.00 ✓ (RESTORED!)
 Withdrawal Status: failed
 Error Message: "Invalid PayPal account" (saved in DB)
 ```
 
-#### User Sees:
+#### User দেখে:
 ```
-Recent Withdrawals
+Recent Withdrawals:
 ┌─────────────────────────────────────────────────────┐
 │ Amount: $1.00                                        │
 │ Status: Failed ❌                                    │
@@ -107,10 +107,10 @@ Recent Withdrawals
 │   Please contact support if you need assistance.    │
 └─────────────────────────────────────────────────────┘
 
-Balance: $30.00 ✓ (Money restored! 😊)
+Balance: $30.00 ✓ (টাকা ফেরত পেয়েছেন!)
 ```
 
-#### Admin Sees:
+#### Admin দেখে:
 ```
 Withdrawal #123
 ┌─────────────────────────────────────────────────────┐
@@ -123,14 +123,14 @@ Withdrawal #123
 │   "Invalid PayPal account configuration"             │
 └─────────────────────────────────────────────────────┘
 
-Now I know why it failed! 😊
+Admin জানেন কেনো ফেইল হয়েছে!
 ```
 
 ---
 
-## Database Record Comparison
+## কোনো পরিবর্তন হয়েছে?
 
-### withdrawal_requests Table
+### Database (withdrawal_requests table)
 
 **Before:**
 ```sql
@@ -150,66 +150,57 @@ Now I know why it failed! 😊
 └────┴─────────┴────────┴──────────────────────┴──────────────┴──────────────────────────────────┘
 ```
 
-### User Balance (referral_commission meta)
+### User Meta (referral_commission)
 
 **Before:**
 ```php
-$balance = 29.00;  // Money lost!
+$balance = 29.00; // টাকা হারিয়ে গেছে
 ```
 
 **After:**
 ```php
-$balance = 30.00;  // Restored!
+$balance = 30.00; // ফেরত পেয়েছেন
 ```
 
-### Audit Log Records
+### Audit Log (payout_audit_log table)
 
 **Before:**
 ```sql
 action              | notes
 ────────────────────────────────────
-payout_failed       | NULL ❌
-(No useful information)
+payout_failed       | NULL ❌ (কোনো তথ্য নেই)
 ```
 
 **After:**
 ```sql
 action              | notes
 ────────────────────────────────────
-payout_failed       | {"http_code":400,"error_message":"...","response_body":{...}}
-(Complete error details)
+payout_failed       | {"http_code":400,"error_message":"...","..."}
+payout_response     | {...detailed response...}
 ```
 
 ---
 
-## All Failure Scenarios Handled
+## সব Failure Scenarios হ্যান্ডেল হচ্ছে
 
 ### Scenario 1: PayPal Token Error
 ```
-Error: "PayPal authentication failed"
-Action: Error captured → Balance refunded ✓ → Error message stored ✓
-User Impact: Balance restored, error details visible
+Error → Balance Refund ✓ → Error Message Store ✓
 ```
 
 ### Scenario 2: PayPal API Connection Error
 ```
-Error: "cURL error 28: Operation timed out"
-Action: Error captured → Balance refunded ✓ → Error message stored ✓
-User Impact: Balance restored, error details visible
+Error → Balance Refund ✓ → Error Message Store ✓
 ```
 
-### Scenario 3: PayPal Response Error
+### Scenario 3: PayPal Response Error (Invalid Account, Insufficient Balance, etc.)
 ```
-Error: "RECEIVER_ACCOUNT_INVALID"
-Action: Error captured → Balance refunded ✓ → Error message stored ✓
-User Impact: Balance restored, error details visible
+Error → Balance Refund ✓ → Error Message Store ✓
 ```
 
 ### Scenario 4: Successful Payout
 ```
-Result: Success
-Action: Status set to "paid" → Batch ID stored ✓
-User Impact: Withdrawal complete, transaction ID visible
+Success → Batch ID Store ✓ → User Notified ✓
 ```
 
 ---
@@ -223,9 +214,8 @@ Day 1:
 └─ User requests $1 withdrawal
 └─ Admin approves
 └─ PayPal API fails
-└─ User: "Why failed? Where's my money?" 😞
-└─ Admin: "I have no idea what happened" 😞
-└─ System: Unreliable and broken ❌
+└─ User: "কেনো ফেইল হলো? টাকা কোথায়?" 😞
+└─ Admin: "কিছুই জানি না" 😞
 ```
 
 ### ✅ AFTER
@@ -239,95 +229,54 @@ Day 1:
    └─ Refunds $1 balance
    └─ Saves error reason
    └─ Logs to audit trail
-└─ User: "Balance restored, know the error" ✓
-└─ Admin: "Can see error and debug it" ✓
-└─ System: Reliable and trustworthy ✓
+└─ User: "ঠিক আছে, balance restore হয়েছে, error কারণ জানি" ✓
+└─ Admin: "Error reason দেখছি এবং সমাধান করতে পারছি" ✓
 ```
 
 ---
 
-## Feature Comparison
+## সুবিধা সংক্ষিপ্ত
 
-| Feature | Before | After |
-|---------|--------|-------|
-| Balance refund on failure | ❌ | ✅ |
+| বৈশিষ্ট্য | Before | After |
+|----------|--------|-------|
+| Failed withdrawal এ balance refund | ❌ | ✅ |
 | Error reason tracking | ❌ | ✅ |
 | User error visibility | ❌ | ✅ |
-| Admin error visibility | ❌ | ✅ |
+| Admin error debugging | ❌ | ✅ |
 | Audit trail | ⚠️ Limited | ✅ Complete |
 | User frustration | High | Low |
-| Admin debugging capability | None | Full |
 | System reliability | Broken | Fixed |
-| Data consistency | Broken | Maintained |
 
 ---
 
-## Example Error Messages Users Will See
+## Error Messages Examples
 
-### Example 1: Token Authentication Error
-```
-⚠️ Failed - Click for details
-Error Reason: Token Error: PayPal authentication failed: invalid_client
-✓ Your balance has been restored.
-```
+### User দেখবেন এরকম messages:
 
-### Example 2: Network Connection Error
-```
-⚠️ Failed - Click for details
-Error Reason: API Error: cURL error 28: Operation timed out
-✓ Your balance has been restored.
-```
+1. **Token Error:**
+   ```
+   ⚠️ Failed - Click for details
+   Error Reason: Token Error: PayPal authentication failed
+   ```
 
-### Example 3: Invalid Account Error
-```
-⚠️ Failed - Click for details
-Error Reason: RECEIVER_ACCOUNT_INVALID
-✓ Your balance has been restored.
-```
+2. **API Error:**
+   ```
+   ⚠️ Failed - Click for details
+   Error Reason: API Error: Connection timeout
+   ```
 
-### Example 4: Success Notification
-```
-✓ Completed
-Batch ID: 83A3...
-```
+3. **Invalid Account:**
+   ```
+   ⚠️ Failed - Click for details
+   Error Reason: Invalid PayPal account configuration
+   ```
 
----
-
-## Code Changes at a Glance
-
-### PayPalAPI.php
-
-**Old Code (Problem):**
-```php
-if (is_wp_error($response)) {
-    $this->payout_system->log_audit($withdrawal_id, 'payout_failed', 'API error: ' . $response->get_error_message());
-    $this->payout_system->update_withdrawal_status($withdrawal_id, 'failed');
-    // ❌ No balance refund
-    // ❌ No error message stored
-    return $response;
-}
-```
-
-**New Code (Solution):**
-```php
-if (is_wp_error($response)) {
-    $error_msg = $response->get_error_message();
-    $this->payout_system->log_audit($withdrawal_id, 'payout_failed', 'API Error: ' . $error_msg);
-    // ✅ Save error message to admin_notes
-    $this->payout_system->update_withdrawal_status($withdrawal_id, 'failed', null, 'API Error: ' . $error_msg);
-    
-    // ✅ Refund balance automatically
-    payout_refund_withdrawal($withdrawal->user_id, $withdrawal->amount, 'PayPal API error: ' . $error_msg);
-    
-    do_action('payout_payment_failed', $withdrawal->user_id, $withdrawal_id, $error_msg);
-    return $response;
-}
-```
+4. **Insufficient Balance (PayPal):**
+   ```
+   ⚠️ Failed - Click for details
+   Error Reason: RECEIVER_ACCOUNT_INVALID
+   ```
 
 ---
 
-## Result
-
-✅ **Before vs After Comparison Complete**
-
-The system has evolved from a **broken and unreliable** state to a **safe and transparent** state. Users' money is protected, errors are visible, and the system is now maintainable by admins.
+সব error scenarios এ **balance automatically restore হচ্ছে** এবং **error reason visible হচ্ছে**!

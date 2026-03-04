@@ -1,12 +1,12 @@
 # Withdrawal System Update - Deployment Checklist
 
-## Pre-Deployment Checklist
+## প্রি-ডিপ্লয়মেন্ট চেকলিস্ট
 
 - [ ] **Code Changes Reviewed**
   - [ ] PayPalAPI.php checked for balance refund logic
   - [ ] PayoutSystem.php checked for status update enhancement
   - [ ] withdrawal-form.php checked for UI changes
-  - [ ] payout-balance.php reviewed
+  - [ ] payout-balance.php reviewed for balance functions
 
 - [ ] **Database Verified**
   - [ ] `wp_withdrawal_requests` table has `admin_notes` column
@@ -15,14 +15,14 @@
 
 - [ ] **Backup Created**
   - [ ] Database backup taken
-  - [ ] File backups taken (PayPalAPI.php, PayoutSystem.php)
+  - [ ] File backups taken (especially PayPalAPI.php, PayoutSystem.php)
   - [ ] Backup location noted: `__________________`
 
-## Deployment Steps
+## ডিপ্লয়মেন্ট স্টেপস
 
-### Step 1: Upload Files
+### Step 1: ফাইল আপলোড করুন
 ```bash
-Upload the modified files to production:
+# Upload the modified files to production:
 /wp-content/themes/247empowerment/inc/PayPalAPI.php
 /wp-content/themes/247empowerment/inc/PayoutSystem.php
 /wp-content/themes/247empowerment/template-custom/frontend/withdrawal-form.php
@@ -34,8 +34,9 @@ Upload the modified files to production:
 - [ ] withdrawal-form.php uploaded
 - [ ] payout-balance.php uploaded
 
-### Step 2: Verify Permissions
+### Step 2: Permission চেক করুন
 ```bash
+# Verify file permissions
 ls -la /wp-content/themes/247empowerment/inc/PayPalAPI.php
 # Should be readable and writable by web server
 ```
@@ -43,7 +44,7 @@ ls -la /wp-content/themes/247empowerment/inc/PayPalAPI.php
 - [ ] File permissions verified (644 or 755)
 - [ ] Web server can read files
 
-### Step 3: Test System Functionality
+### Step 3: সিস্টেম ফাংশনালিটি টেস্ট করুন
 
 #### Test 1: Admin Dashboard Access
 ```
@@ -55,9 +56,12 @@ Go to: Admin Dashboard → Payouts → Withdrawal Requests
 - [ ] New "Details" column visible for failed withdrawals
 
 #### Test 2: Create Test Withdrawal
-```
-User-side: Request small withdrawal (e.g., $0.25)
-Admin-side: Click "Approve" button
+```php
+// In admin, go to Clear Test Data page
+// Set some test balance in user meta (if needed)
+
+// User-side: Request small withdrawal (e.g., $0.25)
+// Admin-side: Click "Approve" button
 ```
 
 - [ ] Withdrawal can be submitted
@@ -66,7 +70,10 @@ Admin-side: Click "Approve" button
 
 #### Test 3: Simulate PayPal Error (Optional)
 ```php
-// Temporarily modify PayPalAPI.php to return an error
+// To test error handling without real PayPal calls:
+// Temporarily modify PayPalAPI.php get_access_token() to return an error
+// Or disconnect network during test
+
 // Then approve a withdrawal
 // Expected: Status becomes "failed", balance is restored
 ```
@@ -84,11 +91,11 @@ Go to: Withdrawal Request page (user-facing)
 - [ ] Balance displays correctly
 - [ ] Recent withdrawals table shows all fields
 - [ ] Failed withdrawal shows "Failed - Click for details"
-- [ ] Clicking reveals error reason
+- [ ] Clicking shows error reason with restoration message
 
-### Step 4: Check Log Files
+### Step 4: Log ফাইল চেক করুন
 ```bash
-# Check WordPress debug log
+# Check WordPress debug log for any errors
 tail -f /wp-content/debug.log
 ```
 
@@ -96,7 +103,7 @@ tail -f /wp-content/debug.log
 - [ ] Withdrawal actions logged correctly
 - [ ] Balance refund logged with reason
 
-### Step 5: Database Verification
+### Step 5: Database ভেরিফিকেশন
 ```sql
 -- Check a failed withdrawal record
 SELECT id, status, admin_notes, transaction_id 
@@ -109,7 +116,7 @@ ORDER BY created_at DESC LIMIT 1;
 - [ ] Successful withdrawals have `transaction_id` populated
 - [ ] No NULL status or invalid data
 
-### Step 6: Audit Logs Check
+### Step 6: Audit Logs চেক করুন
 ```sql
 -- Check audit trail
 SELECT * FROM wp_payout_audit_log 
@@ -120,19 +127,19 @@ ORDER BY created_at DESC LIMIT 10;
 - [ ] Error details logged when failures occur
 - [ ] Timestamps are accurate
 
-## Post-Deployment Verification
+## পোস্ট-ডিপ্লয়মেন্ট ভেরিফিকেশন
 
 ### User-Facing Changes
 - [ ] Users can see withdrawal history
 - [ ] Failed withdrawals show error details when clicked
-- [ ] Message "Your balance has been restored" displays
-- [ ] Balance updates correctly
+- [ ] Message "Your balance has been restored" displays for failed withdrawals
+- [ ] Balance updates correctly after restoration
 
 ### Admin-Facing Changes
 - [ ] Admin can see error reasons for failed withdrawals
 - [ ] Admin can see transaction IDs for successful withdrawals
-- [ ] Details column shows appropriate information
-- [ ] Admin buttons work correctly
+- [ ] Details column shows appropriate information for each status
+- [ ] Admin approval/rejection buttons still work
 
 ### System Health
 - [ ] No JavaScript console errors
@@ -140,51 +147,54 @@ ORDER BY created_at DESC LIMIT 10;
 - [ ] Database queries execute without errors
 - [ ] Email notifications sent (if configured)
 
-## Rollback Plan
+## রোলব্যাক প্ল্যান
 
-If critical issues occur, follow these steps:
+If issues occur, follow these steps to revert:
 
-### Option 1: Restore from Backup
+### Option 1: Revert from Backup
 ```bash
 # Restore files from backup
 cp backup/PayPalAPI.php /wp-content/themes/247empowerment/inc/
 cp backup/PayoutSystem.php /wp-content/themes/247empowerment/inc/
 cp backup/withdrawal-form.php /wp-content/themes/247empowerment/template-custom/frontend/
 
-# Restore database if schema was modified
+# Restore database (if schema was modified)
 mysql -u username -p database_name < backup/database.sql
 ```
 
 ### Option 2: Manual File Revert
 ```bash
-# Using git
+# If you have git
 git revert HEAD
 
-# Or manually restore old versions
+# Or manually restore old versions from your version control
 ```
 
 ### Verification After Rollback
 ```
 1. Clear browser cache
 2. Verify admin page loads
-3. Check withdrawal system still functions
-4. Review debug logs
+3. Check that withdrawal system still functions
+4. Review debug logs for any errors
 ```
 
 ---
 
 ## Performance Considerations
 
-### Test Response Times
-- [ ] Withdrawal approval response time < 2 seconds
-- [ ] Balance refund response time < 1 second
-- [ ] Database query performance acceptable
+### Before Optimization
+- [ ] Test withdrawal approval response time (should be < 2 seconds)
+- [ ] Test balance refund response time (should be < 1 second)
+- [ ] Monitor database query performance
 
-### Optional Optimization
+### After Optimization (if needed)
 ```sql
 -- Add indexes for frequently queried fields
 ALTER TABLE wp_withdrawal_requests ADD INDEX idx_user_status (user_id, status);
 ALTER TABLE wp_withdrawal_requests ADD INDEX idx_status (status);
+
+-- Check index effectiveness
+EXPLAIN SELECT * FROM wp_withdrawal_requests WHERE user_id = 5 AND status = 'failed';
 ```
 
 ---
@@ -194,19 +204,17 @@ ALTER TABLE wp_withdrawal_requests ADD INDEX idx_status (status);
 ### Key Metrics to Monitor
 ```
 1. Failed withdrawal rate:
-   SELECT COUNT(*) FROM wp_withdrawal_requests 
-   WHERE status = 'failed' AND DATE(created_at) = CURDATE();
+   SELECT COUNT(*) FROM wp_withdrawal_requests WHERE status = 'failed' AND DATE(created_at) = CURDATE();
 
-2. Average processing time:
-   SELECT AVG(TIMESTAMPDIFF(MINUTE, created_at, updated_at)) 
-   FROM wp_withdrawal_requests WHERE status = 'paid';
+2. Average payout processing time:
+   SELECT AVG(TIMESTAMPDIFF(MINUTE, created_at, updated_at)) FROM wp_withdrawal_requests WHERE status = 'paid';
 
-3. Balance accuracy:
-   Verify sum of all user balances matches total referral_commission
+3. User balance accuracy:
+   Check that sum of all user balances matches total referral_commission across all users
 ```
 
 ### Alert Setup
-- [ ] Set alert if failed withdrawal count > 5 per day
+- [ ] Set alert if failed withdrawal count > 5 in a day
 - [ ] Set alert if processing time > 5 minutes
 - [ ] Set alert if database backup fails
 
@@ -217,7 +225,7 @@ ALTER TABLE wp_withdrawal_requests ADD INDEX idx_status (status);
 - [ ] README updated with new features
 - [ ] CHANGELOG updated with fix details
 - [ ] Support documentation updated
-- [ ] FAQ updated with failure reason explanations
+- [ ] FAQ updated with "Why was my withdrawal rejected?" answer
 
 ---
 
@@ -226,11 +234,11 @@ ALTER TABLE wp_withdrawal_requests ADD INDEX idx_status (status);
 ### Internal Team
 - [ ] Developers notified of changes
 - [ ] Support team trained on new error messages
-- [ ] Admin users trained on new Details column
+- [ ] Admin users trained on new details column
 
 ### External Communication
-- [ ] Consider notifying users about the fix
-- [ ] Update support pages with troubleshooting guide
+- [ ] Users informed about balance restoration fix (optional blog post)
+- [ ] Support page updated with troubleshooting guide
 
 ---
 
@@ -258,17 +266,17 @@ ALTER TABLE wp_withdrawal_requests ADD INDEX idx_status (status);
 
 ## Support Contacts
 
-For deployment issues:
-- **Primary**: [Development Lead Email]
-- **Secondary**: [DevOps Email]
-- **Emergency**: [Manager Email]
+For issues during deployment:
+- **Primary**: `[Development Lead Email]`
+- **Secondary**: `[DevOps Email]`
+- **Emergency**: `[Manager Email]`
 
 ---
 
-## Common Issues & Solutions
+## Appendix: Common Issues & Solutions
 
 ### Issue 1: "admin_notes column not found"
-**Solution:** Verify column exists:
+**Solution**: Database migration might not have run. Manually check column exists:
 ```sql
 DESC wp_withdrawal_requests;
 ```
@@ -278,47 +286,21 @@ ALTER TABLE wp_withdrawal_requests ADD COLUMN admin_notes LONGTEXT DEFAULT NULL;
 ```
 
 ### Issue 2: Balance not refunding
-**Solution:** Verify `payout_refund_withdrawal()` is called in PayPalAPI.php around line 167.
+**Solution**: Check `payout_refund_withdrawal()` function is called correctly:
+```php
+// Verify in PayPalAPI.php line ~167
+payout_refund_withdrawal($withdrawal->user_id, $withdrawal->amount, 'PayPal payout failed...');
+```
 
 ### Issue 3: Error details not showing
-**Solution:** Clear WordPress object cache:
+**Solution**: Clear WordPress object cache:
 ```php
 wp_cache_flush();
 ```
 
 ### Issue 4: Admin page slow
-**Solution:** Add database indexes:
+**Solution**: Check for missing database indexes:
 ```sql
 CREATE INDEX idx_user_status ON wp_withdrawal_requests(user_id, status);
 CREATE INDEX idx_status ON wp_withdrawal_requests(status);
 ```
-
----
-
-## Success Criteria
-
-Deployment is successful when:
-
-✅ Admin can see withdrawal list without errors  
-✅ Failed withdrawals display error reasons  
-✅ User balance is automatically restored on failure  
-✅ Audit logs record all transactions  
-✅ No errors in WordPress debug log  
-✅ All database queries execute correctly  
-✅ System processes withdrawals reliably  
-
----
-
-## Post-Deployment Support
-
-After successful deployment:
-
-1. Monitor for 24-48 hours for any issues
-2. Collect feedback from admin and support team
-3. Document any edge cases discovered
-4. Plan for optional enhancements (email notifications, retry mechanism)
-
-See related documentation:
-- [WITHDRAWAL_SOLUTION_SUMMARY.md](WITHDRAWAL_SOLUTION_SUMMARY.md)
-- [WITHDRAWAL_ISSUE_FIX.md](WITHDRAWAL_ISSUE_FIX.md)
-- [WITHDRAWAL_DEVELOPER_GUIDE.md](WITHDRAWAL_DEVELOPER_GUIDE.md)

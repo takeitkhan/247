@@ -1,14 +1,14 @@
 # Withdrawal System - Developer Reference Guide
 
-## Code References
+## কোড রিফারেন্স
 
 ### 1. PayPalAPI.php - Balance Refund Logic
 
-**Location:** `/inc/PayPalAPI.php`
+#### Location: `/wp-content/themes/247empowerment/inc/PayPalAPI.php`
 
 #### Key Changes:
 
-##### Token Error Handling (Around line 68-79)
+##### Token Error Handling (Line ~68-79)
 ```php
 public function process_withdrawal($withdrawal_id) {
     $withdrawal = $this->payout_system->get_withdrawal($withdrawal_id);
@@ -37,7 +37,7 @@ public function process_withdrawal($withdrawal_id) {
 }
 ```
 
-##### API Error Handling (Around line 112-126)
+##### API Error Handling (Line ~112-126)
 ```php
 // Send payout request
 $response = wp_remote_post($this->api_url . '/payments/payouts', [
@@ -66,7 +66,7 @@ if (is_wp_error($response)) {
 }
 ```
 
-##### PayPal Response Error (Around line 145-169)
+##### PayPal Response Error (Line ~145-169)
 ```php
 $body = json_decode(wp_remote_retrieve_body($response), true);
 $http_code = wp_remote_retrieve_response_code($response);
@@ -102,7 +102,7 @@ if ($http_code >= 400 || isset($body['name'])) {
 
 ### 2. PayoutSystem.php - Enhanced Status Update
 
-**Location:** `/inc/PayoutSystem.php`
+#### Location: `/wp-content/themes/247empowerment/inc/PayoutSystem.php`
 
 #### Updated Method: `update_withdrawal_status()`
 ```php
@@ -112,7 +112,7 @@ if ($http_code >= 400 || isset($body['name'])) {
  * @param int $withdrawal_id The withdrawal request ID
  * @param string $status The new status (pending, approved, processing, paid, rejected, failed)
  * @param string $transaction_id Optional PayPal batch ID (for successful payouts)
- * @param string $admin_notes Optional error message or notes
+ * @param string $admin_notes Optional error message or notes to display to admin/user
  * 
  * @return int|false Number of rows affected, or false on error
  */
@@ -152,7 +152,7 @@ $this->update_withdrawal_status($withdrawal_id, 'rejected', null, 'Insufficient 
 
 ### 3. payout-balance.php - Refund Function
 
-**Location:** `/inc/payout-balance.php`
+#### Location: `/wp-content/themes/247empowerment/inc/payout-balance.php`
 
 #### Key Function: `payout_refund_withdrawal()`
 ```php
@@ -210,7 +210,7 @@ function payout_set_user_balance($user_id, $amount, $reason = '') {
 
 ### Admin Withdrawal List Table
 
-**Location:** `PayoutSystem.php` - `render_admin_page()` method
+#### Location: `PayoutSystem.php` - `render_admin_page()` method
 
 #### New "Details" Column:
 ```php
@@ -234,13 +234,26 @@ function payout_set_user_balance($user_id, $amount, $reason = '') {
 </td>
 ```
 
+#### How it looks:
+```
+┌─────────────────────────────────┐
+│ Withdrawal #123                 │
+├─────────────────────────────────┤
+│ Status: Failed ❌               │
+│ Details:                        │
+│   View Error ▼                 │
+│   ├─ Error:                     │
+│   └─ "Invalid PayPal account"   │
+└─────────────────────────────────┘
+```
+
 ---
 
 ## Frontend Changes
 
 ### User Withdrawal History Table
 
-**Location:** `withdrawal-form.php`
+#### Location: `withdrawal-form.php`
 
 #### New "Details" Column:
 ```php
@@ -261,6 +274,22 @@ function payout_set_user_balance($user_id, $amount, $reason = '') {
 </td>
 ```
 
+#### How it looks:
+```
+┌──────────────────────────────────────────────────────┐
+│ Recent Withdrawal Requests                           │
+├──────────────────────────────────────────────────────┤
+│ Amount: $1.00                                        │
+│ Status: Failed ❌                                    │
+│ Requested: Feb 19, 2026                              │
+│ Details:                                             │
+│   ⚠️ Failed - Click for details                     │
+│   ├─ Error Reason:                                   │
+│   │  "PayPal API Error: ..."                         │
+│   └─ ✓ Your balance has been restored.              │
+└──────────────────────────────────────────────────────┘
+```
+
 ---
 
 ## Database Schema
@@ -274,8 +303,8 @@ CREATE TABLE wp_withdrawal_requests (
     amount DECIMAL(10, 2) NOT NULL,
     paypal_email VARCHAR(255) NOT NULL,
     status ENUM('pending', 'approved', 'processing', 'paid', 'rejected', 'failed') DEFAULT 'pending',
-    transaction_id VARCHAR(255) DEFAULT NULL,
-    admin_notes LONGTEXT DEFAULT NULL,
+    transaction_id VARCHAR(255) DEFAULT NULL,          -- PayPal Batch ID on success
+    admin_notes LONGTEXT DEFAULT NULL,                 -- Error message on failure
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     KEY user_id (user_id),
@@ -305,10 +334,12 @@ CREATE TABLE wp_payout_audit_log (
 
 ## Error Logging
 
-All errors logged to WordPress debug log at `/wp-content/debug.log`:
+### WordPress Debug Log
+
+All errors logged to `/wp-content/debug.log`:
 
 ```log
-[19-Feb-2026 14:23:45 UTC] === WITHDRAWAL REQUEST START ===
+[19-Feb-2026 14:23:45 UTC] =S WITHDRAWAL REQUEST START ===
 [19-Feb-2026 14:23:45 UTC] POST data: {"nonce":"...","amount":1}
 [19-Feb-2026 14:23:45 UTC] User ID: 5, Amount: 1
 [19-Feb-2026 14:23:45 UTC] Withdrawal ID created: 123
@@ -321,6 +352,41 @@ All errors logged to WordPress debug log at `/wp-content/debug.log`:
 [19-Feb-2026 14:23:47 UTC] PayPal API request error: cURL error 28: Operation timed out
 [19-Feb-2026 14:23:47 UTC] Refunding balance of $1 to user 5
 [19-Feb-2026 14:23:47 UTC] Balance updated for user 5: PayPal API error: cURL error 28: Operation timed out | New balance: 30
+```
+
+---
+
+## Testing Guide
+
+### Test Case 1: Successful Withdrawal
+```php
+// Credentials: Valid PayPal sandbox account
+// Amount: $1.00
+// Expected:
+// - Status: paid
+// - Balance: Deducted
+// - Batch ID: Stored in transaction_id
+```
+
+### Test Case 2: PayPal Account Error
+```php
+// Credentials: Invalid PayPal account email
+// Amount: $1.00
+// Expected:
+// - Status: failed
+// - Balance: Restored
+// - admin_notes: "RECEIVER_ACCOUNT_INVALID"
+// - User sees: "Failed - Click for details"
+```
+
+### Test Case 3: API Timeout
+```php
+// Setup: Temporarily disable PayPal API
+// Amount: $1.00
+// Expected:
+// - Status: failed
+// - Balance: Restored
+// - admin_notes: "API Error: Connection timeout"
 ```
 
 ---
@@ -362,61 +428,9 @@ print_r($audits);
 
 ---
 
-## Testing Guide
+## Support Contact
 
-### Test Case 1: Successful Withdrawal
-```php
-// Credentials: Valid PayPal sandbox account
-// Amount: $1.00
-// Expected:
-// - Status: paid
-// - Balance: Deducted
-// - Batch ID: Stored in transaction_id
-```
-
-### Test Case 2: Invalid Account Error
-```php
-// Credentials: Invalid PayPal account email
-// Amount: $1.00
-// Expected:
-// - Status: failed
-// - Balance: Restored
-// - admin_notes: "RECEIVER_ACCOUNT_INVALID"
-```
-
-### Test Case 3: API Timeout
-```php
-// Setup: Disable PayPal API temporarily
-// Amount: $1.00
-// Expected:
-// - Status: failed
-// - Balance: Restored
-// - admin_notes: "API Error: Connection timeout"
-```
-
----
-
-## Performance Optimization
-
-### Add Database Indexes
-```sql
-ALTER TABLE wp_withdrawal_requests ADD INDEX idx_user_status (user_id, status);
-ALTER TABLE wp_withdrawal_requests ADD INDEX idx_status (status);
-```
-
-### Monitor Query Performance
-```sql
-EXPLAIN SELECT * FROM wp_withdrawal_requests WHERE user_id = 5 AND status = 'failed';
-```
-
----
-
-## Support & Maintenance
-
-For issues or questions:
-1. Check `/wp-content/debug.log` for errors
-2. Review audit logs in WordPress admin
-3. Check user meta `balance_change_logs`
-4. Verify database integrity
-
-See [WITHDRAWAL_DEPLOYMENT_CHECKLIST.md](WITHDRAWAL_DEPLOYMENT_CHECKLIST.md) for deployment steps.
+For issues or questions about the withdrawal system:
+- Check `/wp-content/debug.log` for errors
+- Review audit logs in `/wp-admin/admin.php?page=payout-requests`
+- View balance history in user meta `balance_change_logs`
