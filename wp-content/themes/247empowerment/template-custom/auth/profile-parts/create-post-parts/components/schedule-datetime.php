@@ -5,25 +5,24 @@
  */
 ?>
 
-<div class="posting-schedule-section">
-    <div class="schedule-label">
-        <i class="bi bi-calendar-event me-2"></i>Schedule Date & Time
-    </div>
-    
+<div class="xposting-schedule-section">
     <div class="schedule-inputs mt-3">
         <!-- Date Input -->
         <div class="mb-3">
-            <label for="schedule-date" class="form-label fw-bold">Date</label>
-            <input type="date" id="schedule-date" class="form-control schedule-date" min="">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="schedule-date" class="form-label fw-bold">Date</label>
+                    <input type="date" id="schedule-date" class="form-control schedule-date" min="">
+                </div>
+                <div class="col-md-6">
+                    <label for="schedule-time" class="form-label fw-bold">Time</label>
+                    <input type="time" id="schedule-time" class="form-control schedule-time">
+                </div>
+            </div>
+            
         </div>
 
-        <!-- Time Input -->
-        <div class="mb-3">
-            <label for="schedule-time" class="form-label fw-bold">Time</label>
-            <input type="time" id="schedule-time" class="form-control schedule-time">
-        </div>
-
-        <!-- Timezone Selector -->
+        <!-- Timezone Selector 
         <div class="mb-3">
             <label for="schedule-timezone" class="form-label fw-bold">Timezone</label>
             <select id="schedule-timezone" class="form-select schedule-timezone">
@@ -46,7 +45,7 @@
                     <option value="Australia/Sydney">Sydney (AEDT/AEST)</option>
                 </optgroup>
             </select>
-        </div>
+        </div> -->
 
         <!-- Scheduled Time Preview Info Box -->
         <div class="schedule-preview-box alert alert-info">
