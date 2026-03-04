@@ -20,6 +20,7 @@
      * Initialize Modal Components
      */
     $(document).ready(function() {
+        console.log('✓ Modal Handler Script Loaded');
         initializeCharacterCounters();
         initializeFormattingToolbar();
         initializeEmojiPickers();
@@ -28,21 +29,16 @@
         initializePostPreview();
         initializeScheduleDateTime();
         initializeFormSubmission();
+        console.log('✓ All modal components initialized');
     });
 
     /**
      * CHARACTER COUNTER
      */
     function initializeCharacterCounters() {
-        const counters = [
-            { textarea: '#post-content-instant', count: '#char-count', progress: '#char-progress-bar' },
-            { textarea: '#post-content-schedule', count: '#char-count-schedule', progress: '#char-progress-bar-schedule' }
-        ];
-
-        counters.forEach(counter => {
-            $(counter.textarea).on('input', function() {
-                updateCharacterCounter($(this), counter.count, counter.progress);
-            });
+        // Single textarea for unified modal structure
+        $('#post-content').on('input', function() {
+            updateCharacterCounter($(this), '#char-count', '#char-progress-bar');
         });
     }
 
@@ -278,46 +274,28 @@
      * POST PREVIEW
      */
     function initializePostPreview() {
-        $('#post-content-instant, #post-content-schedule').on('input', function() {
+        // Updated for new unified modal structure (no tabs)
+        $('#post-content').on('input', function() {
             updatePostPreview($(this));
         });
 
         // Update preview on privacy change
-        $('.privacy-option input[type="radio"]').on('change', function() {
-            const $activeTab = $('.tab-pane.active');
-            updatePostPreview($activeTab.find('.posting-textarea'));
+        $('#privacyOptionsContainer input[type="radio"]').on('change', function() {
+            const $textarea = $('#post-content');
+            updatePostPreview($textarea);
         });
     }
 
     function updatePostPreview($textarea) {
-        const $activeTab = $textarea.closest('.tab-pane');
         const content = $textarea.val();
-        const $preview = $activeTab.find('.preview-content');
+        const $preview = $('#previewText');
 
-        if (content.trim()) {
-            const formattedContent = formatPreviewContent(content);
-            $preview.html(formattedContent).addClass('has-content');
+        if (content && content.trim()) {
+            $preview.text(content);
         } else {
-            $preview.html('<p class="text-muted text-center py-4">Your post preview will appear here</p>').removeClass('has-content');
+            $preview.text('(No content yet)');
         }
-
-        // Add image preview if exists
-        const $imagePreview = $activeTab.find('#image-preview, #image-preview-schedule');
-        if ($imagePreview.is(':visible')) {
-            const $imageContainer = $('<div class="mt-3"></div>');
-            $imageContainer.append($imagePreview.clone());
-            $preview.find('p').after($imageContainer);
-        }
-
-        // Show privacy info
-        const selectedPrivacy = $activeTab.find('input[name="post_privacy"]:checked').val();
-        const privacyLabel = getPrivacyLabel(selectedPrivacy);
-        $preview.append(`<div class="mt-2 pt-2 border-top"><small class="text-muted"><i class="bi bi-shield-check me-1"></i>${privacyLabel}</small></div>`);
     }
-
-    function formatPreviewContent(content) {
-        let formatted = content
-            .replace(/\n/g, '<br>')
             .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.+?)\*/g, '<em>$1</em>')
             .replace(/__(.+?)__/g, '<u>$1</u>');
@@ -355,7 +333,6 @@
     function updateSchedulePreview() {
         const date = $('#schedule-date').val();
         const time = $('#schedule-time').val();
-        const timezone = $('#schedule-timezone').val();
         const $preview = $('#schedule-preview-time');
 
         if (date && time) {
@@ -369,7 +346,7 @@
                 hour12: true
             });
             
-            $preview.text(`${formatted} ${timezone}`);
+            $preview.text(formatted);
 
             // Store timestamp
             const timestamp = Math.floor(dateObj.getTime() / 1000);
@@ -385,42 +362,60 @@
     function initializeFormSubmission() {
         $('#create-post-form-redesigned').on('submit', function(e) {
             e.preventDefault();
+            console.log('=== FORM SUBMIT EVENT TRIGGERED ===');
 
             const $form = $(this);
-            const $activeTab = $('.tab-pane.active');
-            const isScheduled = $activeTab.attr('id') === 'schedulePost';
-
+            
+            // For new unified structure (no tabs)
+            const content = $('#post-content').val();
+            console.log('Form content length:', content ? content.length : 0);
+            
             // Validate required fields
-            const content = $activeTab.find('.posting-textarea').val().trim();
-            if (!content) {
+            if (!content || !content.trim()) {
+                console.warn('Validation failed: No content');
                 alert('Please write something before posting');
                 return;
             }
 
+            // Check if scheduled
+            const isScheduled = $('#postingScheduleToggle').is(':checked');
+            console.log('Is scheduled:', isScheduled);
+            
             if (isScheduled) {
                 const date = $('#schedule-date').val();
                 const time = $('#schedule-time').val();
+                console.log('Schedule date:', date, 'time:', time);
                 if (!date || !time) {
+                    console.warn('Validation failed: Missing schedule date/time');
                     alert('Please select a date and time for scheduled post');
                     return;
                 }
             }
 
+            console.log('Validation passed, proceeding with submission...');
+
             // Disable submit button
-            const $submitBtn = $activeTab.find('.posting-submit-btn');
+            const $submitBtn = $('#submitPostBtn');
             $submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Processing...');
 
             // Submit form via AJAX
             submitPostForm($form, isScheduled, function() {
+                console.log('Form submission callback - success');
                 // Reset form
                 $form[0].reset();
                 $('#createPostModalRedesigned').modal('hide');
-                $submitBtn.prop('disabled', false).html($activeTab.attr('id') === 'instantPost' ? '<i class="bi bi-send me-2"></i>Share Now' : '<i class="bi bi-calendar-event me-2"></i>Schedule Post');
+                $submitBtn.prop('disabled', false);
+                
+                // Reset button text based on schedule mode
+                const btnText = isScheduled ? 
+                    '<i class="bi bi-calendar-event me-2"></i>Schedule Post' : 
+                    '<i class="bi bi-send me-2"></i>Share Now';
+                $submitBtn.html(btnText);
 
                 // Show success message
                 showSuccessMessage(isScheduled ? 'Post scheduled successfully!' : 'Post published successfully!');
 
-                // Reload posts (if using existing post display)
+                // Reload posts
                 if (typeof location !== 'undefined') {
                     setTimeout(() => location.reload(), 1500);
                 }
@@ -431,21 +426,47 @@
     function submitPostForm($form, isScheduled, callback) {
         const formData = new FormData($form[0]);
         
+        // Make sure we have the action and nonce
+        if (!formData.has('action')) {
+            formData.append('action', 'create_post');
+        }
+        
+        // Set post status type
+        if (!formData.has('post_status_type')) {
+            formData.append('post_status_type', isScheduled ? 'scheduled' : 'instant');
+        }
+        
+        // Log form data for debugging
+        console.log('=== SUBMITTING FORM DATA ===');
+        console.log('isScheduled:', isScheduled);
+        for (let [key, value] of formData.entries()) {
+            if (key !== 'post_image') {
+                console.log(key + ':', value);
+            }
+        }
+        console.log('AJAX URL:', ajax_object && ajax_object.ajax_url ? ajax_object.ajax_url : ajaxurl);
+        
         $.ajax({
             type: 'POST',
-            url: ajaxurl,
+            url: ajax_object && ajax_object.ajax_url ? ajax_object.ajax_url : ajaxurl,
             data: formData,
             processData: false,
             contentType: false,
             success: function(response) {
+                console.log('AJAX Success response:', response);
                 if (response.success) {
                     callback();
                 } else {
-                    alert('Error: ' + (response.data || 'Unknown error'));
+                    const errorMsg = response.data?.message || response.data || 'Unknown error';
+                    console.error('AJAX Error response:', errorMsg);
+                    alert('Error: ' + errorMsg);
                 }
             },
-            error: function() {
-                alert('Error submitting post. Please try again.');
+            error: function(xhr, status, error) {
+                console.error('AJAX Error - Status:', status);
+                console.error('AJAX Error - Error:', error);
+                console.error('AJAX Response:', xhr.responseText);
+                alert('Error submitting post. Check console for details.');
             }
         });
     }

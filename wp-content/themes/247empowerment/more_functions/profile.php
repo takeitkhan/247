@@ -217,44 +217,114 @@ add_action('wp_enqueue_scripts', 'enqueue_profile_map_script');
 add_action('wp_ajax_create_post', 'handle_create_post');
 function handle_create_post()
 {
+    // Debug logging
+    error_log('=== CREATE POST AJAX CALLED ===');
+    error_log('POST data keys: ' . implode(', ', array_keys($_POST)));
+    
     // Check nonce
-    if (!isset($_POST['create_post_nonce']) || !wp_verify_nonce($_POST['create_post_nonce'], 'create_post_action')) {
+    if (!isset($_POST['create_post_nonce'])) {
+        error_log('ERROR: Nonce not in POST');
+        wp_send_json_error(array('message' => 'Nonce missing'), 403);
+    }
+
+    if (!wp_verify_nonce($_POST['create_post_nonce'], 'create_post_action')) {
+        error_log('ERROR: Nonce verification failed');
         wp_send_json_error(array('message' => 'Invalid nonce'), 403);
     }
 
-    // Sanitize post content
-    $post_content = sanitize_text_field($_POST['post_content']);
+    // Check user logged in
+    if (!is_user_logged_in()) {
+        error_log('ERROR: User not logged in');
+        wp_send_json_error(array('message' => 'You must be logged in'), 403);
+    }
+
+    // Get post content
+    if (!isset($_POST['post_content'])) {
+        error_log('ERROR: post_content not in POST');
+        wp_send_json_error(array('message' => 'Content is required'), 400);
+    }
+
+    $post_content = sanitize_textarea_field($_POST['post_content']);
+
+    if (empty(trim($post_content))) {
+        error_log('ERROR: post_content is empty after sanitization');
+        wp_send_json_error(array('message' => 'Post content cannot be empty'), 400);
+    }
+
+    error_log('Post content length: ' . strlen($post_content) . ' chars');
 
     // Sanitize privacy option
     $privacy_options = array('only_me', 'referral_partners', 'public');
     $post_privacy = in_array($_POST['post_privacy'] ?? '', $privacy_options) ? $_POST['post_privacy'] : 'only_me';
+    error_log('Privacy level: ' . $post_privacy);
+
+    // Check if this is a scheduled post
+    $post_status = 'publish';
+    $post_date = current_time('mysql');
+    
+    if (isset($_POST['post_status_type']) && $_POST['post_status_type'] === 'scheduled') {
+        if (isset($_POST['schedule_timestamp'])) {
+            $schedule_timestamp = intval($_POST['schedule_timestamp']);
+            if ($schedule_timestamp > 0) {
+                $post_status = 'future';
+                $post_date = date('Y-m-d H:i:s', $schedule_timestamp);
+                error_log('Scheduled post for: ' . $post_date);
+            }
+        }
+    }
+
+    // Get current user ID
+    $current_user_id = get_current_user_id();
+    error_log('Creating post for user ID: ' . $current_user_id);
 
     // Create post
-    $post_id = wp_insert_post(array(
+    $post_args = array(
         'post_type'    => 'post',
-        'post_status'  => 'publish',
+        'post_status'  => $post_status,
         'post_content' => $post_content,
-        'post_title'   => wp_trim_words($post_content, 10, '...')
-    ));
+        'post_title'   => wp_trim_words($post_content, 10, '...'),
+        'post_date'    => $post_date,
+        'post_author'  => $current_user_id
+    );
+
+    error_log('Post args: ' . json_encode($post_args));
+
+    $post_id = wp_insert_post($post_args);
 
     if (is_wp_error($post_id)) {
-        wp_send_json_error(array('message' => 'Failed to create post'));
+        $error_msg = $post_id->get_error_message();
+        error_log('ERROR in wp_insert_post: ' . $error_msg);
+        wp_send_json_error(array('message' => 'Post creation failed: ' . $error_msg));
     }
+
+    error_log('POST CREATED - ID: ' . $post_id);
 
     // Save privacy as post meta
     update_post_meta($post_id, '_post_privacy', $post_privacy);
 
     // Image handling
     if (!empty($_FILES['post_image']['name'])) {
+        error_log('Image file uploaded: ' . $_FILES['post_image']['name']);
         require_once ABSPATH . 'wp-admin/includes/file.php';
         require_once ABSPATH . 'wp-admin/includes/image.php';
         $attachment_id = media_handle_upload('post_image', $post_id);
         if (!is_wp_error($attachment_id)) {
             set_post_thumbnail($post_id, $attachment_id);
+            error_log('Image attached - ID: ' . $attachment_id);
+        } else {
+            error_log('Image upload error: ' . $attachment_id->get_error_message());
         }
     }
 
+    error_log('=== POST CREATION COMPLETE ===');
+
     wp_send_json_success(array(
+        'post_id' => $post_id,
+        'privacy' => $post_privacy,
+        'status' => $post_status,
+        'message' => 'Post created successfully'
+    ));
+}
         'post_id' => $post_id,
         'privacy' => $post_privacy
     ));
