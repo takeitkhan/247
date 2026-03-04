@@ -325,10 +325,6 @@ function handle_create_post()
         'message' => 'Post created successfully'
     ));
 }
-        'post_id' => $post_id,
-        'privacy' => $post_privacy
-    ));
-}
 
 // AJAX handler to update post privacy
 add_action('wp_ajax_update_post_privacy', 'handle_update_post_privacy');
