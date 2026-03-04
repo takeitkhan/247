@@ -54,7 +54,11 @@ if ($user_posts->have_posts()):
                     </div>
                     <div class="d-flex flex-column post-user">
                         <span class="p_name"><?php echo esc_html($profile['first_name'] . ' ' . $profile['last_name']); ?></span>
-                        <span><?php echo esc_html($post_time); ?></span>
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <span><?php echo esc_html($post_time); ?></span>
+                            <?php display_post_status_badge($post_id); ?>
+                        </div>
+                        <?php display_scheduled_time_info($post_id); ?>
                     </div>
                 </div>
                 <div class="dropdown">

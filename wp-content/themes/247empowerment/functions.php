@@ -8,6 +8,12 @@ require_once get_template_directory() . '/inc/PayPalAPI.php';
 require_once get_template_directory() . '/inc/PayoutNotifications.php';
 require_once get_template_directory() . '/inc/payout-balance.php';
 
+// ============================================
+// Load Phase 1, 2, 3 Enhanced Posting Features
+// ============================================
+require_once get_template_directory() . '/inc/database-migration.php';
+require_once get_template_directory() . '/inc/status-indicators.php';
+
 // Activation hook - for theme activation
 register_activation_hook(__FILE__, ['PayoutSystem', 'activate']);
 
@@ -311,6 +317,39 @@ function mm_enqueue_assets()
     wp_localize_script('mm-main-js', 'themeData', [
         'dir' => get_template_directory_uri(),
     ]);
+
+    // ============================================
+    // PHASE 1: Modern Posting Modal Assets
+    // ============================================
+    
+    // Phase 1 Modal CSS
+    wp_enqueue_style(
+        'phase1-modal-css',
+        get_template_directory_uri() . '/template-custom/auth/profile-parts/modal-design.css',
+        [],
+        filemtime(get_template_directory() . '/template-custom/auth/profile-parts/modal-design.css')
+    );
+
+    // Emoji Picker Library (lightweight emoji picker)
+    wp_enqueue_script(
+        'emoji-picker-element',
+        'https://cdn.jsdelivr.net/npm/emoji-picker-element@1.0.0',
+        [],
+        '1.0.0',
+        true
+    );
+
+    // Phase 1 Modal JavaScript Handler
+    wp_enqueue_script(
+        'phase1-modal-handler-js',
+        get_template_directory_uri() . '/template-custom/auth/profile-parts/modal-handler.js',
+        ['jquery', 'emoji-picker-element'],
+        filemtime(get_template_directory() . '/template-custom/auth/profile-parts/modal-handler.js'),
+        true
+    );
+
+    // Pass AJAX URL to JavaScript
+    wp_localize_script('phase1-modal-handler-js', 'ajaxurl', admin_url('admin-ajax.php'));
 }
 add_action('wp_enqueue_scripts', 'mm_enqueue_assets');
 
