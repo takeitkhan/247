@@ -1,4 +1,81 @@
 <?php
+// ✅ AUTO-SAVE AJAX HANDLER - Save individual field to database
+add_action('wp_ajax_save_profile_field', 'save_profile_field_ajax');
+function save_profile_field_ajax() {
+    error_log('🔍 AJAX called: save_profile_field');
+    
+    // Check if user is logged in
+    if (!is_user_logged_in()) {
+        error_log('❌ User not logged in');
+        wp_send_json_error(['message' => 'Unauthorized']);
+    }
+    
+    // Verify nonce
+    $nonce = isset($_POST['nonce']) ? sanitize_text_field($_POST['nonce']) : '';
+    error_log('📋 Nonce: ' . $nonce);
+    
+    if (!wp_verify_nonce($nonce, 'frontend_profile_update')) {
+        error_log('❌ Nonce verification failed');
+        wp_send_json_error(['message' => 'Security check failed']);
+    }
+    
+    $user_id = get_current_user_id();
+    $field_name = isset($_POST['field_name']) ? sanitize_text_field($_POST['field_name']) : '';
+    $field_value = isset($_POST['field_value']) ? $_POST['field_value'] : '';
+    
+    error_log('💾 Saving - User: ' . $user_id . ', Field: ' . $field_name . ', Value: ' . substr($field_value, 0, 50));
+    
+    // Sanitize based on field type
+    switch($field_name) {
+        case 'email':
+            $field_value = sanitize_email($field_value);
+            wp_update_user([
+                'ID' => $user_id,
+                'user_email' => $field_value
+            ]);
+            error_log('✅ Email updated');
+            break;
+        case 'first_name':
+        case 'last_name':
+        case 'phone':
+        case 'place_display_name':
+        case 'dob':
+        case 'about_me_short':
+            $field_value = sanitize_text_field($field_value);
+            if ($field_name === 'first_name' || $field_name === 'last_name') {
+                wp_update_user([
+                    'ID' => $user_id,
+                    $field_name => $field_value
+                ]);
+                error_log('✅ User field updated: ' . $field_name);
+            } else {
+                update_user_meta($user_id, $field_name, $field_value);
+                error_log('✅ Meta field updated: ' . $field_name);
+            }
+            break;
+        case 'about_me':
+            $field_value = sanitize_textarea_field($field_value);
+            update_user_meta($user_id, 'about_me', $field_value);
+            error_log('✅ About me updated');
+            break;
+        case 'show_email':
+        case 'show_phone':
+        case 'show_dob':
+        case 'show_full_address':
+            $field_value = $field_value === '1' ? '1' : '0';
+            update_user_meta($user_id, $field_name, $field_value);
+            error_log('✅ Checkbox updated: ' . $field_name);
+            break;
+        default:
+            error_log('❌ Unknown field: ' . $field_name);
+            wp_send_json_error(['message' => 'Unknown field']);
+            break;
+    }
+    
+    error_log('✅ All done - sending success');
+    wp_send_json_success(['message' => 'Field saved successfully']);
+}
+
 add_action('wp_enqueue_scripts', function () {
     if (is_page_template('modify-profile.php')) {
         wp_enqueue_media();  // Enqueue WordPress media
@@ -10,6 +87,9 @@ add_action('wp_enqueue_scripts', function () {
             null, // Version
             true // Load in footer
         );
+        
+        // Localize AJAX URL
+        wp_localize_script('modify-profile-js', 'ajaxurl', admin_url('admin-ajax.php'));
     }
 });
 
@@ -110,6 +190,10 @@ add_action('wp_enqueue_scripts', 'enqueue_post_create_script');
 
 function enqueue_profile_map_script()
 {
+    // ✅ Map functionality disabled - no longer needed
+    return;
+    
+    /*
     if (is_page_template('template-custom/auth/modify-profile.php')) {
         wp_enqueue_script(
             'profile-map',
@@ -126,6 +210,7 @@ function enqueue_profile_map_script()
             true
         );
     }
+    */
 }
 add_action('wp_enqueue_scripts', 'enqueue_profile_map_script');
 
