@@ -296,12 +296,6 @@
             $preview.text('(No content yet)');
         }
     }
-            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\*(.+?)\*/g, '<em>$1</em>')
-            .replace(/__(.+?)__/g, '<u>$1</u>');
-        
-        return `<p>${formatted}</p>`;
-    }
 
     function getPrivacyLabel(privacy) {
         const labels = {
@@ -394,6 +388,25 @@
 
             console.log('Validation passed, proceeding with submission...');
 
+            // IMPORTANT: Update hidden fields BEFORE submitting
+            // Set post_status_type based on schedule
+            $('#postStatusType').val(isScheduled ? 'scheduled' : 'publish');
+            
+            // Ensure schedule_timestamp is set (even if empty for instant posts)
+            if (isScheduled) {
+                const date = $('#schedule-date').val();
+                const time = $('#schedule-time').val();
+                if (date && time) {
+                    const dateObj = new Date(`${date}T${time}`);
+                    const timestamp = Math.floor(dateObj.getTime() / 1000);
+                    $('#schedule_timestamp').val(timestamp);
+                    console.log('Schedule timestamp set to:', timestamp);
+                }
+            } else {
+                $('#schedule_timestamp').val('');
+                console.log('Instant post - schedule_timestamp cleared');
+            }
+
             // Disable submit button
             const $submitBtn = $('#submitPostBtn');
             $submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Processing...');
@@ -426,34 +439,48 @@
     function submitPostForm($form, isScheduled, callback) {
         const formData = new FormData($form[0]);
         
-        // Make sure we have the action and nonce
+        // Verify action is set
         if (!formData.has('action')) {
+            console.warn('⚠ Action field missing, adding it');
             formData.append('action', 'create_post');
         }
         
-        // Set post status type
-        if (!formData.has('post_status_type')) {
-            formData.append('post_status_type', isScheduled ? 'scheduled' : 'instant');
+        // Verify nonce is set
+        if (!formData.has('create_post_nonce')) {
+            console.warn('⚠ Nonce missing from form! This will fail.');
         }
         
         // Log form data for debugging
-        console.log('=== SUBMITTING FORM DATA ===');
+        console.log('%c=== SUBMITTING FORM DATA ===', 'background: #2196F3; color: white; padding: 5px 10px; border-radius: 3px;');
         console.log('isScheduled:', isScheduled);
+        
+        // Create object for cleaner logging
+        const formDataObj = {};
         for (let [key, value] of formData.entries()) {
             if (key !== 'post_image') {
-                console.log(key + ':', value);
+                formDataObj[key] = value || '(empty)';
+            } else {
+                formDataObj[key] = '[File: ' + (value.name || 'unnamed') + ']';
             }
         }
-        console.log('AJAX URL:', ajax_object && ajax_object.ajax_url ? ajax_object.ajax_url : ajaxurl);
+        console.table(formDataObj);
+        
+        const ajaxUrl = ajax_object && ajax_object.ajax_url ? ajax_object.ajax_url : ajaxurl;
+        console.log('AJAX URL:', ajaxUrl);
+        console.log('Request will be sent to:', ajaxUrl);
         
         $.ajax({
             type: 'POST',
-            url: ajax_object && ajax_object.ajax_url ? ajax_object.ajax_url : ajaxurl,
+            url: ajaxUrl,
             data: formData,
             processData: false,
             contentType: false,
+            beforeSend: function(xhr) {
+                console.log('%c[beforeSend]', 'color: orange', 'AJAX request initiated');
+            },
             success: function(response) {
-                console.log('AJAX Success response:', response);
+                console.log('%c=== AJAX SUCCESS ===', 'background: #4CAF50; color: white; padding: 5px 10px; border-radius: 3px;');
+                console.log('Response:', response);
                 if (response.success) {
                     callback();
                 } else {
@@ -463,9 +490,11 @@
                 }
             },
             error: function(xhr, status, error) {
-                console.error('AJAX Error - Status:', status);
-                console.error('AJAX Error - Error:', error);
-                console.error('AJAX Response:', xhr.responseText);
+                console.error('%c=== AJAX ERROR ===', 'background: #f44336; color: white; padding: 5px 10px; border-radius: 3px;');
+                console.error('Status:', status);
+                console.error('Error:', error);
+                console.error('Response Text:', xhr.responseText);
+                console.error('Response Status Code:', xhr.status);
                 alert('Error submitting post. Check console for details.');
             }
         });
