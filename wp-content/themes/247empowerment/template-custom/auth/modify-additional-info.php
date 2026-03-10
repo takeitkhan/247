@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_additional_detai
                     <h5 class="pb-4 text-start portal-title">Additional Profile Details For Digital Business Card</h5>
                 </div>
 
-                <form method="post" class="row g-3">
+                <form method="post" class="row g-3" id="additional-details-form">
                     <?php wp_nonce_field('additional_details_action', 'additional_details_nonce'); ?>
 
                     <!-- Designation -->
@@ -217,6 +217,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_additional_detai
 </div>
 
 <script>
+    // Form submission handler to ensure hidden fields are populated
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('additional-details-form');
+        if (form) {
+            form.addEventListener('submit', function() {
+                // Update keywords hidden field
+                const keywordContainer = document.getElementById('keyword-tags');
+                if (keywordContainer) {
+                    const keywords = [...keywordContainer.querySelectorAll('.keyword-tag')]
+                        .map(tag => tag.textContent.replace(/\s*×\s*$/, '').trim());
+                    document.getElementById('keywords-hidden').value = keywords.join(', ');
+                }
+                
+                // Update hashtags hidden field
+                const hashtagContainer = document.getElementById('hashtag-tags');
+                if (hashtagContainer) {
+                    const hashtags = [...hashtagContainer.querySelectorAll('.hashtag-tag')]
+                        .map(tag => tag.textContent.replace(/\s*×\s*$/, '').trim());
+                    document.getElementById('hashtags-hidden').value = hashtags.join(', ');
+                }
+            });
+        }
+    });
+
     // Live character count for About Short field
     document.addEventListener('DOMContentLoaded', function() {
         const textarea = document.getElementById('about_me_short');
@@ -239,7 +263,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_additional_detai
 
         function updateHiddenField() {
             const tags = [...tagContainer.querySelectorAll(".keyword-tag")]
-                .map(tag => tag.childNodes[0].nodeValue.trim());
+                .map(tag => {
+                    // Extract text before the close button
+                    const text = tag.childNodes[0].nodeValue;
+                    return text ? text.trim() : '';
+                })
+                .filter(tag => tag !== '');
             hiddenField.value = tags.join(", ");
         }
 
@@ -284,7 +313,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_additional_detai
 
         function updateHiddenField() {
             const tags = [...tagContainer.querySelectorAll(".hashtag-tag")]
-                .map(tag => tag.childNodes[0].nodeValue.trim());
+                .map(tag => {
+                    // Extract text before the close button
+                    const text = tag.childNodes[0].nodeValue;
+                    return text ? text.trim() : '';
+                })
+                .filter(tag => tag !== '');
             hiddenField.value = tags.join(", ");
         }
 

@@ -43,7 +43,7 @@ wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css
             id="post-trigger"
             type="text"
             class="w-100 input"
-            placeholder="What's on your mind?"
+            placeholder="This Area is for One-Click Concurrent and Scheduled Posting to Targeted Audiences"
             data-bs-toggle="modal"
             data-bs-target="#createPostModalRedesigned"
             readonly>
@@ -104,7 +104,7 @@ wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css
                                         id="post-content"
                                         class="posting-textarea" 
                                         rows="10" 
-                                        placeholder="What's on your mind? Share your thoughts..."></textarea>
+                                        placeholder="This Area is for One-Click Concurrent and Scheduled Posting to Targeted Audiences"></textarea>
                                     
                                     <!-- CHARACTER COUNTER -->
                                     <?php include 'create-post-parts/components/character-counter.php'; ?>
