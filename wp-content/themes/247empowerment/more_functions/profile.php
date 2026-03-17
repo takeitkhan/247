@@ -314,8 +314,9 @@ function handle_create_post()
             $schedule_timestamp = intval($_POST['schedule_timestamp']);
             if ($schedule_timestamp > 0) {
                 $post_status = 'future';
-                $post_date = date('Y-m-d H:i:s', $schedule_timestamp);
-                error_log('✓ Scheduled post for: ' . $post_date);
+                // Convert Unix timestamp to WordPress blog time (respects blog timezone)
+                $post_date = wp_date('Y-m-d H:i:s', $schedule_timestamp);
+                error_log('✓ Scheduled post for: ' . $post_date . ' (timestamp: ' . $schedule_timestamp . ')');
             }
         }
     } else {
@@ -375,6 +376,179 @@ function handle_create_post()
         'status' => $post_status,
         'message' => 'Post created successfully'
     ));
+}
+
+/**
+ * Delete Scheduled Post AJAX Handler
+ */
+add_action('wp_ajax_delete_scheduled_post', 'handle_delete_scheduled_post');
+
+function handle_delete_scheduled_post() {
+    // Check user is logged in
+    if (!is_user_logged_in()) {
+        wp_send_json_error(array('message' => 'User not logged in'));
+    }
+
+    $current_user_id = get_current_user_id();
+    $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
+
+    if (!$post_id) {
+        wp_send_json_error(array('message' => 'Invalid post ID'));
+    }
+
+    // Verify user is the post author
+    $post = get_post($post_id);
+    if (!$post || $post->post_author != $current_user_id) {
+        wp_send_json_error(array('message' => 'You do not have permission to delete this post'));
+    }
+
+    // Verify post is scheduled (future status)
+    if ($post->post_status !== 'future') {
+        wp_send_json_error(array('message' => 'Only scheduled posts can be deleted this way'));
+    }
+
+    // Delete the post permanently (skip trash)
+    $deleted = wp_delete_post($post_id, true);
+
+    if ($deleted) {
+        error_log('✓ Scheduled post deleted - ID: ' . $post_id . ' by user: ' . $current_user_id);
+        wp_send_json_success(array(
+            'message' => 'Scheduled post deleted successfully',
+            'post_id' => $post_id
+        ));
+    } else {
+        wp_send_json_error(array('message' => 'Failed to delete scheduled post'));
+    }
+}
+
+// AJAX handler to get scheduled post data for editing
+add_action('wp_ajax_get_scheduled_post_data', 'handle_get_scheduled_post_data');
+function handle_get_scheduled_post_data()
+{
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Not authorized'], 403);
+    }
+
+    // Verify nonce for security
+    if (!isset($_POST['edit_post_nonce']) || !wp_verify_nonce($_POST['edit_post_nonce'], 'edit_scheduled_post_action')) {
+        wp_send_json_error(['message' => 'Invalid nonce'], 403);
+    }
+
+    $post_id = intval($_POST['post_id'] ?? 0);
+    $current_user_id = get_current_user_id();
+    
+    if (!$post_id) {
+        wp_send_json_error(['message' => 'Invalid post ID']);
+    }
+
+    // Get post
+    $post = get_post($post_id);
+    
+    if (!$post) {
+        wp_send_json_error(['message' => 'Post not found']);
+    }
+    
+    // Check if user is the author
+    if ($current_user_id !== (int)$post->post_author) {
+        wp_send_json_error(['message' => 'You can only edit your own posts'], 403);
+    }
+    
+    // Check if post is scheduled (future status)
+    if ($post->post_status !== 'future') {
+        wp_send_json_error(['message' => 'Can only edit scheduled posts']);
+    }
+    
+    // Get privacy meta
+    $privacy = get_post_meta($post_id, '_post_privacy', true) ?: 'only_me';
+    
+    // Return post data
+    wp_send_json_success([
+        'post_id' => $post_id,
+        'post_title' => $post->post_title,
+        'post_content' => $post->post_content,
+        'post_privacy' => $privacy,
+        'post_date' => $post->post_date,
+        'post_date_gmt' => $post->post_date_gmt
+    ]);
+}
+
+// AJAX handler to update scheduled post
+add_action('wp_ajax_update_scheduled_post', 'handle_update_scheduled_post');
+function handle_update_scheduled_post()
+{
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Not authorized'], 403);
+    }
+
+    // Verify nonce for security
+    if (!isset($_POST['edit_post_nonce']) || !wp_verify_nonce($_POST['edit_post_nonce'], 'edit_scheduled_post_action')) {
+        wp_send_json_error(['message' => 'Invalid nonce'], 403);
+    }
+
+    $post_id = intval($_POST['post_id'] ?? 0);
+    $current_user_id = get_current_user_id();
+    
+    if (!$post_id) {
+        wp_send_json_error(['message' => 'Invalid post ID']);
+    }
+
+    // Get post
+    $post = get_post($post_id);
+    
+    if (!$post) {
+        wp_send_json_error(['message' => 'Post not found']);
+    }
+    
+    // Check if user is the author
+    if ($current_user_id !== (int)$post->post_author) {
+        wp_send_json_error(['message' => 'You can only edit your own posts'], 403);
+    }
+    
+    // Check if post is scheduled (future status)
+    if ($post->post_status !== 'future') {
+        wp_send_json_error(['message' => 'Can only edit scheduled posts']);
+    }
+
+    // Validate inputs
+    $title = sanitize_text_field($_POST['post_title'] ?? '');
+    $content = sanitize_textarea_field($_POST['post_content'] ?? '');
+    $privacy = in_array($_POST['post_privacy'] ?? '', ['only_me', 'referral_partners', 'public']) 
+        ? sanitize_text_field($_POST['post_privacy']) 
+        : 'only_me';
+    $schedule_timestamp = intval($_POST['schedule_timestamp'] ?? 0);
+
+    if (!$content) {
+        wp_send_json_error(['message' => 'Post content is required']);
+    }
+
+    if (!$schedule_timestamp) {
+        wp_send_json_error(['message' => 'Invalid schedule timestamp']);
+    }
+
+    // Convert timestamp to WordPress date format
+    $new_post_date = wp_date('Y-m-d H:i:s', $schedule_timestamp);
+
+    // Prepare post data
+    $post_data = [
+        'ID' => $post_id,
+        'post_title' => $title,
+        'post_content' => $content,
+        'post_date' => $new_post_date,
+        'post_status' => 'future'
+    ];
+
+    // Update post
+    $result = wp_update_post($post_data);
+    
+    if (is_wp_error($result)) {
+        error_log('Failed to update post ' . $post_id . ': ' . $result->get_error_message());
+        wp_send_json_error(['message' => 'Failed to update post']);
+    }
+
+    // Update privacy meta
+    update_post_meta($post_id, '_post_privacy', $privacy);
+
+    wp_send_json_success(['message' => 'Post updated successfully']);
 }
 
 // AJAX handler to update post privacy

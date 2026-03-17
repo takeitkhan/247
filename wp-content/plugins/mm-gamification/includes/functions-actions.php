@@ -39,6 +39,12 @@ mm_register_action('suggestion_submitted', 'Suggestion Submitted');
 mm_register_action('report_submitted', 'Issue Report Submitted');
 mm_register_action('referral_signup', 'Referral Signup');
 
+// SPG Onboarding Actions
+mm_register_action('interest_completed', 'Interest Selection Completed');
+mm_register_action('business_card_completed', 'Business Card Completed');
+mm_register_action('social_links_completed', 'Social Links Completed');
+mm_register_action('onboarding_completed', 'Onboarding Completed (Bonus)');
+
 /**
  * Ensure a gamification action exists in DB (seed if missing)
  */

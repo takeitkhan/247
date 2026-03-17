@@ -28,6 +28,15 @@ require_once(MM_SPG_PATH . '/inc/frontend/current-guide-state.php');
 require_once(MM_SPG_PATH . '/inc/frontend/modal.php');
 require_once(MM_SPG_PATH . '/inc/frontend/shortcodes.php');
 
+// Load API Endpoints
+require_once(MM_SPG_PATH . '/inc/api/auth-endpoints.php');
+require_once(MM_SPG_PATH . '/inc/api/interests-endpoints.php');
+require_once(MM_SPG_PATH . '/inc/api/business-card-endpoints.php');
+require_once(MM_SPG_PATH . '/inc/api/social-links-endpoints.php');
+
+// Load Admin Documentation
+require_once(MM_SPG_PATH . '/inc/admin/api-documentation.php');
+
 // Hardcoded steps loader (deprecated)
 // require_once(MM_SPG_PATH . '/inc/frontend/hardcoded-steps.php');
 // Frontend (dynamic) steps loader
