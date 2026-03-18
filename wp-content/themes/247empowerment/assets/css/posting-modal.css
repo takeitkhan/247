@@ -149,3 +149,28 @@
         font-size: 11px;
     }
 }
+/* ============================================
+   BUTTON ICON FIX - Ensure icons visible on hover
+   ============================================ */
+
+.btn-outline-secondary i,
+.btn-outline-danger i {
+    color: inherit;
+    transition: color 0.15s ease-in-out;
+}
+
+.btn-outline-secondary:hover i,
+.btn-outline-danger:hover i {
+    color: inherit;
+}
+
+/* Specifically for edit and delete buttons */
+.edit-scheduled-post i,
+.delete-scheduled-post i {
+    color: inherit;
+}
+
+.edit-scheduled-post:hover i,
+.delete-scheduled-post:hover i {
+    color: inherit;
+}

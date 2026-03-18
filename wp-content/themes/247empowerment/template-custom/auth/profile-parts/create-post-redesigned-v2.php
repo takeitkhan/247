@@ -188,7 +188,7 @@ wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css
                         <input type="hidden" name="post_status_type" id="postStatusType" value="publish">
                         <input type="hidden" name="schedule_timestamp" id="schedule_timestamp">
                         
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary edit-scheduled-post" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-info posting-submit-btn" id="submitPostBtn">
                             <i class="bi bi-send me-2"></i><span id="submitBtnText">Share Now</span>
                         </button>
@@ -228,29 +228,33 @@ wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css
                         }
 
                         function updatePreviewData() {
-                            // Get textarea content
+                            // Get textarea content and preserve line breaks
                             const textarea = document.getElementById('post-content');
                             const previewText = document.getElementById('previewText');
                             if (textarea && previewText) {
-                                previewText.textContent = textarea.value || '(No content yet)';
+                                const content = textarea.value || '(No content yet)';
+                                previewText.textContent = content;
                             }
 
-                            // Get image if uploaded
+                            // Get image if uploaded - check if image container is visible or has a valid src
+                            const imagePreviewContainer = document.querySelector('.image-preview-container');
                             const uploadedImage = document.getElementById('image-preview');
                             const previewImageContainer = document.getElementById('previewImageContainer');
                             const previewPostImage = document.getElementById('previewPostImage');
+                            const imageName = document.getElementById('image-name');
                             
-                            if (uploadedImage && uploadedImage.src && uploadedImage.style.display !== 'none') {
+                            if (imagePreviewContainer && imagePreviewContainer.style.display !== 'none' && uploadedImage && uploadedImage.src) {
                                 previewPostImage.src = uploadedImage.src;
                                 previewImageContainer.style.display = 'block';
                             } else {
                                 previewImageContainer.style.display = 'none';
                             }
 
-                            // Get user info
-                            const userNameSpan = document.querySelector('.p_name');
+                            // Get user info - SCOPE TO MODAL TO AVOID PICKING UP OTHER USERS
+                            const modal = document.getElementById('createPostModalRedesigned');
+                            const userNameSpan = modal.querySelector('.modal-header .p_name');
                             const audienceLabelSpan = document.getElementById('audienceLabel');
-                            const userPhotoImg = document.querySelector('.modal-header img[alt="Profile"]');
+                            const userPhotoImg = modal.querySelector('.modal-header img[alt="Profile"]');
                             const previewUserName = document.getElementById('previewUserName');
                             const previewAudience = document.getElementById('previewAudience');
                             const previewUserPhoto = document.getElementById('previewUserPhoto');
@@ -275,6 +279,27 @@ wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css
                                 previewMeta.textContent = `Just now • ${timeStr}`;
                             }
                         }
+
+                        // Update preview in real-time as user types
+                        const textarea = document.getElementById('post-content');
+                        if (textarea) {
+                            textarea.addEventListener('input', function() {
+                                // Only update if preview is visible
+                                if (previewView && previewView.style.display !== 'none') {
+                                    updatePreviewData();
+                                }
+                            });
+                        }
+
+                        // Update preview when privacy changes
+                        const privacyRadios = document.querySelectorAll('input[name="post_privacy"]');
+                        privacyRadios.forEach(radio => {
+                            radio.addEventListener('change', function() {
+                                if (previewView && previewView.style.display !== 'none') {
+                                    updatePreviewData();
+                                }
+                            });
+                        });
 
                         // ============================================
                         // SCHEDULE TOGGLE
