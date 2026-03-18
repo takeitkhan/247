@@ -172,6 +172,9 @@ function enqueue_post_create_script()
         true
     );
 
+    // ❌ REMOVED: post-create-js was causing duplicate form submissions
+    // The new modal-handler-js handles the redesigned form exclusively
+    /*
     wp_enqueue_script(
         'post-create-js',
         get_template_directory_uri() . '/assets/js/post-create.js',
@@ -179,6 +182,7 @@ function enqueue_post_create_script()
         null,
         true
     );
+    */
 
     // Enqueue modal handler for redesigned v2 form
     wp_enqueue_script(
@@ -189,13 +193,16 @@ function enqueue_post_create_script()
         true
     );
 
+    // ❌ REMOVED: post-create-js localize (no longer used)
+    /*
     wp_localize_script('post-create-js', 'ajax_object', array(
         'ajax_url' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce('post_comment_nonce'),
         'reaction_nonce' => wp_create_nonce('post_reaction_nonce')
     ));
+    */
 
-    // Also localize for modal handler
+    // Localize for modal handler
     wp_localize_script('modal-handler-js', 'ajax_object', array(
         'ajax_url' => admin_url('admin-ajax.php')
     ));

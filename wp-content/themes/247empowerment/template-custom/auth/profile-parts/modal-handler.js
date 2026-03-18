@@ -354,7 +354,8 @@
      * FORM SUBMISSION
      */
     function initializeFormSubmission() {
-        $('#create-post-form-redesigned').on('submit', function(e) {
+        // Only attach handler once using .off to remove any existing handlers first
+        $('#create-post-form-redesigned').off('submit').on('submit', function(e) {
             e.preventDefault();
             console.log('=== FORM SUBMIT EVENT TRIGGERED ===');
 
