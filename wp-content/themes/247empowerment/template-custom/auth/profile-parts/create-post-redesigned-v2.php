@@ -189,7 +189,7 @@ wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css
                         <input type="hidden" name="schedule_timestamp" id="schedule_timestamp">
                         
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary btn-md posting-submit-btn" id="submitPostBtn">
+                        <button type="submit" class="btn btn-info posting-submit-btn" id="submitPostBtn">
                             <i class="bi bi-send me-2"></i><span id="submitBtnText">Share Now</span>
                         </button>
                     </div>

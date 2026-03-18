@@ -229,7 +229,7 @@ $template_uri = get_template_directory_uri();
                             <!-- Modal Footer - Instant Post -->
                             <div class="modal-footer posting-modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-primary btn-lg posting-submit-btn" id="submit-instant-post">
+                                <button type="submit" class="btn btn-info posting-submit-btn" id="submit-instant-post">
                                     <i class="bi bi-send me-2"></i>Share Now
                                 </button>
                             </div>
@@ -436,7 +436,7 @@ $template_uri = get_template_directory_uri();
                             <!-- Modal Footer - Schedule Post -->
                             <div class="modal-footer posting-modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-primary btn-lg posting-submit-btn" id="submit-schedule-post">
+                                <button type="submit" class="btn btn-info posting-submit-btn" id="submit-schedule-post">
                                     <i class="bi bi-calendar-event me-2"></i>Schedule Post
                                 </button>
                             </div>

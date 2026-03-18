@@ -467,7 +467,6 @@ emoji-picker {
    ============================================ */
 
 .posting-submit-btn {
-    padding: 10px 24px;
     font-weight: 500;
     border-radius: 6px;
     transition: all 0.2s ease;
