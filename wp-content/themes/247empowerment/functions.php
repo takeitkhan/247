@@ -1193,3 +1193,11 @@ require_once get_template_directory() . '/more_functions/jobs.php';
 require_once get_template_directory() . '/more_functions/agreement.php';
 require_once get_template_directory() . '/more_functions/issues.php';
 require_once get_template_directory() . '/more_functions/paypalsettings.php';
+
+// Social Media Integration
+require_once get_template_directory() . '/more_functions/social-media-settings.php';
+require_once get_template_directory() . '/more_functions/facebook-auth.php';
+require_once get_template_directory() . '/more_functions/linkedin-auth.php';
+require_once get_template_directory() . '/more_functions/social-auth-handler.php';
+require_once get_template_directory() . '/more_functions/facebook-poster.php';
+require_once get_template_directory() . '/more_functions/linkedin-poster.php';

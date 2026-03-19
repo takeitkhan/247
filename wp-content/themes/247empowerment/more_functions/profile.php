@@ -377,11 +377,36 @@ function handle_create_post()
     error_log('║          POST CREATION COMPLETE (ID: ' . $post_id . ')' . str_repeat(' ', 18 - strlen($post_id)) . '║');
     error_log('╚════════════════════════════════════════════════════════╝');
 
+    // ============================================
+    // SOCIAL MEDIA SHARING
+    // ============================================
+    
+    // Check if user wants to share to Facebook
+    $share_to_facebook = isset($_POST['share_to_facebook']) && $_POST['share_to_facebook'] === '1';
+    
+    // Check if user wants to share to LinkedIn
+    $share_to_linkedin = isset($_POST['share_to_linkedin']) && $_POST['share_to_linkedin'] === '1';
+    
+    $social_shares = array();
+    
+    if ($share_to_facebook) {
+        $facebook_result = share_post_to_facebook($current_user_id, $post_id, $post_content);
+        $social_shares['facebook'] = $facebook_result;
+        error_log('Facebook share result: ' . ($facebook_result ? '✓ Success' : '✗ Failed'));
+    }
+    
+    if ($share_to_linkedin) {
+        $linkedin_result = share_post_to_linkedin($current_user_id, $post_id, $post_content);
+        $social_shares['linkedin'] = $linkedin_result;
+        error_log('LinkedIn share result: ' . ($linkedin_result ? '✓ Success' : '✗ Failed'));
+    }
+
     wp_send_json_success(array(
         'post_id' => $post_id,
         'privacy' => $post_privacy,
         'status' => $post_status,
-        'message' => 'Post created successfully'
+        'message' => 'Post created successfully',
+        'social_shares' => $social_shares
     ));
 }
 
@@ -1405,3 +1430,34 @@ function build_comment_tree($comments, $parent_id = 0, $depth = 0) {
     
     return $html;
 }
+
+// ============================================
+// SOCIAL MEDIA - CHECK CONNECTIONS AJAX
+// ============================================
+add_action('wp_ajax_check_social_connections', 'handle_check_social_connections');
+function handle_check_social_connections() {
+    // Check if user is logged in
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Unauthorized']);
+    }
+
+    $user_id = get_current_user_id();
+
+    // Check Facebook connection
+    $facebook_connected = false;
+    if (function_exists('is_facebook_connected')) {
+        $facebook_connected = is_facebook_connected($user_id);
+    }
+
+    // Check LinkedIn connection
+    $linkedin_connected = false;
+    if (function_exists('is_linkedin_connected')) {
+        $linkedin_connected = is_linkedin_connected($user_id);
+    }
+
+    wp_send_json_success([
+        'facebook_connected' => $facebook_connected,
+        'linkedin_connected' => $linkedin_connected
+    ]);
+}
+

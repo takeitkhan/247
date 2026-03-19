@@ -188,7 +188,32 @@ wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css
                         <input type="hidden" name="post_status_type" id="postStatusType" value="publish">
                         <input type="hidden" name="schedule_timestamp" id="schedule_timestamp">
                         
-                        <button type="button" class="btn btn-secondary edit-scheduled-post" data-bs-dismiss="modal">Cancel</button>
+                        <!-- Social Media Share Options -->
+                        <div class="social-share-options me-auto" id="socialShareOptions" style="display: none;">
+                            <div class="d-flex gap-3 align-items-center">
+                                <small class="text-muted">Also share to:</small>
+                                
+                                <!-- Facebook Checkbox -->
+                                <div class="form-check" id="facebookShareOption" style="display: none;">
+                                    <input class="form-check-input" type="checkbox" id="shareToFacebook" name="share_to_facebook" value="1">
+                                    <label class="form-check-label" for="shareToFacebook" style="cursor: pointer; margin: 0;">
+                                        <i class="bi bi-facebook me-1" style="color: #1877f2;"></i>
+                                        <small>Facebook</small>
+                                    </label>
+                                </div>
+                                
+                                <!-- LinkedIn Checkbox -->
+                                <div class="form-check" id="linkedinShareOption" style="display: none;">
+                                    <input class="form-check-input" type="checkbox" id="shareToLinkedin" name="share_to_linkedin" value="1">
+                                    <label class="form-check-label" for="shareToLinkedin" style="cursor: pointer; margin: 0;">
+                                        <i class="bi bi-linkedin me-1" style="color: #0a66c2;"></i>
+                                        <small>LinkedIn</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-info posting-submit-btn" id="submitPostBtn">
                             <i class="bi bi-send me-2"></i><span id="submitBtnText">Share Now</span>
                         </button>

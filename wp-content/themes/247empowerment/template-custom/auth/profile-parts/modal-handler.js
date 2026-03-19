@@ -28,6 +28,7 @@
         initializePrivacySelector();
         initializePostPreview();
         initializeScheduleDateTime();
+        initializeSocialShareOptions();
         initializeFormSubmission();
         console.log('✓ All modal components initialized');
     });
@@ -348,6 +349,51 @@
         } else {
             $preview.text('Select a date and time');
         }
+    }
+
+    /**
+     * SOCIAL MEDIA SHARE OPTIONS
+     */
+    function initializeSocialShareOptions() {
+        // Check which social accounts are connected via AJAX
+        $.ajax({
+            type: 'POST',
+            url: ajaxurl,
+            data: {
+                action: 'check_social_connections'
+            },
+            success: function(response) {
+                if (response.success) {
+                    const data = response.data;
+                    
+                    // Show social share options if any account is connected
+                    if (data.facebook_connected || data.linkedin_connected) {
+                        $('#socialShareOptions').show();
+                    }
+                    
+                    // Show Facebook checkbox if connected
+                    if (data.facebook_connected) {
+                        $('#facebookShareOption').show();
+                    } else {
+                        $('#facebookShareOption').hide();
+                        $('#shareToFacebook').prop('checked', false);
+                    }
+                    
+                    // Show LinkedIn checkbox if connected
+                    if (data.linkedin_connected) {
+                        $('#linkedinShareOption').show();
+                    } else {
+                        $('#linkedinShareOption').hide();
+                        $('#shareToLinkedin').prop('checked', false);
+                    }
+                    
+                    console.log('Social connections checked:', data);
+                }
+            },
+            error: function() {
+                console.log('Failed to check social connections');
+            }
+        });
     }
 
     /**
