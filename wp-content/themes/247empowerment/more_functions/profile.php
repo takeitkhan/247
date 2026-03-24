@@ -89,7 +89,7 @@ add_action('wp_enqueue_scripts', function () {
         );
         
         // Localize AJAX URL
-        wp_localize_script('modify-profile-js', 'ajaxurl', admin_url('admin-ajax.php'));
+        wp_localize_script('modify-profile-js', 'ajaxurl', array('url' => admin_url('admin-ajax.php')));
     }
 });
 
@@ -754,22 +754,6 @@ function load_more_referrals_callback()
 
     $search = isset($_GET['search']) ? sanitize_text_field($_GET['search']) : '';
 
-
-    if ($search) {
-        $profiles = array_filter($profiles, function ($p) use ($search) {
-            return str_contains(
-                strtolower(
-                    $p['first_name'] . ' ' .
-                        $p['last_name'] . ' ' .
-                        $p['username']
-                ),
-                strtolower($search)
-            );
-        });
-
-        $profiles = array_values($profiles);
-    }
-
     if (!$user_id) {
         wp_send_json_error('Invalid user ID');
     }
@@ -798,11 +782,28 @@ function load_more_referrals_callback()
         if (!$ref_id) {
             continue;
         }
+        // Build profile array...
+        $profiles[] = array(
+            'id' => $ref_id,
+            'first_name' => '',
+            'last_name' => '',
+            'username' => ''
+        );
+    }
 
-        $profile = (new UserProfileData($ref_id))->getProfile();
-        if ($profile) {
-            $profiles[] = $profile;
-        }
+    if ($search) {
+        $profiles = array_filter($profiles, function ($p) use ($search) {
+            return str_contains(
+                strtolower(
+                    $p['first_name'] . ' ' .
+                        $p['last_name'] . ' ' .
+                        $p['username']
+                ),
+                strtolower($search)
+            );
+        });
+
+        $profiles = array_values($profiles);
     }
 
     $sort = isset($_GET['sort']) ? sanitize_text_field($_GET['sort']) : 'recent';

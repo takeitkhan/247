@@ -89,6 +89,13 @@ $old_input = $message['old_input'] ?? [];
                             </div>
 
                             <div class="mb-3">
+                                <label for="phone" class="form-label fw-normal">Phone Number <span>*</span></label>
+                                <input type="tel" class="input" id="phone" name="phone"
+                                    placeholder="Enter your phone number"
+                                    value="<?php echo esc_attr($old_input['phone'] ?? ''); ?>" required>
+                            </div>
+
+                            <div class="mb-3">
                                 <label for="password" class="form-label fw-normal">Password <span>*</span></label>
                                 <div class="position-relative">
                                     <input type="password" class="input" id="password" name="password" placeholder="Enter your password" required>

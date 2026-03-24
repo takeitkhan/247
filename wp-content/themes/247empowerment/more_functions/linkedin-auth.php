@@ -18,20 +18,37 @@ if ( ! defined( 'LINKEDIN_APP_SECRET' ) ) {
     $app_secret = get_option('mm_linkedin_app_secret', '');
     define('LINKEDIN_APP_SECRET', $app_secret ?: 'NOT_SET');
 }
-define('LINKEDIN_REDIRECT_URI', admin_url('admin.php?page=social-auth-callback&provider=linkedin'));
+define('LINKEDIN_REDIRECT_URI', home_url('/linkedin-oauth-callback/'));
 
 // ============================================
 // Step 1: Generate Login URL
 // ============================================
 
 function get_linkedin_login_url() {
-    $state = wp_generate_password(32, false);
-    
-    // Store state in session for verification
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
+    // Ensure user is logged in
+    if (!is_user_logged_in()) {
+        wp_die('You must be logged in to connect social media.');
     }
-    $_SESSION['linkedin_oauth_state'] = $state;
+    
+    $state = wp_generate_password(32, false);
+    $user_id = get_current_user_id();
+    
+    // Store state in BOTH transient and option with timestamp
+    // This ensures it survives across different PHP requests/sessions
+    $transient_key = 'linkedin_oauth_state_' . $user_id;
+    
+    // Primary: WordPress transient
+    set_transient($transient_key, $state, 600); // 10 minute expiration
+    
+    // Backup: User option (for redundancy)
+    update_user_meta($user_id, '_linkedin_oauth_state_backup', array(
+        'state' => $state,
+        'timestamp' => time()
+    ));
+    
+    error_log('LinkedIn OAuth - Generated state for user ' . $user_id . ': ' . $state);
+    error_log('  Transient key: ' . $transient_key);
+    error_log('  User ID verified: ' . is_user_logged_in());
     
     $params = array(
         'response_type' => 'code',
@@ -50,18 +67,41 @@ function get_linkedin_login_url() {
 
 function handle_linkedin_oauth_callback() {
     if (!is_user_logged_in()) {
+        error_log('LinkedIn OAuth Callback - User NOT logged in!');
         wp_redirect(wp_login_url());
         exit;
     }
     
-    // Verify state for security
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
+    $user_id = get_current_user_id();
+    
+    // Try to get state from transient first
+    $transient_key = 'linkedin_oauth_state_' . $user_id;
+    $stored_state = get_transient($transient_key);
+    
+    // Fallback to user meta if transient expired
+    if (empty($stored_state)) {
+        $backup_data = get_user_meta($user_id, '_linkedin_oauth_state_backup', true);
+        if ($backup_data && is_array($backup_data)) {
+            $stored_state = $backup_data['state'];
+            $state_time = $backup_data['timestamp'];
+            
+            // Check if backup is still valid (within 10 minutes)
+            if ((time() - $state_time) > 600) {
+                $stored_state = null; // Expired
+            }
+        }
     }
     
-    if (empty($_GET['state']) || empty($_SESSION['linkedin_oauth_state']) || 
-        $_GET['state'] !== $_SESSION['linkedin_oauth_state']) {
-        wp_die('State mismatch. Security verification failed.');
+    error_log('LinkedIn OAuth Callback - User: ' . $user_id);
+    error_log('  Received state: ' . ($_GET['state'] ?? 'empty'));
+    error_log('  Stored state (transient): ' . ($stored_state ?? 'empty'));
+    error_log('  Transient key used: ' . $transient_key);
+    
+    // Check state exists and matches
+    if (empty($_GET['state']) || empty($stored_state) || 
+        $_GET['state'] !== $stored_state) {
+        error_log('LinkedIn OAuth State Mismatch! GET=' . ($_GET['state'] ?? 'empty') . ', Stored=' . ($stored_state ?? 'empty'));
+        wp_die('State mismatch. Security verification failed. Please try connecting again.');
     }
     
     // Check for errors from LinkedIn
@@ -89,9 +129,15 @@ function handle_linkedin_oauth_callback() {
     // Store token and user info
     $stored = store_linkedin_credentials($user_id, $token_response);
     
+    // Clean up state from both transient and backup meta
+    delete_transient('linkedin_oauth_state_' . $user_id);
+    delete_user_meta($user_id, '_linkedin_oauth_state_backup');
+    
     if ($stored) {
+        error_log('LinkedIn OAuth Success - User: ' . $user_id . ' connected successfully');
         wp_redirect(add_query_arg('success', 'linkedin', admin_url('admin.php?page=social-connect')));
     } else {
+        error_log('LinkedIn OAuth Failed - Could not store credentials for user ' . $user_id);
         wp_die('Failed to store LinkedIn credentials.');
     }
     

@@ -119,6 +119,25 @@ function render_social_media_settings_page() {
                             </label>
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row">
+                            <label>Facebook Redirect URI</label>
+                        </th>
+                        <td>
+                            <input type="text" 
+                                   readonly
+                                   value="<?php echo esc_attr(home_url('/facebook-oauth-callback/')); ?>" 
+                                   class="regular-text"
+                                   style="width: 100%; max-width: 400px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; background-color: #f5f5f5;">
+                            <p class="description">
+                                ✅ Auto-generated. Copy this and paste it in your <strong>Facebook App Settings → Valid OAuth Redirect URIs</strong>
+                                <br>
+                                <button type="button" class="button" onclick="copyFacebookRedirectURI()" style="margin-top: 8px;">
+                                    📋 Copy to Clipboard
+                                </button>
+                            </p>
+                        </td>
+                    </tr>
                 </table>
             </div>
 
@@ -160,6 +179,25 @@ function render_social_media_settings_page() {
                             <label style="margin-top: 10px;">
                                 <input type="checkbox" id="toggle_linkedin_secret"> Show/Hide
                             </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            <label>LinkedIn Redirect URI</label>
+                        </th>
+                        <td>
+                            <input type="text" 
+                                   readonly
+                                   value="<?php echo esc_attr(home_url('/linkedin-oauth-callback/')); ?>" 
+                                   class="regular-text"
+                                   style="width: 100%; max-width: 400px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; background-color: #f5f5f5;">
+                            <p class="description">
+                                ✅ Auto-generated. Copy this and paste it in your <strong>LinkedIn App Settings → Authorized Redirect URLs</strong>
+                                <br>
+                                <button type="button" class="button" onclick="copyLinkedInRedirectURI()" style="margin-top: 8px;">
+                                    📋 Copy to Clipboard
+                                </button>
+                            </p>
                         </td>
                     </tr>
                 </table>
@@ -357,6 +395,34 @@ function render_social_media_settings_page() {
             const field = document.getElementById('linkedin_app_secret');
             field.type = this.checked ? 'text' : 'password';
         });
+
+        // Copy to clipboard functions
+        function copyFacebookRedirectURI() {
+            const uri = "<?php echo esc_attr(home_url('/facebook-oauth-callback/')); ?>";
+            copyToClipboard(uri, event.target);
+        }
+
+        function copyLinkedInRedirectURI() {
+            const uri = "<?php echo esc_attr(home_url('/linkedin-oauth-callback/')); ?>";
+            copyToClipboard(uri, event.target);
+        }
+
+        function copyToClipboard(text, button) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            
+            const originalText = button.textContent;
+            button.textContent = '✅ Copied!';
+            button.disabled = true;
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.disabled = false;
+            }, 2000);
+        }
     </script>
 
     <?php

@@ -14,6 +14,11 @@
             'walker' => new Edit_Profile_Walker(),
         ]);
         ?>
+        <!-- Social Media Settings Link -->
+        <a href="<?php echo esc_url(home_url('/social-media-settings')); ?>" class="nav-link d-flex align-items-center gap-2" style="padding: 8px 0; color: #666; text-decoration: none;">
+            <i class="bi bi-share2" style="font-size: 16px;"></i>
+            <span>Social Media</span>
+        </a>
     </div>
 
 </div>

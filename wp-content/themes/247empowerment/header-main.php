@@ -8,6 +8,25 @@
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+    window.addEventListener('load', function () {
+
+    const players = document.querySelectorAll('.ytplayer iframe');
+
+    players.forEach((iframe) => {
+        let src = iframe.getAttribute('src');
+
+        // remove old params to avoid duplication
+        src = src.replace(/(&|\?)autoplay=1/g, '');
+
+        // add required params
+        const newSrc = src + '&autoplay=1&mute=1&enablejsapi=1&playsinline=1';
+
+        iframe.setAttribute('src', newSrc);
+    });
+
+    });
+    </script>
 
     <?php
     /**

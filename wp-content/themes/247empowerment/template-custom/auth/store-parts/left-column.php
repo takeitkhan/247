@@ -1,5 +1,7 @@
-<h3 class="fw-bold market-title">Marketplace</h3>
 <?php
+/**
+ * @var mixed
+<h3 class="fw-bold market-title">Marketplace</h3>
 $current_user = wp_get_current_user();
 $username = $current_user->user_nicename;
 
@@ -11,8 +13,10 @@ $terms = get_terms([
 ]);
 
 $username = get_query_var('store_user');
+ */
 ?>
-
+<!-- Marketplace Navigation -->
+<?php /**
 <ul class="flex-column gap-4 mt-3 nav">
     <li class="nav-item">
         <a class="p-0 nav-link mark-title-clr" href="<?php echo esc_url(home_url("/$username/store")); ?>">
@@ -30,3 +34,5 @@ $username = get_query_var('store_user');
         </li>
     <?php endforeach; ?>
 </ul>
+*/ ?>
+<!-- End of Marketplace Navigation -->

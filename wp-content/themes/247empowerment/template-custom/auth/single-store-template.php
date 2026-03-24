@@ -116,6 +116,9 @@ if (!$is_shareable) {
 
                 <?php get_template_part('template-custom/auth/feed-parts/profile-card', null, ['profile' => $profile]); ?>
                 <?php
+                /**
+                 * @var mixed
+                 
                 $current_user = wp_get_current_user();
                 $username = get_query_var('store_user') ?: $current_user->user_nicename;
 
@@ -125,7 +128,7 @@ if (!$is_shareable) {
                     'orderby' => 'name',
                     'order' => 'ASC',
                 ]);
-                ?>
+                    
                 <div class="bg-white custom-card navbar-link">
                     <ul class="d-flex flex-column gap-2 nav">
                         <!-- Browse All -->
@@ -150,6 +153,8 @@ if (!$is_shareable) {
                         <?php endforeach; ?>
                     </ul>
                 </div>
+                */
+                ?>
                 <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
             </div>
             <div class="bg-white mb-0 col-lg-9 custom-card">

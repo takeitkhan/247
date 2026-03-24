@@ -701,6 +701,9 @@ add_filter('theme_page_templates', function ($templates) {
 add_action('init', function () {
     add_rewrite_rule('^report/?$', 'index.php?custom_page=report', 'top');
     add_rewrite_rule('^suggestion/?$', 'index.php?custom_page=suggestion', 'top');
+    add_rewrite_rule('^social-media-settings/?$', 'index.php?custom_page=social-media-settings', 'top');
+    add_rewrite_rule('^facebook-oauth-callback/?$', 'index.php?custom_page=facebook-oauth-callback', 'top');
+    add_rewrite_rule('^linkedin-oauth-callback/?$', 'index.php?custom_page=linkedin-oauth-callback', 'top');
 });
 
 // Register query var
@@ -722,11 +725,27 @@ add_filter('template_include', function ($template) {
 
     // Handle custom_page
     $custom_page = get_query_var('custom_page');
+    
+    // OAuth Callbacks
+    if ($custom_page === 'facebook-oauth-callback') {
+        require_once get_template_directory() . '/more_functions/facebook-auth.php';
+        handle_facebook_oauth_callback();
+        exit;
+    }
+    if ($custom_page === 'linkedin-oauth-callback') {
+        require_once get_template_directory() . '/more_functions/linkedin-auth.php';
+        handle_linkedin_oauth_callback();
+        exit;
+    }
+    
     if ($custom_page === 'report') {
         return get_theme_file_path('template-custom/auth/report.php');
     }
     if ($custom_page === 'suggestion') {
         return get_theme_file_path('template-custom/auth/suggestion.php');
+    }
+    if ($custom_page === 'social-media-settings') {
+        return get_theme_file_path('template-custom/auth/social-media-settings.php');
     }
 
     // Handle user profile
@@ -1201,3 +1220,6 @@ require_once get_template_directory() . '/more_functions/linkedin-auth.php';
 require_once get_template_directory() . '/more_functions/social-auth-handler.php';
 require_once get_template_directory() . '/more_functions/facebook-poster.php';
 require_once get_template_directory() . '/more_functions/linkedin-poster.php';
+
+// Debug Logs Viewer (for OAuth debugging)
+require_once get_template_directory() . '/more_functions/debug-logs-viewer.php';
