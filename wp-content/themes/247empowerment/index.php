@@ -15,5 +15,4 @@
     <?php endwhile; ?>
 </div>
 
-
 <?php get_footer_based_on_login(); ?>

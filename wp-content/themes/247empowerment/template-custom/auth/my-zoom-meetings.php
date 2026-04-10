@@ -1,35 +1,53 @@
 <?php
 /* Template Name: My Zoom Meetings */
+
+// Check if user is logged in
 if (!is_user_logged_in()) {
-    wp_redirect(home_url('/signin'));
+    wp_redirect(wp_login_url());
     exit;
 }
 
-get_header_based_on_login();
-?>
-<main>
-    <div class="main-container" style="padding-top: 80px">
-        <div class="row g-3">
-            <?php include get_template_directory() . '/template-custom/auth/profile-parts/edit-profile-left-sidebar.php'; ?>
+// Get header
+get_header();
 
-            <div class="ms-md-auto col-12 col-md-8 col-lg-9 col-xl-9">
-                <div class="bg-white custom-box-shadow mb-3 p-3 custom-border-radius">
-                    <div class="row">
-                        <div class="col-6">
-                            <h5 class="mb-5">📹 My Zoom Meetings</h5>
-                        </div>
+// Get current user info
+$user_id = get_current_user_id();
+?>
+
+<div class="container profile-page pt20">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <?php 
+            // Load sidebar menu
+            if (function_exists('get_template_part')) {
+                get_template_part('template-custom/auth/common-parts/editprofilemenu');
+                get_template_part('template-custom/auth/profile-parts/navlink');
+            }
+            ?>
+        </div>
+
+        <!-- Main Content -->
+        <div class="mb-0 rounded-end-0 col-lg-6">
+            <div class="bg-white custom-card post-search">
+                <div class="gap-3 post-row">
+                    <div>
+                        <h5 class="pb-4 text-start portal-title">📹 My Zoom Meetings</h5>
                     </div>
-                    <?php
-                    // echo '<pre>';
-                    // print_r($profile);
-                    // echo '</pre>';
-                    echo do_shortcode('[zoom_appointments]');
-                    ?>
+                    
+                    <div class="w-100">
+                        <?php 
+                        // Display Zoom meetings
+                        echo do_shortcode('[zoom_upcoming_meetings]');
+                        ?>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    </div>
-</main>
+</div>
 
-<?php get_footer_based_on_login(); ?>
+<?php 
+// Get footer
+get_footer();
+?>

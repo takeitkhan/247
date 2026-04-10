@@ -1,18 +1,16 @@
 @use "variables" as *;
 
 .custom-navbar {
-  background: #fff;
+  background: #ffffff;
   position: sticky;
   top: 0;
   z-index: 1050;
-  height: 93px;
-  padding: 24px 20px;
+  padding: 0px;
 
   .nav-item {
     color: $black;
     font-weight: 500;
-    padding: 0px 5px;
-    margin: 0 15px;
+    margin: 0 10px;
     border-bottom: 2px solid transparent; // ✅ reserve space for the border
 
     &:hover,
@@ -73,7 +71,7 @@
   }
 
   .logo-nav {
-    height: 55px;
+    width: 80px;
   }
 
   .n-badge {
@@ -644,7 +642,7 @@
   .navbar-nav.desktop-menu {
     flex-direction: row;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
   }
 
   /* Desktop dropdown */
@@ -658,4 +656,19 @@
   .navbar-nav.desktop-menu .dropdown:hover>.dropdown-menu {
     display: block;
   }
+}
+
+@media (max-width: 460px) {
+    .logo-nav {
+      width: 150px;
+    }
+    .logo-text {
+      font-family: 'Goudy Old Style', serif;
+      font-size: 18px !important;
+    }
+}
+
+.logo-text {
+  font-family: 'Goudy Old Style', serif;
+  font-size: 25px !important;
 }

@@ -9,7 +9,7 @@ get_header_based_on_login();
     <?php endif; ?>
 </div>
 
-<div class="container">
+<div class="container container-home">
     <div class="text-center row">
         <?php while (have_posts()): the_post(); ?>
 

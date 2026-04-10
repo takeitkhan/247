@@ -154,7 +154,7 @@
       <header class="custom-navbar">
           <div class="d-flex align-items-center justify-content-between w-100 h-100 container">
               <!-- logo-nav -->
-              <div class="d-flex align-items-center gap-2">
+              <div class="d-flex align-items-center gap-1">
                   <?php if (is_user_logged_in()): ?>
                       <?php $user = UserProfileData::getInstance(); ?>
                       <a
@@ -165,6 +165,9 @@
                               src="<?php echo esc_url(get_theme_mod('large_logo')); ?>"
                               alt="<?php echo esc_attr(get_bloginfo('name')); ?>">
                       </a>
+                      <span class="logo-text fw-normal" style="color: #333;">
+                          <?php echo esc_html(get_bloginfo('name')); ?>
+                      </span>
                   <?php endif; ?>
               </div>
 

@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+/* Goudy Old Style Font */
+@font-face {
+    font-family: 'Goudy Old Style';
+    src: url('../goudyoldstyle/GoudyOldStyleT-Regular.woff2') format('woff2'),
+         url('../goudyoldstyle/GoudyOldStyleT-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 @keyframes pulse {
   0% {
     transform: scale(1);
@@ -25,4 +35,11 @@
   h2.custom-title {
     font-size: 30px;
   }
+}
+
+/* DESKTOP NAV - Goudy Old Style Font */
+.navbar,
+.navbar-nav,
+.desktop-menu {
+  font-family: 'Goudy Old Style', serif;
 }

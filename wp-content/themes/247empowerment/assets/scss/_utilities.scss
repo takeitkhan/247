@@ -4,12 +4,19 @@
   text-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
 }
 
+
 .container {
   max-width: 1440px !important;
   margin-right: 24px !important;
   margin-left: 24px !important;
   margin: 0 auto !important;
 }
+
+
+.container-home {
+  max-width: 1200px !important;
+}
+
 .bg-custom-gray {
   background-color: #E7EEFB !important;
   border: 1px solid #B5C9F2 !important;
@@ -131,7 +138,14 @@
     height: 200px;
   }
 }
-
+@media (max-width: 576px) {
+  .gap-3 {
+    gap: .2rem !important;
+  }
+  .gap-4 {
+    gap: 1rem !important;
+  }
+}
 
 .border-underline {
   border-bottom: 1px solid $supporting-neutral;
