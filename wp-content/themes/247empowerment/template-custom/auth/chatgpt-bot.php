@@ -4,29 +4,103 @@
  * Template Name: ChatGPT Bot
  */
 if (!is_user_logged_in()) {
-    wp_redirect(home_url('/signin'));
+    wp_redirect(wp_login_url());
     exit;
 }
 get_header_based_on_login();
+
+$current_user = wp_get_current_user();
+$user_id = get_current_user_id();
 ?>
 
-<div class="container profile-page pt20">
+<div class="container profile-page pt-4 pb-4">
     <div class="row">
-        <div class="order-3 order-lg-1 col-lg-3">
-            <?php get_template_part('template-custom/auth/common-parts/editprofilemenu', null, ['profile' => $profile]); ?>
-            <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
+        <!-- Sidebar Navigation -->
+        <div class="col-lg-3">
+            <?php 
+            $profile = (new UserProfileData($current_user->ID))->getProfile();
+            get_template_part('template-custom/auth/common-parts/editprofilemenu', null, ['profile' => $profile]); 
+            ?>
         </div>
-        <div class="order-2 order-lg-2 mb-0 rounded-end-0 col-lg-9">
-            <div class="main-container">
-                <div class="mx-auto xshadow card">
-                    <div class="text-center card-header">
-                        <h5 class="mb-0">Basic Aritficial Intelligence</h5>
+
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <!-- Header Section -->
+            <div class="bg-white rounded mb-4 p-4 border-bottom">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <h3 class="mb-2">
+                            <i class="bi bi-robot"></i>
+                            AI Chat Assistant
+                        </h3>
+                        <p class="text-muted mb-0">
+                            Chat with our AI assistant powered by OpenRouter. Ask questions, get answers, and explore AI capabilities.
+                        </p>
                     </div>
-                    <div id="chat-box" class="overflow-auto card-body" style="height: 400px; background: #f8f9fa;"></div>
-                    <div class="p-3 card-footer">
-                        <div class="input-group">
-                            <input type="text" id="user-input" class="form-control" placeholder="Type your message..." />
-                            <button class="btn custom-btn" id="send-btn" type="button">Send</button>
+                </div>
+            </div>
+
+            <!-- Chat Container -->
+            <div class="chat-wrapper bg-white rounded border">
+                <!-- Chat Messages Area -->
+                <div id="chat-box" class="chat-messages">
+                    <div class="chat-welcome">
+                        <div class="welcome-icon">
+                            <i class="bi bi-robot"></i>
+                        </div>
+                        <h5>Welcome to AI Chat</h5>
+                        <p class="text-muted">Start a conversation by typing a message below</p>
+                    </div>
+                </div>
+
+                <!-- Chat Input Area -->
+                <div class="chat-footer">
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            id="user-input" 
+                            class="form-control chat-input" 
+                            placeholder="Ask me anything..." 
+                            autocomplete="off"
+                        />
+                        <button class="btn btn-send" id="send-btn" type="button" title="Send message">
+                            <i class="bi bi-send-fill"></i>
+                        </button>
+                    </div>
+                    <small class="text-muted d-block mt-2 text-center">
+                        <i class="bi bi-info-circle"></i>
+                        Press Enter or click Send to submit your message
+                    </small>
+                </div>
+            </div>
+
+            <!-- Info Section -->
+            <div class="chat-info mt-4 p-4 bg-light rounded">
+                <h6 class="mb-3">
+                    <i class="bi bi-lightbulb"></i>
+                    Tips for Better Responses
+                </h6>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="bi bi-chat-left-text"></i>
+                            </div>
+                            <div>
+                                <strong>Be Specific</strong>
+                                <p class="small text-muted mb-0">The more details you provide, the better answers you'll get</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="bi bi-question-circle"></i>
+                            </div>
+                            <div>
+                                <strong>Ask Follow-ups</strong>
+                                <p class="small text-muted mb-0">Don't hesitate to ask clarifying questions</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -34,53 +108,372 @@ get_header_based_on_login();
         </div>
     </div>
 </div>
+
+<style>
+/* Chat Wrapper */
+.chat-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 600px;
+    max-height: 700px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Chat Messages Area */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Welcome Message */
+.chat-welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    color: #6c757d;
+}
+
+.welcome-icon {
+    font-size: 3rem;
+    color: #0a66c2;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+
+.welcome-icon i {
+    display: inline-block;
+}
+
+.chat-welcome h5 {
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 0.5rem;
+}
+
+/* Chat Messages */
+.chat-msg {
+    margin-bottom: 1rem;
+    display: flex;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chat-msg.user {
+    justify-content: flex-end;
+}
+
+.chat-msg.bot {
+    justify-content: flex-start;
+}
+
+.chat-msg-bubble {
+    max-width: 75%;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    word-wrap: break-word;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.chat-msg.user .chat-msg-bubble {
+    background: linear-gradient(135deg, #0a66c2 0%, #005b96 100%);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.chat-msg.bot .chat-msg-bubble {
+    background: #f1f3f5;
+    color: #212529;
+    border-bottom-left-radius: 4px;
+    border: 1px solid #e9ecef;
+}
+
+.chat-msg strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.chat-msg.user strong {
+    text-align: right;
+}
+
+/* Chat Footer */
+.chat-footer {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.input-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chat-input {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.chat-input:focus {
+    border-color: #0a66c2;
+    box-shadow: 0 0 0 0.2rem rgba(10, 102, 194, 0.15);
+    outline: none;
+}
+
+.btn-send {
+    background: linear-gradient(135deg, #0a66c2 0%, #005b96 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    min-width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-send:hover {
+    background: linear-gradient(135deg, #005b96 0%, #003d60 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(10, 102, 194, 0.3);
+}
+
+.btn-send:active {
+    transform: translateY(0);
+}
+
+.btn-send i {
+    font-size: 1rem;
+}
+
+/* Info Section */
+.chat-info {
+    border: 1px solid #e9ecef;
+}
+
+.info-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.info-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0a66c2;
+    font-size: 1.2rem;
+}
+
+.info-item strong {
+    display: block;
+    font-size: 0.95rem;
+    color: #212529;
+}
+
+.info-item p {
+    margin: 0;
+    color: #6c757d;
+}
+
+/* Scrollbar Styling */
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: #dee2e6;
+    border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #adb5bd;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .chat-wrapper {
+        min-height: 500px;
+        max-height: 600px;
+    }
+
+    .chat-msg-bubble {
+        max-width: 90%;
+    }
+
+    .chat-messages {
+        padding: 1.5rem 1rem;
+    }
+
+    .chat-footer {
+        padding: 1rem;
+    }
+
+    .input-group {
+        gap: 0.25rem;
+    }
+
+    .chat-input {
+        font-size: 0.9rem;
+        padding: 0.65rem 0.75rem;
+    }
+
+    .btn-send {
+        padding: 0.65rem 1rem;
+        min-width: 45px;
+    }
+}
+</style>
+
 <script>
-    document.getElementById("send-btn").onclick = async () => {
-        await sendMessage();
+(function() {
+    'use strict';
+
+    // Chat configuration
+    const chatConfig = {
+        ajaxUrl: "<?php echo admin_url('admin-ajax.php'); ?>",
+        action: 'chatgpt_ajax_handler'
     };
 
-    document.getElementById("user-input").addEventListener("keydown", async (e) => {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            await sendMessage();
-        }
+    // Initialize chat when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeChat();
     });
 
-    async function sendMessage() {
-        const input = document.getElementById("user-input");
-        const msg = input.value.trim();
-        if (!msg) return;
+    function initializeChat() {
+        const sendBtn = document.getElementById('send-btn');
+        const userInput = document.getElementById('user-input');
+        const chatBox = document.getElementById('chat-box');
 
-        appendMessage("You", msg, "user");
-        input.value = "";
+        // Send button click
+        sendBtn.addEventListener('click', () => sendMessage());
 
-        const res = await fetch("<?php echo admin_url('admin-ajax.php?action=chatgpt_ajax_handler'); ?>", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                message: msg
-            })
+        // Enter key press
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
         });
 
-        const data = await res.json();
+        // Clear welcome message on first message
+        let isFirstMessage = true;
+        userInput.addEventListener('input', function() {
+            if (isFirstMessage && this.value.trim()) {
+                const welcome = chatBox.querySelector('.chat-welcome');
+                if (welcome) {
+                    welcome.remove();
+                    isFirstMessage = false;
+                }
+            }
+        });
+    }
 
-        if (data.reply) {
-            appendMessage("AI", data.reply, "bot");
-        } else {
-            appendMessage("AI", "⚠️ AI response was empty or malformed.", "bot");
+    async function sendMessage() {
+        const input = document.getElementById('user-input');
+        const msg = input.value.trim();
+
+        if (!msg) return;
+
+        const chatBox = document.getElementById('chat-box');
+
+        // Remove welcome message if still present
+        const welcome = chatBox.querySelector('.chat-welcome');
+        if (welcome) welcome.remove();
+
+        // Append user message
+        appendMessage(msg, 'user');
+        input.value = '';
+        input.focus();
+
+        // Show loading indicator
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'chat-msg bot';
+        loadingDiv.innerHTML = `
+            <div class="chat-msg-bubble">
+                <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        `;
+        chatBox.appendChild(loadingDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        try {
+            const res = await fetch(chatConfig.ajaxUrl + '?action=' + chatConfig.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: msg })
+            });
+
+            const data = await res.json();
+
+            // Remove loading indicator
+            loadingDiv.remove();
+
+            if (data.reply) {
+                appendMessage(data.reply, 'bot');
+            } else {
+                appendMessage('⚠️ Sorry, I couldn\'t process that. Please try again.', 'bot');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            loadingDiv.remove();
+            appendMessage('⚠️ Connection error. Please try again.', 'bot');
         }
     }
 
-    function appendMessage(sender, text, cssClass) {
-        const box = document.getElementById("chat-box");
-        const div = document.createElement("div");
-        div.className = `chat-msg ${cssClass} mb-2`;
-        div.innerHTML = `<strong>${sender}:</strong> ${text}`;
-        box.appendChild(div);
-        box.scrollTop = box.scrollHeight;
+    function appendMessage(text, sender) {
+        const chatBox = document.getElementById('chat-box');
+        const div = document.createElement('div');
+        div.className = `chat-msg ${sender}`;
+
+        const bubble = document.createElement('div');
+        bubble.className = 'chat-msg-bubble';
+        bubble.textContent = text;
+
+        div.appendChild(bubble);
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
+})();
 </script>
 
 <?php get_footer_based_on_login(); ?>

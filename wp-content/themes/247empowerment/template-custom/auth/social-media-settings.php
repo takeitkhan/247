@@ -29,62 +29,97 @@ get_header_based_on_login();
         <!-- Main Content -->
         <div class="col-lg-9">
             <!-- Breadcrumb / Header -->
-            <div class="bg-white rounded mb-4 p-3">
-                <h4 class="mb-0">
-                    <i class="bi bi-share2 me-2"></i>
-                    Connect Social Media Accounts
-                </h4>
-                <small class="text-muted d-block mt-2">
-                    Link your Facebook and LinkedIn accounts to share your posts automatically across social platforms
-                </small>
+            <div class="bg-white rounded mb-4 p-4">
+                <div class="mb-0">
+                    <h4 class="mb-2">
+                        <i class="bi bi-share2 me-2"></i>
+                        Connect Social Media Accounts
+                    </h4>
+                    <p class="text-muted mb-0 small">
+                        Link your Facebook and LinkedIn accounts to share your posts automatically across social platforms
+                    </p>
+                </div>
             </div>
 
             <!-- Social Media Connect Component -->
             <?php get_template_part('template-custom/auth/profile-parts/social-media-connect'); ?>
 
             <!-- Help Section -->
-            <div class="bg-light rounded mt-5 p-4">
-                <h5 class="mb-3">
-                    <i class="bi bi-question-circle me-2"></i>
-                    How to Connect Your Accounts
-                </h5>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body">
-                                <h6 class="card-title">
-                                    <span style="color: #1877f2;">f</span> Facebook
-                                </h6>
-                                <ol style="font-size: 13px; padding-left: 20px;">
-                                    <li>Click "Connect with Facebook" button</li>
-                                    <li>Log in with your Facebook account</li>
-                                    <li>Allow permissions for posting</li>
-                                    <li>You're ready to share!</li>
-                                </ol>
-                                <p class="text-muted small mt-2 mb-0">
-                                    <i class="bi bi-info-circle me-1"></i>
-                                    We'll never post without your permission
-                                </p>
+            <div class="help-section mt-5">
+                <div class="help-header">
+                    <h5 class="help-title">
+                        <i class="bi bi-lightbulb"></i>
+                        How to Connect Your Accounts
+                    </h5>
+                    <p class="help-subtitle">Follow these simple steps to connect your social accounts</p>
+                </div>
+
+                <div class="help-cards-grid">
+                    <!-- Facebook Instructions -->
+                    <div class="help-card facebook-help">
+                        <div class="help-card-icon">
+                            <i class="bi bi-facebook"></i>
+                        </div>
+                        <h6 class="help-card-title">Connect Facebook</h6>
+                        
+                        <div class="steps-container">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <p>Click "Connect Now" button above</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <p>Log in with your Facebook account</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <p>Review and approve the permissions</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <p>You're all set! Start sharing posts</p>
                             </div>
                         </div>
+
+                        <div class="help-card-footer">
+                            <p class="footer-text">
+                                <i class="bi bi-shield-check"></i>
+                                We'll never post without your permission
+                            </p>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body">
-                                <h6 class="card-title">
-                                    <span style="color: #0a66c2;">in</span> LinkedIn
-                                </h6>
-                                <ol style="font-size: 13px; padding-left: 20px;">
-                                    <li>Click "Connect with LinkedIn" button</li>
-                                    <li>Log in with your LinkedIn account</li>
-                                    <li>Allow permissions for posting</li>
-                                    <li>You're ready to share!</li>
-                                </ol>
-                                <p class="text-muted small mt-2 mb-0">
-                                    <i class="bi bi-info-circle me-1"></i>
-                                    Perfect for professional networking
-                                </p>
+
+                    <!-- LinkedIn Instructions -->
+                    <div class="help-card linkedin-help">
+                        <div class="help-card-icon">
+                            <i class="bi bi-linkedin"></i>
+                        </div>
+                        <h6 class="help-card-title">Connect LinkedIn</h6>
+                        
+                        <div class="steps-container">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <p>Click "Connect Now" button above</p>
                             </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <p>Log in with your LinkedIn account</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <p>Review and approve the permissions</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <p>You're all set! Start sharing posts</p>
+                            </div>
+                        </div>
+
+                        <div class="help-card-footer">
+                            <p class="footer-text">
+                                <i class="bi bi-briefcase"></i>
+                                Perfect for professional networking
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -164,21 +199,233 @@ get_header_based_on_login();
 </div>
 
 <style>
+/* Help Section Styling */
+.help-section {
+    margin-top: 3rem;
+}
+
+.help-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.help-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.help-title i {
+    color: #ffc107;
+    font-size: 1.75rem;
+}
+
+.help-subtitle {
+    color: #6c757d;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Help Cards Grid */
+.help-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+/* Individual Help Card */
+.help-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.help-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+}
+
+/* Help Card Icon */
+.help-card-icon {
+    width: 100%;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: white;
+}
+
+.facebook-help .help-card-icon {
+    background: linear-gradient(135deg, #1877f2 0%, #0a66f2 100%);
+}
+
+.linkedin-help .help-card-icon {
+    background: linear-gradient(135deg, #0a66c2 0%, #004182 100%);
+}
+
+/* Help Card Title */
+.help-card-title {
+    padding: 1.5rem 1.5rem 0.75rem 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #212529;
+    margin: 0;
+}
+
+/* Steps Container */
+.steps-container {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    flex: 1;
+}
+
+.step {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: flex-start;
+}
+
+.step:last-child {
+    margin-bottom: 0;
+}
+
+.step-number {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: white;
+    min-width: 32px;
+}
+
+.facebook-help .step-number {
+    background-color: #1877f2;
+}
+
+.linkedin-help .step-number {
+    background-color: #0a66c2;
+}
+
+.step p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #495057;
+    line-height: 1.5;
+    padding-top: 0.25rem;
+}
+
+/* Help Card Footer */
+.help-card-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e9ecef;
+    background-color: #f8f9fa;
+}
+
+.footer-text {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #495057;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.facebook-help .footer-text i {
+    color: #1877f2;
+}
+
+.linkedin-help .footer-text i {
+    color: #0a66c2;
+}
+
+/* Accordion Button Styling */
 .accordion-button {
     font-weight: 500;
+    transition: all 0.3s ease;
 }
 
 .accordion-button:not(.collapsed) {
     background-color: #f8f9fa;
     color: #000;
+    box-shadow: none;
+    border-bottom: 1px solid #dee2e6;
 }
 
+.accordion-button:hover {
+    background-color: #f8f9fa;
+}
+
+/* Card Hover Effects */
 .card {
     transition: all 0.3s ease;
 }
 
 .card:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .help-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .help-header {
+        padding-bottom: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .help-title {
+        font-size: 1.25rem;
+    }
+
+    .help-subtitle {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .help-card-icon {
+        padding: 1rem;
+    }
+
+    .help-card-title {
+        padding: 1rem 1rem 0.5rem 1rem;
+        font-size: 1.1rem;
+    }
+
+    .steps-container {
+        padding: 0 1rem 1rem 1rem;
+    }
+
+    .step {
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .help-card-footer {
+        padding: 0.75rem 1rem;
+    }
 }
 </style>
 

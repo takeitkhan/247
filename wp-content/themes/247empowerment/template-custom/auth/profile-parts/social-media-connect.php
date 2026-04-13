@@ -27,158 +27,118 @@ $linkedin_name = get_user_meta($user_id, '_linkedin_user_name', true);
 ?>
 
 <div class="social-media-connect-container">
-    <div class="card border-0 shadow-sm">
-        <!-- Header -->
-        <div class="card-header bg-white border-bottom">
-            <h4 class="mb-0">
-                <i class="bi bi-share2 me-2"></i>
-                Connect Social Media Accounts
-            </h4>
-            <small class="text-muted d-block mt-1">
-                Link your Facebook and LinkedIn accounts to share posts automatically
-            </small>
+    <!-- Social Connect Cards Grid -->
+    <div class="social-connect-grid">
+        <!-- Facebook Connect Card -->
+        <div class="social-connect-card facebook-card">
+            <div class="card-header-icon facebook-icon">
+                <i class="bi bi-facebook"></i>
+            </div>
+            
+            <div class="card-content">
+                <h5 class="card-title">Facebook</h5>
+                <p class="card-subtitle">Share to your Facebook profile</p>
+                
+                <!-- Status Badge -->
+                <div class="status-badge <?php echo $facebook_connected ? 'connected' : 'disconnected'; ?>">
+                    <i class="bi <?php echo $facebook_connected ? 'bi-check-circle-fill' : 'bi-exclamation-circle'; ?>"></i>
+                    <span><?php echo $facebook_connected ? 'Connected' : 'Not Connected'; ?></span>
+                    <?php if ($facebook_connected && !empty($facebook_name)): ?>
+                        <div class="account-name"><?php echo esc_html($facebook_name); ?></div>
+                    <?php endif; ?>
+                </div>
+                
+                <!-- Action Button -->
+                <div class="action-button">
+                    <?php if ($facebook_connected): ?>
+                        <button type="button" class="btn btn-disconnect disconnect-facebook" data-user-id="<?php echo esc_attr($user_id); ?>">
+                            <i class="bi bi-link-45deg"></i>
+                            Disconnect
+                        </button>
+                    <?php else: ?>
+                        <a href="<?php echo esc_url(admin_url('admin.php?page=social-auth&provider=facebook')); ?>" class="btn btn-connect">
+                            <i class="bi bi-box-arrow-in-up-right"></i>
+                            Connect Now
+                        </a>
+                    <?php endif; ?>
+                </div>
+                
+                <!-- Info Text -->
+                <p class="info-text">
+                    <i class="bi bi-info-circle"></i>
+                    We'll only post content you explicitly choose to share
+                </p>
+            </div>
         </div>
 
-        <!-- Card Body -->
-        <div class="card-body p-4">
-            <div class="row g-4">
-                <!-- Facebook Connect -->
-                <div class="col-md-6">
-                    <div class="social-connect-card border rounded-3 p-4 h-100" style="background: #f5f5f5;">
-                        <!-- Icon -->
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="social-icon" style="width: 50px; height: 50px; background: #1877f2; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                <i class="bi bi-facebook text-white" style="font-size: 24px;"></i>
-                            </div>
-                            <div class="ms-3">
-                                <h5 class="mb-0">Facebook</h5>
-                                <small class="text-muted">Share to your Facebook profile</small>
-                            </div>
-                        </div>
-
-                        <!-- Status -->
-                        <div class="status-section mb-3">
-                            <?php if ($facebook_connected): ?>
-                                <div class="alert alert-success py-2 px-3 mb-2" role="alert">
-                                    <i class="bi bi-check-circle me-2"></i>
-                                    <strong>Connected</strong>
-                                    <?php if (!empty($facebook_name)): ?>
-                                        <br><small class="d-block mt-1">Account: <?php echo esc_html($facebook_name); ?></small>
-                                    <?php endif; ?>
-                                </div>
-                            <?php else: ?>
-                                <div class="alert alert-warning py-2 px-3 mb-2" role="alert">
-                                    <i class="bi bi-exclamation-circle me-2"></i>
-                                    Not connected
-                                </div>
-                            <?php endif; ?>
-                        </div>
-
-                        <!-- Action Button -->
-                        <div class="action-buttons">
-                            <?php if ($facebook_connected): ?>
-                                <button type="button" class="btn btn-outline-danger btn-sm w-100 disconnect-facebook" data-user-id="<?php echo esc_attr($user_id); ?>">
-                                    <i class="bi bi-link-45deg me-2"></i>Disconnect Facebook
-                                </button>
-                            <?php else: ?>
-                                <a href="<?php echo esc_url(admin_url('admin.php?page=social-auth&provider=facebook')); ?>" class="btn btn-primary btn-sm w-100">
-                                    <i class="bi bi-box-arrow-in-up-right me-2"></i>
-                                    Connect with Facebook
-                                </a>
-                            <?php endif; ?>
-                        </div>
-
-                        <!-- Info -->
-                        <small class="text-muted d-block mt-3">
-                            <i class="bi bi-info-circle me-1"></i>
-                            We'll only post content you explicitly choose to share
-                        </small>
-                    </div>
+        <!-- LinkedIn Connect Card -->
+        <div class="social-connect-card linkedin-card">
+            <div class="card-header-icon linkedin-icon">
+                <i class="bi bi-linkedin"></i>
+            </div>
+            
+            <div class="card-content">
+                <h5 class="card-title">LinkedIn</h5>
+                <p class="card-subtitle">Share to your LinkedIn profile</p>
+                
+                <!-- Status Badge -->
+                <div class="status-badge <?php echo $linkedin_connected ? 'connected' : 'disconnected'; ?>">
+                    <i class="bi <?php echo $linkedin_connected ? 'bi-check-circle-fill' : 'bi-exclamation-circle'; ?>"></i>
+                    <span><?php echo $linkedin_connected ? 'Connected' : 'Not Connected'; ?></span>
+                    <?php if ($linkedin_connected && !empty($linkedin_name)): ?>
+                        <div class="account-name"><?php echo esc_html($linkedin_name); ?></div>
+                    <?php endif; ?>
                 </div>
+                
+                <!-- Action Button -->
+                <div class="action-button">
+                    <?php if ($linkedin_connected): ?>
+                        <button type="button" class="btn btn-disconnect disconnect-linkedin" data-user-id="<?php echo esc_attr($user_id); ?>">
+                            <i class="bi bi-link-45deg"></i>
+                            Disconnect
+                        </button>
+                    <?php else: ?>
+                        <a href="<?php echo esc_url(admin_url('admin.php?page=social-auth&provider=linkedin')); ?>" class="btn btn-connect">
+                            <i class="bi bi-box-arrow-in-up-right"></i>
+                            Connect Now
+                        </a>
+                    <?php endif; ?>
+                </div>
+                
+                <!-- Info Text -->
+                <p class="info-text">
+                    <i class="bi bi-info-circle"></i>
+                    Perfect for professional networking
+                </p>
+            </div>
+        </div>
+    </div>
 
-                <!-- LinkedIn Connect -->
-                <div class="col-md-6">
-                    <div class="social-connect-card border rounded-3 p-4 h-100" style="background: #f5f5f5;">
-                        <!-- Icon -->
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="social-icon" style="width: 50px; height: 50px; background: #0a66c2; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                <i class="bi bi-linkedin text-white" style="font-size: 24px;"></i>
-                            </div>
-                            <div class="ms-3">
-                                <h5 class="mb-0">LinkedIn</h5>
-                                <small class="text-muted">Share to your LinkedIn profile</small>
-                            </div>
-                        </div>
-
-                        <!-- Status -->
-                        <div class="status-section mb-3">
-                            <?php if ($linkedin_connected): ?>
-                                <div class="alert alert-success py-2 px-3 mb-2" role="alert">
-                                    <i class="bi bi-check-circle me-2"></i>
-                                    <strong>Connected</strong>
-                                    <?php if (!empty($linkedin_name)): ?>
-                                        <br><small class="d-block mt-1">Account: <?php echo esc_html($linkedin_name); ?></small>
-                                    <?php endif; ?>
-                                </div>
-                            <?php else: ?>
-                                <div class="alert alert-warning py-2 px-3 mb-2" role="alert">
-                                    <i class="bi bi-exclamation-circle me-2"></i>
-                                    Not connected
-                                </div>
-                            <?php endif; ?>
-                        </div>
-
-                        <!-- Action Button -->
-                        <div class="action-buttons">
-                            <?php if ($linkedin_connected): ?>
-                                <button type="button" class="btn btn-outline-danger btn-sm w-100 disconnect-linkedin" data-user-id="<?php echo esc_attr($user_id); ?>">
-                                    <i class="bi bi-link-45deg me-2"></i>Disconnect LinkedIn
-                                </button>
-                            <?php else: ?>
-                                <a href="<?php echo esc_url(admin_url('admin.php?page=social-auth&provider=linkedin')); ?>" class="btn btn-primary btn-sm w-100">
-                                    <i class="bi bi-box-arrow-in-up-right me-2"></i>
-                                    Connect with LinkedIn
-                                </a>
-                            <?php endif; ?>
-                        </div>
-
-                        <!-- Info -->
-                        <small class="text-muted d-block mt-3">
-                            <i class="bi bi-info-circle me-1"></i>
-                            We'll only post content you explicitly choose to share
-                        </small>
-                    </div>
+    <!-- Connected Accounts Summary -->
+    <div class="accounts-summary mt-5 pt-4 border-top">
+        <h6 class="summary-title">
+            <i class="bi bi-gear"></i>
+            Connected Accounts Overview
+        </h6>
+        <div class="summary-grid">
+            <div class="summary-item facebook-summary">
+                <i class="bi bi-facebook"></i>
+                <div class="summary-content">
+                    <p class="summary-label">Facebook</p>
+                    <p class="summary-status <?php echo $facebook_connected ? 'status-connected' : 'status-disconnected'; ?>">
+                        <i class="bi <?php echo $facebook_connected ? 'bi-check-circle-fill' : 'bi-x-circle-fill'; ?>"></i>
+                        <?php echo $facebook_connected ? 'Connected' : 'Not Connected'; ?>
+                    </p>
                 </div>
             </div>
-
-            <!-- Connected Accounts Summary -->
-            <div class="mt-4 pt-4 border-top">
-                <h6 class="mb-3">
-                    <i class="bi bi-gear me-2"></i>Connected Accounts Summary
-                </h6>
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <div class="p-3 rounded" style="background: #f8f9fa;">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-facebook" style="font-size: 20px; color: #1877f2; margin-right: 10px;"></i>
-                                <div>
-                                    <small class="d-block text-muted">Facebook</small>
-                                    <strong><?php echo $facebook_connected ? '✓ Connected' : '✗ Not Connected'; ?></strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="p-3 rounded" style="background: #f8f9fa;">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-linkedin" style="font-size: 20px; color: #0a66c2; margin-right: 10px;"></i>
-                                <div>
-                                    <small class="d-block text-muted">LinkedIn</small>
-                                    <strong><?php echo $linkedin_connected ? '✓ Connected' : '✗ Not Connected'; ?></strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="summary-item linkedin-summary">
+                <i class="bi bi-linkedin"></i>
+                <div class="summary-content">
+                    <p class="summary-label">LinkedIn</p>
+                    <p class="summary-status <?php echo $linkedin_connected ? 'status-connected' : 'status-disconnected'; ?>">
+                        <i class="bi <?php echo $linkedin_connected ? 'bi-check-circle-fill' : 'bi-x-circle-fill'; ?>"></i>
+                        <?php echo $linkedin_connected ? 'Connected' : 'Not Connected'; ?>
+                    </p>
                 </div>
             </div>
         </div>
@@ -258,24 +218,268 @@ $linkedin_name = get_user_meta($user_id, '_linkedin_user_name', true);
 
 <style>
 .social-media-connect-container {
-    padding: 20px 0;
+    width: 100%;
 }
 
+/* Social Connect Grid */
+.social-connect-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* Individual Card Styling */
 .social-connect-card {
-    transition: all 0.3s ease;
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .social-connect-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+    border-color: #dee2e6;
 }
 
-.social-icon {
-    flex-shrink: 0;
-}
-
-.status-section {
-    min-height: 60px;
+/* Card Header Icon */
+.card-header-icon {
+    width: 100%;
+    padding: 1.5rem;
     display: flex;
     align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: white;
+}
+
+.facebook-icon {
+    background: linear-gradient(135deg, #1877f2 0%, #0a66f2 100%);
+}
+
+.linkedin-icon {
+    background: linear-gradient(135deg, #0a66c2 0%, #004182 100%);
+}
+
+/* Card Content */
+.card-content {
+    padding: 2rem;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #212529;
+}
+
+.card-subtitle {
+    font-size: 0.95rem;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+}
+
+/* Status Badge */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.status-badge.connected {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-badge.disconnected {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.status-badge i {
+    font-size: 1.1rem;
+}
+
+.account-name {
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+/* Action Button */
+.action-button {
+    margin-bottom: 1.5rem;
+}
+
+.btn {
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-connect {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+}
+
+.btn-connect:hover {
+    background: linear-gradient(135deg, #0056b3 0%, #003d82 100%);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-disconnect {
+    background-color: #f8f9fa;
+    color: #dc3545;
+    border: 1.5px solid #dc3545;
+}
+
+.btn-disconnect:hover {
+    background-color: #dc3545;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Info Text */
+.info-text {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-text i {
+    color: #0d6efd;
+}
+
+/* Connected Accounts Summary */
+.accounts-summary {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+}
+
+.summary-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.summary-item {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-left: 4px solid;
+}
+
+.facebook-summary {
+    border-left-color: #1877f2;
+}
+
+.facebook-summary i {
+    color: #1877f2;
+    font-size: 1.75rem;
+}
+
+.linkedin-summary {
+    border-left-color: #0a66c2;
+}
+
+.linkedin-summary i {
+    color: #0a66c2;
+    font-size: 1.75rem;
+}
+
+.summary-content {
+    flex: 1;
+}
+
+.summary-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin: 0 0 0.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summary-status {
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-connected {
+    color: #28a745;
+}
+
+.status-disconnected {
+    color: #dc3545;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .social-connect-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .card-content {
+        padding: 1.5rem;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-header-icon {
+        padding: 1rem;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+    }
+
+    .card-subtitle {
+        font-size: 0.9rem;
+    }
 }
 </style>
