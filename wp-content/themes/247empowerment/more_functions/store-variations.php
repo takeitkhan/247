@@ -291,7 +291,7 @@ add_action('save_post_course', function ($post_id) {
                 'label'   => $label,
                 'price'   => number_format($price, 2, '.', ''),
                 'sku'     => $sku,
-                'desc'    => isset($row['desc']) ? wp_kses_post($row['desc']) : '',
+                'desc'    => isset($row['desc']) ? wp_kses_post(preg_replace('/[\r\n\t]+/', ' ', $row['desc'])) : '',
                 'billing' => $billing,
                 'plan_id' => $plan_id,
             ];
