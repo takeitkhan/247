@@ -382,7 +382,7 @@ if (!$is_shareable) {
                                                         <?php endif; ?>
                                                         <?php if (!empty($v['desc'])): ?>
                                                             <div class="mt-1 text-muted" style="font-size: 0.875rem;">
-                                                                <?php echo wp_kses_post($v['desc']); ?>
+                                                                <?php echo wpautop(wp_kses_post($v['desc'])); ?>
                                                             </div>
                                                         <?php endif; ?>
                                                     </div>
