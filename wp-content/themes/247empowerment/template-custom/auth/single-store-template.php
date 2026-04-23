@@ -246,9 +246,9 @@ if (!$is_shareable) {
                     <div class="col-lg-4">
                         <div class="upcoming-events">
                             <div class="d-flex u-title">
-                                <h5 class="pb-4 portal-title">Benefits</h5>
+                                <h5 class="portal-title">Benefits</h5>
                             </div>
-                            <div class="d-flex flex-column gap-3 pb-4 border-underline">
+                            <div class="d-flex flex-column gap-3 py-4 border-underline">
                                 <div class="d-flex gap-2">
                                     <div>
                                         <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/right-sign.png" alt="">
@@ -319,6 +319,21 @@ if (!$is_shareable) {
                             }
                             ?>
                             <div>
+                                <!-- DEBUG: Show variation status -->
+                                <?php if (current_user_can('manage_options')): ?>
+                                    <div class="mb-3 alert alert-warning" style="font-size:11px;">
+                                        <strong>DEBUG (Admin only):</strong> 
+                                        has_variations=<?= $has_variations ? 'YES' : 'NO' ?>
+                                        count=<?= count($variations) ?>
+                                        ACF_price=<?= $price ?: '(empty)' ?>
+                                        func_exists=<?= function_exists('mm_get_course_variations') ? 'YES' : 'NO' ?>
+                                        <br/>
+                                        <code style="font-size:9px;background:#f5f5f5;padding:3px;display:block;margin-top:3px;max-width:600px;overflow:auto;">
+                                            Variations: <?= htmlspecialchars(json_encode($variations)) ?>
+                                        </code>
+                                    </div>
+                                <?php endif; ?>
+
                                 <?php if ($has_variations): ?>
                                     <div class="my-4">
                                         <h6 class="mb-2 fw-semibold">Choose a variation:</h6>
