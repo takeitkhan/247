@@ -13,7 +13,7 @@ $full_name = trim(($profile['first_name'] ?? '') . ' ' . ($profile['last_name'] 
 $location = get_user_meta($user->ID, 'place_display_name', true);
 $profession = get_user_meta($user->ID, 'about_me_short', true);
 ?>
-<div class="bg-white upcoming-events custom-card">
+<div class="bg-white upcoming-events">
     <!-- Cover Photo Section -->
     <div class="position-relative mb-4">
         <div style="height: 150px; overflow: hidden; border-radius: 8px;">

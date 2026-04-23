@@ -155,6 +155,14 @@ if ($user) {
                                                 <span>Upload image</span>
                                             </label>
                                             <input type="file" name="eventCover" class="form-control d-none" id="eventCover" accept="image/*">
+
+                                            <!-- Immediate preview -->
+                                            <div id="eventCoverPreviewWrap" class="position-relative mt-2 d-none">
+                                                <img id="eventCoverPreview" src="" alt="Event cover preview" class="border rounded img-fluid" style="max-height:220px;object-fit:cover;">
+                                                <button type="button" id="eventCoverRemove" class="position-absolute border btn btn-sm btn-light" style="top:6px;right:6px;" aria-label="Remove image">
+                                                    &times;
+                                                </button>
+                                            </div>
                                         </div>
 
                                         <!-- Registration Type -->
@@ -191,11 +199,49 @@ if ($user) {
                 </div>
 
             </div>
-            <div class="d-flex">
-                <?php if (isset($_GET['event_submitted']) && $_GET['event_submitted'] === 'true'): ?>
-                    <div class="mt-3 alert alert-success">✅ Event submitted successfully!</div>
-                <?php endif; ?>
-            </div>
+            <?php if (isset($_GET['event_submitted']) && $_GET['event_submitted'] === 'true'): ?>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        alert('✅ Event submitted successfully!');
+                    });
+                </script>
+            <?php endif; ?>
+
+            <script>
+                // Event Cover: immediate preview on file select
+                (function () {
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var input      = document.getElementById('eventCover');
+                        var previewImg = document.getElementById('eventCoverPreview');
+                        var wrap       = document.getElementById('eventCoverPreviewWrap');
+                        var removeBtn  = document.getElementById('eventCoverRemove');
+                        if (!input || !previewImg || !wrap) return;
+
+                        input.addEventListener('change', function () {
+                            var file = this.files && this.files[0];
+                            if (!file || !file.type || file.type.indexOf('image/') !== 0) {
+                                wrap.classList.add('d-none');
+                                previewImg.src = '';
+                                return;
+                            }
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                previewImg.src = e.target.result;
+                                wrap.classList.remove('d-none');
+                            };
+                            reader.readAsDataURL(file);
+                        });
+
+                        if (removeBtn) {
+                            removeBtn.addEventListener('click', function () {
+                                input.value = '';
+                                previewImg.src = '';
+                                wrap.classList.add('d-none');
+                            });
+                        }
+                    });
+                })();
+            </script>
             <div class="d-flex flex-column">
                 <?php
                 $store_user = get_query_var('store_user');

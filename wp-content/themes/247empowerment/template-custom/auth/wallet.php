@@ -124,6 +124,10 @@ $profile = (new UserProfileData($user_slug))->getProfile();
                     ]);
                     break;
 
+                case 'subscriptions':
+                    get_template_part('template-custom/auth/wallet-parts/subscriptions');
+                    break;
+
                 default:
                     // Default wallet page
                     get_template_part('template-custom/auth/wallet-parts/how-to-earn-points');

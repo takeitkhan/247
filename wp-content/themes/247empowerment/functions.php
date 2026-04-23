@@ -1205,6 +1205,7 @@ add_shortcode('withdrawal_form', function() {
 
 require_once get_template_directory() . '/more_functions/profile.php';
 require_once get_template_directory() . '/more_functions/store.php';
+require_once get_template_directory() . '/more_functions/store-variations.php';
 require_once get_template_directory() . '/more_functions/event.php';
 require_once get_template_directory() . '/more_functions/blog.php';
 require_once get_template_directory() . '/more_functions/video.php';
@@ -1212,6 +1213,8 @@ require_once get_template_directory() . '/more_functions/jobs.php';
 require_once get_template_directory() . '/more_functions/agreement.php';
 require_once get_template_directory() . '/more_functions/issues.php';
 require_once get_template_directory() . '/more_functions/paypalsettings.php';
+require_once get_template_directory() . '/more_functions/paypal-webhook.php';
+require_once get_template_directory() . '/more_functions/course-sales-admin.php';
 
 // Social Media Integration
 require_once get_template_directory() . '/more_functions/social-media-settings.php';

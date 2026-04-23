@@ -1,6 +1,16 @@
 <?php
 $balance = $args['balance'] ?? 0;
 $current_points = $args['current_points'] ?? 0;
+$active_sub_count = 0;
+$user_id_for_subs = get_current_user_id();
+if ($user_id_for_subs) {
+    $subs_list = get_user_meta($user_id_for_subs, 'active_subscriptions', true);
+    if (is_array($subs_list)) {
+        foreach ($subs_list as $s) {
+            if (($s['status'] ?? '') === 'ACTIVE') $active_sub_count++;
+        }
+    }
+}
 ?>
 <div class="bg-white custom-card post-search">
     <div class="gap-3 post-row">
@@ -62,6 +72,18 @@ $current_points = $args['current_points'] ?? 0;
                     </form> -->
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <div class="bg-white mb-0 custom-card">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-2">
+                <span class="fs20 fw-bold">My Subscriptions</span>
+                <span class="bg-primary badge"><?= (int) $active_sub_count ?> active</span>
+            </div>
+            <a href="<?php echo esc_url(add_query_arg('wallet_section', 'subscriptions', get_permalink())); ?>" class="custom-btn">Manage</a>
         </div>
     </div>
 </div>

@@ -39,7 +39,14 @@ $short_details = get_field('short_details', $course->ID);
 $thumbnail_url = get_the_post_thumbnail_url($course->ID, 'large') ?: '/img/banner.jpg';
 $custom_permalink = home_url("/{$store_user}/store/{$course_slug}/");
 
-
+// Variations (custom field system, see more_functions/store-variations.php)
+$variations = function_exists('mm_get_course_variations') ? mm_get_course_variations($course->ID) : [];
+$has_variations = !empty($variations);
+// Default price used by the JS when no variation is pre-selected:
+// - If variations exist: use the first variation's price
+// - Else: fall back to the legacy `price` ACF field
+$default_price = $has_variations ? $variations[0]['price'] : ($price ?: '');
+$default_label = $has_variations ? $variations[0]['label'] : get_the_title($course);
 $current_user = wp_get_current_user();
 
 // Get current logged-in user ID (used as a fallback if no slug is provided)
@@ -159,7 +166,7 @@ if (!$is_shareable) {
             </div>
             <div class="bg-white mb-0 col-lg-9 custom-card">
                 <div class="row">
-                    <div class="col-lg-9">
+                    <div class="col-lg-8">
                         <div class="post-search">
                             <div class="gap-3 post-row">
                                 <div class="d-flex align-items-center justify-content-between u-title">
@@ -202,7 +209,7 @@ if (!$is_shareable) {
                                 </div>
                                 <div>
                                     <?php if ($short_details): ?>
-                                        <div class="mb-4 custom-card bg-custom-gray">
+                                        <div class="bg-custom-gray mb-4 custom-card">
                                             <p class="mb-3 lead"><?= esc_html($short_details); ?></p>
 
                                             <?php
@@ -221,7 +228,7 @@ if (!$is_shareable) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <div class="upcoming-events">
                             <div class="d-flex u-title">
                                 <h5 class="pb-4 portal-title">Benefits</h5>
@@ -268,9 +275,102 @@ if (!$is_shareable) {
                             }
 
                             $already_purchased = is_array($purchased_courses) && in_array($course->ID, $purchased_courses);
+
+                            // Per-variation ownership map (index => 'onetime'|'active_sub')
+                            $owned_variations = [];
+                            if ($buyer_id && $has_variations) {
+                                // one-time purchases from log
+                                $purchase_log = get_user_meta($buyer_id, 'course_purchase_log', true);
+                                if (is_array($purchase_log)) {
+                                    foreach ($purchase_log as $entry) {
+                                        if ((int)($entry['course_id'] ?? 0) !== (int)$course->ID) continue;
+                                        if (($entry['type'] ?? '') === 'subscription') continue; // handled below
+                                        if (($entry['type'] ?? '') === 'renewal') continue;
+                                        if (($entry['type'] ?? '') === 'subscription_status') continue;
+                                        $idx = $entry['variation_index'] ?? -1;
+                                        if ($idx >= 0) $owned_variations[(int)$idx] = 'onetime';
+                                    }
+                                }
+                                // active subscriptions
+                                $active_subs = get_user_meta($buyer_id, 'active_subscriptions', true);
+                                if (is_array($active_subs)) {
+                                    foreach ($active_subs as $s) {
+                                        if ((int)($s['course_id'] ?? 0) !== (int)$course->ID) continue;
+                                        if (($s['status'] ?? '') !== 'ACTIVE' && ($s['status'] ?? '') !== 'APPROVAL_PENDING') continue;
+                                        $idx = $s['variation_index'] ?? -1;
+                                        if ($idx >= 0) $owned_variations[(int)$idx] = 'active_sub';
+                                    }
+                                }
+                            }
                             ?>
                             <div>
-                                <?php if ($price): ?>
+                                <?php if ($has_variations): ?>
+                                    <div class="my-4">
+                                        <h6 class="mb-2 fw-semibold">Choose a variation:</h6>
+                                        <div class="d-flex flex-column gap-2 mb-3" id="mm-variation-list">
+                                            <?php
+                                            // pick first non-owned variation to be initially selected
+                                            $initial_selected_idx = -1;
+                                            foreach ($variations as $ii => $vv) {
+                                                if (!isset($owned_variations[$ii])) { $initial_selected_idx = $ii; break; }
+                                            }
+                                            ?>
+                                            <?php foreach ($variations as $i => $v): ?>
+                                                <?php
+                                                $billing = $v['billing'] ?? 'onetime';
+                                                $billing_suffix = $billing === 'monthly' ? '/mo' : ($billing === 'yearly' ? '/yr' : '');
+                                                $owned_type = $owned_variations[$i] ?? '';
+                                                $is_owned = $owned_type !== '';
+                                                $is_selected = ($i === $initial_selected_idx);
+                                                ?>
+                                                <label class="d-flex align-items-start gap-2 p-3 border rounded mm-variation-option <?= $is_owned ? 'mm-variation-owned' : '' ?>"
+                                                       style="cursor:<?= $is_owned ? 'not-allowed' : 'pointer' ?>;<?= $is_selected ? 'border-color:#0d6efd;background:#f0f6ff;' : '' ?><?= $is_owned ? 'opacity:0.7;' : '' ?>">
+                                                    <input type="radio"
+                                                           name="mm_variation"
+                                                           value="<?= esc_attr($i) ?>"
+                                                           data-price="<?= esc_attr($v['price']) ?>"
+                                                           data-label="<?= esc_attr($v['label']) ?>"
+                                                           data-billing="<?= esc_attr($billing) ?>"
+                                                           data-plan-id="<?= esc_attr($v['plan_id'] ?? '') ?>"
+                                                           data-suffix="<?= esc_attr($billing_suffix) ?>"
+                                                           data-owned="<?= esc_attr($owned_type) ?>"
+                                                           <?= $is_selected ? 'checked' : '' ?>
+                                                           <?= $is_owned ? 'disabled' : '' ?>
+                                                           class="mt-1">
+                                                    <div class="flex-grow-1">
+                                                        <div class="d-flex align-items-center justify-content-between">
+                                                            <strong><?= esc_html($v['label']) ?></strong>
+                                                            <span class="text-primary fs20 fw-bold">$<?= esc_html($v['price']) ?><?= $billing_suffix ? '<small class="ms-1">' . esc_html($billing_suffix) . '</small>' : '' ?></span>
+                                                        </div>
+                                                        <?php if ($billing !== 'onetime'): ?>
+                                                            <span class="bg-info mt-1 text-dark badge"><?= $billing === 'monthly' ? 'Monthly subscription' : 'Yearly subscription' ?></span>
+                                                        <?php endif; ?>
+                                                        <?php if ($is_owned): ?>
+                                                            <span class="bg-success ms-1 mt-1 badge">
+                                                                <?= $owned_type === 'active_sub' ? '✓ Active subscription' : '✓ Already purchased' ?>
+                                                            </span>
+                                                        <?php endif; ?>
+                                                        <?php if (!empty($v['desc'])): ?>
+                                                            <small class="d-block mt-1 text-muted"><?= esc_html($v['desc']) ?></small>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </label>
+                                            <?php endforeach; ?>
+                                        </div>
+                                        <p class="d-flex align-items-center gap-3 mb-3">
+                                            <span class="fs20">Total:</span>
+                                            <span class="fs28 fw-bold" id="mm-selected-price">$<?= esc_html($default_price) ?></span>
+                                        </p>
+                                        <?php
+                                        $all_owned = $has_variations && count($owned_variations) === count($variations);
+                                        ?>
+                                        <?php if ($all_owned): ?>
+                                            <div class="alert alert-success fw-semibold">✅ You own every variation of this course.</div>
+                                        <?php else: ?>
+                                            <div id="paypal-button-container"></div>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php elseif ($price): ?>
                                     <div class="my-4">
                                         <p class="d-flex align-items-center gap-3">
                                             <span class="fs24">Price:</span>
@@ -301,61 +401,174 @@ if (!$is_shareable) :
     $paypal = get_paypal_api_credentials();
     $client_id = esc_js($paypal['client_id']);
     $is_live   = (get_option('paypal_environment') === 'live');
+    // Include both `buttons` (one-time) and `subscription` intents so the
+    // same SDK can render either flow depending on selected variation.
     $paypal_sdk_url = $is_live
-        ? "https://www.paypal.com/sdk/js?client-id={$client_id}&currency=USD"
-        : "https://www.paypal.com/sdk/js?client-id={$client_id}&currency=USD&debug=true";
+        ? "https://www.paypal.com/sdk/js?client-id={$client_id}&currency=USD&intent=capture&vault=true&components=buttons"
+        : "https://www.paypal.com/sdk/js?client-id={$client_id}&currency=USD&intent=capture&vault=true&components=buttons&debug=true";
     ?>
     <!-- ✅ Load PayPal SDK -->
     <script src="<?= $paypal_sdk_url; ?>"></script>
 
     <!-- ✅ PayPal Button Script -->
     <script>
+        // Data shared with PayPal handlers
+        var MM_COURSE = {
+            id: "<?= esc_js($course->ID); ?>",
+            title: "<?= esc_js(get_the_title($course)); ?>",
+            hasVariations: <?= $has_variations ? 'true' : 'false' ?>,
+            defaultPrice: "<?= esc_js($default_price ?: '10.00'); ?>",
+            defaultLabel: "<?= esc_js($default_label); ?>",
+            ajaxUrl: "<?= admin_url('admin-ajax.php'); ?>",
+            returnUrl: "<?= esc_url($custom_permalink); ?>"
+        };
+
+        function mmGetSelectedVariation() {
+            if (!MM_COURSE.hasVariations) {
+                return {
+                    index: -1, price: MM_COURSE.defaultPrice, label: MM_COURSE.defaultLabel,
+                    billing: 'onetime', planId: ''
+                };
+            }
+            var el = document.querySelector('input[name="mm_variation"]:checked');
+            if (!el) {
+                return {
+                    index: 0, price: MM_COURSE.defaultPrice, label: MM_COURSE.defaultLabel,
+                    billing: 'onetime', planId: ''
+                };
+            }
+            return {
+                index:   parseInt(el.value, 10),
+                price:   el.getAttribute('data-price'),
+                label:   el.getAttribute('data-label'),
+                billing: el.getAttribute('data-billing') || 'onetime',
+                planId:  el.getAttribute('data-plan-id') || ''
+            };
+        }
+
+        // Live-update the visible total + highlight selected row + re-render PayPal button
+        document.addEventListener('DOMContentLoaded', function() {
+            var radios = document.querySelectorAll('input[name="mm_variation"]');
+            var priceEl = document.getElementById('mm-selected-price');
+            radios.forEach(function(r){
+                r.addEventListener('change', function(){
+                    if (priceEl) {
+                        var suffix = r.getAttribute('data-suffix') || '';
+                        priceEl.innerHTML = '$' + r.getAttribute('data-price') +
+                            (suffix ? ' <small class="ms-1">' + suffix + '</small>' : '');
+                    }
+                    document.querySelectorAll('.mm-variation-option').forEach(function(l){
+                        l.style.borderColor = '';
+                        l.style.background = '';
+                    });
+                    var label = r.closest('.mm-variation-option');
+                    if (label) {
+                        label.style.borderColor = '#0d6efd';
+                        label.style.background  = '#f0f6ff';
+                    }
+                    // Re-render PayPal buttons for the new variation
+                    mmRenderPayPal();
+                });
+            });
+        });
+
+        function mmRenderPayPal() {
+            if (typeof paypal === 'undefined') return;
+            var container = document.getElementById('paypal-button-container');
+            if (!container) return;
+            container.innerHTML = ''; // clear previous button
+
+            var v = mmGetSelectedVariation();
+
+            if (v.billing === 'monthly' || v.billing === 'yearly') {
+                if (!v.planId) {
+                    container.innerHTML = '<div class="alert alert-warning">This subscription is not fully configured yet. Please contact the admin.</div>';
+                    return;
+                }
+                paypal.Buttons({
+                    style: { layout: 'vertical', label: 'subscribe' },
+                    createSubscription: function(data, actions) {
+                        return actions.subscription.create({
+                            plan_id: v.planId,
+                            custom_id: MM_COURSE.id + ':' + v.index
+                        });
+                    },
+                    onApprove: async function(data) {
+                        try {
+                            const response = await fetch(MM_COURSE.ajaxUrl, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                                body: new URLSearchParams({
+                                    action: "handle_course_subscription",
+                                    course_id: MM_COURSE.id,
+                                    variation_index: v.index,
+                                    subscriptionID: data.subscriptionID
+                                })
+                            });
+                            const result = await response.json();
+                            if (result && result.success) {
+                                alert('Subscription activated!');
+                                window.location.href = MM_COURSE.returnUrl;
+                            } else {
+                                alert('Subscription verification failed: ' + (result && result.data ? result.data.message : 'unknown'));
+                            }
+                        } catch (err) {
+                            console.error(err);
+                            alert('Error activating subscription. Please contact support.');
+                        }
+                    },
+                    onError: function(err) {
+                        console.error('PayPal subscription error:', err);
+                    }
+                }).render('#paypal-button-container');
+            } else {
+                // One-time payment
+                paypal.Buttons({
+                    style: { layout: 'vertical' },
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: { value: v.price },
+                                description: MM_COURSE.title + (v.label && v.label !== MM_COURSE.defaultLabel ? ' — ' + v.label : '')
+                            }]
+                        });
+                    },
+                    onApprove: async function(data, actions) {
+                        try {
+                            const details = await actions.order.capture();
+                            const response = await fetch(MM_COURSE.ajaxUrl, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                                body: new URLSearchParams({
+                                    action: "handle_course_purchase",
+                                    course_id: MM_COURSE.id,
+                                    amount: v.price,
+                                    variation_index: v.index,
+                                    variation_label: v.label,
+                                    orderID: data.orderID,
+                                    referrer: sessionStorage.getItem("referrer") || ""
+                                })
+                            });
+                            await response.json();
+                            window.location.href = MM_COURSE.returnUrl;
+                        } catch (err) {
+                            console.error("Error during payment:", err);
+                            alert("An error occurred while processing your purchase. Please try again.");
+                        }
+                    },
+                    onError: function(err) {
+                        console.error('PayPal order error:', err);
+                    }
+                }).render('#paypal-button-container');
+            }
+        }
+
         function initializePayPalButtons() {
             if (typeof paypal === 'undefined') {
                 console.error("PayPal SDK failed to load.");
                 return;
             }
-
-            paypal.Buttons({
-                createOrder: function(data, actions) {
-                    return actions.order.create({
-                        purchase_units: [{
-                            amount: {
-                                value: "<?= esc_js($price ?: '10.00'); ?>"
-                            },
-                            description: "<?= esc_js(get_the_title($course)); ?>"
-                        }]
-                    });
-                },
-                onApprove: async function(data, actions) {
-                    try {
-                        const details = await actions.order.capture();
-
-                        //alert('Transaction completed by ' + details.payer.name.given_name);
-
-                        const response = await fetch("<?= admin_url('admin-ajax.php'); ?>", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/x-www-form-urlencoded"
-                            },
-                            body: new URLSearchParams({
-                                action: "handle_course_purchase",
-                                course_id: "<?= esc_js($course->ID); ?>",
-                                amount: "<?= esc_js($price); ?>",
-                                referrer: sessionStorage.getItem("referrer") || ""
-                            })
-                        });
-
-                        const result = await response.json();
-                        //console.log(result);
-
-                        window.location.href = "<?= esc_url($custom_permalink); ?>";
-                    } catch (err) {
-                        console.error("Error during payment:", err);
-                        alert("An error occurred while processing your purchase. Please try again.");
-                    }
-                }
-            }).render('#paypal-button-container');
+            mmRenderPayPal();
         }
 
         document.addEventListener("DOMContentLoaded", function() {

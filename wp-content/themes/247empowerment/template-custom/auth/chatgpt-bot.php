@@ -13,11 +13,11 @@ $current_user = wp_get_current_user();
 $user_id = get_current_user_id();
 ?>
 
-<div class="container profile-page pt-4 pb-4">
+<div class="pt-4 pb-4 container profile-page">
     <div class="row">
         <!-- Sidebar Navigation -->
         <div class="col-lg-3">
-            <?php 
+            <?php
             $profile = (new UserProfileData($current_user->ID))->getProfile();
             get_template_part('template-custom/auth/common-parts/editprofilemenu', null, ['profile' => $profile]); 
             ?>
@@ -26,14 +26,14 @@ $user_id = get_current_user_id();
         <!-- Main Content -->
         <div class="col-lg-9">
             <!-- Header Section -->
-            <div class="bg-white rounded mb-4 p-4 border-bottom">
+            <div class="bg-white mb-4 p-4 border-bottom rounded">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <h3 class="mb-2">
                             <i class="bi bi-robot"></i>
                             AI Chat Assistant
                         </h3>
-                        <p class="text-muted mb-0">
+                        <p class="mb-0 text-muted">
                             Chat with our AI assistant powered by OpenRouter. Ask questions, get answers, and explore AI capabilities.
                         </p>
                     </div>
@@ -41,7 +41,7 @@ $user_id = get_current_user_id();
             </div>
 
             <!-- Chat Container -->
-            <div class="chat-wrapper bg-white rounded border">
+            <div class="bg-white border rounded chat-wrapper">
                 <!-- Chat Messages Area -->
                 <div id="chat-box" class="chat-messages">
                     <div class="chat-welcome">
@@ -67,15 +67,14 @@ $user_id = get_current_user_id();
                             <i class="bi bi-send-fill"></i>
                         </button>
                     </div>
-                    <small class="text-muted d-block mt-2 text-center">
+                    <small class="d-block mt-2 text-muted text-center">
                         <i class="bi bi-info-circle"></i>
                         Press Enter or click Send to submit your message
                     </small>
                 </div>
             </div>
-
             <!-- Info Section -->
-            <div class="chat-info mt-4 p-4 bg-light rounded">
+            <div class="bg-light mt-4 p-4 rounded chat-info">
                 <h6 class="mb-3">
                     <i class="bi bi-lightbulb"></i>
                     Tips for Better Responses
@@ -84,11 +83,11 @@ $user_id = get_current_user_id();
                     <div class="col-md-6">
                         <div class="info-item">
                             <div class="info-icon">
-                                <i class="bi bi-chat-left-text"></i>
+                                <i class="bi-chat-left-text bi"></i>
                             </div>
                             <div>
                                 <strong>Be Specific</strong>
-                                <p class="small text-muted mb-0">The more details you provide, the better answers you'll get</p>
+                                <p class="mb-0 text-muted small">The more details you provide, the better answers you'll get</p>
                             </div>
                         </div>
                     </div>
@@ -99,12 +98,27 @@ $user_id = get_current_user_id();
                             </div>
                             <div>
                                 <strong>Ask Follow-ups</strong>
-                                <p class="small text-muted mb-0">Don't hesitate to ask clarifying questions</p>
+                                <p class="mb-0 text-muted small">Don't hesitate to ask clarifying questions</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <?php
+            // Render the content of the current Page (the one this "ChatGPT Bot"
+            // template is assigned to). Edit that page in WP Admin to update.
+            $current_page = get_queried_object();
+            if ($current_page instanceof WP_Post && !empty(trim($current_page->post_content))) :
+                $chatbot_page_content = apply_filters('the_content', $current_page->post_content);
+                ?>
+                <div class="bg-white mt-4 p-4 border rounded chatbot-page-content">
+                    <article class="chatbot-info-block">
+                        <?php echo $chatbot_page_content; ?>
+                    </article>
+                </div>
+            <?php endif; ?>
+
         </div>
     </div>
 </div>
