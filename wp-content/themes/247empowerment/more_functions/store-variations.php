@@ -65,27 +65,36 @@ function mm_course_variations_meta_box_html($post)
         var editorInstances = {};
 
         function reindex() {
+            console.log('🔄 Reindexing variations...');
             list.find('.mm-var-row').each(function(i) {
+                console.log('  Row ' + i + ':');
                 $(this).find('[name]').each(function() {
                     var oldName = $(this).attr('name');
                     var newName = oldName.replace(/mm_variations\[\d+\]/, 'mm_variations[' + i + ']');
+                    console.log('    ' + oldName + ' → ' + newName);
                     $(this).attr('name', newName);
                 });
             });
+            console.log('✅ Reindexing complete');
         }
 
         $('#mm-var-add').on('click', function(){
+            console.log('➕ Add variation clicked');
             list.find('[data-placeholder]').remove();
             var newIndex = list.find('.mm-var-row').length;
+            console.log('New index:', newIndex);
             var tpl = $('#mm-var-template').html().replace(/__INDEX__/g, newIndex);
             list.append(tpl);
+            console.log('Template appended, reindexing...');
             reindex();
+            console.log('✅ Reindexed, current variations:', list.find('.mm-var-row').length);
             
             // Initialize editor for new row
             var editorId = 'mm_var_desc_' + newIndex;
             setTimeout(function() {
                 if (window.tinyMCE) {
                     window.tinyMCE.execCommand('mceAddEditor', false, editorId);
+                    console.log('TinyMCE editor added:', editorId);
                 }
             }, 100);
         });
@@ -108,8 +117,14 @@ function mm_course_variations_meta_box_html($post)
 
         // CRITICAL: Sync TinyMCE editors to textareas BEFORE form submission
         $('#post').on('submit', function(e) {
+            console.log('📝 Form submit detected!');
+            console.log('Variations in DOM:', list.find('.mm-var-row').length);
             if (window.tinyMCE) {
-                window.tinyMCE.triggerSave(); // Sync all active editors
+                console.log('TinyMCE found, syncing...');
+                window.tinyMCE.triggerSave();
+                console.log('✅ TinyMCE synced');
+            } else {
+                console.log('⚠️ TinyMCE not available');
             }
         });
     })(jQuery);
@@ -182,14 +197,16 @@ function mm_render_variation_row($index, $v)
 add_action('save_post_course', function ($post_id) {
     // Debug log
     error_log('=== SAVE_POST_COURSE FIRED for post ' . $post_id);
+    error_log('POST keys: ' . wp_json_encode(array_keys($_POST)));
     
     if (!isset($_POST['mm_course_variations_nonce'])) {
-        error_log('No nonce found in POST');
+        error_log('❌ No nonce found in POST');
+        error_log('POST data: ' . wp_json_encode($_POST));
         return;
     }
     
     if (!wp_verify_nonce($_POST['mm_course_variations_nonce'], 'mm_course_variations_save')) {
-        error_log(' Nonce verification failed');
+        error_log('❌ Nonce verification failed');
         return;
     }
     
@@ -207,6 +224,8 @@ add_action('save_post_course', function ($post_id) {
 
     $raw = $_POST['mm_variations'] ?? [];
     error_log('Raw variations: ' . wp_json_encode($raw));
+    error_log('Raw variations type: ' . gettype($raw));
+    error_log('Raw variations count: ' . count($raw));
     
     $existing = mm_get_course_variations($post_id);
     $clean = [];
@@ -222,7 +241,7 @@ add_action('save_post_course', function ($post_id) {
             error_log("Label: '$label', Price: $price");
             
             if ($label === '' || $price <= 0) {
-                error_log('❌ Invalid row - skipping (label empty or price invalid)');
+                error_log('Invalid row - skipping (label empty or price invalid)');
                 continue;
             }
 
