@@ -92,6 +92,32 @@ add_action('init', function () {
         $first_name = sanitize_text_field($_POST['first_name']);
         $last_name  = sanitize_text_field($_POST['last_name']);
         $dob        = sanitize_text_field($_POST['dob']);
+        $phone      = sanitize_text_field($_POST['phone'] ?? '');
+
+        // Validate phone number is provided
+        if (empty($phone)) {
+            set_transient('custom_user_message', [
+                'type' => 'danger',
+                'text' => 'Phone number is required.',
+                'old_input' => $_POST
+            ], 30);
+
+            wp_redirect(wp_get_referer());
+            exit;
+        }
+
+        // Validate phone format (basic: at least 7 digits)
+        $phone_digits = preg_replace('/\D/', '', $phone);
+        if (strlen($phone_digits) < 7) {
+            set_transient('custom_user_message', [
+                'type' => 'danger',
+                'text' => 'Please enter a valid phone number (at least 7 digits).',
+                'old_input' => $_POST
+            ], 30);
+
+            wp_redirect(wp_get_referer());
+            exit;
+        }
 
         // (all your validations unchanged...)
 
@@ -132,6 +158,7 @@ add_action('init', function () {
             ]);
 
             update_user_meta($user_id, 'dob', $dob);
+            update_user_meta($user_id, 'phone', $phone);
 
             /*
             |--------------------------------------------------------------------------

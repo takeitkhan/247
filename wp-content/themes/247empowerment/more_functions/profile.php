@@ -42,6 +42,21 @@ function save_profile_field_ajax() {
         case 'dob':
         case 'about_me_short':
             $field_value = sanitize_text_field($field_value);
+            
+            // Validate phone number if it's phone field
+            if ($field_name === 'phone') {
+                if (empty($field_value)) {
+                    error_log('❌ Phone number cannot be empty');
+                    wp_send_json_error(['message' => 'Phone number is required']);
+                }
+                // Validate phone format (at least 7 digits)
+                $phone_digits = preg_replace('/\D/', '', $field_value);
+                if (strlen($phone_digits) < 7) {
+                    error_log('❌ Invalid phone format');
+                    wp_send_json_error(['message' => 'Please enter a valid phone number (at least 7 digits)']);
+                }
+            }
+            
             if ($field_name === 'first_name' || $field_name === 'last_name') {
                 wp_update_user([
                     'ID' => $user_id,
@@ -1359,7 +1374,7 @@ function build_comment_tree($comments, $parent_id = 0, $depth = 0) {
         $html .= '<div class="comment-item" data-comment-id="' . $comment->comment_ID . '" data-comment-content="' . esc_attr($comment->comment_content) . '" style="margin-left: ' . $margin_left . 'px; margin-bottom: 12px; padding: 0 8px;">';
         
         // Header: Profile photo + name + time + options
-        $html .= '<div class="d-flex justify-content-between align-items-flex-start mb-1">';
+        $html .= '<div class="d-flex align-items-flex-start justify-content-between mb-1">';
         $html .= '<div class="d-flex align-items-center gap-2" style="flex: 1;">';
         
         // Profile photo (larger - 40px)
@@ -1375,7 +1390,7 @@ function build_comment_tree($comments, $parent_id = 0, $depth = 0) {
         $html .= '</div>';
         
         // Options menu (3-dot button)
-        $html .= '<button class="btn btn-sm p-0 text-muted comment-options-btn" data-comment-id="' . $comment->comment_ID . '" style="font-size: 18px; border: none; background: none;">';
+        $html .= '<button class="p-0 text-muted btn btn-sm comment-options-btn" data-comment-id="' . $comment->comment_ID . '" style="font-size: 18px; border: none; background: none;">';
         $html .= '<i class="fas fa-ellipsis-h"></i>';
         $html .= '</button>';
         $html .= '</div>';
@@ -1390,12 +1405,12 @@ function build_comment_tree($comments, $parent_id = 0, $depth = 0) {
         // Action buttons: Like, Reply
         $html .= '<div style="margin-left: 48px; margin-bottom: 8px;">';
         $html .= '<div class="d-flex gap-3">';
-        $html .= '<button class="btn btn-sm p-0 text-muted comment-like-btn" data-comment-id="' . $comment->comment_ID . '" style="font-size: 12px; border: none; background: none; cursor: pointer;">';
+        $html .= '<button class="p-0 text-muted btn btn-sm comment-like-btn" data-comment-id="' . $comment->comment_ID . '" style="font-size: 12px; border: none; background: none; cursor: pointer;">';
         $html .= '<i class="far fa-thumbs-up" style="margin-right: 4px;"></i>Like';
         $html .= '</button>';
         
         if ($depth < 2) { // Only show reply button for first 2 levels
-            $html .= '<button class="btn btn-sm p-0 text-muted reply-btn" data-comment-id="' . $comment->comment_ID . '" data-author-name="' . esc_attr($author_name) . '" style="font-size: 12px; border: none; background: none; cursor: pointer;">';
+            $html .= '<button class="p-0 text-muted btn btn-sm reply-btn" data-comment-id="' . $comment->comment_ID . '" data-author-name="' . esc_attr($author_name) . '" style="font-size: 12px; border: none; background: none; cursor: pointer;">';
             $html .= '<i class="fas fa-reply" style="margin-right: 4px;"></i>Reply';
             $html .= '</button>';
         }
@@ -1406,13 +1421,13 @@ function build_comment_tree($comments, $parent_id = 0, $depth = 0) {
         if ($depth < 2) {
             $html .= '<div class="reply-input-container" id="reply-container-' . $comment->comment_ID . '" style="display: none; margin-left: 48px; margin-bottom: 10px;">';
             
-            $html .= '<div class="d-flex gap-2 align-items-start">';
+            $html .= '<div class="d-flex align-items-start gap-2">';
             $html .= '<div class="position-relative" style="width: 36px; height: 36px; flex-shrink: 0;">';
             $html .= '<img src="' . esc_url($current_user_photo) . '" alt="You" class="rounded-circle w-100 h-100" style="object-fit: cover;">';
             $html .= '</div>';
             
             $reply_nonce = wp_create_nonce('post_comment_nonce');
-            $html .= '<div class="flex-grow-1 position-relative">';
+            $html .= '<div class="position-relative flex-grow-1">';
             $html .= '<input type="text" class="form-control comment-reply-input" data-parent-id="' . $comment->comment_ID . '" data-nonce="' . esc_attr($reply_nonce) . '" placeholder="Write a reply..." style="font-size: 14px; border-radius: 18px; padding: 10px 14px; border: 1px solid #e0e0e0; background-color: #f0f2f5;">';
             $html .= '<img class="position-absolute emoji-icon" src="' . get_template_directory_uri() . '/assets/img/emoji.svg" alt="Emoji" style="right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; width: 18px; height: 18px;">';
             $html .= '</div>';
