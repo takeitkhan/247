@@ -180,23 +180,51 @@ function mm_render_variation_row($index, $v)
 
 // Save handler
 add_action('save_post_course', function ($post_id) {
-    if (!isset($_POST['mm_course_variations_nonce']) ||
-        !wp_verify_nonce($_POST['mm_course_variations_nonce'], 'mm_course_variations_save')) {
+    // Debug log
+    error_log('=== SAVE_POST_COURSE FIRED for post ' . $post_id);
+    
+    if (!isset($_POST['mm_course_variations_nonce'])) {
+        error_log('No nonce found in POST');
         return;
     }
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
-    if (!current_user_can('edit_post', $post_id)) return;
+    
+    if (!wp_verify_nonce($_POST['mm_course_variations_nonce'], 'mm_course_variations_save')) {
+        error_log(' Nonce verification failed');
+        return;
+    }
+    
+    error_log('✅ Nonce verified');
+    
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        error_log('ℹ️ Autosave detected, skipping');
+        return;
+    }
+    
+    if (!current_user_can('edit_post', $post_id)) {
+        error_log('❌ User cannot edit post');
+        return;
+    }
 
     $raw = $_POST['mm_variations'] ?? [];
+    error_log('Raw variations: ' . wp_json_encode($raw));
+    
     $existing = mm_get_course_variations($post_id);
     $clean = [];
     $errors = [];
 
     if (is_array($raw)) {
-        foreach ($raw as $row) {
+        foreach ($raw as $index => $row) {
+            error_log('Processing row ' . $index . ': ' . wp_json_encode($row));
+            
             $label = isset($row['label']) ? sanitize_text_field($row['label']) : '';
             $price = isset($row['price']) ? floatval($row['price']) : 0;
-            if ($label === '' || $price <= 0) continue;
+            
+            error_log("Label: '$label', Price: $price");
+            
+            if ($label === '' || $price <= 0) {
+                error_log('❌ Invalid row - skipping (label empty or price invalid)');
+                continue;
+            }
 
             $billing = in_array($row['billing'] ?? 'onetime', ['onetime', 'weekly', 'monthly', 'yearly'], true)
                 ? $row['billing']
@@ -248,12 +276,16 @@ add_action('save_post_course', function ($post_id) {
                 'billing' => $billing,
                 'plan_id' => $plan_id,
             ];
+            error_log('✅ Variation added: ' . $label . ' - $' . number_format($price, 2) . ' (' . $billing . ')');
         }
     }
 
     if ($clean) {
+        error_log('✅ Saving ' . count($clean) . ' variations');
         update_post_meta($post_id, '_course_variations', wp_json_encode($clean));
+        error_log('Saved variations: ' . wp_json_encode($clean));
     } else {
+        error_log('ℹ️ No valid variations to save, deleting meta');
         delete_post_meta($post_id, '_course_variations');
     }
 
