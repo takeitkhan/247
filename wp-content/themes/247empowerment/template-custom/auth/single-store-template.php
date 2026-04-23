@@ -384,10 +384,14 @@ if (!$is_shareable) {
                                                             <div class="mt-1 text-muted" style="font-size: 0.875rem;">
                                                                 <?php 
                                                                     $desc = $v['desc'];
-                                                                    // Remove literal \r\n escape sequences
+                                                                    // Remove literal 'rn' string artifacts
+                                                                    $desc = str_replace('rn', '', $desc);
+                                                                    // Remove escape sequences
                                                                     $desc = str_replace(['\\r\\n', '\\r', '\\n'], '', $desc);
-                                                                    // Remove stray 'rn' that might appear as plain text
-                                                                    $desc = preg_replace('/[\r\n]+/', '', $desc);
+                                                                    // Remove all actual newlines/carriage returns
+                                                                    $desc = preg_replace('/[\r\n\t]+/', '', $desc);
+                                                                    // Clean up extra spaces around HTML tags
+                                                                    $desc = preg_replace('/>\s+</', '><', $desc);
                                                                     echo wp_kses_post($desc);
                                                                 ?>
                                                             </div>
