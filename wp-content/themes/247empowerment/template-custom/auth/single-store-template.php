@@ -41,6 +41,21 @@ $custom_permalink = home_url("/{$store_user}/store/{$course_slug}/");
 
 // Variations (custom field system, see more_functions/store-variations.php)
 $variations = function_exists('mm_get_course_variations') ? mm_get_course_variations($course->ID) : [];
+
+// FALLBACK: If no variations saved, auto-create from ACF price field (one-time)
+if (empty($variations) && $price) {
+    $variations = [
+        [
+            'label' => get_the_title($course),
+            'desc' => $short_details ?: '',
+            'price' => (string)$price,
+            'sku' => get_field('sku', $course->ID) ?: '',
+            'billing' => 'onetime',
+            'plan_id' => '',
+        ]
+    ];
+}
+
 $has_variations = !empty($variations);
 // Default price used by the JS when no variation is pre-selected:
 // - If variations exist: use the first variation's price
