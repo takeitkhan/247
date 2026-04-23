@@ -105,6 +105,13 @@ function mm_course_variations_meta_box_html($post)
                 list.append('<div class="mm-var-empty" data-placeholder>No variations yet. Click "Add variation" below.</div>');
             }
         });
+
+        // CRITICAL: Sync TinyMCE editors to textareas BEFORE form submission
+        $('#post').on('submit', function(e) {
+            if (window.tinyMCE) {
+                window.tinyMCE.triggerSave(); // Sync all active editors
+            }
+        });
     })(jQuery);
     </script>
     <?php
