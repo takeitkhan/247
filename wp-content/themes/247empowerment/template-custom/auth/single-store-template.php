@@ -382,7 +382,14 @@ if (!$is_shareable) {
                                                         <?php endif; ?>
                                                         <?php if (!empty($v['desc'])): ?>
                                                             <div class="mt-1 text-muted" style="font-size: 0.875rem;">
-                                                                <?php echo wpautop(wp_kses_post($v['desc'])); ?>
+                                                                <?php 
+                                                                    $desc = $v['desc'];
+                                                                    // Remove literal \r\n escape sequences
+                                                                    $desc = str_replace(['\\r\\n', '\\r', '\\n'], '', $desc);
+                                                                    // Remove stray 'rn' that might appear as plain text
+                                                                    $desc = preg_replace('/[\r\n]+/', '', $desc);
+                                                                    echo wp_kses_post($desc);
+                                                                ?>
                                                             </div>
                                                         <?php endif; ?>
                                                     </div>
