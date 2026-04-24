@@ -336,16 +336,12 @@ if (function_exists('acf_add_local_field_group')) {
                 'type' => 'repeater',
                 'instructions' => 'Add benefits that this course provides',
                 'required' => 0,
-                'conditional_logic' => 0,
                 'wrapper' => [
                     'width' => '100',
-                    'class' => '',
-                    'id' => '',
                 ],
-                'collapsed' => '',
                 'min' => 0,
                 'max' => 0,
-                'layout' => 'table',
+                'layout' => 'block',
                 'button_label' => 'Add Benefit',
                 'sub_fields' => [
                     [
@@ -353,18 +349,12 @@ if (function_exists('acf_add_local_field_group')) {
                         'label' => 'Benefit Text',
                         'name' => 'benefit_text',
                         'type' => 'text',
-                        'instructions' => 'What is the benefit?',
+                        'instructions' => 'Enter the benefit text',
                         'required' => 1,
-                        'conditional_logic' => 0,
                         'wrapper' => [
                             'width' => '100',
-                            'class' => '',
-                            'id' => '',
                         ],
-                        'default_value' => '',
                         'placeholder' => 'e.g. Full-day guided experience',
-                        'prepend' => '',
-                        'append' => '',
                     ],
                 ],
             ],
@@ -378,13 +368,100 @@ if (function_exists('acf_add_local_field_group')) {
                 ],
             ],
         ],
-        'menu_order' => 0,
+        'menu_order' => 10,
         'position' => 'normal',
         'style' => 'default',
         'label_placement' => 'top',
         'instruction_placement' => 'label',
-        'hide_on_screen' => '',
+        'hide_on_screen' => [],
         'active' => true,
         'description' => '',
     ]);
 }
+
+/**
+ * FALLBACK: Traditional Meta Box for Course Benefits (if ACF not active)
+ */
+add_action('add_meta_boxes', function () {
+    // Only show if ACF is NOT active
+    if (!function_exists('acf_add_local_field_group')) {
+        add_meta_box(
+            'course_benefits_metabox',
+            'Course Benefits',
+            function ($post) {
+                wp_nonce_field('course_benefits_nonce', 'course_benefits_nonce_field');
+                
+                $benefits = get_post_meta($post->ID, '_course_benefits', true);
+                if (!is_array($benefits)) {
+                    $benefits = [];
+                }
+                
+                echo '<div id="benefits-container" style="margin-bottom: 20px;">';
+                
+                foreach ($benefits as $index => $benefit) {
+                    echo '<div class="benefit-row" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9;">';
+                    echo '<input type="text" name="course_benefits[' . $index . ']" value="' . esc_attr($benefit) . '" placeholder="Enter benefit" style="width: 100%; padding: 8px; margin-bottom: 5px;" />';
+                    echo '<button type="button" class="button remove-benefit" data-index="' . $index . '">Remove</button>';
+                    echo '</div>';
+                }
+                
+                echo '</div>';
+                echo '<button type="button" id="add-benefit-btn" class="button button-primary">Add Benefit</button>';
+                
+                ?>
+                <script>
+                var benefitIndex = <?php echo count($benefits); ?>;
+                
+                document.getElementById('add-benefit-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var container = document.getElementById('benefits-container');
+                    var row = document.createElement('div');
+                    row.className = 'benefit-row';
+                    row.style.cssText = 'margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9;';
+                    row.innerHTML = '<input type="text" name="course_benefits[' + benefitIndex + ']" placeholder="Enter benefit" style="width: 100%; padding: 8px; margin-bottom: 5px;" /><button type="button" class="button remove-benefit" data-index="' + benefitIndex + '">Remove</button>';
+                    container.appendChild(row);
+                    benefitIndex++;
+                    
+                    attachRemoveListener(row.querySelector('.remove-benefit'));
+                });
+                
+                function attachRemoveListener(btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        this.closest('.benefit-row').remove();
+                    });
+                }
+                
+                document.querySelectorAll('.remove-benefit').forEach(attachRemoveListener);
+                </script>
+                <?php
+            },
+            'course',
+            'normal',
+            'high'
+        );
+    }
+});
+
+/**
+ * FALLBACK: Save Course Benefits (if ACF not active)
+ */
+add_action('save_post_course', function ($post_id) {
+    if (!function_exists('acf_add_local_field_group') && isset($_POST['course_benefits_nonce_field'])) {
+        if (!wp_verify_nonce($_POST['course_benefits_nonce_field'], 'course_benefits_nonce')) {
+            return;
+        }
+        
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+        if (!current_user_can('edit_post', $post_id)) return;
+        
+        $benefits = isset($_POST['course_benefits']) ? array_map('sanitize_text_field', $_POST['course_benefits']) : [];
+        $benefits = array_filter($benefits); // Remove empty values
+        
+        if (!empty($benefits)) {
+            update_post_meta($post_id, '_course_benefits', $benefits);
+        } else {
+            delete_post_meta($post_id, '_course_benefits');
+        }
+    }
+});

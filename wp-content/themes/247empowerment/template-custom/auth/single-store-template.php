@@ -250,44 +250,50 @@ if (!$is_shareable) {
                             </div>
                             <div class="d-flex flex-column gap-3 py-4 border-underline">
                                 <?php
-                                // Get benefits from ACF
-                                $benefits = get_field('course_benefits', $course->ID);
+                                $benefits = [];
                                 
-                                if ($benefits && is_array($benefits)) {
-                                    // Display ACF benefits
-                                    foreach ($benefits as $benefit) {
-                                        $benefit_text = $benefit['benefit_text'] ?? '';
-                                        if (!empty($benefit_text)) {
-                                            ?>
-                                            <div class="d-flex gap-2">
-                                                <div>
-                                                    <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/right-sign.png" alt="">
-                                                </div>
-                                                <span><?= esc_html($benefit_text); ?></span>
-                                            </div>
-                                            <?php
+                                // Try ACF first
+                                if (function_exists('get_field')) {
+                                    $acf_benefits = get_field('course_benefits', $course->ID);
+                                    if ($acf_benefits && is_array($acf_benefits)) {
+                                        foreach ($acf_benefits as $benefit) {
+                                            $benefit_text = $benefit['benefit_text'] ?? '';
+                                            if (!empty($benefit_text)) {
+                                                $benefits[] = $benefit_text;
+                                            }
                                         }
                                     }
-                                } else {
-                                    // Fallback to default benefits if none defined
-                                    $default_benefits = [
+                                }
+                                
+                                // If no ACF benefits, try fallback meta box
+                                if (empty($benefits)) {
+                                    $meta_benefits = get_post_meta($course->ID, '_course_benefits', true);
+                                    if ($meta_benefits && is_array($meta_benefits)) {
+                                        $benefits = array_filter($meta_benefits);
+                                    }
+                                }
+                                
+                                // If still no benefits, use defaults
+                                if (empty($benefits)) {
+                                    $benefits = [
                                         'Full-day guided experience',
                                         'Personalized empowerment coaching',
                                         'Deep clarity and purpose',
                                         'Reconnection with inner self',
                                         'Transformative legacy activation',
                                     ];
-                                    
-                                    foreach ($default_benefits as $benefit) {
-                                        ?>
-                                        <div class="d-flex gap-2">
-                                            <div>
-                                                <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/right-sign.png" alt="">
-                                            </div>
-                                            <span><?= esc_html($benefit); ?></span>
+                                }
+                                
+                                // Display benefits
+                                foreach ($benefits as $benefit) {
+                                    ?>
+                                    <div class="d-flex gap-2">
+                                        <div>
+                                            <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/right-sign.png" alt="">
                                         </div>
-                                        <?php
-                                    }
+                                        <span><?= esc_html($benefit); ?></span>
+                                    </div>
+                                    <?php
                                 }
                                 ?>
                             </div>
