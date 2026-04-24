@@ -7,6 +7,7 @@ require_once get_template_directory() . '/inc/PayoutSystem.php';
 require_once get_template_directory() . '/inc/PayPalAPI.php';
 require_once get_template_directory() . '/inc/PayoutNotifications.php';
 require_once get_template_directory() . '/inc/payout-balance.php';
+require_once get_template_directory() . '/more_functions/paypal-api.php';
 
 // ============================================
 // Load Phase 1, 2, 3 Enhanced Posting Features
