@@ -252,25 +252,10 @@ if (!$is_shareable) {
                                 <?php
                                 $benefits = [];
                                 
-                                // Try ACF first
-                                if (function_exists('get_field')) {
-                                    $acf_benefits = get_field('course_benefits', $course->ID);
-                                    if ($acf_benefits && is_array($acf_benefits)) {
-                                        foreach ($acf_benefits as $benefit) {
-                                            $benefit_text = $benefit['benefit_text'] ?? '';
-                                            if (!empty($benefit_text)) {
-                                                $benefits[] = $benefit_text;
-                                            }
-                                        }
-                                    }
-                                }
-                                
-                                // If no ACF benefits, try fallback meta box
-                                if (empty($benefits)) {
-                                    $meta_benefits = get_post_meta($course->ID, '_course_benefits', true);
-                                    if ($meta_benefits && is_array($meta_benefits)) {
-                                        $benefits = array_filter($meta_benefits);
-                                    }
+                                // Get from meta box
+                                $meta_benefits = get_post_meta($course->ID, 'course_benefits', true);
+                                if ($meta_benefits && is_array($meta_benefits)) {
+                                    $benefits = array_filter($meta_benefits);
                                 }
                                 
                                 // If still no benefits, use defaults
