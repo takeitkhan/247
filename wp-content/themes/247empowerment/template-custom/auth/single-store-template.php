@@ -252,11 +252,33 @@ if (!$is_shareable) {
                                 <?php
                                 $benefits = [];
                                 
-                                // Get from meta box
-                                $meta_benefits = get_post_meta($course->ID, 'course_benefits', true);
+                                // Debug: Check what's in the database
+                                error_log('🔍 ===== BENEFITS DEBUG START =====');
+                                error_log('🔍 Course ID: ' . $course->ID);
+                                error_log('🔍 Course Slug: ' . $course->post_name);
+                                
+                                // Get ALL meta keys for this course
+                                $all_meta = get_post_meta($course->ID);
+                                error_log('📊 All meta keys: ' . wp_json_encode(array_keys($all_meta)));
+                                
+                                // Try different meta keys
+                                $meta1 = get_post_meta($course->ID, 'course_benefits', true);
+                                error_log('📊 course_benefits: ' . wp_json_encode($meta1));
+                                
+                                $meta2 = get_post_meta($course->ID, '_course_benefits', true);
+                                error_log('📊 _course_benefits: ' . wp_json_encode($meta2));
+                                
+                                // Get from either key
+                                $meta_benefits = $meta1 ?: $meta2;
+                                
                                 if ($meta_benefits && is_array($meta_benefits)) {
                                     $benefits = array_filter($meta_benefits);
+                                    error_log('✅ Benefits found: ' . wp_json_encode($benefits));
+                                } else {
+                                    error_log('⚠️ No benefits found - using defaults');
                                 }
+                                
+                                error_log('🔍 ===== BENEFITS DEBUG END =====');
                                 
                                 // If still no benefits, use defaults
                                 if (empty($benefits)) {
