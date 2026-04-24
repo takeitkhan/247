@@ -421,20 +421,48 @@ function render_course_benefits_metabox($post) {
 }
 
 add_action('save_post_course', function ($post_id) {
-    if (!isset($_POST['course_benefits_nonce']) || !wp_verify_nonce($_POST['course_benefits_nonce'], 'course_benefits_save')) {
+    error_log('💾 ===== SAVE BENEFITS START =====');
+    error_log('💾 Post ID: ' . $post_id);
+    
+    if (!isset($_POST['course_benefits_nonce'])) {
+        error_log('❌ No nonce field found');
+        return;
+    }
+    
+    if (!wp_verify_nonce($_POST['course_benefits_nonce'], 'course_benefits_save')) {
+        error_log('❌ Nonce verification failed');
         return;
     }
 
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
-    if (!current_user_can('edit_post', $post_id)) return;
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        error_log('⏭️ Autosave - skipping');
+        return;
+    }
+    
+    if (!current_user_can('edit_post', $post_id)) {
+        error_log('❌ User cannot edit post');
+        return;
+    }
 
     $benefits = isset($_POST['course_benefits']) ? array_map('sanitize_text_field', (array) $_POST['course_benefits']) : [];
+    error_log('📊 Raw benefits from POST: ' . wp_json_encode($_POST['course_benefits'] ?? []));
+    
     $benefits = array_filter($benefits); // Remove empty values
     $benefits = array_values($benefits); // Re-index array
+    
+    error_log('📊 Filtered benefits: ' . wp_json_encode($benefits));
 
     if (!empty($benefits)) {
         update_post_meta($post_id, 'course_benefits', $benefits);
+        error_log('✅ Saved ' . count($benefits) . ' benefits to post ' . $post_id);
+        
+        // Verify it was saved
+        $verify = get_post_meta($post_id, 'course_benefits', true);
+        error_log('✅ Verification - what was saved: ' . wp_json_encode($verify));
     } else {
         delete_post_meta($post_id, 'course_benefits');
+        error_log('🗑️ Deleted all benefits');
     }
+    
+    error_log('💾 ===== SAVE BENEFITS END =====');
 });
