@@ -249,36 +249,47 @@ if (!$is_shareable) {
                                 <h5 class="portal-title">Benefits</h5>
                             </div>
                             <div class="d-flex flex-column gap-3 py-4 border-underline">
-                                <div class="d-flex gap-2">
-                                    <div>
-                                        <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/right-sign.png" alt="">
-                                    </div>
-                                    <span>Full-day guided experience</span>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <div>
-                                        <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/right-sign.png" alt="">
-                                    </div>
-                                    <span>Personalized empowerment coaching</span>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <div>
-                                        <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/right-sign.png" alt="">
-                                    </div>
-                                    <span>Deep clarity and purpose</span>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <div>
-                                        <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/right-sign.png" alt="">
-                                    </div>
-                                    <span>Reconnection with inner self</span>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <div>
-                                        <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/right-sign.png" alt="">
-                                    </div>
-                                    <span>Transformative legacy activation</span>
-                                </div>
+                                <?php
+                                // Get benefits from ACF
+                                $benefits = get_field('course_benefits', $course->ID);
+                                
+                                if ($benefits && is_array($benefits)) {
+                                    // Display ACF benefits
+                                    foreach ($benefits as $benefit) {
+                                        $benefit_text = $benefit['benefit_text'] ?? '';
+                                        if (!empty($benefit_text)) {
+                                            ?>
+                                            <div class="d-flex gap-2">
+                                                <div>
+                                                    <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/right-sign.png" alt="">
+                                                </div>
+                                                <span><?= esc_html($benefit_text); ?></span>
+                                            </div>
+                                            <?php
+                                        }
+                                    }
+                                } else {
+                                    // Fallback to default benefits if none defined
+                                    $default_benefits = [
+                                        'Full-day guided experience',
+                                        'Personalized empowerment coaching',
+                                        'Deep clarity and purpose',
+                                        'Reconnection with inner self',
+                                        'Transformative legacy activation',
+                                    ];
+                                    
+                                    foreach ($default_benefits as $benefit) {
+                                        ?>
+                                        <div class="d-flex gap-2">
+                                            <div>
+                                                <img src="<?= get_template_directory_uri(); ?>/assets/img/nd/right-sign.png" alt="">
+                                            </div>
+                                            <span><?= esc_html($benefit); ?></span>
+                                        </div>
+                                        <?php
+                                    }
+                                }
+                                ?>
                             </div>
                             <?php
                             $buyer_id = get_current_user_id();

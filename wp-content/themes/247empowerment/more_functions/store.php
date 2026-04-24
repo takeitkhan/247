@@ -320,3 +320,72 @@ add_action('admin_enqueue_scripts', function ($hook) {
         });
     ");
 });
+
+/**
+ * ACF Field Group: Course Benefits
+ */
+if (function_exists('acf_add_local_field_group')) {
+    acf_add_local_field_group([
+        'key' => 'group_course_benefits',
+        'title' => 'Course Benefits',
+        'fields' => [
+            [
+                'key' => 'field_course_benefits_repeater',
+                'label' => 'Benefits',
+                'name' => 'course_benefits',
+                'type' => 'repeater',
+                'instructions' => 'Add benefits that this course provides',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => [
+                    'width' => '100',
+                    'class' => '',
+                    'id' => '',
+                ],
+                'collapsed' => '',
+                'min' => 0,
+                'max' => 0,
+                'layout' => 'table',
+                'button_label' => 'Add Benefit',
+                'sub_fields' => [
+                    [
+                        'key' => 'field_benefit_text',
+                        'label' => 'Benefit Text',
+                        'name' => 'benefit_text',
+                        'type' => 'text',
+                        'instructions' => 'What is the benefit?',
+                        'required' => 1,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '100',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'default_value' => '',
+                        'placeholder' => 'e.g. Full-day guided experience',
+                        'prepend' => '',
+                        'append' => '',
+                    ],
+                ],
+            ],
+        ],
+        'location' => [
+            [
+                [
+                    'param' => 'post_type',
+                    'operator' => '==',
+                    'value' => 'course',
+                ],
+            ],
+        ],
+        'menu_order' => 0,
+        'position' => 'normal',
+        'style' => 'default',
+        'label_placement' => 'top',
+        'instruction_placement' => 'label',
+        'hide_on_screen' => '',
+        'active' => true,
+        'description' => '',
+    ]);
+}
+});
