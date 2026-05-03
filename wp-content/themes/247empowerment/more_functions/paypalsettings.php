@@ -98,7 +98,7 @@ add_action('admin_init', function () {
     register_setting('paypal_settings_group', 'paypal_referral_commission'); // ✅ New
     register_setting('paypal_settings_group', 'paypal_webhook_id');
 
-    add_settings_section('paypal_main_section', 'PayPal API Configuration', null, 'paypal-settings');
+    add_settings_section('paypal_main_section', 'PayPal API Configuration', '', 'paypal-settings');
 
     // Environment
     add_settings_field('paypal_environment', 'Environment', function () {

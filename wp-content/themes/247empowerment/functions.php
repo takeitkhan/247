@@ -7,7 +7,6 @@ require_once get_template_directory() . '/inc/PayoutSystem.php';
 require_once get_template_directory() . '/inc/PayPalAPI.php';
 require_once get_template_directory() . '/inc/PayoutNotifications.php';
 require_once get_template_directory() . '/inc/payout-balance.php';
-require_once get_template_directory() . '/more_functions/paypal-api.php';
 
 // ============================================
 // Load Phase 1, 2, 3 Enhanced Posting Features
@@ -354,30 +353,32 @@ function mm_enqueue_assets()
 }
 add_action('wp_enqueue_scripts', 'mm_enqueue_assets');
 
+/**
+if (class_exists('Kirki')) {
+    Kirki::add_config('my_config', array(
+        'capability'  => 'edit_theme_options',
+        'option_type' => 'theme_mod',
+    ));
 
-Kirki::add_config('my_config', array(
-    'capability'  => 'edit_theme_options',
-    'option_type' => 'theme_mod',
-));
+    Kirki::add_section('hero_text_section', array(
+        'title'    => esc_html__('Hero Text Section', 'textdomain'),
+        'priority' => 160,
+    ));
 
-Kirki::add_section('hero_text_section', array(
-    'title'    => esc_html__('Hero Text Section', 'textdomain'),
-    'priority' => 160,
-));
-
-Kirki::add_field('my_config', [
-    'type'        => 'editor',
-    'settings'    => 'hero_text_content',
-    'label'       => esc_html__('Hero Text Content', 'textdomain'),
-    'section'     => 'hero_text_section',
-    'default'     => '<h2>Hello <strong>world!</strong></h2>',
-    'choices'     => [
-        'rows'           => 10,
-        'toolbar'        => 'full',
-        'media_buttons'  => false,
-    ],
-]);
-
+    Kirki::add_field('my_config', [
+        'type'        => 'editor',
+        'settings'    => 'hero_text_content',
+        'label'       => esc_html__('Hero Text Content', 'textdomain'),
+        'section'     => 'hero_text_section',
+        'default'     => '<h2>Hello <strong>world!</strong></h2>',
+        'choices'     => [
+            'rows'           => 10,
+            'toolbar'        => 'full',
+            'media_buttons'  => false,
+        ],
+    ]);
+}
+ */
 // Utility functions
 function get_header_based_on_login()
 {
@@ -1206,14 +1207,16 @@ add_shortcode('withdrawal_form', function() {
 
 require_once get_template_directory() . '/more_functions/profile.php';
 require_once get_template_directory() . '/more_functions/store.php';
+require_once get_template_directory() . '/more_functions/paypalsettings.php';
+require_once get_template_directory() . '/more_functions/paypal-api.php';
 require_once get_template_directory() . '/more_functions/store-variations.php';
+require_once get_template_directory() . '/more_functions/paypal-diagnostic-dashboard.php';
 require_once get_template_directory() . '/more_functions/event.php';
 require_once get_template_directory() . '/more_functions/blog.php';
 require_once get_template_directory() . '/more_functions/video.php';
 require_once get_template_directory() . '/more_functions/jobs.php';
 require_once get_template_directory() . '/more_functions/agreement.php';
 require_once get_template_directory() . '/more_functions/issues.php';
-require_once get_template_directory() . '/more_functions/paypalsettings.php';
 require_once get_template_directory() . '/more_functions/paypal-webhook.php';
 require_once get_template_directory() . '/more_functions/course-sales-admin.php';
 
@@ -1227,3 +1230,8 @@ require_once get_template_directory() . '/more_functions/linkedin-poster.php';
 
 // Debug Logs Viewer (for OAuth debugging)
 require_once get_template_directory() . '/more_functions/debug-logs-viewer.php';
+require_once get_template_directory() . '/more_functions/debug-paypal-plans.php';
+// require_once get_template_directory() . '/more_functions/paypal-diagnostic.php'; // Use paypal-diagnostic-dashboard.php instead
+require_once get_template_directory() . '/more_functions/check-db-diagnostic.php';
+
+// End of theme functions.php

@@ -1,12 +1,26 @@
 <?php
 /**
- * Course / Product Variations with Rich Text Editor
- * Single editor instance per variation with HTML support
+ * Course / Product Variations
+ * -----------------------------------------------------------
+ * Adds a backend meta box on the `course` CPT that lets admins
+ * create multiple variations (label, description, price, sku).
+ *
+ * Variations are stored as a single post meta `_course_variations`
+ * holding a JSON-encoded array:
+ *   [
+ *     { "label": "Basic",    "desc": "1 month access", "price": "19.00", "sku": "BASIC" },
+ *     { "label": "Pro",      "desc": "3 month access", "price": "49.00", "sku": "PRO"   },
+ *     { "label": "Lifetime", "desc": "Forever",        "price": "199.00","sku": "LIFE"  }
+ *   ]
+ *
+ * Helper: mm_get_course_variations($course_id) → array
  */
 
 if (!defined('ABSPATH')) exit;
 
-// Register meta box
+// -----------------------------------------------------------
+// 1. Register meta box
+// -----------------------------------------------------------
 add_action('add_meta_boxes', function () {
     add_meta_box(
         'mm_course_variations',
@@ -25,36 +39,55 @@ function mm_course_variations_meta_box_html($post)
     ?>
     <style>
         .mm-var-wrap { margin-top: 10px; }
-        .mm-var-row { background: #fff; border: 1px solid #ccd0d4; border-radius: 4px; padding: 15px; margin-bottom: 15px; }
-        .mm-var-top { display: grid; grid-template-columns: 2fr 1fr 1.5fr 1fr auto; gap: 12px; margin-bottom: 15px; }
-        .mm-var-top > div > label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 12px; text-transform: uppercase; color: #555; }
-        .mm-var-top input, .mm-var-top select { width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 3px; }
-        .mm-var-desc-box { border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px; }
-        .mm-var-desc-box label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 12px; text-transform: uppercase; color: #555; }
-        .mm-var-remove { background: #dc3232; color: #fff; border: 0; padding: 8px 12px; border-radius: 3px; cursor: pointer; font-size: 13px; margin-top: 24px; }
+        .mm-var-row {
+            background: #fff; border: 1px solid #ccd0d4; border-radius: 4px;
+            padding: 12px; margin-bottom: 10px; position: relative;
+        }
+        .mm-var-row .mm-var-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 3fr auto;
+            gap: 10px; align-items: start;
+        }
+        .mm-var-row input[type="text"],
+        .mm-var-row input[type="number"],
+        .mm-var-row textarea { width: 100%; }
+        .mm-var-row textarea { min-height: 60px; }
+        .mm-var-row label {
+            display: block; font-weight: 600; margin-bottom: 4px; font-size: 12px;
+            text-transform: uppercase; color: #555;
+        }
+        .mm-var-remove {
+            background: #dc3232; color: #fff; border: 0; padding: 6px 10px;
+            border-radius: 3px; cursor: pointer; height: fit-content; margin-top: 22px;
+        }
         .mm-var-remove:hover { background: #a00; }
-        #mm-var-add { background: #2271b1; color: #fff; border: 0; padding: 10px 20px; border-radius: 3px; cursor: pointer; font-size: 14px; margin-top: 10px; }
+        #mm-var-add {
+            background: #2271b1; color: #fff; border: 0; padding: 8px 16px;
+            border-radius: 3px; cursor: pointer; font-size: 14px;
+        }
         #mm-var-add:hover { background: #135e96; }
-        .mm-var-empty { color: #999; font-style: italic; padding: 20px 0; }
+        .mm-var-empty { color: #888; font-style: italic; padding: 10px 0; }
     </style>
 
     <div class="mm-var-wrap">
-        <p class="description">Add multiple pricing options for this course. Each variation can have different pricing and billing terms.</p>
+        <p class="description">
+            Add one row per variation. Each variation has its own price. When a buyer
+            selects a variation on the product page, the PayPal payment uses that
+            variation's price.
+        </p>
 
         <div id="mm-var-list">
             <?php if (empty($variations)): ?>
                 <div class="mm-var-empty" data-placeholder>No variations yet. Click "Add variation" below.</div>
-            <?php else: 
-                foreach ($variations as $i => $v): 
-                    mm_render_variation_row($i, $v);
-                endforeach;
-            endif; ?>
+            <?php else: foreach ($variations as $i => $v): ?>
+                <?php mm_render_variation_row($i, $v); ?>
+            <?php endforeach; endif; ?>
         </div>
 
-        <button type="button" id="mm-var-add">+ Add variation</button>
+        <p><button type="button" id="mm-var-add">+ Add variation</button></p>
     </div>
 
-    <!-- Template for new variations -->
+    <!-- Template for a new row -->
     <script type="text/template" id="mm-var-template">
         <?php mm_render_variation_row('__INDEX__', ['label' => '', 'desc' => '', 'price' => '', 'sku' => '', 'billing' => 'onetime']); ?>
     </script>
@@ -62,188 +95,228 @@ function mm_course_variations_meta_box_html($post)
     <script>
     (function($){
         var list = $('#mm-var-list');
-        var editorInstances = {};
 
         function reindex() {
-            console.log('🔄 Reindexing variations...');
-            list.find('.mm-var-row').each(function(i) {
-                console.log('  Row ' + i + ':');
-                $(this).find('[name]').each(function() {
-                    var oldName = $(this).attr('name');
-                    var newName = oldName.replace(/mm_variations\[\d+\]/, 'mm_variations[' + i + ']');
-                    console.log('    ' + oldName + ' → ' + newName);
-                    $(this).attr('name', newName);
+            list.find('.mm-var-row').each(function(i){
+                $(this).find('[name]').each(function(){
+                    var name = $(this).attr('name').replace(/mm_variations\[[^\]]+\]/, 'mm_variations[' + i + ']');
+                    $(this).attr('name', name);
                 });
             });
-            console.log('✅ Reindexing complete');
         }
 
         $('#mm-var-add').on('click', function(){
-            console.log('➕ Add variation clicked');
             list.find('[data-placeholder]').remove();
-            var newIndex = list.find('.mm-var-row').length;
-            console.log('New index:', newIndex);
-            var tpl = $('#mm-var-template').html().replace(/__INDEX__/g, newIndex);
+            var tpl = $('#mm-var-template').html().replace(/__INDEX__/g, list.find('.mm-var-row').length);
             list.append(tpl);
-            console.log('Template appended, reindexing...');
-            reindex();
-            console.log('✅ Reindexed, current variations:', list.find('.mm-var-row').length);
-            
-            // Initialize editor for new row
-            var editorId = 'mm_var_desc_' + newIndex;
-            setTimeout(function() {
-                if (window.tinyMCE) {
-                    window.tinyMCE.execCommand('mceAddEditor', false, editorId);
-                    console.log('TinyMCE editor added:', editorId);
-                }
-            }, 100);
         });
 
         list.on('click', '.mm-var-remove', function(){
             if (!confirm('Remove this variation?')) return;
-            
-            var editorId = $(this).closest('.mm-var-row').find('[id^="mm_var_desc_"]').attr('id');
-            if (editorId && window.tinyMCE && window.tinyMCE.get(editorId)) {
-                window.tinyMCE.get(editorId).destroy(true);
-            }
-            
             $(this).closest('.mm-var-row').remove();
             reindex();
-            
             if (!list.find('.mm-var-row').length) {
                 list.append('<div class="mm-var-empty" data-placeholder>No variations yet. Click "Add variation" below.</div>');
             }
         });
-
-        // CRITICAL: Sync TinyMCE editors to textareas BEFORE form submission
-        $('#post').on('submit', function(e) {
-            console.log('📝 Form submit detected!');
-            console.log('Variations in DOM:', list.find('.mm-var-row').length);
-            if (window.tinyMCE) {
-                console.log('TinyMCE found, syncing...');
-                window.tinyMCE.triggerSave();
-                console.log('✅ TinyMCE synced');
-            } else {
-                console.log('⚠️ TinyMCE not available');
-            }
-        });
     })(jQuery);
     </script>
+
+    <!-- Debug: Variation Status Table -->
+    <div style="margin-top: 20px; padding: 12px; background: #f0f6fc; border-left: 4px solid #2271b1; border-radius: 4px;">
+        <h4 style="margin-top: 0; margin-bottom: 10px;">🔍 Variation Summary & PayPal Status:</h4>
+        <?php 
+        if (empty($variations)): 
+            echo '<p style="color: #666; margin: 0;">No variations created yet.</p>';
+        else:
+        ?>
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+            <thead>
+                <tr style="border-bottom: 2px solid #2271b1; background: #e7f1f8;">
+                    <th style="padding: 8px; text-align: left; font-weight: 600;">Variation</th>
+                    <th style="padding: 8px; text-align: center; font-weight: 600;">Price</th>
+                    <th style="padding: 8px; text-align: center; font-weight: 600;">Billing</th>
+                    <th style="padding: 8px; text-align: center; font-weight: 600;">PayPal Plan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($variations as $i => $v): 
+                    $label = $v['label'] ?? 'Untitled';
+                    $price = $v['price'] ?? 0;
+                    $billing = $v['billing'] ?? 'onetime';
+                    $plan_id = $v['plan_id'] ?? '';
+                ?>
+                <tr style="border-bottom: 1px solid #d0d7e0;">
+                    <td style="padding: 8px;"><strong><?= htmlspecialchars($label) ?></strong></td>
+                    <td style="padding: 8px; text-align: center; color: #27ae60; font-weight: 600;">$<?= number_format($price, 2) ?></td>
+                    <td style="padding: 8px; text-align: center;">
+                        <?php 
+                        $billing_labels = [
+                            'onetime' => '📦 One-time',
+                            'weekly' => '📅 Weekly',
+                            'monthly' => '📅 Monthly',
+                            'yearly' => '📅 Yearly'
+                        ];
+                        echo $billing_labels[$billing] ?? $billing;
+                        ?>
+                    </td>
+                    <td style="padding: 8px; text-align: center;">
+                        <?php 
+                        if ($billing === 'onetime'):
+                            echo '<span style="color: #999;">N/A</span>';
+                        elseif (empty($plan_id)):
+                            echo '<span style="color: #e74c3c; font-weight: 600;">❌ Missing</span>';
+                        else:
+                            echo '<span style="color: #27ae60; font-weight: 600;">✅ ' . substr($plan_id, 0, 8) . '...</span>';
+                        endif;
+                        ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?php endif; ?>
+        
+        <!-- Show any errors from previous save -->
+        <?php 
+        $errors = get_post_meta($post->ID, '_mm_var_errors', true);
+        if (!empty($errors) && is_array($errors)): 
+        ?>
+        <div style="margin-top: 12px; padding: 10px; background: #fff5f5; border-left: 4px solid #e74c3c; border-radius: 3px;">
+            <p style="margin: 0 0 8px 0; font-weight: 600; color: #e74c3c;">⚠️ Plan Creation Errors:</p>
+            <ul style="margin: 0; padding-left: 20px; color: #c0392b; font-size: 12px;">
+                <?php foreach ($errors as $error): ?>
+                    <li style="margin: 4px 0;"><?= htmlspecialchars($error) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <?php endif; ?>
+        
+        <!-- Show PayPal API debug log -->
+        <?php 
+        $debug_info = get_post_meta($post->ID, '_mm_pp_debug_info', true);
+        $has_debug = !empty($debug_info) && is_array($debug_info);
+        ?>
+        <details style="margin-top: 12px; padding: 10px; background: #f5f9ff; border-left: 4px solid #3498db; border-radius: 3px;">
+            <summary style="cursor: pointer; font-weight: 600; color: #2c3e50; user-select: none;">
+                🔍 API Debug Log <?php if ($has_debug) echo '(' . count($debug_info) . ' events)'; else echo '(no data yet - save to generate)'; ?>
+            </summary>
+            <?php if ($has_debug): ?>
+            <div style="margin-top: 8px; font-family: monospace; font-size: 11px; background: #fff; padding: 8px; border-radius: 3px; max-height: 300px; overflow-y: auto; border: 1px solid #ddd;">
+                <?php foreach ($debug_info as $idx => $entry): ?>
+                    <div style="margin: 4px 0; padding: 4px; border-bottom: 1px solid #ecf0f1;">
+                        <span style="color: #7f8c8d;">[<?= htmlspecialchars($entry['time']) ?>]</span>
+                        <span style="color: #2c3e50; font-weight: 600;"><?= htmlspecialchars($entry['message']) ?></span>
+                        <?php if (!empty($entry['data'])): ?>
+                            <span style="color: #3498db;">→</span>
+                            <span style="color: #555;">
+                                <?php 
+                                if (is_array($entry['data'])) {
+                                    $json = wp_json_encode($entry['data']);
+                                    if (strlen($json) > 150) {
+                                        $json = substr($json, 0, 150) . '...';
+                                    }
+                                    echo htmlspecialchars($json);
+                                } else {
+                                    echo htmlspecialchars((string)$entry['data']);
+                                }
+                                ?>
+                            </span>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <?php else: ?>
+            <div style="margin-top: 8px; color: #999; font-size: 13px;">
+                💡 No API calls recorded yet. Save the post to populate this log.
+            </div>
+            <?php endif; ?>
+        </details>
+        
+        <p style="margin: 10px 0 0 0; font-size: 12px; color: #666;">
+            💡 <strong>Tip:</strong> Save the post to auto-create missing PayPal plans for subscription variations.
+        </p>
+    </div>
     <?php
 }
 
 function mm_render_variation_row($index, $v)
 {
     $label = esc_attr($v['label'] ?? '');
-    $desc  = $v['desc'] ?? '';
+    $desc  = esc_textarea($v['desc']  ?? '');
     $price = esc_attr($v['price'] ?? '');
     $sku   = esc_attr($v['sku']   ?? '');
     $billing = $v['billing'] ?? 'onetime';
     $plan_id = $v['plan_id'] ?? '';
-    $editor_id = 'mm_var_desc_' . $index;
     ?>
     <div class="mm-var-row">
-        <!-- Top row: Label, Price, Billing, SKU, Remove -->
-        <div class="mm-var-top">
+        <div class="mm-var-grid">
             <div>
                 <label>Label</label>
-                <input type="text" name="mm_variations[<?= $index ?>][label]" value="<?= $label ?>" placeholder="e.g. Pro Plan" required>
+                <input type="text" name="mm_variations[<?= $index ?>][label]" value="<?= $label ?>" placeholder="e.g. Basic Plan" required>
             </div>
             <div>
                 <label>Price (USD)</label>
-                <input type="number" step="0.01" min="0" name="mm_variations[<?= $index ?>][price]" value="<?= $price ?>" placeholder="29.99" required>
+                <input type="number" step="0.01" min="0" name="mm_variations[<?= $index ?>][price]" value="<?= $price ?>" placeholder="19.00" required>
             </div>
             <div>
                 <label>Billing</label>
                 <select name="mm_variations[<?= $index ?>][billing]">
                     <option value="onetime" <?= selected($billing, 'onetime', false) ?>>One-time</option>
-                    <option value="weekly" <?= selected($billing, 'weekly', false) ?>>Weekly</option>
+                    <option value="weekly"  <?= selected($billing, 'weekly',  false) ?>>Weekly</option>
                     <option value="monthly" <?= selected($billing, 'monthly', false) ?>>Monthly</option>
-                    <option value="yearly" <?= selected($billing, 'yearly', false) ?>>Yearly</option>
+                    <option value="yearly"  <?= selected($billing, 'yearly',  false) ?>>Yearly</option>
                 </select>
+                <?php if ($plan_id): ?>
+                    <small style="color:#46b450;display:block;margin-top:4px;" title="<?= esc_attr($plan_id) ?>">✓ Plan linked</small>
+                <?php endif; ?>
             </div>
             <div>
                 <label>SKU (optional)</label>
-                <input type="text" name="mm_variations[<?= $index ?>][sku]" value="<?= $sku ?>" placeholder="PRO-01">
+                <input type="text" name="mm_variations[<?= $index ?>][sku]" value="<?= $sku ?>" placeholder="BASIC-01">
             </div>
             <div>
-                <button type="button" class="mm-var-remove">Remove</button>
+                <label>Description</label>
+                <textarea name="mm_variations[<?= $index ?>][desc]" placeholder="Short description shown to buyer"><?= $desc ?></textarea>
+            </div>
+            <div>
+                <button type="button" class="mm-var-remove" title="Remove">✕</button>
             </div>
         </div>
-
-        <!-- Full-width: Description Editor -->
-        <div class="mm-var-desc-box">
-            <label>Description (Rich Text)</label>
-            <?php
-            wp_editor(
-                $desc,
-                $editor_id,
-                [
-                    'textarea_name' => 'mm_variations[' . $index . '][desc]',
-                    'media_buttons' => false,
-                    'textarea_rows' => 4,
-                    'teeny' => true,
-                ]
-            );
-            ?>
-        </div>
-
         <input type="hidden" name="mm_variations[<?= $index ?>][plan_id]" value="<?= esc_attr($plan_id) ?>">
     </div>
     <?php
 }
 
-// Save handler
+// -----------------------------------------------------------
+// 2. Save handler
+// -----------------------------------------------------------
 add_action('save_post_course', function ($post_id) {
-    // Debug log
-    error_log('=== SAVE_POST_COURSE FIRED for post ' . $post_id);
-    error_log('POST keys: ' . wp_json_encode(array_keys($_POST)));
-    
-    if (!isset($_POST['mm_course_variations_nonce'])) {
-        error_log('❌ No nonce found in POST');
-        error_log('POST data: ' . wp_json_encode($_POST));
+    if (!isset($_POST['mm_course_variations_nonce']) ||
+        !wp_verify_nonce($_POST['mm_course_variations_nonce'], 'mm_course_variations_save')) {
         return;
     }
-    
-    if (!wp_verify_nonce($_POST['mm_course_variations_nonce'], 'mm_course_variations_save')) {
-        error_log('❌ Nonce verification failed');
-        return;
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (!current_user_can('edit_post', $post_id)) return;
+
+    // Clear debug info from previous run
+    if (function_exists('mm_pp_clear_debug')) {
+        mm_pp_clear_debug();
     }
     
-    error_log('✅ Nonce verified');
-    
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-        error_log('ℹ️ Autosave detected, skipping');
-        return;
-    }
-    
-    if (!current_user_can('edit_post', $post_id)) {
-        error_log('❌ User cannot edit post');
-        return;
-    }
+    // Force clear cached PayPal token - get fresh one each save attempt
+    delete_transient('mm_pp_access_token');
 
     $raw = $_POST['mm_variations'] ?? [];
-    error_log('Raw variations: ' . wp_json_encode($raw));
-    error_log('Raw variations type: ' . gettype($raw));
-    error_log('Raw variations count: ' . count($raw));
-    
-    $existing = mm_get_course_variations($post_id);
+    $existing = mm_get_course_variations($post_id); // keyed by numeric index
     $clean = [];
     $errors = [];
 
     if (is_array($raw)) {
-        foreach ($raw as $index => $row) {
-            error_log('Processing row ' . $index . ': ' . wp_json_encode($row));
-            
+        foreach ($raw as $row) {
             $label = isset($row['label']) ? sanitize_text_field($row['label']) : '';
             $price = isset($row['price']) ? floatval($row['price']) : 0;
-            
-            error_log("Label: '$label', Price: $price");
-            
-            if ($label === '' || $price <= 0) {
-                error_log('Invalid row - skipping (label empty or price invalid)');
-                continue;
-            }
+            if ($label === '' || $price <= 0) continue;
 
             $billing = in_array($row['billing'] ?? 'onetime', ['onetime', 'weekly', 'monthly', 'yearly'], true)
                 ? $row['billing']
@@ -251,7 +324,8 @@ add_action('save_post_course', function ($post_id) {
 
             $sku = isset($row['sku']) ? sanitize_text_field($row['sku']) : '';
 
-            // Find existing variation
+            // Try to find an existing record that matches this row (by label+billing)
+            // so we can reuse its plan_id when price hasn't changed.
             $prev = null;
             foreach ($existing as $e) {
                 if (($e['label'] ?? '') === $label && ($e['billing'] ?? 'onetime') === $billing) {
@@ -262,24 +336,45 @@ add_action('save_post_course', function ($post_id) {
 
             $plan_id = '';
             if ($billing === 'onetime') {
-                $plan_id = '';
+                $plan_id = ''; // not needed
             } else {
+                // Subscription: reuse plan_id only if price unchanged
                 $prev_price = $prev['price'] ?? '';
                 $prev_plan  = $prev['plan_id'] ?? '';
                 if ($prev_plan && $prev_price !== '' && floatval($prev_price) === floatval($price)) {
                     $plan_id = $prev_plan;
                 } else {
+                    // Create product (once per course) then plan
                     if (function_exists('mm_pp_get_or_create_product')) {
+                        error_log('[Store Variations] Creating plan for: ' . $label);
                         $product_id = mm_pp_get_or_create_product($post_id);
                         if (is_wp_error($product_id)) {
-                            $errors[] = "Could not create PayPal product for \"$label\": " . $product_id->get_error_message();
+                            $msg = "Could not create PayPal product for \"$label\": " . $product_id->get_error_message();
+                            error_log('[Store Variations] ' . $msg);
+                            $errors[] = $msg;
                         } else {
+                            error_log('[Store Variations] Product created: ' . $product_id);
                             $interval_map = ['weekly' => 'WEEK', 'monthly' => 'MONTH', 'yearly' => 'YEAR'];
                             $interval = $interval_map[$billing] ?? 'MONTH';
+                            error_log('[Store Variations] Creating plan with interval: ' . $interval . ' (' . $billing . ')');
                             $plan = mm_pp_create_plan($product_id, $label, $price, $interval);
                             if (is_wp_error($plan)) {
-                                $errors[] = "Could not create PayPal plan for \"$label\": " . $plan->get_error_message();
+                                $msg = "Could not create PayPal plan for \"$label\": " . $plan->get_error_message();
+                                error_log('[Store Variations] Plan creation error: ' . $msg);
+                                $plan_data = $plan->get_error_data();
+                                if (is_array($plan_data)) {
+                                    error_log('[Store Variations] PayPal error details: ' . wp_json_encode($plan_data));
+                                    // Show PayPal error details
+                                    if (!empty($plan_data['name'])) {
+                                        $msg .= " [" . $plan_data['name'] . "]";
+                                    }
+                                    if (!empty($plan_data['message'])) {
+                                        $msg .= " - " . $plan_data['message'];
+                                    }
+                                }
+                                $errors[] = $msg;
                             } else {
+                                error_log('[Store Variations] Plan created: ' . $plan);
                                 $plan_id = $plan;
                             }
                         }
@@ -291,39 +386,38 @@ add_action('save_post_course', function ($post_id) {
                 'label'   => $label,
                 'price'   => number_format($price, 2, '.', ''),
                 'sku'     => $sku,
-                'desc'    => isset($row['desc']) ? wp_kses_post(preg_replace('/[\r\n\t]+/', ' ', $row['desc'])) : '',
+                'desc'    => isset($row['desc']) ? sanitize_textarea_field($row['desc']) : '',
                 'billing' => $billing,
                 'plan_id' => $plan_id,
             ];
-            error_log('✅ Variation added: ' . $label . ' - $' . number_format($price, 2) . ' (' . $billing . ')');
         }
     }
 
     if ($clean) {
-        error_log('✅ Saving ' . count($clean) . ' variations');
         update_post_meta($post_id, '_course_variations', wp_json_encode($clean));
-        error_log('Saved variations: ' . wp_json_encode($clean));
     } else {
-        error_log('ℹ️ No valid variations to save, deleting meta');
         delete_post_meta($post_id, '_course_variations');
     }
 
-    if (function_exists('mm_pp_request')) {
-        $still_used_plans = array_filter(array_map(function ($r) { return $r['plan_id'] ?? ''; }, $clean));
-        foreach ($existing as $e) {
-            $old_plan = $e['plan_id'] ?? '';
-            if (!$old_plan) continue;
-            if (in_array($old_plan, $still_used_plans, true)) continue;
-            $resp = mm_pp_request('POST', '/v1/billing/plans/' . rawurlencode($old_plan) . '/deactivate');
-        }
+    if ($errors) {
+        // Store in both transient (for notice) and post meta (for debug table)
+        set_transient('mm_var_errors_' . $post_id, $errors, 60);
+        update_post_meta($post_id, '_mm_var_errors', $errors);
+        error_log('[Store Variations] Errors occurred: ' . wp_json_encode($errors));
+    } else {
+        delete_post_meta($post_id, '_mm_var_errors');
     }
 
-    if ($errors) {
-        set_transient('mm_var_errors_' . $post_id, $errors, 60);
+    // Capture debug info
+    if (function_exists('mm_pp_get_debug')) {
+        $debug_info = mm_pp_get_debug();
+        if (!empty($debug_info)) {
+            update_post_meta($post_id, '_mm_pp_debug_info', $debug_info);
+        }
     }
 });
 
-// Display errors
+// Display any plan-creation errors as an admin notice after save
 add_action('admin_notices', function () {
     global $post;
     if (!$post || $post->post_type !== 'course') return;
@@ -335,7 +429,15 @@ add_action('admin_notices', function () {
     echo '</ul></div>';
 });
 
-// Helper functions
+// -----------------------------------------------------------
+// 3. Helpers
+// -----------------------------------------------------------
+/**
+ * Get all variations for a course.
+ *
+ * @param int $course_id
+ * @return array List of ['label','desc','price','sku'] (possibly empty).
+ */
 function mm_get_course_variations($course_id)
 {
     $raw = get_post_meta($course_id, '_course_variations', true);
@@ -344,9 +446,13 @@ function mm_get_course_variations($course_id)
     return is_array($data) ? $data : [];
 }
 
+/**
+ * Get a single variation by index, or null if not found.
+ */
 function mm_get_course_variation($course_id, $index)
 {
     $all = mm_get_course_variations($course_id);
     $index = (int) $index;
     return isset($all[$index]) ? $all[$index] : null;
 }
+

@@ -42,6 +42,14 @@ $custom_permalink = home_url("/{$store_user}/store/{$course_slug}/");
 // Variations (custom field system, see more_functions/store-variations.php)
 $variations = function_exists('mm_get_course_variations') ? mm_get_course_variations($course->ID) : [];
 
+// Debug: Check what variations were loaded
+error_log('📦 [single-store-template] Loaded variations for course ' . $course->ID . ': ' . count($variations) . ' variations');
+if (!empty($variations)) {
+    foreach ($variations as $idx => $var) {
+        error_log('  [' . $idx . '] Label: ' . ($var['label'] ?? 'N/A') . ' | Billing: ' . ($var['billing'] ?? 'N/A') . ' | Plan ID: ' . ($var['plan_id'] ?? 'EMPTY'));
+    }
+}
+
 // FALLBACK: If no variations saved, auto-create from ACF price field (one-time)
 if (empty($variations) && $price) {
     $variations = [
@@ -132,6 +140,82 @@ if (!$is_shareable) {
 
 
     <div class="pb-5 container profile-page pt20">
+        <?php
+        // 🔍 DEBUG: Show missing plan IDs for admins
+        if (current_user_can('manage_options') && $has_variations) {
+            $missing_plans = [];
+            foreach ($variations as $i => $v) {
+                if (in_array($v['billing'] ?? 'onetime', ['weekly', 'monthly', 'yearly'], true) && empty($v['plan_id'])) {
+                    $missing_plans[] = $v;
+                }
+            }
+            
+            // Check PayPal credentials
+            $paypal_creds = function_exists('get_paypal_api_credentials') ? get_paypal_api_credentials() : null;
+            $paypal_configured = $paypal_creds && !empty($paypal_creds['client_id']) && !empty($paypal_creds['secret']);
+            
+            // Check for errors from the last save
+            $errors = get_transient('mm_var_errors_' . $course->ID);
+            
+            if ($missing_plans || !$paypal_configured || $errors) {
+                ?>
+                <div class="d-flex align-items-start justify-content-between alert alert-danger" style="margin-bottom: 20px; border-left: 4px solid #dc3232;">
+                    <div style="flex-grow: 1;">
+                        <strong>🔍 Admin Debug: PayPal Configuration Issues</strong>
+                        <div style="font-size: 0.9rem; margin-top: 5px;">
+                            <?php if (!$paypal_configured): ?>
+                                <div style="margin-bottom: 8px;">
+                                    ❌ <strong>PayPal Not Configured</strong>
+                                    <div style="margin-left: 16px; color: #555; font-size: 0.85rem;">
+                                        Client ID or Secret is missing. Go to <strong>Settings → PayPal Settings</strong>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <?php if ($errors && is_array($errors)): ?>
+                                <div style="margin-bottom: 8px;">
+                                    ❌ <strong>PayPal API Errors (Last Save):</strong>
+                                    <div style="margin-left: 16px; background: #fff3cd; padding: 8px; border-radius: 3px; margin-top: 4px;">
+                                        <?php foreach ($errors as $error): ?>
+                                            <div style="font-size: 0.85rem; color: #333; margin: 4px 0;">
+                                                • <?= esc_html($error) ?>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <?php if ($missing_plans): ?>
+                                <div>
+                                    ❌ <strong>Missing Plan IDs on <?= count($missing_plans) ?> variation(s):</strong>
+                                    <div style="margin-left: 16px;">
+                                        <?php foreach ($missing_plans as $v): ?>
+                                            <div style="font-size: 0.85rem; margin: 4px 0; color: #555;">
+                                                📌 <strong><?= esc_html($v['label']) ?></strong> 
+                                                (<?= esc_html($v['billing']) ?> @ $<?= esc_html($v['price']) ?>)
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 8px; color: #333; font-size: 0.85rem;">
+                                    <?php if ($errors): ?>
+                                        <strong>→ Check the PayPal error above. Then:</strong>
+                                    <?php else: ?>
+                                        <strong>→ Fix:</strong>
+                                    <?php endif; ?>
+                                    Save this course post again to retry creating PayPal plans.
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="position: relative; float: none; margin-left: 10px; cursor: pointer;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?php
+            }
+        }
+        ?>
         <div class="row">
             <!-- Sidebar -->
             <div class="col-lg-3">
@@ -475,6 +559,27 @@ if (!$is_shareable) :
             returnUrl: "<?= esc_url($custom_permalink); ?>"
         };
 
+        // 🔍 DEBUG: Log all variations on page load
+        (function() {
+            if (!MM_COURSE.hasVariations) {
+                console.log('✅ No variations - using single price');
+                return;
+            }
+            console.log('📦 === COURSE VARIATIONS DEBUG ===');
+            var radios = document.querySelectorAll('input[name="mm_variation"]');
+            console.log('Total variations:', radios.length);
+            radios.forEach(function(radio, i) {
+                console.log('  [' + i + ']', {
+                    label: radio.getAttribute('data-label'),
+                    price: radio.getAttribute('data-price'),
+                    billing: radio.getAttribute('data-billing'),
+                    planId: radio.getAttribute('data-plan-id') || '❌ MISSING',
+                    checked: radio.checked ? '✓' : ''
+                });
+            });
+            console.log('📦 === END DEBUG ===');
+        })();
+
         function mmGetSelectedVariation() {
             if (!MM_COURSE.hasVariations) {
                 return {
@@ -489,13 +594,24 @@ if (!$is_shareable) :
                     billing: 'onetime', planId: ''
                 };
             }
-            return {
+            
+            var result = {
                 index:   parseInt(el.value, 10),
                 price:   el.getAttribute('data-price'),
                 label:   el.getAttribute('data-label'),
                 billing: el.getAttribute('data-billing') || 'onetime',
                 planId:  el.getAttribute('data-plan-id') || ''
             };
+            
+            // AGGRESSIVE DEBUG
+            console.log('🔥 mmGetSelectedVariation() - Raw data attributes:');
+            console.log('  data-price:', el.getAttribute('data-price'));
+            console.log('  data-label:', el.getAttribute('data-label'));
+            console.log('  data-billing:', el.getAttribute('data-billing'));
+            console.log('  data-plan-id:', el.getAttribute('data-plan-id'));
+            console.log('  Result object:', result);
+            
+            return result;
         }
 
         // Live-update the visible total + highlight selected row + re-render PayPal button
@@ -531,10 +647,20 @@ if (!$is_shareable) :
             container.innerHTML = ''; // clear previous button
 
             var v = mmGetSelectedVariation();
+            
+            // Debug log
+            console.log('🔍 mmRenderPayPal() - Selected variation:', v);
 
-            if (v.billing === 'monthly' || v.billing === 'yearly') {
+            if (v.billing === 'weekly' || v.billing === 'monthly' || v.billing === 'yearly') {
                 if (!v.planId) {
-                    container.innerHTML = '<div class="alert alert-warning">This subscription is not fully configured yet. Please contact the admin.</div>';
+                    console.warn('⚠️ Missing plan ID for', v.billing, 'billing');
+                    var debugHtml = '<div class="alert alert-warning">' +
+                        '<strong>⚠️ Subscription Not Configured</strong>' +
+                        '<p style="margin:8px 0 0 0; font-size:0.9rem;">This ' + v.billing + ' plan is missing a PayPal plan ID.</p>' +
+                        '<p style="margin:8px 0 0 0; font-size:0.85rem;"><small>Debug: Label="' + v.label + '" | Price=$' + v.price + ' | BillingType=' + v.billing + '</small></p>' +
+                        '<p style="margin:8px 0 0 0; font-size:0.85rem;">Please contact the admin to configure PayPal and create billing plans.</p>' +
+                        '</div>';
+                    container.innerHTML = debugHtml;
                     return;
                 }
                 paypal.Buttons({
