@@ -20,9 +20,15 @@
  */
 
 $current_user = wp_get_current_user();
-$user_photo = get_user_meta(get_current_user_id(), 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg';
+$current_user_id = get_current_user_id();
+$user_photo = get_user_meta($current_user_id, 'profile_photo', true) ?: get_template_directory_uri() . '/assets/img/loggedin_images/banner.jpg';
 $template_uri = get_template_directory_uri();
 $nonce = wp_create_nonce('create_post_action');
+
+// ✅ NEW: Get profile from args (who's profile we're posting on)
+$profile = $args['profile'] ?? null;
+$wall_owner_id = ($profile && isset($profile['id'])) ? intval($profile['id']) : $current_user_id;
+$is_posting_on_friend_wall = ($wall_owner_id !== $current_user_id);
 
 // Enqueue posting modal styles
 wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css', [], '1.0.0');
@@ -43,7 +49,7 @@ wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css
             id="post-trigger"
             type="text"
             class="w-100 input"
-            placeholder="This Area is for One-Click Concurrent and Scheduled Posting to Targeted Audiences"
+            placeholder="<?php echo $is_posting_on_friend_wall ? 'Post on ' . esc_attr($profile['first_name'] . ' ' . $profile['last_name']) . '\'s wall' : 'This Area is for One-Click Concurrent and Scheduled Posting to Targeted Audiences'; ?>"
             data-bs-toggle="modal"
             data-bs-target="#createPostModalRedesigned"
             readonly>
@@ -60,34 +66,38 @@ wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css
 
                 <!-- 2a. MODAL HEADER with Schedule Toggle -->
                 <div class="modal-header posting-modal-header">
-                    <div class="d-flex align-items-center gap-3 flex-grow-1">
+                    <div class="d-flex flex-grow-1 align-items-center gap-3">
                         <div class="position-relative img44">
                             <img src="<?php echo esc_url($user_photo); ?>" class="rounded-circle w-100 h-100 object-fit-cover" alt="Profile">
                             <img class="position-absolute active-icon" src="<?php echo esc_url($template_uri); ?>/assets/img/nd/active_icon.png" alt="Active">
                         </div>
                         <div class="d-flex flex-column post-user">
                             <span class="p_name fw-bold"><?php echo esc_html($current_user->first_name . ' ' . $current_user->last_name); ?></span>
-                            <span class="small text-muted" id="audienceLabel">Only Me</span>
+                            <?php if ($is_posting_on_friend_wall): ?>
+                                <span class="text-muted small" id="audienceLabel">Posting on <?php echo esc_html($profile['first_name'] . ' ' . $profile['last_name']); ?>'s wall</span>
+                            <?php else: ?>
+                                <span class="text-muted small" id="audienceLabel">Only Me</span>
+                            <?php endif; ?>
                         </div>
                     </div>
                     
                     <!-- SCHEDULE TOGGLE - Right side of header (Bootstrap 5) -->
                     <div class="d-flex align-items-center gap-3 ms-3">
                         <!-- PREVIEW TOGGLE BUTTON -->
-                        <button type="button" class="btn btn-outline-secondary btn-sm preview-toggle-btn" id="previewToggleBtn" style="font-size: 12px; white-space: nowrap;">
-                            <i class="bi bi-eye me-1"></i>Preview
+                        <button type="button" class="btn-outline-secondary btn btn-sm preview-toggle-btn" id="previewToggleBtn" style="font-size: 12px; white-space: nowrap;">
+                            <i class="me-1 bi bi-eye"></i>Preview
                         </button>
                         
                         <!-- SCHEDULE TOGGLE -->
                         <label class="form-check-label posting-schedule-label-header" for="postingScheduleToggle" style="margin: 0; cursor: pointer; font-size: 12px; color: #65676b; white-space: nowrap;">
-                            <i class="bi bi-calendar-event me-1"></i>Schedule
+                            <i class="me-1 bi bi-calendar-event"></i>Schedule
                         </label>
                         <div class="form-check form-switch" style="margin: 0;">
                             <input class="form-check-input posting-schedule-toggle" type="checkbox" id="postingScheduleToggle" role="switch">
                         </div>
                     </div>
                     
-                    <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="ms-2 btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <!-- 2c. UNIFIED CONTENT - Two Views: Edit & Preview -->
@@ -139,7 +149,7 @@ wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css
                                 <div class="" id="scheduleSection" style="display: none; margin-top: 20px;">
                                     <div class="schedule-block">
                                         <h6 class="schedule-title">
-                                            <i class="bi bi-calendar-event me-2"></i>Schedule Date & Time
+                                            <i class="me-2 bi bi-calendar-event"></i>Schedule Date & Time
                                         </h6>
                                         <?php include 'create-post-parts/components/schedule-datetime.php'; ?>
                                     </div>
@@ -152,7 +162,7 @@ wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css
                     <div class="modal-body posting-modal-body preview-view" id="previewView" style="display: none; padding: 16px;">
                         
                         <!-- User Info -->
-                        <div class="preview-user-info d-flex align-items-center gap-2 mb-3">
+                        <div class="d-flex align-items-center gap-2 mb-3 preview-user-info">
                             <div class="position-relative" style="width: 44px; height: 44px;">
                                 <img id="previewUserPhoto" src="" alt="User" class="rounded-circle w-100 h-100 object-fit-cover">
                             </div>
@@ -165,12 +175,12 @@ wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css
                         <!-- Post Content Area -->
                         <div style="max-height: 400px; overflow-y: auto;">
                             <!-- Post Text -->
-                            <div class="preview-post-text mb-3">
+                            <div class="mb-3 preview-post-text">
                                 <p id="previewText" style="line-height: 1.6; color: #050505; word-wrap: break-word; white-space: pre-wrap; font-size: 14px;"></p>
                             </div>
 
                             <!-- Post Image (if any) -->
-                            <div class="preview-post-image mb-3" style="display: none;" id="previewImageContainer">
+                            <div class="mb-3 preview-post-image" style="display: none;" id="previewImageContainer">
                                 <img id="previewPostImage" src="" alt="Post" style="width: 100%; border-radius: 8px; max-height: 300px; object-fit: cover;">
                             </div>
 
@@ -187,17 +197,19 @@ wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css
                         <input type="hidden" name="create_post_nonce" value="<?php echo wp_create_nonce('create_post_action'); ?>">
                         <input type="hidden" name="post_status_type" id="postStatusType" value="publish">
                         <input type="hidden" name="schedule_timestamp" id="schedule_timestamp">
+                        <!-- ✅ NEW: Track which profile wall this post is being posted on -->
+                        <input type="hidden" name="wall_owner_id" id="wall_owner_id" value="<?php echo intval($wall_owner_id); ?>">
                         
                         <!-- Social Media Share Options -->
-                        <div class="social-share-options me-auto" id="socialShareOptions" style="display: none;">
-                            <div class="d-flex gap-3 align-items-center">
+                        <div class="me-auto social-share-options" id="socialShareOptions" style="display: none;">
+                            <div class="d-flex align-items-center gap-3">
                                 <small class="text-muted">Also share to:</small>
                                 
                                 <!-- Facebook Checkbox -->
                                 <div class="form-check" id="facebookShareOption" style="display: none;">
                                     <input class="form-check-input" type="checkbox" id="shareToFacebook" name="share_to_facebook" value="1">
                                     <label class="form-check-label" for="shareToFacebook" style="cursor: pointer; margin: 0;">
-                                        <i class="bi bi-facebook me-1" style="color: #1877f2;"></i>
+                                        <i class="me-1 bi bi-facebook" style="color: #1877f2;"></i>
                                         <small>Facebook</small>
                                     </label>
                                 </div>
@@ -206,7 +218,7 @@ wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css
                                 <div class="form-check" id="linkedinShareOption" style="display: none;">
                                     <input class="form-check-input" type="checkbox" id="shareToLinkedin" name="share_to_linkedin" value="1">
                                     <label class="form-check-label" for="shareToLinkedin" style="cursor: pointer; margin: 0;">
-                                        <i class="bi bi-linkedin me-1" style="color: #0a66c2;"></i>
+                                        <i class="me-1 bi bi-linkedin" style="color: #0a66c2;"></i>
                                         <small>LinkedIn</small>
                                     </label>
                                 </div>
@@ -215,7 +227,7 @@ wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css
                         
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-info posting-submit-btn" id="submitPostBtn">
-                            <i class="bi bi-send me-2"></i><span id="submitBtnText">Share Now</span>
+                            <i class="me-2 bi bi-send"></i><span id="submitBtnText">Share Now</span>
                         </button>
                     </div>
                 </div>
@@ -241,13 +253,13 @@ wp_enqueue_style('posting-modal', $template_uri . '/assets/css/posting-modal.css
                                     editView.style.display = 'none';
                                     previewView.style.display = 'block';
                                     previewToggleBtn.classList.add('active');
-                                    previewToggleBtn.innerHTML = '<i class="bi bi-pencil me-1"></i>Edit';
+                                    previewToggleBtn.innerHTML = '<i class="me-1 bi bi-pencil"></i>Edit';
                                 } else {
                                     // Show edit
                                     editView.style.display = 'block';
                                     previewView.style.display = 'none';
                                     previewToggleBtn.classList.remove('active');
-                                    previewToggleBtn.innerHTML = '<i class="bi bi-eye me-1"></i>Preview';
+                                    previewToggleBtn.innerHTML = '<i class="me-1 bi bi-eye"></i>Preview';
                                 }
                             });
                         }

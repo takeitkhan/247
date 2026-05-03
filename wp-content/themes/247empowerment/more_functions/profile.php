@@ -349,6 +349,35 @@ function handle_create_post()
     $current_user_id = get_current_user_id();
     error_log('✓ Creating post for user ID: ' . $current_user_id);
 
+    // ✅ NEW: Get wall owner ID (which profile the post is being posted on)
+    $wall_owner_id = isset($_POST['wall_owner_id']) ? intval($_POST['wall_owner_id']) : $current_user_id;
+    $is_posting_on_friend_wall = ($wall_owner_id !== $current_user_id);
+    
+    if ($is_posting_on_friend_wall) {
+        error_log('✓ Post will be posted on wall of user ID: ' . $wall_owner_id);
+        
+        // ✅ NEW: Validate permission - user must be a referral partner (friend) of wall owner
+        $wall_owner_profile = new UserProfileData($wall_owner_id);
+        $referral_partners = $wall_owner_profile->getReferredUsers();
+        
+        $is_partner_of_wall_owner = false;
+        foreach ($referral_partners as $partner) {
+            if ($partner->ID === $current_user_id) {
+                $is_partner_of_wall_owner = true;
+                break;
+            }
+        }
+        
+        if (!$is_partner_of_wall_owner) {
+            error_log('❌ ERROR: User ' . $current_user_id . ' is not a friend of wall owner ' . $wall_owner_id);
+            wp_send_json_error(array('message' => 'You do not have permission to post on this profile'), 403);
+        }
+        
+        error_log('✓ Permission verified: User is a friend of the wall owner');
+    } else {
+        error_log('✓ Post will be posted on own wall');
+    }
+
     // Create post
     $post_args = array(
         'post_type'    => 'post',
@@ -373,6 +402,12 @@ function handle_create_post()
 
     // Save privacy as post meta
     update_post_meta($post_id, '_post_privacy', $post_privacy);
+    
+    // ✅ NEW: Save wall owner ID as post meta (for posts on friend walls)
+    if ($is_posting_on_friend_wall) {
+        update_post_meta($post_id, '_post_wall_owner_id', $wall_owner_id);
+        error_log('✓ Wall owner ID saved: ' . $wall_owner_id);
+    }
 
     // Image handling
     if (!empty($_FILES['post_image']['name'])) {
@@ -630,6 +665,65 @@ function handle_update_post_privacy()
         'message' => 'Privacy updated successfully',
         'privacy' => $new_privacy
     ]);
+}
+
+// ✅ NEW: AJAX handler to delete a post
+add_action('wp_ajax_delete_post', 'handle_delete_post_ajax');
+function handle_delete_post_ajax()
+{
+    // Check user is logged in
+    if (!is_user_logged_in()) {
+        wp_send_json_error(array('message' => 'User not logged in'), 403);
+    }
+
+    $current_user_id = get_current_user_id();
+    $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
+
+    if (!$post_id) {
+        wp_send_json_error(array('message' => 'Invalid post ID'));
+    }
+
+    // Get the post
+    $post = get_post($post_id);
+    
+    if (!$post) {
+        wp_send_json_error(array('message' => 'Post not found'));
+    }
+
+    // Verify user is either the post author OR the wall owner
+    $wall_owner_id = get_post_meta($post_id, '_post_wall_owner_id', true);
+    $is_author = (int)$post->post_author === $current_user_id;
+    $is_wall_owner = !empty($wall_owner_id) && (int)$wall_owner_id === $current_user_id;
+    
+    if (!$is_author && !$is_wall_owner) {
+        error_log('❌ Delete permission denied: User ' . $current_user_id . ' (post author: ' . $post->post_author . ', wall owner: ' . $wall_owner_id . ') tried to delete post ' . $post_id);
+        wp_send_json_error(array('message' => 'You do not have permission to delete this post'), 403);
+    }
+
+    // For wall posts, our custom permission check above is sufficient
+    // For regular posts, also check WordPress post capabilities
+    $is_wall_post = !empty($wall_owner_id);
+    if (!$is_wall_post) {
+        if (!current_user_can('delete_post', $post_id)) {
+            wp_send_json_error(array('message' => 'You do not have permission to delete posts'));
+        }
+    }
+
+    error_log('✓ User ' . $current_user_id . ' authorized to delete post ' . $post_id . ' (is_author: ' . ($is_author ? 'yes' : 'no') . ', is_wall_owner: ' . ($is_wall_owner ? 'yes' : 'no') . ')');
+
+    // Delete the post permanently (skip trash)
+    $deleted = wp_delete_post($post_id, true);
+
+    if ($deleted) {
+        error_log('✓ Post deleted - ID: ' . $post_id . ' by user: ' . $current_user_id);
+        wp_send_json_success(array(
+            'message' => 'Post deleted successfully',
+            'post_id' => $post_id
+        ));
+    } else {
+        error_log('❌ Failed to delete post ' . $post_id);
+        wp_send_json_error(array('message' => 'Failed to delete post'));
+    }
 }
 
 // Add inside your theme's functions.php or a loaded plugin
