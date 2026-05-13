@@ -1571,3 +1571,26 @@ function handle_check_social_connections() {
     ]);
 }
 
+
+
+// Debug shortcode to display user profile data (সব ইউজারের জন্য উন্মুক্ত)
+add_shortcode('debug_user_profile_data', function() {
+    // সব লগইন ইউজার দেখতে পারবে
+    if (!is_user_logged_in()) {
+        return '<p style="color: red;">Please log in</p>';
+    }
+    
+    $user_id = get_current_user_id();
+    $profile_data = UserProfileData::getInstance()->getProfile();
+    
+    // HTML output
+    $html = '<div style="background: #f5f5f5; padding: 20px; border: 1px solid #ddd; border-radius: 5px; margin: 20px 0; max-width: 100%; overflow-x: auto;">';
+    $html .= '<h3 style="color: #333; margin-top: 0;">🔍 User Profile Debug Data</h3>';
+    $html .= '<pre style="background: white; padding: 15px; border-radius: 3px; border: 1px solid #ccc; overflow-x: auto; font-size: 12px;">';
+    $html .= htmlspecialchars(wp_json_encode($profile_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+    $html .= '</pre>';
+    $html .= '</div>';
+    
+    return $html;
+});
+

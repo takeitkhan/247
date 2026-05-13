@@ -8,6 +8,7 @@
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="zoom-domain-verification" content="ZOOM_verify_3f562159b8034f7888f6e326d334129c">
     <script>
     window.addEventListener('load', function () {
 
@@ -82,8 +83,8 @@
             height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
 <!-- End Google Tag Manager (noscript) -->
-<header class="custom-navbar shadow-sm">
-    <div class="container container-home d-flex align-items-center justify-content-between w-100 h-100 py-2">
+<header class="shadow-sm custom-navbar">
+    <div class="d-flex align-items-center justify-content-between py-2 w-100 h-100 container container-home">
 
         <!-- LOGO -->
         <div class="d-flex align-items-center gap-1">
@@ -120,8 +121,8 @@
             </button>
         </div>
     </div>
-    <hr class="p-0 m-0" />
-    <div class="container container-home d-flex align-items-center justify-content-between w-100 h-100 bg-white">
+    <hr class="m-0 p-0" />
+    <div class="d-flex align-items-center justify-content-between bg-white w-100 h-100 container container-home">
         <!-- DESKTOP NAV -->
         <nav class="navbar">
             <ul class="navbar-nav desktop-menu">
@@ -140,8 +141,8 @@
     </div>
 
     <!-- MOBILE MENU -->
-    <div class="mobile-menu bg-white" id="mobileMenu">
-        <ul class="nav flex-column text-center">
+    <div class="bg-white mobile-menu" id="mobileMenu">
+        <ul class="flex-column text-center nav">
             <?php
             wp_nav_menu( [
                 'theme_location' => 'primary',

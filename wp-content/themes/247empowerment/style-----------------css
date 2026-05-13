@@ -188,9 +188,185 @@ Tags: custom-colors, custom-menu, multi-column, custom-logo, editor-style, featu
   border: 1px solid rgba(190, 201, 229, 0.45);
 }
 
+.support-chat-widget {
+  position: fixed;
+  left: 20px;
+  bottom: 24px;
+  z-index: 9998;
+}
+
+.support-chat-toggle {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #05489c, #0c63d4);
+  color: #fff;
+  box-shadow: 0 14px 30px rgba(5, 72, 156, 0.28);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px 12px 12px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.support-chat-toggle__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.support-chat-panel {
+  width: min(360px, calc(100vw - 32px));
+  margin-top: 12px;
+  background: #fff;
+  border: 1px solid rgba(190, 201, 229, 0.7);
+  border-radius: 20px;
+  box-shadow: 0 24px 60px rgba(19, 39, 80, 0.22);
+  overflow: hidden;
+}
+
+.support-chat-panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 18px 14px;
+  background: linear-gradient(135deg, #f4f8ff, #ffffff);
+  border-bottom: 1px solid rgba(190, 201, 229, 0.45);
+}
+
+.support-chat-panel__eyebrow {
+  margin: 0 0 4px;
+  color: #8c96b0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.support-chat-panel__title {
+  margin: 0;
+  color: #1d2433;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.support-chat-panel__close {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(5, 72, 156, 0.08);
+  color: #05489c;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.support-chat-panel__body {
+  padding: 16px;
+}
+
+.support-chat-panel__copy {
+  margin: 0 0 12px;
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.support-chat-questions {
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.support-chat-question {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 10px;
+  padding: 12px 14px;
+  border: 1px solid rgba(190, 201, 229, 0.7);
+  border-radius: 14px;
+  background: #fff;
+  color: #1d2433;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+  transition: all 0.2s ease;
+}
+
+.support-chat-question:hover {
+  border-color: #05489c;
+  background: rgba(5, 72, 156, 0.04);
+}
+
+.support-chat-answer__question {
+  margin: 0 0 10px;
+  color: #05489c;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.support-chat-answer__bubble {
+  padding: 14px 15px;
+  border-radius: 16px;
+  background: #f4f7fd;
+  color: #30384a;
+  font-size: 13px;
+  line-height: 1.6;
+  border: 1px solid rgba(190, 201, 229, 0.55);
+}
+
+.support-chat-answer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.support-chat-secondary,
+.support-chat-primary {
+  min-height: 42px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.support-chat-secondary {
+  border: 1px solid rgba(5, 72, 156, 0.18);
+  background: #fff;
+  color: #05489c;
+}
+
+.support-chat-primary {
+  border: 0;
+  background: #05489c;
+  color: #fff !important;
+}
+
 @media (max-width: 991.98px) {
   .leaderboard-card {
     margin-bottom: 20px;
+  }
+
+  .support-chat-widget {
+    left: 14px;
+    bottom: 18px;
+  }
+
+  .support-chat-toggle {
+    padding-right: 16px;
   }
 }
 /* @import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap'); */
@@ -493,3 +669,8 @@ small {
   background-color: #fafafa;
   border-radius: 0 0 8px 8px;
 }
+
+
+/* Book Container Styling */
+css.book-container .pages         { display: none !important; }
+.book-container .pages.current { display: block !important; }

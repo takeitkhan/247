@@ -1,0 +1,270 @@
+<?php
+$support_questions = [
+    [
+        'question' => 'How do I complete my profile checklist?',
+        'answer'   => 'Complete your profile photo, add your introduction, save your links, set your wallet email, and add your favorite affirmation. Once all items are complete, your profile milestone is recognized automatically.',
+    ],
+    [
+        'question' => 'Where do I update my PayPal email for payouts?',
+        'answer'   => 'Open the Wallet page or the PayPal Email settings area in your profile, enter your preferred payout email, and save it so withdrawal requests can be processed correctly.',
+    ],
+    [
+        'question' => 'How do I earn points on the platform?',
+        'answer'   => 'Members earn points by completing onboarding steps such as selecting an avatar, choosing interests, completing the profile milestone, saving social links, and other gamified actions configured on the site.',
+    ],
+    [
+        'question' => 'Why is the guide asking me to finish my wallet and profile photo?',
+        'answer'   => 'The guide checks your full profile milestone, not just the text fields. Your wallet email and profile photo are part of that checklist, so they must be completed before the milestone is fully recognized.',
+    ],
+    [
+        'question' => 'How do I join a Personal Empowerment Team?',
+        'answer'   => 'Use the Support Teams area from the menu or your guide actions. That page is where members continue into team participation, training, and certification paths.',
+    ],
+    [
+        'question' => 'Where can I report a bug or suggest an improvement?',
+        'answer'   => 'Use the Report a Bug or Make a Suggestion buttons at the top of the portal, or open the report and suggestion pages from the guide and menu links.',
+    ],
+    [
+        'question' => 'How do I add links to my profile?',
+        'answer'   => 'Go to Modify Links or use the guide link step, choose a platform, paste the full URL, and save your profile links so visitors can connect with you easily.',
+    ],
+    [
+        'question' => 'Why am I not seeing my points update yet?',
+        'answer'   => 'Points are usually awarded when a milestone is completed for the first time. If a checklist item is still missing, the final milestone reward may wait until the remaining requirement is saved.',
+    ],
+    [
+        'question' => 'How does the returning member guide work?',
+        'answer'   => 'When you return, the guide reads your saved avatar, interest, affirmation, and completion status so it can show a welcome-back experience instead of the first-time start flow.',
+    ],
+    [
+        'question' => 'How do I access AI tools and training?',
+        'answer'   => 'Open the Artificial Intelligence section from the menu or use the guide actions card. That area is intended to route members into AI tools, education, and certification resources.',
+    ],
+    [
+        'question' => 'Can I update my interests later?',
+        'answer'   => 'Yes. Your interests can be updated later, and the platform will use the saved priorities to guide your recommended path and personalized experience.',
+    ],
+    [
+        'question' => 'How do I request a withdrawal?',
+        'answer'   => 'Once your wallet information is configured and you have available balance, use the Wallet page to submit a withdrawal request for admin review.',
+    ],
+    [
+        'question' => 'Why do I see the leaderboard and events on the home page?',
+        'answer'   => 'The right sidebar is designed to highlight timely activity such as events, rankings, and engagement opportunities so members can stay connected with platform momentum.',
+    ],
+    [
+        'question' => 'How do I continue after finishing the guide?',
+        'answer'   => 'After the guide is complete, you can keep moving through your selected path by choosing the next action from the guide card, such as Marketing, AI, Collaboration, Reputation, or Support Teams.',
+    ],
+    [
+        'question' => 'Who do I contact for manual help?',
+        'answer'   => 'If you need personal help, billing help, or something is not working as expected, use the Contact Support button and send your message directly to the support admin email.',
+    ],
+];
+
+/**
+ * Template Name: Logged In Front Page
+ */
+get_header_based_on_login();
+// Get current logged-in user ID (used as a fallback if no slug is provided)
+$current_user_id = get_current_user_id();
+$leaderboard_api_nonce = '';
+$leaderboard_api_root = esc_url_raw(rest_url('api/v1/spg'));
+
+if ($current_user_id) {
+    $leaderboard_api_nonce = (string) get_user_meta($current_user_id, 'mm_spg_api_nonce', true);
+    $leaderboard_api_nonce_time = (int) get_user_meta($current_user_id, 'mm_spg_api_nonce_time', true);
+
+    if ($leaderboard_api_nonce === '' || !$leaderboard_api_nonce_time || (time() - $leaderboard_api_nonce_time) > 86400) {
+        $leaderboard_api_nonce = wp_hash($current_user_id . time() . wp_rand(), 'nonce');
+        update_user_meta($current_user_id, 'mm_spg_api_nonce', $leaderboard_api_nonce);
+        update_user_meta($current_user_id, 'mm_spg_api_nonce_time', time());
+    }
+}
+
+// 1. Get the user slug from the query variable
+$user_slug = get_query_var('user_profile');
+
+// 2. Determine the target user
+if ($user_slug) {
+    // If a slug is present, try to get the user by their slug (login or nicename)
+    $user = get_user_by('slug', $user_slug);
+} else {
+    // If no slug, fall back to the currently logged-in user
+    $user = get_user_by('ID', $current_user_id);
+}
+
+// 3. Instantiate the UserProfileData class and get the profile array
+if ($user) {
+    // We pass the WP_User object to the class constructor, or the ID/slug depending on the class's constructor.
+    // Given your original line: $profile = (new UserProfileData($user_slug))->getProfile();
+    // We'll update it to pass the $user object for better data handling, assuming the class supports it.
+    // If the class REQUIRES a slug, use $user_slug or $user->user_login.
+
+    // Option A: If UserProfileData takes a WP_User object (Recommended)
+    $profile_data_instance = new UserProfileData($user); 
+    
+    // Option B: If UserProfileData only takes the slug (Sticking closer to your original code)
+    // Use the slug if present, otherwise use the current user's login.
+    $target_identifier = $user_slug ? $user_slug : $user->user_login;
+    $profile_data_instance = new UserProfileData($target_identifier); 
+
+    // Get the profile array
+    $profile = $profile_data_instance->getProfile();
+} else {
+    // Set variables to null if no user could be determined
+    $user = null;
+    $profile = null;
+}
+?>
+
+<div class="container profile-page pt20">
+    <div class="row">
+        <div class="col-lg-3">
+            <?php get_template_part('template-custom/auth/feed-parts/profile-card', null, ['profile' => $profile]); ?>
+            <?php get_template_part('template-custom/auth/profile-parts/navlink', null, ['profile' => $profile]); ?>
+        </div>
+        <div class="mb-4 col-lg-6">
+            <?php
+                // echo '<pre>';
+                // print_r($profile);
+                // echo '</pre>';
+            ?>
+            <?php get_template_part('template-custom/auth/feed-parts/create-post', null, ['profile' => $profile]); ?>
+            <?php get_template_part('template-custom/auth/feed-parts/feeds', null, ['profile' => $profile]); ?>
+        </div>
+        <div class="col-lg-3">
+            <?php get_template_part('template-custom/auth/feed-parts/upcoming', null, [
+                'profile'               => $profile,
+                'leaderboard_api_nonce' => $leaderboard_api_nonce,
+                'leaderboard_api_root'  => $leaderboard_api_root,
+            ]); ?>
+        </div>
+    </div>
+</div>
+<div class="support-chat-widget" id="support-chat-widget">
+    <button type="button" class="support-chat-toggle" id="support-chat-toggle" aria-expanded="false" aria-controls="support-chat-panel">
+        <span class="support-chat-toggle__icon">?</span>
+        <span class="support-chat-toggle__label">Support</span>
+    </button>
+
+    <div class="support-chat-panel" id="support-chat-panel" hidden>
+        <div class="support-chat-panel__header">
+            <div>
+                <p class="support-chat-panel__eyebrow">24/7 Empowerment</p>
+                <h5 class="support-chat-panel__title">Support Chat</h5>
+            </div>
+            <button type="button" class="support-chat-panel__close" id="support-chat-close" aria-label="Close support chat">x</button>
+        </div>
+
+        <div class="support-chat-panel__body">
+            <div class="support-chat-questions" id="support-chat-questions">
+                <p class="support-chat-panel__copy">Select a question below to see the answer.</p>
+                <?php foreach ($support_questions as $index => $item) : ?>
+                    <button
+                        type="button"
+                        class="support-chat-question"
+                        data-question-index="<?= esc_attr($index); ?>"
+                        data-question="<?= esc_attr($item['question']); ?>"
+                        data-answer="<?= esc_attr($item['answer']); ?>">
+                        <?= esc_html($item['question']); ?>
+                    </button>
+                <?php endforeach; ?>
+            </div>
+
+            <div class="support-chat-answer" id="support-chat-answer" hidden>
+                <p class="support-chat-answer__question" id="support-chat-answer-question"></p>
+                <div class="support-chat-answer__bubble" id="support-chat-answer-text"></div>
+
+                <div class="support-chat-answer__actions">
+                    <button type="button" class="support-chat-secondary" id="support-chat-reset">Ask Another Question</button>
+                    <a
+                        class="support-chat-primary"
+                        href="https://mail.google.com/mail/?view=cm&fs=1&to=resortfinancing@aol.com&su=24%2F7%20Empowerment%20Support"
+                        target="_blank"
+                        rel="noopener noreferrer">Contact Support</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const widget = document.getElementById('support-chat-widget');
+    const toggle = document.getElementById('support-chat-toggle');
+    const panel = document.getElementById('support-chat-panel');
+    const closeButton = document.getElementById('support-chat-close');
+    const questionsWrap = document.getElementById('support-chat-questions');
+    const answerWrap = document.getElementById('support-chat-answer');
+    const answerQuestion = document.getElementById('support-chat-answer-question');
+    const answerText = document.getElementById('support-chat-answer-text');
+    const resetButton = document.getElementById('support-chat-reset');
+
+    if (!widget || !toggle || !panel) {
+        return;
+    }
+
+    function openPanel() {
+        panel.hidden = false;
+        toggle.setAttribute('aria-expanded', 'true');
+        widget.classList.add('is-open');
+    }
+
+    function closePanel() {
+        panel.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
+        widget.classList.remove('is-open');
+    }
+
+    function showQuestions() {
+        questionsWrap.hidden = false;
+        answerWrap.hidden = true;
+        answerQuestion.textContent = '';
+        answerText.textContent = '';
+    }
+
+    function showAnswer(question, answer) {
+        answerQuestion.textContent = question;
+        answerText.textContent = answer;
+        questionsWrap.hidden = true;
+        answerWrap.hidden = false;
+    }
+
+    toggle.addEventListener('click', function () {
+        if (panel.hidden) {
+            openPanel();
+            return;
+        }
+
+        closePanel();
+    });
+
+    if (closeButton) {
+        closeButton.addEventListener('click', closePanel);
+    }
+
+    if (resetButton) {
+        resetButton.addEventListener('click', showQuestions);
+    }
+
+    questionsWrap.querySelectorAll('.support-chat-question').forEach(function (button) {
+        button.addEventListener('click', function () {
+            showAnswer(button.dataset.question || '', button.dataset.answer || '');
+        });
+    });
+
+    document.addEventListener('click', function (event) {
+        if (!widget.classList.contains('is-open')) {
+            return;
+        }
+
+        if (widget.contains(event.target)) {
+            return;
+        }
+
+        closePanel();
+    });
+});
+</script>
+<?php get_footer_based_on_login(); ?>

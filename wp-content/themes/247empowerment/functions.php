@@ -1,6 +1,12 @@
 <?php
 
 // ============================================
+// Load Notification System Classes
+// ============================================
+require_once get_template_directory() . '/inc/NotificationTypes.php';
+require_once get_template_directory() . '/inc/NotificationManager.php';
+
+// ============================================
 // Load Payout System Classes
 // ============================================
 require_once get_template_directory() . '/inc/PayoutSystem.php';
@@ -17,11 +23,15 @@ require_once get_template_directory() . '/inc/status-indicators.php';
 // Activation hook - for theme activation
 register_activation_hook(__FILE__, ['PayoutSystem', 'activate']);
 
+// Create Notification table on activation
+register_activation_hook(__FILE__, ['NotificationManager', 'createTable']);
+
 // Ensure tables exist on every page load (fallback)
 add_action('init', function() {
     static $tables_checked = false;
     if (!$tables_checked) {
         PayoutSystem::activate();
+        NotificationManager::createTable();
         $tables_checked = true;
     }
 }, 1); // Run early
@@ -1220,6 +1230,11 @@ require_once get_template_directory() . '/more_functions/issues.php';
 require_once get_template_directory() . '/more_functions/paypal-webhook.php';
 require_once get_template_directory() . '/more_functions/course-sales-admin.php';
 
+// Notifications System
+require_once get_template_directory() . '/more_functions/notifications-dashboard.php';
+require_once get_template_directory() . '/more_functions/notifications-ajax-handlers.php';
+require_once get_template_directory() . '/more_functions/notifications-test-helper.php';
+
 // Social Media Integration
 require_once get_template_directory() . '/more_functions/social-media-settings.php';
 require_once get_template_directory() . '/more_functions/facebook-auth.php';
@@ -1233,5 +1248,8 @@ require_once get_template_directory() . '/more_functions/debug-logs-viewer.php';
 require_once get_template_directory() . '/more_functions/debug-paypal-plans.php';
 // require_once get_template_directory() . '/more_functions/paypal-diagnostic.php'; // Use paypal-diagnostic-dashboard.php instead
 require_once get_template_directory() . '/more_functions/check-db-diagnostic.php';
+
+// Code from Adeel's team for Gamification (badges, points, etc.)
+require_once get_template_directory() . '/more_functions/gamifications-functions.php';
 
 // End of theme functions.php

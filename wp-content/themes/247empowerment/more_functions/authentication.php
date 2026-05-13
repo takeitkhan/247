@@ -311,8 +311,17 @@ function handle_custom_user_login()
                 update_user_meta($user->ID, 'last_login', current_time('mysql'));
             }
 
-            // Redirect to modify profile
-            wp_redirect(home_url('/modify-profile'));
+            // Redirect: guide if incomplete, modify-profile if done
+            $uid_check   = $user->ID;
+            $_chk_cats   = get_user_meta( $uid_check, 'user_categories_priority', true );
+            $_chk_about  = get_user_meta( $uid_check, 'guide_about', true )
+                        ?: get_user_meta( $uid_check, 'about_me', true )
+                        ?: get_user_meta( $uid_check, 'digital_card_about', true );
+            $_chk_title  = get_user_meta( $uid_check, 'guide_title', true )
+                        ?: get_user_meta( $uid_check, 'designation', true );
+            $_guide_done = is_array( $_chk_cats ) && count( $_chk_cats ) > 0
+                        && ! empty( $_chk_about ) && ! empty( $_chk_title );
+            wp_redirect( $_guide_done ? home_url( '/modify-profile' ) : home_url( '/guide' ) );
             exit;
         } else {
 
@@ -581,7 +590,16 @@ add_action('admin_init', function () {
 
     // Only allow admins to access admin area
     if (!current_user_can('administrator')) {
-        wp_redirect(home_url('/modify-profile'));
+        $uid_check   = get_current_user_id();
+        $_chk_cats   = get_user_meta( $uid_check, 'user_categories_priority', true );
+        $_chk_about  = get_user_meta( $uid_check, 'guide_about', true )
+                    ?: get_user_meta( $uid_check, 'about_me', true )
+                    ?: get_user_meta( $uid_check, 'digital_card_about', true );
+        $_chk_title  = get_user_meta( $uid_check, 'guide_title', true )
+                    ?: get_user_meta( $uid_check, 'designation', true );
+        $_guide_done = is_array( $_chk_cats ) && count( $_chk_cats ) > 0
+                    && ! empty( $_chk_about ) && ! empty( $_chk_title );
+        wp_redirect( $_guide_done ? home_url( '/modify-profile' ) : home_url( '/guide' ) );
         exit;
     }
 });
@@ -610,7 +628,17 @@ add_action('template_redirect', function () {
     $current_slug = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
     if (in_array($current_slug, $redirect_to_dashboard)) {
-        wp_redirect(home_url('/dashboard'));
+        // Send logged-in user to guide if incomplete, profile if done
+        $uid_r    = get_current_user_id();
+        $_r_cats  = get_user_meta( $uid_r, 'user_categories_priority', true );
+        $_r_about = get_user_meta( $uid_r, 'guide_about', true )
+                 ?: get_user_meta( $uid_r, 'about_me', true )
+                 ?: get_user_meta( $uid_r, 'digital_card_about', true );
+        $_r_title = get_user_meta( $uid_r, 'guide_title', true )
+                 ?: get_user_meta( $uid_r, 'designation', true );
+        $_r_done  = is_array( $_r_cats ) && count( $_r_cats ) > 0
+                 && ! empty( $_r_about ) && ! empty( $_r_title );
+        wp_redirect( $_r_done ? home_url( '/modify-profile' ) : home_url( '/guide' ) );
         exit;
     }
 

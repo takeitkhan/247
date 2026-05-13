@@ -138,6 +138,14 @@ class UserProfileData
             'mm_spg_avatar' => get_user_meta($this->user->ID, 'mm_spg_avatar', true),
             'mm_spg_step' => get_user_meta($this->user->ID, 'mm_spg_step', true),
             'mm_spg_status' => get_user_meta($this->user->ID, 'mm_spg_status', true),
+
+            // Social Tokens (for internal use, not public)            
+            'esp_state_google' => get_user_meta($this->user->ID, 'esp_state_google', true),
+            'esp_state_facebook' => get_user_meta($this->user->ID, 'esp_state_facebook', true),
+            'esp_state_linkedin' => get_user_meta($this->user->ID, 'esp_state_linkedin', true),
+            'esp_state_instagram' => get_user_meta($this->user->ID, 'esp_state_instagram', true),
+            'paypal_email' => get_user_meta($this->user->ID, 'paypal_email', true),
+
         ];
     }
 
@@ -329,8 +337,7 @@ class UserProfileData
                 'user_category_names' => $user_category_names,
 
                 // ✅ NEW (priority-aware)
-                'user_categories_with_priority' => $user_categories_with_priority,
-                'user_category_names' => $user_category_names,
+                'user_categories_with_priority' => $user_categories_with_priority,                
                 'bio' => get_user_meta($user_id, 'description', true),
                 'profile_photo' => get_user_meta($user_id, 'profile_photo', true),
                 'cover_photo' => get_user_meta($user_id, 'profile_cover_photo', true),

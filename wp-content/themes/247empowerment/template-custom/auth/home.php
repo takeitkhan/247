@@ -1,11 +1,23 @@
 <?php
-
 /**
  * Template Name: Logged In Front Page
  */
 get_header_based_on_login();
 // Get current logged-in user ID (used as a fallback if no slug is provided)
 $current_user_id = get_current_user_id();
+$leaderboard_api_nonce = '';
+$leaderboard_api_root = esc_url_raw(rest_url('api/v1/spg'));
+
+if ($current_user_id) {
+    $leaderboard_api_nonce = (string) get_user_meta($current_user_id, 'mm_spg_api_nonce', true);
+    $leaderboard_api_nonce_time = (int) get_user_meta($current_user_id, 'mm_spg_api_nonce_time', true);
+
+    if ($leaderboard_api_nonce === '' || !$leaderboard_api_nonce_time || (time() - $leaderboard_api_nonce_time) > 86400) {
+        $leaderboard_api_nonce = wp_hash($current_user_id . time() . wp_rand(), 'nonce');
+        update_user_meta($current_user_id, 'mm_spg_api_nonce', $leaderboard_api_nonce);
+        update_user_meta($current_user_id, 'mm_spg_api_nonce_time', time());
+    }
+}
 
 // 1. Get the user slug from the query variable
 $user_slug = get_query_var('user_profile');
@@ -21,18 +33,8 @@ if ($user_slug) {
 
 // 3. Instantiate the UserProfileData class and get the profile array
 if ($user) {
-    // We pass the WP_User object to the class constructor, or the ID/slug depending on the class's constructor.
-    // Given your original line: $profile = (new UserProfileData($user_slug))->getProfile();
-    // We'll update it to pass the $user object for better data handling, assuming the class supports it.
-    // If the class REQUIRES a slug, use $user_slug or $user->user_login.
-
-    // Option A: If UserProfileData takes a WP_User object (Recommended)
-    $profile_data_instance = new UserProfileData($user); 
-    
-    // Option B: If UserProfileData only takes the slug (Sticking closer to your original code)
-    // Use the slug if present, otherwise use the current user's login.
     $target_identifier = $user_slug ? $user_slug : $user->user_login;
-    $profile_data_instance = new UserProfileData($target_identifier); 
+    $profile_data_instance = new UserProfileData($target_identifier);
 
     // Get the profile array
     $profile = $profile_data_instance->getProfile();
@@ -59,7 +61,11 @@ if ($user) {
             <?php get_template_part('template-custom/auth/feed-parts/feeds', null, ['profile' => $profile]); ?>
         </div>
         <div class="col-lg-3">
-            <?php get_template_part('template-custom/auth/feed-parts/upcoming', null, ['profile' => $profile]); ?>
+            <?php get_template_part('template-custom/auth/feed-parts/upcoming', null, [
+                'profile'               => $profile,
+                'leaderboard_api_nonce' => $leaderboard_api_nonce,
+                'leaderboard_api_root'  => $leaderboard_api_root,
+            ]); ?>
         </div>
     </div>
 </div>

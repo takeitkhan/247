@@ -76,6 +76,7 @@ $val = fn($key, $default = '') => esc_attr($profile[$key] ?? $default);
  echo '</pre>'; */
 ?>
 <div class="container profile-page pt20">
+    <?php echo do_shortcode('[guide_personalized_path]'); ?>
     <div class="row">
         <!-- Sidebar -->
         <div class="col-lg-3">
@@ -266,11 +267,6 @@ $val = fn($key, $default = '') => esc_attr($profile[$key] ?? $default);
             </div>
         </div>
         <div class="rounded-start-0 col-lg-3">
-            <?php
-            $gpp_html = do_shortcode('[guide_personalized_path]');
-            if ( ! empty( $gpp_html ) ) : ?>
-            <div class="mb-3"><?php echo $gpp_html; ?></div>
-            <?php endif; ?>
             <?php get_template_part('template-custom/auth/editprofile-parts/profile-photo-form', null, ['profile' => $profile, 'user' => $user]); ?>
         </div>
     </div>
