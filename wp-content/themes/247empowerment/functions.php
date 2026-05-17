@@ -1,6 +1,11 @@
 <?php
 
 // ============================================
+// Load Helper Functions (FIRST - needed by other modules)
+// ============================================
+require_once get_template_directory() . '/inc/helpers.php';
+
+// ============================================
 // Load Notification System Classes
 // ============================================
 require_once get_template_directory() . '/inc/NotificationTypes.php';
@@ -1234,6 +1239,7 @@ require_once get_template_directory() . '/more_functions/course-sales-admin.php'
 require_once get_template_directory() . '/more_functions/notifications-dashboard.php';
 require_once get_template_directory() . '/more_functions/notifications-ajax-handlers.php';
 require_once get_template_directory() . '/more_functions/notifications-test-helper.php';
+require_once get_template_directory() . '/more_functions/notifications-triggers.php';
 
 // Social Media Integration
 require_once get_template_directory() . '/more_functions/social-media-settings.php';

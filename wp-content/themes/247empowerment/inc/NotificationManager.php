@@ -63,7 +63,8 @@ class NotificationManager {
     public function add($user_id, $type, $message, $data = []) {
         global $wpdb;
 
-        if (!$user_id || !NotificationTypes::isValid($type)) {
+        // Allow user_id = 0 for admin group notifications
+        if (($user_id === null || $user_id === '') || !NotificationTypes::isValid($type)) {
             error_log("Invalid notification: user_id=$user_id, type=$type");
             return false;
         }
@@ -106,7 +107,17 @@ class NotificationManager {
     }
 
     /**
+     * Add notification for admin group (visible to all admins)
+     * Uses special user_id = 0 to represent admin group
+     */
+    public function addForAdmins($type, $message, $data = []) {
+        // Send to special admin group user_id (0)
+        return $this->add(0, $type, $message, $data);
+    }
+
+    /**
      * Get notifications with filtering and pagination
+     * For admins: includes admin group notifications (user_id = 0)
      */
     public function get($user_id, $args = []) {
         global $wpdb;
@@ -124,8 +135,18 @@ class NotificationManager {
         $args = wp_parse_args($args, $defaults);
         $table_name = $wpdb->prefix . self::TABLE_NAME;
 
+        // Check if user is admin - if so, include admin group (user_id = 0) notifications
+        $user_data = get_userdata($user_id);
+        $is_admin = $user_data && in_array('administrator', $user_data->roles);
+
         // Build WHERE clause
-        $where = $wpdb->prepare("WHERE user_id = %d", (int)$user_id);
+        if ($is_admin) {
+            // Admin gets their own notifications + admin group notifications
+            $where = $wpdb->prepare("WHERE (user_id = %d OR user_id = 0)", (int)$user_id);
+        } else {
+            // Regular user gets only their own
+            $where = $wpdb->prepare("WHERE user_id = %d", (int)$user_id);
+        }
 
         if (!empty($args['type'])) {
             $where .= $wpdb->prepare(" AND type = %s", $args['type']);

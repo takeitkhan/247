@@ -84,6 +84,8 @@ function mm_pp_webhook_handle()
     switch ($type) {
         case 'BILLING.SUBSCRIPTION.ACTIVATED':
             mm_pp_update_sub_status($user_id, $sub, 'ACTIVE');
+            // Fire notification hook
+            do_action('mm_subscription_activated', $user_id, $sub, $event);
             break;
 
         case 'BILLING.SUBSCRIPTION.CANCELLED':
@@ -92,10 +94,14 @@ function mm_pp_webhook_handle()
             $new_status = str_replace('BILLING.SUBSCRIPTION.', '', $type);
             mm_pp_update_sub_status($user_id, $sub, $new_status);
             mm_pp_revoke_course_access_if_no_active_sub($user_id, $sub);
+            // Fire notification hook
+            do_action('mm_subscription_status_changed', $user_id, $sub, $new_status, $event);
             break;
 
         case 'PAYMENT.SALE.COMPLETED':
             mm_pp_log_renewal($user_id, $sub, $event['resource']);
+            // Fire notification hook for renewal payment
+            do_action('mm_subscription_renewed', $user_id, $sub, $event['resource']);
             break;
     }
 

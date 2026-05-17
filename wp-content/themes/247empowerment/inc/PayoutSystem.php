@@ -371,6 +371,9 @@ class PayoutSystem {
         error_log('Triggering payout_process_paypal action');
         // Trigger PayPal payout
         do_action('payout_process_paypal', $withdrawal_id);
+        
+        // Fire notification hook for withdrawal approved
+        do_action('mm_withdrawal_approved', $withdrawal->user_id, $withdrawal_id, $withdrawal->amount);
 
         error_log('=== APPROVE WITHDRAWAL SUCCESS ===');
         wp_send_json_success('Withdrawal approved and processing');
@@ -420,6 +423,9 @@ class PayoutSystem {
 
         error_log('Triggering payout_withdrawal_rejected action');
         do_action('payout_withdrawal_rejected', $withdrawal->user_id, $withdrawal_id, $withdrawal->amount);
+        
+        // Fire notification hook for withdrawal rejected
+        do_action('mm_withdrawal_rejected', $withdrawal->user_id, $withdrawal_id, $notes ?: 'No reason provided');
 
         error_log('=== REJECT WITHDRAWAL SUCCESS ===');
         wp_send_json_success('Withdrawal rejected');
@@ -557,7 +563,7 @@ class PayoutSystem {
         <div class="wrap">
             <h1>Withdrawal Requests</h1>
             
-            <div class="tablenav top">
+            <div class="top tablenav">
                 <form method="get">
                     <input type="hidden" name="page" value="payout-requests">
                     <select name="status">

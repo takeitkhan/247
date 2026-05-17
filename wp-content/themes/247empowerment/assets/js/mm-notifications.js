@@ -98,14 +98,14 @@
 
             container.html(html);
 
-            // Attach event listeners
-            $('.mark-read-btn').on('click', function(e) {
+            // Attach event listeners with event delegation
+            $(document).off('click', '.mark-read-btn').on('click', '.mark-read-btn', function(e) {
                 e.preventDefault();
                 const notifId = $(this).data('id');
                 NotificationAPI.markAsRead(notifId);
             });
 
-            $('.delete-btn').on('click', function(e) {
+            $(document).off('click', '.delete-btn').on('click', '.delete-btn', function(e) {
                 e.preventDefault();
                 const notifId = $(this).data('id');
                 if (confirm('Delete this notification?')) {
@@ -127,13 +127,15 @@
                 
                 paginationHtml += '</ul></nav>';
                 $('#mm-notifications-pagination').html(paginationHtml);
-
-                $('.page-link').on('click', function(e) {
-                    e.preventDefault();
-                    const page = $(this).data('page');
-                    NotificationAPI.loadNotifications(page);
-                });
             }
+
+            // Use event delegation for pagination clicks
+            $(document).off('click', '.page-link').on('click', '.page-link', function(e) {
+                e.preventDefault();
+                const page = $(this).data('page');
+                NotificationAPI.loadNotifications(page);
+                $('html, body').animate({ scrollTop: 0 }, 'fast');
+            });
         },
 
         // Mark as read
@@ -216,19 +218,19 @@
             NotificationAPI.loadNotifications();
 
             // Mark all as read button
-            $('#mm-mark-all-read-btn').on('click', function(e) {
+            $(document).off('click', '#mm-mark-all-read-btn').on('click', '#mm-mark-all-read-btn', function(e) {
                 e.preventDefault();
                 NotificationAPI.markAllAsRead();
             });
 
             // Delete all button
-            $('#mm-delete-all-btn').on('click', function(e) {
+            $(document).off('click', '#mm-delete-all-btn').on('click', '#mm-delete-all-btn', function(e) {
                 e.preventDefault();
                 NotificationAPI.deleteAllNotifications();
             });
 
-            // Filter form
-            $('#mm-notifications-filter').on('change', function() {
+            // Filter form - use event delegation
+            $(document).off('change', '#mm-notifications-filter').on('change', '#mm-notifications-filter', function() {
                 const filters = {
                     type: $('#notification-type').val(),
                     category: $('#notification-category').val(),

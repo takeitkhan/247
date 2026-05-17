@@ -106,6 +106,37 @@ class NotificationTestHelper {
             'by_type' => $by_type,
         ];
     }
+
+    /**
+     * Test admin notification creation
+     */
+    public static function testAdminNotification() {
+        $admins = get_users(['role' => 'administrator', 'number' => -1]);
+        
+        if (empty($admins)) {
+            return 'No admin users found';
+        }
+
+        $test_user_id = get_current_user_id();
+        $test_user = get_userdata($test_user_id);
+        
+        $admin_count = 0;
+        foreach ($admins as $admin) {
+            NotificationManager::getInstance()->add(
+                $admin->ID,
+                'new_follower',
+                "TEST: Admin notification received - Test User ({$test_user->user_email})",
+                [
+                    'action_url' => get_admin_url() . "user-edit.php?user_id={$test_user_id}",
+                    'action_label' => 'View User',
+                    'metadata' => ['admin_alert' => true, 'test' => true, 'test_user_id' => $test_user_id]
+                ]
+            );
+            $admin_count++;
+        }
+
+        return "Test notifications sent to {$admin_count} admin(s)";
+    }
 }
 
 // AJAX endpoint to create test data
@@ -144,6 +175,33 @@ add_action('wp_ajax_mm_get_notification_stats', function() {
     wp_send_json_success($stats);
 });
 
+// AJAX endpoint to clear test notifications
+add_action('wp_ajax_mm_clear_test_notifications', function() {
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error('Unauthorized');
+    }
+
+    check_ajax_referer('mm_notification_nonce', 'nonce');
+
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'notifications';
+    $deleted = $wpdb->query("DELETE FROM $table_name WHERE data LIKE '%\"test\":%'");
+    
+    wp_send_json_success(['message' => "Deleted $deleted test notifications"]);
+});
+
+// AJAX endpoint to test admin notifications
+add_action('wp_ajax_mm_test_admin_notification', function() {
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error('Unauthorized');
+    }
+
+    check_ajax_referer('mm_notification_nonce', 'nonce');
+
+    $result = NotificationTestHelper::testAdminNotification();
+    wp_send_json_success(['message' => $result]);
+});
+
 // Add test button to admin
 add_action('admin_footer', function() {
     if (!current_user_can('manage_options')) {
@@ -159,6 +217,9 @@ add_action('admin_footer', function() {
             </button>
             <button class="button" id="mm-test-random-btn" style="margin-bottom: 10px; display: block; width: 100%;">
                 🎲 Random Notifications
+            </button>
+            <button class="button button-secondary" id="mm-test-admin-btn" style="margin-bottom: 10px; display: block; width: 100%;">
+                👤 Test Admin Notification
             </button>
             <button class="button button-link-delete" id="mm-test-clear-btn" style="display: block; width: 100%; color: #d63638;">
                 🗑️ Clear Test Data
@@ -200,6 +261,20 @@ add_action('admin_footer', function() {
                 }, function(response) {
                     $('#mm-test-result').text('Cleared').css('color', '#d63638');
                     setTimeout(() => location.reload(), 2000);
+                });
+            });
+
+            $('#mm-test-admin-btn').on('click', function() {
+                $.post(ajaxurl, {
+                    action: 'mm_test_admin_notification',
+                    nonce: '<?php echo wp_create_nonce("mm_notification_nonce"); ?>',
+                }, function(response) {
+                    if (response.success) {
+                        $('#mm-test-result').text(response.data.message).css('color', '#0073aa');
+                        setTimeout(() => location.reload(), 2000);
+                    } else {
+                        $('#mm-test-result').text('Error: ' + response.data).css('color', '#d63638');
+                    }
                 });
             });
         });
