@@ -278,18 +278,24 @@ add_action( 'wp_loaded', function () {
         $pts_awarded = get_user_meta( $uid, 'mm_spg_pts_' . $step, true ); // set by award handler
 
         if ( $step_done && ! $pts_awarded ) {
-            $current = (int) get_user_meta( $uid, 'mm_spg_points', true );
-            update_user_meta( $uid, 'mm_spg_points', $current + $pts );
+            // Write to the gamification system (what the wallet reads) if available,
+            // otherwise fall back to mm_spg_points so something is recorded locally.
+            if ( function_exists( 'mm_award_points_and_notify' ) ) {
+                mm_award_points_and_notify( $uid, $step );
+            } else {
+                $current = (int) get_user_meta( $uid, 'mm_spg_points', true );
+                update_user_meta( $uid, 'mm_spg_points', $current + $pts );
 
-            $history = get_user_meta( $uid, 'mm_spg_points_history', true );
-            if ( ! is_array( $history ) ) { $history = []; }
-            $history[] = [
-                'points'    => $pts,
-                'reason'    => $step,
-                'date'      => current_time( 'mysql' ),
-                'timestamp' => time(),
-            ];
-            update_user_meta( $uid, 'mm_spg_points_history', $history );
+                $history = get_user_meta( $uid, 'mm_spg_points_history', true );
+                if ( ! is_array( $history ) ) { $history = []; }
+                $history[] = [
+                    'points'    => $pts,
+                    'reason'    => $step,
+                    'date'      => current_time( 'mysql' ),
+                    'timestamp' => time(),
+                ];
+                update_user_meta( $uid, 'mm_spg_points_history', $history );
+            }
             update_user_meta( $uid, 'mm_spg_pts_' . $step, 1 );
         }
     }
@@ -542,13 +548,7 @@ add_shortcode('guide_personalized_path', function () {
     ob_start();
     ?>
     <div class="gpp-wrap">
-        <div class="gpp-header">
-            <span class="gpp-header-icon">🎯</span>
-            <div>
-                <h2 class="gpp-main-title">Your Personalized Path</h2>
-                <p class="gpp-subtitle">Based on your selected interests</p>
-            </div>
-        </div>
+        <div class="gpp-attention-badge">Click the below mentioned links to complete your signup process by completing these tasks</div>
         <div class="gpp-cards">
             <?php foreach ($matched as $path): ?>
             <div class="gpp-card">
@@ -560,7 +560,7 @@ add_shortcode('guide_personalized_path', function () {
                     <?php foreach ($path['links'] as $link): ?>
                     <li>
                         <a href="<?php echo esc_url($link['url']); ?>" target="_blank" rel="noopener">
-                            → <?php echo esc_html($link['label']); ?>
+                            <span class="gpp-arrow">▶</span> <?php echo esc_html($link['label']); ?>
                         </a>
                     </li>
                     <?php endforeach; ?>
@@ -569,21 +569,54 @@ add_shortcode('guide_personalized_path', function () {
             <?php endforeach; ?>
         </div>
         <style>
-            .gpp-wrap { padding: 0; }
-            .gpp-header { display: flex; align-items: center; gap: 10px; padding: 14px 16px 10px; background: linear-gradient(135deg,#1a3e6e,#2563eb); border-radius: 10px 10px 0 0; }
+            @keyframes gppGlow {
+                0%,100% { box-shadow: 0 0 0 2px rgba(37,99,235,.5), 0 4px 20px rgba(37,99,235,.18); }
+                50%      { box-shadow: 0 0 0 4px rgba(37,99,235,.85), 0 8px 32px rgba(37,99,235,.35); }
+            }
+            @keyframes gppBadgePulse {
+                0%,100% { opacity: 1; transform: scale(1); }
+                50%      { opacity: .88; transform: scale(1.015); }
+            }
+            @keyframes gppArrow {
+                0%,100% { transform: translateX(0); }
+                50%      { transform: translateX(3px); }
+            }
+            .gpp-wrap {
+                padding: 0; border-radius: 12px; overflow: hidden;
+                animation: gppGlow 2.8s ease-in-out infinite;
+            }
+            .gpp-attention-badge {
+                background: linear-gradient(135deg, #f59e0b, #fbbf24);
+                color: #1a0800; font-weight: 900; font-size: .76rem;
+                padding: 7px 14px; text-align: center; letter-spacing: .02em;
+                animation: gppBadgePulse 2.2s ease-in-out infinite;
+                cursor: default;
+            }
+            .gpp-header {
+                display: flex; align-items: center; gap: 10px;
+                padding: 12px 16px 10px;
+                background: linear-gradient(135deg,#1a3e6e,#2563eb);
+            }
             .gpp-header-icon { font-size: 1.4rem; }
-            .gpp-main-title { font-size: .95rem; font-weight: 800; color: #fff; margin: 0; line-height: 1.2; }
-            .gpp-subtitle { font-size: .72rem; color: rgba(255,255,255,.78); margin: 2px 0 0; }
-            .gpp-cards { display: flex; flex-direction: column; gap: 0; border: 1px solid #dbe8f8; border-top: none; border-radius: 0 0 10px 10px; overflow: hidden; }
-            .gpp-card { background: #fff; border-bottom: 1px solid #e8f0fb; padding: 12px 14px; }
-            .gpp-card:last-child { border-bottom: none; }
+            .gpp-main-title  { font-size: .95rem; font-weight: 800; color: #fff; margin: 0; line-height: 1.2; }
+            .gpp-subtitle    { font-size: .7rem; color: rgba(255,255,255,.82); margin: 2px 0 0; }
+            .gpp-cards { display: flex; flex-direction: column; gap: 0; border: 1px solid #dbe8f8; border-top: none; }
+            .gpp-card { background: #fff; border-bottom: 1px solid #e8f0fb; padding: 12px 14px; transition: background .2s; }
+            .gpp-card:last-child { border-bottom: none; border-radius: 0 0 12px 12px; }
+            .gpp-card:hover { background: #f0f6ff; }
             .gpp-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-            .gpp-icon { font-size: 1.1rem; }
+            .gpp-icon       { font-size: 1.1rem; }
             .gpp-card-title { font-size: .82rem; font-weight: 800; color: #1a3e6e; margin: 0; }
-            .gpp-links { list-style: none; padding: 0; margin: 0; }
-            .gpp-links li { margin-bottom: 5px; }
-            .gpp-links li a { color: #2563eb; text-decoration: none; font-size: .78rem; font-weight: 600; transition: color .15s; display: flex; align-items: center; gap: 4px; }
-            .gpp-links li a:hover { color: #1a3e6e; text-decoration: underline; }
+            .gpp-links      { list-style: none; padding: 0; margin: 0; }
+            .gpp-links li   { margin-bottom: 5px; }
+            .gpp-links li a {
+                color: #2563eb; text-decoration: none; font-size: .78rem; font-weight: 600;
+                display: flex; align-items: center; gap: 5px;
+                transition: color .15s, gap .2s;
+            }
+            .gpp-links li a:hover { color: #1a3e6e; text-decoration: underline; gap: 9px; }
+            .gpp-arrow { font-size: .6rem; color: #2563eb; animation: gppArrow 1.4s ease-in-out infinite; display: inline-block; }
+            .gpp-links li a:hover .gpp-arrow { animation: none; color: #1a3e6e; }
         </style>
     </div>
     <?php
@@ -744,3 +777,85 @@ add_action('wp_footer', function() {
     </script>
     <?php
 });
+
+// ============================================
+// Personalized Path Spotlight — modify-profile
+// On every page load/reload, dims the page and
+// scrolls to + spotlights the .gpp-wrap widget
+// for ~2.5s so users notice their action plan.
+// ============================================
+add_action( 'wp_footer', function () {
+    if ( ! is_page( 'modify-profile' ) ) return;
+    if ( ! is_user_logged_in() ) return;
+    ?>
+    <style>
+    #gpp-spot-ov {
+        position:fixed; inset:0;
+        background:rgba(0,0,0,.72);
+        z-index:99990;
+        opacity:1;
+        transition:opacity .75s ease;
+        pointer-events:none;
+    }
+    #gpp-spot-ov.gpp-out { opacity:0; }
+    .gpp-spot-active {
+        position:relative !important;
+        z-index:99999 !important;
+        outline:2.5px solid #f0c060 !important;
+        outline-offset:5px !important;
+        border-radius:12px !important;
+        animation:gppSpotPulse 2.6s ease forwards;
+    }
+    @keyframes gppSpotPulse {
+        0%   { box-shadow:0 0 0 0   rgba(240,192,96,.65), 0 0 32px rgba(240,192,96,.35); }
+        50%  { box-shadow:0 0 0 10px rgba(240,192,96,.18), 0 0 40px rgba(240,192,96,.25); }
+        100% { box-shadow:0 0 0 16px rgba(240,192,96,0),   0 0 0   rgba(240,192,96,0); }
+    }
+    </style>
+    <script>
+    (function(){
+        function runSpotlight(){
+            var gpp = document.querySelector('.gpp-wrap');
+            if(!gpp) return;
+
+            // Lift every positioned ancestor above the overlay
+            var el = gpp.parentElement;
+            while(el && el !== document.body){
+                if(window.getComputedStyle(el).position !== 'static'){
+                    el.style.zIndex = '99999';
+                }
+                el = el.parentElement;
+            }
+
+            // Full-page dark overlay
+            var ov = document.createElement('div');
+            ov.id = 'gpp-spot-ov';
+            document.body.appendChild(ov);
+
+            // Highlight the widget
+            gpp.classList.add('gpp-spot-active');
+
+            // Scroll to it after a brief paint delay
+            setTimeout(function(){
+                gpp.scrollIntoView({ behavior:'smooth', block:'center' });
+            }, 150);
+
+            // Fade out after 2.6s
+            setTimeout(function(){
+                ov.classList.add('gpp-out');
+                gpp.classList.remove('gpp-spot-active');
+                setTimeout(function(){ if(ov.parentNode) ov.remove(); }, 750);
+            }, 2600);
+        }
+
+        if(document.readyState === 'loading'){
+            document.addEventListener('DOMContentLoaded', runSpotlight);
+        } else {
+            runSpotlight();
+        }
+    })();
+    </script>
+    <?php
+} );
+
+

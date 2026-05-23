@@ -12,6 +12,7 @@ function register_my_menus()
         'editprofilemenu' => __('Edit Profile Menu', 'mm'),
         'portalmegamenu' => __('Portal Mega Menu', 'mm'),
         'megarightmenu' => __('Mega Right Menu', 'mm'),
+        'zoommenu' => __('Zoom Menu', 'mm'),
     ]);
 }
 add_action('after_setup_theme', 'register_my_menus');
@@ -412,5 +413,57 @@ class Mega_Right_Walker extends Walker_Nav_Menu {
 
     function end_lvl(&$output, $depth = 0, $args = null) {
         $output .= '</ul>';
+    }
+}
+
+/**
+ * Zoom Menu Walker
+ * Manages Zoom App Functionalities menu with icon support
+ * Same styling as Profile Menu
+ */
+class Zoom_Menu_Walker extends Walker_Nav_Menu
+{
+    function start_lvl(&$output, $depth = 0, $args = null)
+    {
+        $output .= "\n<ul class=\"nav d-flex flex-column gap-2\">\n";
+    }
+
+    function end_lvl(&$output, $depth = 0, $args = null)
+    {
+        $output .= "</ul>\n";
+    }
+
+    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
+    {
+        // 🔥 Detect active item
+        $active_class = '';
+        if (
+            in_array('current-menu-item', $item->classes) ||
+            in_array('current_page_item', $item->classes) ||
+            in_array('current-menu-ancestor', $item->classes) ||
+            in_array('current_page_ancestor', $item->classes) ||
+            in_array('current-menu-parent', $item->classes)
+        ) {
+            $active_class = ' active-menu';
+        }
+
+        // ACF icon fields
+        $icon_url   = get_field('menu_icon_image', $item);
+        $icon_class = get_field('menu_icon_class', $item) ?: 'img24';
+
+        // Output LI with active class
+        $output .= '<li class="d-flex align-items-center nav-item gap10' . $active_class . '">';
+
+        // Only output image if icon exists (matches Edit_Profile_Walker)
+        if ($icon_url) {
+            $output .= '<img src="' . esc_url($icon_url) . '" alt="' . esc_attr($item->title) . '" class="icon-img ' . esc_attr($icon_class) . '">';
+        }
+
+        $output .= '<a href="' . esc_url($item->url) . '" class="p-0 text">' . esc_html($item->title) . '</a>';
+    }
+
+    function end_el(&$output, $item, $depth = 0, $args = null)
+    {
+        $output .= "</li>\n";
     }
 }

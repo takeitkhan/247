@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Notification Triggers - Automatic notification system for user actions
  * Hooks into key events throughout the theme to send notifications

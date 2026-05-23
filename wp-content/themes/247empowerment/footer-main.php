@@ -141,7 +141,7 @@
 
     });
 </script>
-<script>window.$zoho=window.$zoho || {};$zoho.salesiq=$zoho.salesiq||{ready:function(){}}</script><script id="zsiqscript" src="https://salesiq.zohopublic.com/widget?wc=siq0404bc707758b5be1581c34ee195cc074669c21e31c113ca806673af92388c1522bdc47681216462f4c41d2bab016384" defer></script>
+<!-- <script>window.$zoho=window.$zoho || {};$zoho.salesiq=$zoho.salesiq||{ready:function(){}}</script><script id="zsiqscript" src="https://salesiq.zohopublic.com/widget?wc=siq0404bc707758b5be1581c34ee195cc074669c21e31c113ca806673af92388c1522bdc47681216462f4c41d2bab016384" defer></script> -->
 <?php wp_footer(); ?>
 </body>
 

@@ -123,6 +123,18 @@ add_action('init', function () {
 
         $username = sanitize_user($_POST['username'], true);
 
+        // ❌ Reject email as username
+        if (is_email($username)) {
+            set_transient('custom_user_message', [
+                'type' => 'danger',
+                'text' => 'You cannot use an email address as your username. Please choose a different username.',
+                'old_input' => $_POST
+            ], 30);
+
+            wp_redirect(wp_get_referer());
+            exit;
+        }
+
         // Reserved / invalid username
         if (mm_is_reserved_username($username)) {
             set_transient('custom_user_message', [
@@ -321,6 +333,12 @@ function handle_custom_user_login()
                         ?: get_user_meta( $uid_check, 'designation', true );
             $_guide_done = is_array( $_chk_cats ) && count( $_chk_cats ) > 0
                         && ! empty( $_chk_about ) && ! empty( $_chk_title );
+            
+            // Clear any output buffering to ensure redirect works
+            while ( ob_get_level() ) {
+                ob_end_clean();
+            }
+            
             wp_redirect( $_guide_done ? home_url( '/modify-profile' ) : home_url( '/guide' ) );
             exit;
         } else {
@@ -344,6 +362,11 @@ function handle_custom_user_login()
                 'type' => 'danger',
                 'text' => $safe_error_msg
             ], 30);
+
+            // Clear any output buffering to ensure redirect works
+            while ( ob_get_level() ) {
+                ob_end_clean();
+            }
 
             // Redirect back to signin
             wp_redirect(home_url('/signin'));
@@ -748,4 +771,216 @@ add_action('admin_init', function () {
     }
 
     update_option('referral_sync_done_mutual', true);
+});
+
+// ========== CHANGE USERNAME HANDLER WITH RESTRICTIONS ==========
+add_action('init', function () {
+    if (!is_user_logged_in()) return;
+
+    if (isset($_POST['change_username'])) {
+        error_log('======= CHANGE USERNAME FORM SUBMITTED =======');
+        error_log('POST: ' . print_r($_POST, true));
+        
+        // Verify nonce first
+        if (!isset($_POST['change_username_nonce'])) {
+            error_log('ERROR: change_username_nonce not in POST');
+            set_transient('change_username_message', [
+                'type' => 'danger',
+                'text' => 'Security check failed (no nonce). Please try again.'
+            ], 30);
+            while (ob_get_level() > 0) ob_end_clean();
+            wp_redirect(wp_get_referer() ?: home_url('/change-username/'));
+            exit;
+        }
+        
+        if (!wp_verify_nonce($_POST['change_username_nonce'], 'change_username_action')) {
+            error_log('ERROR: Nonce verification failed');
+            set_transient('change_username_message', [
+                'type' => 'danger',
+                'text' => 'Security check failed (nonce invalid). Please try again.'
+            ], 30);
+            while (ob_get_level() > 0) ob_end_clean();
+            wp_redirect(wp_get_referer() ?: home_url('/change-username/'));
+            exit;
+        }
+
+        error_log('Nonce verified, processing username change');
+        $user_id = get_current_user_id();
+        error_log('User ID: ' . $user_id);
+        
+        $user = get_user_by('id', $user_id);
+        if (!$user || is_wp_error($user)) {
+            error_log('ERROR: User not found');
+            set_transient('change_username_message', [
+                'type' => 'danger',
+                'text' => 'User not found. Please try again.'
+            ], 30);
+            while (ob_get_level() > 0) ob_end_clean();
+            wp_redirect(wp_get_referer() ?: home_url('/change-username/'));
+            exit;
+        }
+        
+        $new_username = sanitize_user($_POST['new_username'] ?? '', true);
+        $password = sanitize_text_field($_POST['confirm_password'] ?? '');
+        
+        error_log('New username: ' . $new_username);
+        error_log('Password provided: ' . (!empty($password) ? 'yes' : 'no'));
+        
+        // Verify inputs are not empty
+        if (empty($new_username) || empty($password)) {
+            error_log('ERROR: Missing required fields');
+            set_transient('change_username_message', [
+                'type' => 'danger',
+                'text' => 'Please fill in all fields.'
+            ], 30);
+            while (ob_get_level() > 0) ob_end_clean();
+            wp_redirect(wp_get_referer() ?: home_url('/change-username/'));
+            exit;
+        }
+
+        // Validate password
+        if (!wp_check_password($password, $user->user_pass, $user_id)) {
+            set_transient('change_username_message', [
+                'type' => 'danger',
+                'text' => 'Password is incorrect. Please try again.'
+            ], 30);
+            while (ob_get_level() > 0) ob_end_clean();
+            wp_redirect(wp_get_referer() ?: home_url('/change-username/'));
+            exit;
+        }
+
+        // Cannot change to same username
+        if ($new_username === $user->user_login) {
+            set_transient('change_username_message', [
+                'type' => 'warning',
+                'text' => 'New username is the same as your current username.'
+            ], 30);
+            while (ob_get_level() > 0) ob_end_clean();
+            wp_redirect(wp_get_referer() ?: home_url('/change-username/'));
+            exit;
+        }
+
+        // ========== 3-MONTH COOLDOWN CHECK ==========
+        $last_change = get_user_meta($user_id, 'username_last_changed', true);
+        if ($last_change) {
+            $last_change_time = strtotime($last_change);
+            $three_months_ago = strtotime('-3 months', current_time('timestamp'));
+            
+            if ($last_change_time > $three_months_ago) {
+                $next_eligible = date('F j, Y', strtotime('+3 months', $last_change_time));
+                set_transient('change_username_message', [
+                    'type' => 'danger',
+                    'text' => 'You can only change your username once every 3 months. Your next eligible change date is <strong>' . esc_html($next_eligible) . '</strong>.'
+                ], 30);
+                while (ob_get_level() > 0) ob_end_clean();
+                wp_redirect(wp_get_referer() ?: home_url('/change-username/'));
+                exit;
+            }
+        }
+
+        // ========== 5 TIMES MAXIMUM CHECK ==========
+        $total_changes = (int) get_user_meta($user_id, 'username_change_count', true);
+        if ($total_changes >= 5) {
+            set_transient('change_username_message', [
+                'type' => 'danger',
+                'text' => 'You have reached the maximum number of username changes allowed (5 changes). You cannot change your username again.'
+            ], 30);
+            while (ob_get_level() > 0) ob_end_clean();
+            wp_redirect(wp_get_referer() ?: home_url('/change-username/'));
+            exit;
+        }
+
+        // Reject email as username
+        if (is_email($new_username)) {
+            set_transient('change_username_message', [
+                'type' => 'danger',
+                'text' => 'Email addresses cannot be used as usernames.'
+            ], 30);
+            while (ob_get_level() > 0) ob_end_clean();
+            wp_redirect(wp_get_referer() ?: home_url('/change-username/'));
+            exit;
+        }
+
+        // Check if reserved
+        if (mm_is_reserved_username($new_username)) {
+            set_transient('change_username_message', [
+                'type' => 'danger',
+                'text' => 'This username is reserved. Please choose another one.'
+            ], 30);
+            while (ob_get_level() > 0) ob_end_clean();
+            wp_redirect(wp_get_referer() ?: home_url('/change-username/'));
+            exit;
+        }
+
+        // Check if already taken
+        if (username_exists($new_username)) {
+            set_transient('change_username_message', [
+                'type' => 'danger',
+                'text' => 'This username is already taken.'
+            ], 30);
+            while (ob_get_level() > 0) ob_end_clean();
+            wp_redirect(wp_get_referer() ?: home_url('/change-username/'));
+            exit;
+        }
+
+        // Change username via direct database update
+        global $wpdb;
+        $wpdb->update(
+            $wpdb->users,
+            [
+                'user_login' => $new_username,
+                'user_nicename' => sanitize_title($new_username)
+            ],
+            ['ID' => $user_id],
+            ['%s', '%s'],
+            ['%d']
+        );
+
+        if ($wpdb->last_error) {
+            set_transient('change_username_message', [
+                'type' => 'danger',
+                'text' => 'Database error: ' . esc_html($wpdb->last_error)
+            ], 30);
+            while (ob_get_level() > 0) ob_end_clean();
+            wp_redirect(wp_get_referer() ?: home_url('/change-username/'));
+            exit;
+        }
+
+        // Update tracking meta
+        update_user_meta($user_id, 'username_last_changed', current_time('mysql'));
+        update_user_meta($user_id, 'username_change_count', $total_changes + 1);
+
+        // Log this action
+        if (function_exists('mm_trigger_action')) {
+            mm_trigger_action('username_changed', $user_id, [
+                'old_username' => $user->user_login,
+                'new_username' => $new_username,
+                'total_changes' => $total_changes + 1
+            ]);
+        }
+
+        // Clear any cached user data
+        wp_cache_delete($user_id, 'users');
+        wp_cache_delete($user->user_login, 'userlogins');
+        wp_cache_delete($new_username, 'userlogins');
+
+        $remaining_changes = 5 - ($total_changes + 1);
+        set_transient('change_username_message', [
+            'type' => 'success',
+            'text' => '✓ Username changed successfully from <strong>' . esc_html($user->user_login) . '</strong> to <strong>' . esc_html($new_username) . '</strong>. You have <strong>' . $remaining_changes . ' change(s)</strong> remaining.'
+        ], 30);
+
+        // Clean up output buffering before redirect
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+        
+        // Redirect with fallback
+        $redirect_url = wp_get_referer();
+        if (!$redirect_url) {
+            $redirect_url = home_url('/change-username/');
+        }
+        wp_redirect($redirect_url);
+        exit;
+    }
 });

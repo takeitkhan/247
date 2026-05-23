@@ -34,6 +34,9 @@ $profile = isset($args['profile']) ? $args['profile'] : [];
         <?php endif; ?>
     </ul>
 </div>
+<div class="bg-white custom-card">
+    <?php echo do_shortcode('[zoom_book_appointment]'); ?>
+</div>
 <div class="bg-white custom-card navbar-link">
     <?php
     wp_nav_menu([

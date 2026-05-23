@@ -61,9 +61,12 @@ if ( isset( $_POST['guide_action'] ) ) {
       update_user_meta( $uid, 'user_categories_priority', $profile_prios );
       update_user_meta( $uid, 'user_categories', $cats );
       update_user_meta( $uid, 'mm_spg_interest_completed', 1 );
+        // Award points via the gamification system (wallet reads this)
+        if ( function_exists( 'mm_award_points_and_notify' ) ) {
+            mm_award_points_and_notify( $uid, 'interest_completed' );
+        }
         wp_send_json_success( [ 'message' => 'Saved.' ] );
     }
-
     /* ── biz card ── */
     if ( $act === 'save_bizcard' ) {
       $title    = sanitize_text_field( $_POST['title'] ?? '' );
@@ -98,6 +101,10 @@ if ( isset( $_POST['guide_action'] ) ) {
       update_user_meta( $uid, 'user_keywords', $keywords );
       update_user_meta( $uid, 'user_hashtags', $hashtags_csv );
       update_user_meta( $uid, 'mm_spg_business_card_completed', 1 );
+        // Award points via the gamification system (wallet reads this)
+        if ( function_exists( 'mm_award_points_and_notify' ) ) {
+            mm_award_points_and_notify( $uid, 'business_card_completed' );
+        }
         wp_send_json_success( [ 'message' => 'Saved.' ] );
     }
 
@@ -117,12 +124,19 @@ if ( isset( $_POST['guide_action'] ) ) {
         // Save to the same key modify-links.php reads/writes.
         update_user_meta( $uid, 'custom_social_links', $sanitized_links );
         update_user_meta( $uid, 'mm_spg_social_links_completed', 1 );
+        // Award points via the gamification system (wallet reads this)
+        if ( function_exists( 'mm_award_points_and_notify' ) ) {
+            mm_award_points_and_notify( $uid, 'social_links_completed' );
+        }
         wp_send_json_success( [ 'message' => 'Saved.' ] );
     }
 
     /* ── mark onboarding complete ── */
     if ( $act === 'complete_onboarding' ) {
         update_user_meta( $uid, 'mm_spg_onboarding_completed', 1 );
+        if ( function_exists( 'mm_award_points_and_notify' ) ) {
+            mm_award_points_and_notify( $uid, 'onboarding_completed' );
+        }
         wp_send_json_success( [ 'message' => 'Done.' ] );
     }
 
@@ -674,30 +688,45 @@ html, body { margin:0; padding:0; width:100%; overflow-x:hidden;
   background:rgba(18,8,2,.93);
   z-index:2147483640;
   flex-direction:column; align-items:center; justify-content:center;
-  gap:18px;
+  gap:14px; overflow-y:auto;
+  padding:24px 20px; box-sizing:border-box;
   animation:wov-in .5s ease;
 }
 #welcome-overlay.show { display:flex; }
 @keyframes wov-in { from{opacity:0;transform:scale(.96)} to{opacity:1;transform:scale(1)} }
-.wov-img { width:120px; height:auto; border-radius:50%; border:3px solid #a07840; }
+.wov-img { width:110px; height:auto; border-radius:50%; border:3px solid #a07840; flex-shrink:0; }
 .wov-title {
   font-size:clamp(1.3rem,4vw,2rem); font-weight:900;
   color:#f0c060; text-align:center;
-  text-shadow:0 2px 12px rgba(0,0,0,.6);
+  text-shadow:0 2px 12px rgba(0,0,0,.6); margin:0;
 }
 .wov-text {
-  font-size:.9rem; color:#f5deb3; text-align:center;
-  max-width:340px; line-height:1.6;
+  font-size:.88rem; color:#f5deb3; text-align:center;
+  max-width:480px; line-height:1.65; margin:0;
 }
-.wov-bar {
-  width:200px; height:6px; background:#3a2510;
-  border-radius:3px; overflow:hidden;
+.wov-tasks-title {
+  font-size:.78rem; font-weight:800; color:#f0c060;
+  text-align:center; margin:6px 0 2px;
 }
-.wov-bar-fill {
-  height:100%; width:0; background:linear-gradient(90deg,#a07840,#f0c060);
-  animation:wov-bar 3.8s linear forwards;
+.wov-tasks-list {
+  list-style:none; padding:0; margin:0;
+  display:grid; grid-template-columns:1fr 1fr; gap:5px 12px;
+  width:100%; max-width:480px;
 }
-@keyframes wov-bar { to{width:100%} }
+.wov-tasks-list li {
+  font-size:.74rem; color:#ffe7a0; font-weight:700;
+  padding:4px 10px; background:rgba(200,169,110,.12);
+  border:1px solid rgba(200,169,110,.25); border-radius:8px;
+}
+#wov-proceed-btn {
+  background:linear-gradient(135deg,#a07840,#f0c060);
+  color:#1a0800; border:none; border-radius:12px;
+  padding:12px 36px; font-size:1rem; font-weight:900;
+  cursor:pointer; font-family:inherit; margin-top:6px;
+  transition:opacity .2s, transform .15s;
+}
+#wov-proceed-btn:hover { opacity:.88; transform:translateY(-1px); }
+#wov-proceed-btn:disabled { opacity:.6; cursor:not-allowed; transform:none; }
 
 /* ── Social links ── */
 .soc-cols {
@@ -746,10 +775,24 @@ html, body { margin:0; padding:0; width:100%; overflow-x:hidden;
   text-shadow: 0 1px 0 rgba(255,255,255,.4);
 }
 .cong-text  {
-  font-size: .95rem;
+  font-size: .88rem;
   color: #2f2414;
   line-height: 1.72;
   font-weight: 700;
+}
+.cong-tasks-title {
+  font-size: .76rem; font-weight: 800; color: #4a2f0f;
+  margin: 10px 0 6px; text-align: left;
+}
+.cong-tasks-list {
+  list-style: none; padding: 0; margin: 0;
+  columns: 2; column-gap: 8px; text-align: left;
+}
+.cong-tasks-list li {
+  font-size: .7rem; color: #3a2010; font-weight: 700;
+  padding: 3px 8px; margin-bottom: 4px; break-inside: avoid;
+  background: rgba(200,169,110,.14);
+  border-radius: 6px; border: 1px solid rgba(160,120,64,.22);
 }
 
 /* Full-page celebration overlay for each Next step */
@@ -923,7 +966,7 @@ html, body { margin:0; padding:0; width:100%; overflow-x:hidden;
    POINTS POPUP
 ════════════════════════════════════ */
 #pts-popup {
-  position:fixed; bottom:90px; right:28px; z-index:2147483647;
+  position:fixed; bottom:192px; right:28px; z-index:2147483647;
   text-align:center; min-width:130px;
   background:linear-gradient(135deg,#5a3e1b,#c8a96e);
   border-radius:20px; padding:14px 24px 13px;
@@ -961,7 +1004,7 @@ html, body { margin:0; padding:0; width:100%; overflow-x:hidden;
 }
 /* ── Persistent points badge ── */
 #pts-badge {
-  position:fixed; bottom:28px; right:28px; z-index:2147483646;
+  position:fixed; bottom:130px; right:28px; z-index:2147483646;
   background:linear-gradient(135deg,#3a2510,#7a5a30);
   color:#f5deb3; border-radius:20px; padding:6px 16px;
   font-size:.78rem; font-weight:800; box-shadow:0 4px 16px rgba(0,0,0,.4);
@@ -1083,6 +1126,21 @@ html, body { margin:0; padding:0; width:100%; overflow-x:hidden;
       <div class="congrats">
         <div class="cong-title">🎉 Congratulations!</div>
         <div class="cong-text">You've completed the first steps in building your 24/7 Empowerment SEO/CRM Profile. Continue exploring to experience Inner Empowerment combined with real External Empowerment — featuring 100+ sales and business tools, jobs, wallets, passive income opportunities, and affordable housing.</div>
+        <p class="cong-tasks-title">At your convenience, complete these sections to activate all tools &amp; benefits:</p>
+        <ul class="cong-tasks-list">
+          <li>📇 Digital Business Card</li>
+          <li>📱 Social Management</li>
+          <li>💳 Wallet &amp; Payments</li>
+          <li>📧 Set up Payouts Email</li>
+          <li>💸 Withdrawal Request</li>
+          <li>🤝 Meeting &amp; Integrations</li>
+          <li>🔒 Password &amp; Security</li>
+          <li>🔔 Notifications</li>
+          <li>📹 Connect Zoom Account</li>
+          <li>📅 My Zoom Meetings</li>
+          <li>📆 Book Meeting</li>
+          <li>🔗 Connect Social Media</li>
+        </ul>
       </div>
     </div>
 
@@ -1095,8 +1153,8 @@ html, body { margin:0; padding:0; width:100%; overflow-x:hidden;
 
 </div><!-- /guide-root -->
 <div id="step-celebrate" aria-hidden="true">
-  <div class="left burst"></div>
-  <div class="right burst"></div>
+  <div class="burst left"></div>
+  <div class="burst right"></div>
   <div class="spark"></div>
 </div>
 <div id="guide-toast"></div>
@@ -1104,9 +1162,24 @@ html, body { margin:0; padding:0; width:100%; overflow-x:hidden;
 <!-- Welcome overlay — shown after completing all steps -->
 <div id="welcome-overlay">
   <img class="wov-img" id="wov-guide-img" src="" alt="Guide">
-  <div class="wov-title">🎉 Welcome to 24/7 Empowerment!</div>
-  <div class="wov-text">Your profile is live. Let's begin your empowerment journey — 100+ tools, passive income, jobs, and community await you!</div>
-  <div class="wov-bar"><div class="wov-bar-fill"></div></div>
+  <div class="wov-title">🎉 Congratulations!</div>
+  <div class="wov-text">You've completed the first steps in building your 24/7 Empowerment SEO/CRM Profile. Continue exploring to experience Inner Empowerment combined with real External Empowerment — featuring 100+ sales and business tools, jobs, wallets, passive income opportunities, and affordable housing.</div>
+  <p class="wov-tasks-title">At your convenience, complete these sections to activate all tools &amp; benefits:</p>
+  <ul class="wov-tasks-list">
+    <li>📇 Digital Business Card</li>
+    <li>📱 Social Management</li>
+    <li>💳 Wallet &amp; Payments</li>
+    <li>📧 Set up Payouts Email</li>
+    <li>💸 Withdrawal Request</li>
+    <li>🤝 Meeting &amp; Integrations</li>
+    <li>🔒 Password &amp; Security</li>
+    <li>🔔 Notifications</li>
+    <li>📹 Connect Zoom Account</li>
+    <li>📅 My Zoom Meetings</li>
+    <li>📆 Book Meeting</li>
+    <li>🔗 Connect Social Media</li>
+  </ul>
+  <button id="wov-proceed-btn" onclick="finishOnboarding()">Go to Profile →</button>
 </div>
 
 <div id="pts-popup" aria-live="polite" aria-atomic="true">
@@ -1249,6 +1322,25 @@ function isPhoneView(){
 // Running total synced from server; seeded from PHP on load
 var _runningPts = INIT_POINTS;
 
+// On load: fetch real gamification total (what wallet reads) and sync badge
+(function(){
+    fetch(SITE_URL + '/wp-json/api/v1/spg/user/earned-points?nonce=' + encodeURIComponent(API_NONCE))
+        .then(function(r){ return r.json(); })
+        .then(function(resp){
+            if(resp && resp.success && resp.data){
+                var earned = resp.data.user_earned_points;
+                var total = (earned && typeof earned.total !== 'undefined')
+                            ? earned.total : resp.data.total_points;
+                if(total){
+                    _runningPts = total;
+                    var badge = document.getElementById('pts-badge-val');
+                    if(badge) badge.textContent = total;
+                }
+            }
+        })
+        .catch(function(){});
+})();
+
 // Dedup map — reason → meta flag name (matches mm_spg_* user meta)
 var REASON_FLAG = {
     'interest_completed':      'interest_completed',
@@ -1261,30 +1353,39 @@ function awardPoints(reason, points, cb){
     cb = cb || function(){};
 
     // Dedup: if this step was already awarded (server flag = true), skip
-    if(PTS_FLAGS[reason]){
-        cb(true);
-        return;
-    }
+    if(PTS_FLAGS[reason]){ cb(true); return; }
 
-    // Award via guide PHP handler — writes directly to mm_spg_points user meta
-    // and appends to mm_spg_points_history. No dependency on external REST API.
-    post('award_points', { reason: reason, points: points }, function(ok, data){
-        if(ok && data){
-            if(data.already_awarded){
-                PTS_FLAGS[reason] = true;
-                cb(true);
-                return;
+    var prev = _runningPts;
+
+    // The PHP save handler already called mm_award_points_and_notify() server-side.
+    // Now fetch the real gamification total (what the wallet reads) from the plugin endpoint.
+    fetch(SITE_URL + '/wp-json/api/v1/spg/user/earned-points?nonce=' + encodeURIComponent(API_NONCE))
+        .then(function(r){ return r.json(); })
+        .then(function(resp){
+            var newTotal = prev + points; // optimistic fallback
+            if(resp && resp.success && resp.data){
+                var earned = resp.data.user_earned_points;
+                if(earned && typeof earned.total !== 'undefined'){
+                    newTotal = earned.total;
+                } else if(typeof resp.data.total_points !== 'undefined'){
+                    newTotal = resp.data.total_points;
+                }
             }
-            _runningPts = data.total_points;
+            var added = newTotal - prev;
+            if(added <= 0) added = points;
+            _runningPts = newTotal;
             PTS_FLAGS[reason] = true;
-            showPtsPopup(data.points_added, data.previous_total, data.total_points);
-            sendBpNotification(reason, data.points_added, data.total_points);
+            showPtsPopup(added, prev, newTotal);
+            sendBpNotification(reason, added, newTotal);
             cb(true);
-        } else {
-            toast('⚠ Points could not be recorded.', 'fail');
-            cb(false);
-        }
-    });
+        })
+        .catch(function(){
+            // Fallback: show optimistic total
+            _runningPts = prev + points;
+            PTS_FLAGS[reason] = true;
+            showPtsPopup(points, prev, _runningPts);
+            cb(true);
+        });
 }
 
 /* sendBpNotification — create a BuddyPress notification for earned points */
@@ -1381,7 +1482,7 @@ var STEP_HINTS = [
   "Pick the topics that interest you most and set a priority for each one. Both a selection and a priority are required to continue.",
   "Fill in your professional title, a short bio, your location, keywords and hashtags. This builds your SEO profile so people can find you.",
   "Add your social media and website links. Choose the platform from the dropdown, give it a custom name if you like, then paste the full URL.",
-  "Amazing work! You've finished setting up your profile. Hit Go to Profile to start exploring your 24/7 Empowerment dashboard."
+  "Congratulations! You finished setting up your basic profile. Now let's review your main interest in visiting 24/7 Empowerment — check the top right!"
 ];
 
 function showWizBubble(text){
@@ -1437,11 +1538,13 @@ function goStep(n){
     var skipLink = document.querySelector('.wiz-skip');
     if(skipLink) skipLink.style.display = (n === 1) ? 'none' : '';
 
-    // Show cloud hint and speak for this step
+    // Show cloud hint and speak for this step (overlay handles speech on last step)
     showWizBubble(STEP_HINTS[n] || '');
-    speakStep(n);
+    if(n !== STEPS) speakStep(n);
 
     updateNextButtonState();
+    // On last step, show the full-screen congratulations overlay immediately
+    if(n === STEPS){ showWelcomeOverlay(); }
 }
 
 function playStepCelebration(done){
@@ -1461,20 +1564,20 @@ function playStepCelebration(done){
 
 /* ── Welcome overlay ── */
 function showWelcomeOverlay(){
+  // Kill any pending speakStep timer — prevents double audio on last step
+  if(window._speakTimer){ clearTimeout(window._speakTimer); window._speakTimer = null; }
   var ov = document.getElementById('welcome-overlay');
-  if(!ov){ window.location.href = PROF; return; }
+  if(!ov){ return; }
   // Set guide image
   var img = document.getElementById('wov-guide-img');
   if(img && selKey && GUIDES[selKey]) img.src = GUIDES[selKey].stand;
   ov.classList.add('show');
-  // Persist onboarding completion flag server-side
-  post('complete_onboarding', {}, function(){});
-  // Speak welcome
+  // Speak congratulations — user clicks "Go to Profile" button to proceed (no auto-redirect)
   if(window.speechSynthesis && !window.voiceMuted){
     try {
       window.speechSynthesis.cancel();
       var u = new SpeechSynthesisUtterance(
-        "Welcome to 24/7 Empowerment! Your profile is live. Let's begin your empowerment journey!"
+        "Congratulations! You've completed the first steps in building your 24 7 Empowerment profile. Continue exploring all the tools and benefits available to you!"
       );
       u.lang = 'en-US'; u.rate = 0.95;
       u.pitch = (selKey === 'bella') ? 1.35 : 0.78;
@@ -1486,10 +1589,17 @@ function showWelcomeOverlay(){
       window.speechSynthesis.speak(u);
     } catch(e){}
   }
-  setTimeout(function(){
-    ov.classList.remove('show');
-    window.location.href = PROF;
-  }, 4200);
+}
+
+function finishOnboarding(){
+  var btn = document.getElementById('wov-proceed-btn');
+  if(btn){ btn.disabled=true; btn.textContent='Loading\u2026'; }
+  if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+  post('complete_onboarding', {}, function(){
+    awardPoints('onboarding_completed', 10, function(){
+      window.location.href = PROF + '?guide_welcome=1&guide=' + encodeURIComponent(selKey || 'joseph');
+    });
+  });
 }
 
 /* ── Tag-cloud chip logic ── */
@@ -2001,10 +2111,9 @@ function wizNext(){
       }
     });
     } else if(step===4){
-    btn.disabled=true;
-    awardPoints('onboarding_completed', 10, function(){
-        playStepCelebration(function(){ showWelcomeOverlay(); });
-    });
+    // Overlay shown on goStep(4); overlay button calls finishOnboarding()
+    // This fallback handles any direct wizNext() call on step 4
+    finishOnboarding();
     }
 }
 
@@ -2012,7 +2121,7 @@ function wizNext(){
 document.addEventListener('DOMContentLoaded',function(){
   setSeated(SEATED_DEFAULT);
 
-  // Mute button — stable toggle: cancel current speech, prevent re-queuing
+  // Mute button — stable toggle: cancel current speech, re-speak on unmute
   var muteBtn = document.getElementById('voice-mute-btn');
   if(muteBtn){
     muteBtn.addEventListener('click', function(){
@@ -2023,6 +2132,28 @@ document.addEventListener('DOMContentLoaded',function(){
       }
       // Debounce: clear any pending speak timers
       if(window._speakTimer){ clearTimeout(window._speakTimer); window._speakTimer = null; }
+      // Re-speak current screen content when unmuting
+      if(!window.voiceMuted){
+        var introEl = document.getElementById('s-intro');
+        var wizEl   = document.getElementById('s-wizard');
+        if(introEl && introEl.classList.contains('active') && selKey && GUIDES[selKey]){
+          // Re-speak guide intro
+          try {
+            var ru = new SpeechSynthesisUtterance(GUIDES[selKey].intro);
+            ru.lang = 'en-US'; ru.rate = 0.95;
+            ru.pitch = (selKey === 'bella') ? 1.35 : 0.78;
+            var rVoices = window.speechSynthesis.getVoices();
+            if(rVoices && rVoices.length){
+              var rv = pickVoiceForGuide(selKey, rVoices);
+              if(rv){ ru.voice = rv; if(rv.lang) ru.lang = rv.lang; }
+            }
+            window.speechSynthesis.speak(ru);
+          } catch(e){}
+        } else if(wizEl && wizEl.classList.contains('active')){
+          // Re-speak current wizard step hint
+          speakStep(step);
+        }
+      }
     });
   }
 

@@ -394,16 +394,7 @@ if (class_exists('Kirki')) {
     ]);
 }
  */
-// Utility functions
-function get_header_based_on_login()
-{
-    get_header(is_user_logged_in() ? 'portal' : 'main');
-}
-
-function get_footer_based_on_login()
-{
-    get_footer(is_user_logged_in() ? 'portal' : 'main');
-}
+// Utility functions moved to helpers.php
 
 
 function mm_customize_register($wp_customize)
